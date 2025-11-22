@@ -1,0 +1,131 @@
+"use client";
+import { Mic, FileText, Brain } from "lucide-react";
+import { motion } from "framer-motion";
+
+export default function Features() {
+  const features = [
+    {
+      icon: Mic,
+      title: "Automatický zápis prednášok",
+      description:
+        "Nahraj si prednášku v reálnom čase pomocou mikrofónu. AI automaticky prepíše reč na text a vytvorí prehľadný zápis s možnosťou úprav.",
+      color: "blue",
+    },
+    {
+      icon: FileText,
+      title: "Spracovanie študijných materiálov",
+      description:
+        "Nahraj PDF alebo Word dokumenty. AI ich analyzuje a pripraví výcuc presne podľa tvojich skúškových otázok z poskytnutých materiálov.",
+      color: "green",
+    },
+    {
+      icon: Brain,
+      title: "Generovanie testov a otázok",
+      description:
+        "Na základe tvojich materiálov AI vytvorí testové otázky na opakovanie. Ideálne na prípravu na skúšky a overenie si vedomostí.",
+      color: "purple",
+    },
+  ];
+
+  const getColorClasses = (color: string) => {
+    const colors = {
+      blue: "bg-blue-100 text-blue-600",
+      green: "bg-green-100 text-green-600",
+      purple: "bg-purple-100 text-purple-600",
+    };
+    return colors[color as keyof typeof colors];
+  };
+
+  return (
+    <section
+      id="funkcie"
+      className="relative py-24 bg-linear-to-br from-slate-900 via-blue-900 to-slate-900 overflow-hidden"
+    >
+      {/* Dekoratívne pozadie */}
+      <div className="absolute inset-0 overflow-hidden">
+        <div className="absolute top-0 left-1/4 w-96 h-96 bg-blue-600/20 rounded-full blur-3xl"></div>
+        <div className="absolute bottom-0 right-1/4 w-80 h-80 bg-cyan-600/20 rounded-full blur-3xl"></div>
+        {/* Animované hviezdičky */}
+        <div className="absolute top-20 left-20 w-2 h-2 bg-white/40 rounded-full animate-pulse animate-float"></div>
+        <div className="absolute top-40 right-40 w-2 h-2 bg-white/40 rounded-full animate-pulse animate-float-delay"></div>
+        <div className="absolute bottom-32 left-1/3 w-2 h-2 bg-white/40 rounded-full animate-pulse animate-float-slow"></div>
+      </div>
+
+      <div className="container-custom relative z-10">
+        {/* Nadpis sekcie */}
+        <div className="text-center max-w-3xl mx-auto mb-16">
+          <motion.div
+            initial={{ opacity: 0, y: -20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5 }}
+            className="inline-block bg-white/20 backdrop-blur-sm px-4 py-2 rounded-full mb-6 border border-white/30"
+          >
+            <span className="text-sm font-semibold text-white">
+              Prečo zvoliť náš asistent?
+            </span>
+          </motion.div>
+          <motion.h2
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6, delay: 0.1 }}
+            className="text-4xl md:text-5xl font-bold text-white mb-6 leading-tight"
+          >
+            Funkcie ktoré ti uľahčia štúdium
+          </motion.h2>
+          <motion.p
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6, delay: 0.2 }}
+            className="text-lg md:text-xl text-blue-50"
+          >
+            Využi silu umelej inteligencie na efektívnejšie učenie a prípravu na
+            skúšky
+          </motion.p>
+        </div>
+
+        {/* Grid funkcií */}
+        <div className="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto">
+          {features.map((feature, index) => {
+            const Icon = feature.icon;
+            return (
+              <motion.div
+                key={index}
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.6, delay: 0.3 + index * 0.1 }}
+                whileHover={{ scale: 1.05, y: -5 }}
+                className="group rounded-2xl card hover:shadow-2xl transition-all duration-300 bg-white p-8 relative overflow-hidden"
+              >
+                {/* linear overlay pri hoveri */}
+                <div className="absolute inset-0 bg-linear-to-br from-blue-50/0 to-cyan-50/0 group-hover:from-blue-50 group-hover:to-cyan-50 transition-all duration-300 rounded-2xl"></div>
+
+                <div className="relative z-10">
+                  <div
+                    className={`w-14 h-14 rounded-xl ${getColorClasses(
+                      feature.color
+                    )} flex items-center justify-center mb-5 shadow-lg group-hover:scale-110 group-hover:rotate-3 transition-all duration-300`}
+                  >
+                    <Icon className="w-7 h-7" />
+                  </div>
+                  <h3 className="text-xl font-bold text-gray-900 mb-4 group-hover:text-blue-600 transition-colors">
+                    {feature.title}
+                  </h3>
+                  <p className="text-gray-600 leading-relaxed">
+                    {feature.description}
+                  </p>
+                </div>
+
+                {/* Dekoratívna čiara */}
+                <div className="absolute bottom-0 left-0 w-0 h-1 bg-linear-to-r from-blue-600 to-cyan-600 group-hover:w-full transition-all duration-500"></div>
+              </motion.div>
+            );
+          })}
+        </div>
+      </div>
+    </section>
+  );
+}

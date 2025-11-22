@@ -6,23 +6,23 @@ export default function Features() {
   const features = [
     {
       icon: Mic,
-      title: "Automatický zápis prednášok",
+      title: "Automatic lecture recording",
       description:
-        "Nahraj si prednášku v reálnom čase pomocou mikrofónu. AI automaticky prepíše reč na text a vytvorí prehľadný zápis s možnosťou úprav.",
+        "Record your lecture in real-time using a microphone. AI automatically transcribes speech to text and creates a clear transcript with editing options.",
       color: "blue",
     },
     {
       icon: FileText,
-      title: "Spracovanie študijných materiálov",
+      title: "Study materials processing",
       description:
-        "Nahraj PDF alebo Word dokumenty. AI ich analyzuje a pripraví výcuc presne podľa tvojich skúškových otázok z poskytnutých materiálov.",
+        "Upload PDF or Word documents. AI analyzes them and prepares study materials precisely according to your exam questions from the provided materials.",
       color: "green",
     },
     {
       icon: Brain,
-      title: "Generovanie testov a otázok",
+      title: "Test and question generation",
       description:
-        "Na základe tvojich materiálov AI vytvorí testové otázky na opakovanie. Ideálne na prípravu na skúšky a overenie si vedomostí.",
+        "Based on your materials, AI creates test questions for review. Perfect for exam preparation and knowledge verification.",
       color: "purple",
     },
   ];
@@ -123,7 +123,7 @@ export default function Features() {
       </div>
 
       <div className="container-custom relative z-10">
-        {/* Nadpis sekcie */}
+        {/* Section heading */}
         <div className="text-center max-w-3xl mx-auto mb-16">
           <motion.div
             initial={{ opacity: 0, y: -20 }}
@@ -133,7 +133,7 @@ export default function Features() {
             className="inline-block bg-white/20 backdrop-blur-sm px-4 py-2 rounded-full mb-6 border border-white/30"
           >
             <span className="text-sm font-semibold text-white">
-              Prečo zvoliť náš asistent?
+              Why choose our assistant?
             </span>
           </motion.div>
           <motion.h2
@@ -143,7 +143,7 @@ export default function Features() {
             transition={{ duration: 0.6, delay: 0.1 }}
             className="text-4xl md:text-5xl font-bold text-white mb-6 leading-tight"
           >
-            Funkcie ktoré ti uľahčia štúdium
+            Features that make studying easier
           </motion.h2>
           <motion.p
             initial={{ opacity: 0, y: 20 }}
@@ -152,8 +152,7 @@ export default function Features() {
             transition={{ duration: 0.6, delay: 0.2 }}
             className="text-lg md:text-xl text-blue-50"
           >
-            Využi silu umelej inteligencie na efektívnejšie učenie a prípravu na
-            skúšky
+            Harness the power of artificial intelligence for more effective learning and exam preparation
           </motion.p>
         </div>
 

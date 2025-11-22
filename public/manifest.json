@@ -1,0 +1,79 @@
+{
+  "name": "Study Assistant - AI Study Helper",
+  "short_name": "Study Assistant",
+  "description": "Free AI-powered study assistant for students. Automatic lecture transcription, study material processing, and test question generation.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#2563eb",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "categories": ["education", "productivity", "utilities"],
+  "screenshots": [
+    {
+      "src": "/screenshot-1.png",
+      "sizes": "1280x720",
+      "type": "image/png",
+      "label": "Study Assistant Dashboard"
+    },
+    {
+      "src": "/screenshot-2.png",
+      "sizes": "1280x720",
+      "type": "image/png",
+      "label": "Lecture Transcription Feature"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Record Lecture",
+      "short_name": "Record",
+      "description": "Start recording a new lecture",
+      "url": "/prednasky?action=record",
+      "icons": [
+        {
+          "src": "/icon-192.png",
+          "sizes": "192x192"
+        }
+      ]
+    },
+    {
+      "name": "Upload Materials",
+      "short_name": "Upload",
+      "description": "Upload study materials",
+      "url": "/materialy?action=upload",
+      "icons": [
+        {
+          "src": "/icon-192.png",
+          "sizes": "192x192"
+        }
+      ]
+    },
+    {
+      "name": "Generate Tests",
+      "short_name": "Tests",
+      "description": "Generate practice tests",
+      "url": "/testy?action=generate",
+      "icons": [
+        {
+          "src": "/icon-192.png",
+          "sizes": "192x192"
+        }
+      ]
+    }
+  ],
+  "related_applications": [],
+  "prefer_related_applications": false
+}

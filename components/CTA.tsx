@@ -98,7 +98,7 @@ export default function CTA() {
           >
             <span className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></span>
             <span className="text-sm font-semibold text-white">
-              Začni dnes - je to zadarmo!
+              Start today - it&apos;s free!
             </span>
           </motion.div>
 
@@ -109,9 +109,9 @@ export default function CTA() {
             transition={{ duration: 0.6, delay: 0.1 }}
             className="text-4xl md:text-6xl font-bold text-white mb-8 leading-tight"
           >
-            Pripravený študovať{" "}
+            Ready to study{" "}
             <span className="bg-linear-to-r from-blue-400 to-cyan-400 bg-clip-text text-transparent">
-              efektívnejšie?
+              more effectively?
             </span>
           </motion.h2>
 
@@ -122,8 +122,8 @@ export default function CTA() {
             transition={{ duration: 0.6, delay: 0.2 }}
             className="text-xl md:text-2xl text-blue-100 mb-12 leading-relaxed"
           >
-            Pridaj sa k stovkám študentov, ktorí už využívajú AI na zlepšenie
-            svojho štúdia
+            Join hundreds of students who are already using AI to improve their
+            studies
           </motion.p>
 
           <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
@@ -131,7 +131,7 @@ export default function CTA() {
               href="/register"
               className="group inline-flex items-center space-x-2 bg-white text-blue-600 font-bold py-4 px-10 rounded-xl hover:bg-gray-50 transition-all duration-300 text-lg shadow-2xl hover:shadow-white/20 hover:scale-105"
             >
-              <span>Začať zadarmo</span>
+              <span>Start for free</span>
               <span className="group-hover:translate-x-1 transition-transform duration-200">
                 →
               </span>
@@ -149,11 +149,11 @@ export default function CTA() {
                   clipRule="evenodd"
                 />
               </svg>
-              <span>Bez kreditnej karty</span>
+              <span>No credit card required</span>
             </div>
           </div>
 
-          {/* Štatistiky */}
+          {/* Statistics */}
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -165,27 +165,23 @@ export default function CTA() {
               <div className="text-3xl md:text-4xl font-bold text-white mb-2">
                 500+
               </div>
-              <div className="text-sm text-blue-200">Aktívnych študentov</div>
+              <div className="text-sm text-blue-200">Active students</div>
             </div>
             <div className="text-center border-x border-white/20">
               <div className="text-3xl md:text-4xl font-bold text-white mb-2">
                 10k+
               </div>
-              <div className="text-sm text-blue-200">
-                Spracovaných prednášok
-              </div>
+              <div className="text-sm text-blue-200">Processed lectures</div>
             </div>
             <div className="text-center">
               <div className="text-3xl md:text-4xl font-bold text-white mb-2">
                 4.9/5
               </div>
-              <div className="text-sm text-blue-200">
-                Hodnotenie používateľov
-              </div>
+              <div className="text-sm text-blue-200">User rating</div>
             </div>
           </motion.div>
 
-          {/* Recenzie */}
+          {/* Reviews */}
           <div className="mt-20 max-w-6xl mx-auto">
             <motion.h3
               initial={{ opacity: 0, y: 20 }}
@@ -194,10 +190,10 @@ export default function CTA() {
               transition={{ duration: 0.6, delay: 0.4 }}
               className="text-2xl font-bold text-white text-center mb-12"
             >
-              Čo hovoria naši študenti
+              What our students say
             </motion.h3>
             <div className="grid md:grid-cols-3 gap-8">
-              {/* Recenzia 1 */}
+              {/* Review 1 */}
               <motion.div
                 initial={{ opacity: 0, y: 30 }}
                 whileInView={{ opacity: 1, y: 0 }}
@@ -221,8 +217,9 @@ export default function CTA() {
                   </div>
                 </div>
                 <p className="text-blue-100 mb-4 leading-relaxed">
-                  Tento nástroj mi úplne zmenil spôsob štúdia. Už nemusím tráviť
-                  hodiny prepisovaním prednášok, všetko sa uloží automaticky.
+                  This tool completely changed the way I study. I no longer have
+                  to spend hours transcribing lectures, everything is saved
+                  automatically.
                 </p>
                 <div className="flex items-center justify-center space-x-3">
                   <div className="w-10 h-10 bg-linear-to-br from-blue-400 to-cyan-400 rounded-full flex items-center justify-center text-white font-bold">
@@ -230,14 +227,12 @@ export default function CTA() {
                   </div>
                   <div>
                     <div className="text-white font-semibold">Martin K.</div>
-                    <div className="text-blue-300 text-sm">
-                      Študent medicíny
-                    </div>
+                    <div className="text-blue-300 text-sm">Medical student</div>
                   </div>
                 </div>
               </motion.div>
 
-              {/* Recenzia 2 */}
+              {/* Review 2 */}
               <motion.div
                 initial={{ opacity: 0, y: 30 }}
                 whileInView={{ opacity: 1, y: 0 }}
@@ -261,8 +256,8 @@ export default function CTA() {
                   </div>
                 </div>
                 <p className="text-blue-100 mb-4 leading-relaxed">
-                  Generovanie testových otázok je skvelé na prípravu na skúšky.
-                  Konečne viem, na čo sa zamerať a čo by som mal vedieť.
+                  Generating test questions is great for exam preparation. I
+                  finally know what to focus on and what I should know.
                 </p>
                 <div className="flex items-center justify-center space-x-3">
                   <div className="w-10 h-10 bg-linear-to-br from-purple-400 to-pink-400 rounded-full flex items-center justify-center text-white font-bold">
@@ -270,12 +265,12 @@ export default function CTA() {
                   </div>
                   <div>
                     <div className="text-white font-semibold">Lucia T.</div>
-                    <div className="text-blue-300 text-sm">Študentka práva</div>
+                    <div className="text-blue-300 text-sm">Law student</div>
                   </div>
                 </div>
               </motion.div>
 
-              {/* Recenzia 3 */}
+              {/* Review 3 */}
               <motion.div
                 initial={{ opacity: 0, y: 30 }}
                 whileInView={{ opacity: 1, y: 0 }}
@@ -299,8 +294,8 @@ export default function CTA() {
                   </div>
                 </div>
                 <p className="text-blue-100 mb-4 leading-relaxed">
-                  Jednoduché a intuitívne rozhranie. Nahrám PDF a za pár minút
-                  mám pripravené materiály na učenie. Geniálne!
+                  Simple and intuitive interface. I upload a PDF and in a few
+                  minutes I have study materials ready. Brilliant!
                 </p>
                 <div className="flex items-center justify-center space-x-3">
                   <div className="w-10 h-10 bg-linear-to-br from-green-400 to-emerald-400 rounded-full flex items-center justify-center text-white font-bold">
@@ -309,7 +304,7 @@ export default function CTA() {
                   <div>
                     <div className="text-white font-semibold">Peter S.</div>
                     <div className="text-blue-300 text-sm">
-                      Študent informatiky
+                      Computer science student
                     </div>
                   </div>
                 </div>

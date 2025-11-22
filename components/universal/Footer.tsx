@@ -11,27 +11,27 @@ export default function Footer() {
 
       <div className="container-custom py-16 relative z-10">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-10 mb-12">
-          {/* O aplikácii */}
+          {/* About the app */}
           <div className="space-y-5">
             <div className="flex items-center space-x-3">
               <div className="bg-linear-to-br from-blue-500 via-blue-600 to-cyan-600 text-white w-10 h-10 rounded-xl flex items-center justify-center shadow-lg shadow-blue-500/30">
                 <BookOpen className="w-6 h-6" />
               </div>
-              <h3 className="font-bold text-xl bg-linear-to-r from-white to-blue-100 bg-clip-text text-transparent">Študijný Asistent</h3>
+              <h3 className="font-bold text-xl bg-linear-to-r from-white to-blue-100 bg-clip-text text-transparent">Study Assistant</h3>
             </div>
             <p className="text-gray-300 text-sm leading-relaxed">
-              Inteligentný pomocník pre efektívne štúdium s podporou AI.
-              Automatizuj zápis prednášok a prípravu na skúšky.
+              Intelligent helper for effective studying with AI support.
+              Automate lecture transcription and exam preparation.
             </p>
             <div className="flex items-center space-x-2 text-xs text-gray-400">
               <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
-              <span>Aktívne a pripravené pomôcť</span>
+              <span>Active and ready to help</span>
             </div>
           </div>
 
-          {/* Funkcie */}
+          {/* Features */}
           <div>
-            <h4 className="font-semibold text-white mb-5 text-lg">Funkcie</h4>
+            <h4 className="font-semibold text-white mb-5 text-lg">Features</h4>
             <ul className="space-y-3">
               <li>
                 <Link
@@ -39,7 +39,7 @@ export default function Footer() {
                   className="text-gray-300 hover:text-blue-400 text-sm transition-all duration-200 flex items-center group"
                 >
                   <span className="w-1.5 h-1.5 bg-blue-500 rounded-full mr-3 group-hover:scale-150 group-hover:bg-blue-400 transition-all duration-200"></span>
-                  <span className="group-hover:translate-x-1 transition-transform duration-200">Zápis prednášok</span>
+                  <span className="group-hover:translate-x-1 transition-transform duration-200">Lecture recording</span>
                 </Link>
               </li>
               <li>
@@ -48,7 +48,7 @@ export default function Footer() {
                   className="text-gray-300 hover:text-blue-400 text-sm transition-all duration-200 flex items-center group"
                 >
                   <span className="w-1.5 h-1.5 bg-blue-500 rounded-full mr-3 group-hover:scale-150 group-hover:bg-blue-400 transition-all duration-200"></span>
-                  <span className="group-hover:translate-x-1 transition-transform duration-200">Spracovanie materiálov</span>
+                  <span className="group-hover:translate-x-1 transition-transform duration-200">Material processing</span>
                 </Link>
               </li>
               <li>
@@ -57,15 +57,15 @@ export default function Footer() {
                   className="text-gray-300 hover:text-blue-400 text-sm transition-all duration-200 flex items-center group"
                 >
                   <span className="w-1.5 h-1.5 bg-blue-500 rounded-full mr-3 group-hover:scale-150 group-hover:bg-blue-400 transition-all duration-200"></span>
-                  <span className="group-hover:translate-x-1 transition-transform duration-200">Generovanie testov</span>
+                  <span className="group-hover:translate-x-1 transition-transform duration-200">Test generation</span>
                 </Link>
               </li>
             </ul>
           </div>
 
-          {/* Podpora */}
+          {/* Support */}
           <div>
-            <h4 className="font-semibold text-white mb-5 text-lg">Podpora</h4>
+            <h4 className="font-semibold text-white mb-5 text-lg">Support</h4>
             <ul className="space-y-3">
               <li>
                 <Link
@@ -73,7 +73,7 @@ export default function Footer() {
                   className="text-gray-300 hover:text-blue-400 text-sm transition-all duration-200 flex items-center group"
                 >
                   <span className="w-1.5 h-1.5 bg-blue-500 rounded-full mr-3 group-hover:scale-150 group-hover:bg-blue-400 transition-all duration-200"></span>
-                  <span className="group-hover:translate-x-1 transition-transform duration-200">Nápoveda</span>
+                  <span className="group-hover:translate-x-1 transition-transform duration-200">Help</span>
                 </Link>
               </li>
               <li>
@@ -82,7 +82,7 @@ export default function Footer() {
                   className="text-gray-300 hover:text-blue-400 text-sm transition-all duration-200 flex items-center group"
                 >
                   <span className="w-1.5 h-1.5 bg-blue-500 rounded-full mr-3 group-hover:scale-150 group-hover:bg-blue-400 transition-all duration-200"></span>
-                  <span className="group-hover:translate-x-1 transition-transform duration-200">Kontakt</span>
+                  <span className="group-hover:translate-x-1 transition-transform duration-200">Contact</span>
                 </Link>
               </li>
               <li>
@@ -100,15 +100,15 @@ export default function Footer() {
                   className="text-gray-300 hover:text-blue-400 text-sm transition-all duration-200 flex items-center group"
                 >
                   <span className="w-1.5 h-1.5 bg-blue-500 rounded-full mr-3 group-hover:scale-150 group-hover:bg-blue-400 transition-all duration-200"></span>
-                  <span className="group-hover:translate-x-1 transition-transform duration-200">Dokumentácia</span>
+                  <span className="group-hover:translate-x-1 transition-transform duration-200">Documentation</span>
                 </Link>
               </li>
             </ul>
           </div>
 
-          {/* Právne a sociálne */}
+          {/* Legal and social */}
           <div>
-            <h4 className="font-semibold text-white mb-5 text-lg">Právne</h4>
+            <h4 className="font-semibold text-white mb-5 text-lg">Legal</h4>
             <ul className="space-y-3 mb-8">
               <li>
                 <Link
@@ -116,7 +116,7 @@ export default function Footer() {
                   className="text-gray-300 hover:text-blue-400 text-sm transition-all duration-200 flex items-center group"
                 >
                   <span className="w-1.5 h-1.5 bg-blue-500 rounded-full mr-3 group-hover:scale-150 group-hover:bg-blue-400 transition-all duration-200"></span>
-                  <span className="group-hover:translate-x-1 transition-transform duration-200">Ochrana súkromia</span>
+                  <span className="group-hover:translate-x-1 transition-transform duration-200">Privacy policy</span>
                 </Link>
               </li>
               <li>
@@ -125,15 +125,15 @@ export default function Footer() {
                   className="text-gray-300 hover:text-blue-400 text-sm transition-all duration-200 flex items-center group"
                 >
                   <span className="w-1.5 h-1.5 bg-blue-500 rounded-full mr-3 group-hover:scale-150 group-hover:bg-blue-400 transition-all duration-200"></span>
-                  <span className="group-hover:translate-x-1 transition-transform duration-200">Podmienky používania</span>
+                  <span className="group-hover:translate-x-1 transition-transform duration-200">Terms of use</span>
                 </Link>
               </li>
             </ul>
 
-            {/* Sociálne siete */}
+            {/* Social media */}
             <div>
               <h5 className="font-semibold text-white mb-4 text-sm">
-                Sleduj nás
+                Follow us
               </h5>
               <div className="flex space-x-3">
                 <a
@@ -166,16 +166,16 @@ export default function Footer() {
           </div>
         </div>
 
-        {/* Copyright - spodná časť */}
+        {/* Copyright - bottom section */}
         <div className="border-t border-gray-700/30 pt-8">
           <div className="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
             <p className="text-gray-400 text-sm text-center md:text-left">
-              © {currentYear} Študijný Asistent. Všetky práva vyhradené.
+              © {currentYear} Study Assistant. All rights reserved.
             </p>
             <div className="flex items-center space-x-2">
-              <span className="text-gray-500 text-xs">Vytvorené s</span>
+              <span className="text-gray-500 text-xs">Made with</span>
               <span className="text-red-500 animate-pulse text-sm">❤️</span>
-              <span className="text-gray-500 text-xs">pre študentov</span>
+              <span className="text-gray-500 text-xs">for students</span>
             </div>
           </div>
         </div>

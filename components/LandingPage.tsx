@@ -23,11 +23,11 @@ export default function LandingPage() {
           >
             <span className="w-2 h-2 bg-blue-600 rounded-full animate-pulse"></span>
             <span className="text-sm font-semibold text-blue-700">
-              Nová AI-powered platforma pre študentov
+              New AI-powered platform for students
             </span>
           </motion.div>
 
-          {/* Hlavný nadpis */}
+          {/* Main heading */}
           <motion.h1
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -35,25 +35,25 @@ export default function LandingPage() {
             className="text-5xl md:text-7xl font-bold mb-6 leading-tight"
           >
             <span className="bg-linear-to-r from-gray-900 via-gray-800 to-gray-900 bg-clip-text text-transparent">
-              Študuj efektívnejšie pomocou{" "}
+              Study more effectively with{" "}
             </span>
             <span className="bg-linear-to-r from-blue-600 via-cyan-500 to-blue-600 bg-clip-text text-transparent animate-linear">
               AI
             </span>
           </motion.h1>
 
-          {/* Popis */}
+          {/* Description */}
           <motion.p
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.2 }}
             className="text-xl md:text-2xl text-gray-600 mb-10 leading-relaxed max-w-3xl mx-auto"
           >
-            Automatický zápis prednášok, inteligentné spracovanie študijných
-            materiálov a generovanie testových otázok. Všetko na jednom mieste.
+            Automatic lecture transcription, intelligent study material processing,
+            and test question generation. All in one place.
           </motion.p>
 
-          {/* CTA tlačidlá */}
+          {/* CTA buttons */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -66,7 +66,7 @@ export default function LandingPage() {
                 className="group btn-primary text-lg bg-linear-to-r from-blue-600 to-cyan-600 px-8 py-4 rounded-xl text-white hover:from-blue-700 hover:to-cyan-700 transition-all duration-300 shadow-xl shadow-blue-500/30 hover:shadow-2xl hover:shadow-blue-500/40 font-semibold inline-block"
               >
                 <span className="flex items-center justify-center space-x-2">
-                  <span>Začať zadarmo</span>
+                  <span>Start for free</span>
                   <span className="group-hover:translate-x-1 transition-transform duration-200">
                     →
                   </span>
@@ -78,12 +78,12 @@ export default function LandingPage() {
                 href="#funkcie"
                 className="btn-secondary text-lg bg-white border-2 border-gray-200 px-8 py-4 rounded-xl hover:bg-gray-50 hover:border-blue-300 transition-all duration-300 shadow-lg hover:shadow-xl font-semibold text-gray-700 hover:text-blue-600 inline-block"
               >
-                Zistiť viac
+                Learn more
               </Link>
             </motion.div>
           </motion.div>
 
-          {/* Ikony funkcií */}
+          {/* Feature icons */}
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
@@ -101,7 +101,7 @@ export default function LandingPage() {
                 <Mic className="w-8 h-8 text-blue-600" />
               </div>
               <span className="text-sm font-semibold text-gray-700 group-hover:text-blue-600 transition-colors">
-                Zápis prednášok
+                Lecture recording
               </span>
             </motion.div>
 
@@ -116,7 +116,7 @@ export default function LandingPage() {
                 <FileText className="w-8 h-8 text-green-600" />
               </div>
               <span className="text-sm font-semibold text-gray-700 group-hover:text-green-600 transition-colors">
-                Analýza materiálov
+                Material analysis
               </span>
             </motion.div>
 
@@ -131,7 +131,7 @@ export default function LandingPage() {
                 <Brain className="w-8 h-8 text-purple-600" />
               </div>
               <span className="text-sm font-semibold text-gray-700 group-hover:text-purple-600 transition-colors">
-                AI výcuc
+                AI study guide
               </span>
             </motion.div>
 
@@ -146,7 +146,7 @@ export default function LandingPage() {
                 <BookOpen className="w-8 h-8 text-orange-600" />
               </div>
               <span className="text-sm font-semibold text-gray-700 group-hover:text-orange-600 transition-colors">
-                Testové otázky
+                Test questions
               </span>
             </motion.div>
           </motion.div>

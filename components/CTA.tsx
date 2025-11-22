@@ -10,9 +10,80 @@ export default function CTA() {
         <div className="absolute top-0 left-1/4 w-96 h-96 bg-blue-600/20 rounded-full blur-3xl"></div>
         <div className="absolute bottom-0 right-1/4 w-80 h-80 bg-cyan-600/20 rounded-full blur-3xl"></div>
         {/* Animované hviezdičky */}
-        <div className="absolute top-20 left-20 w-2 h-2 bg-white/40 rounded-full animate-pulse animate-float"></div>
-        <div className="absolute top-40 right-40 w-2 h-2 bg-white/40 rounded-full animate-pulse animate-float-delay"></div>
-        <div className="absolute bottom-32 left-1/3 w-2 h-2 bg-white/40 rounded-full animate-pulse animate-float-slow"></div>
+        <motion.div
+          className="absolute w-2 h-2 bg-white/40 rounded-full"
+          animate={{
+            x: [0, 100, -50, 80, 0],
+            y: [0, -80, 60, -40, 0],
+            opacity: [0.4, 0.8, 0.3, 0.7, 0.4],
+          }}
+          transition={{
+            duration: 15,
+            repeat: Infinity,
+            ease: "easeInOut",
+          }}
+          style={{ top: "20%", left: "20%" }}
+        />
+        <motion.div
+          className="absolute w-2 h-2 bg-white/40 rounded-full"
+          animate={{
+            x: [0, -80, 60, -40, 0],
+            y: [0, 70, -90, 50, 0],
+            opacity: [0.3, 0.7, 0.4, 0.8, 0.3],
+          }}
+          transition={{
+            duration: 18,
+            repeat: Infinity,
+            ease: "easeInOut",
+            delay: 0.5,
+          }}
+          style={{ top: "40%", right: "20%" }}
+        />
+        <motion.div
+          className="absolute w-2 h-2 bg-white/40 rounded-full"
+          animate={{
+            x: [0, -60, 90, -70, 0],
+            y: [0, -50, 80, -30, 0],
+            opacity: [0.5, 0.3, 0.8, 0.4, 0.5],
+          }}
+          transition={{
+            duration: 20,
+            repeat: Infinity,
+            ease: "easeInOut",
+            delay: 1,
+          }}
+          style={{ bottom: "30%", left: "33%" }}
+        />
+        <motion.div
+          className="absolute w-2 h-2 bg-white/40 rounded-full"
+          animate={{
+            x: [0, 70, -80, 50, 0],
+            y: [0, -60, 40, -70, 0],
+            opacity: [0.6, 0.4, 0.7, 0.3, 0.6],
+          }}
+          transition={{
+            duration: 16,
+            repeat: Infinity,
+            ease: "easeInOut",
+            delay: 1.5,
+          }}
+          style={{ top: "60%", right: "30%" }}
+        />
+        <motion.div
+          className="absolute w-2 h-2 bg-white/40 rounded-full"
+          animate={{
+            x: [0, -90, 40, -60, 0],
+            y: [0, 80, -70, 50, 0],
+            opacity: [0.4, 0.8, 0.5, 0.7, 0.4],
+          }}
+          transition={{
+            duration: 22,
+            repeat: Infinity,
+            ease: "easeInOut",
+            delay: 2,
+          }}
+          style={{ top: "15%", left: "60%" }}
+        />
       </div>
 
       <div className="container-custom relative z-10">

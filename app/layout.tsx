@@ -40,7 +40,7 @@ export default function RootLayout({
         <Navbar />
 
         {/* Hlavný obsah stránky */}
-        <main className="flex-grow">{children}</main>
+        <main className="grow">{children}</main>
 
         {/* Footer - zobrazuje sa na všetkých stránkach */}
         <Footer />

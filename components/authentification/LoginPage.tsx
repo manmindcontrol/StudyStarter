@@ -169,7 +169,7 @@ export default function LoginPage() {
               animate={{ opacity: 1, scale: 1 }}
               className="mb-6 p-4 bg-red-500/20 backdrop-blur-sm border border-red-400/50 rounded-lg flex items-start space-x-3"
             >
-              <AlertCircle className="w-5 h-5 text-red-300 mt-0.5 flex-shrink-0" />
+              <AlertCircle className="w-5 h-5 text-red-300 mt-0.5 shrink-0" />
               <p className="text-sm text-red-100">{error}</p>
             </motion.div>
           )}

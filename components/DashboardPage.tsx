@@ -3,18 +3,9 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { getCurrentUser, signOut } from "@/lib/auth";
+import { getCurrentUser } from "@/lib/auth";
 import { supabase } from "@/lib/supabase";
-import {
-  BookOpen,
-  FileText,
-  Mic,
-  Brain,
-  Plus,
-  TrendingUp,
-  LogOut,
-  User as UserIcon,
-} from "lucide-react";
+import { BookOpen, FileText, Mic, Brain, Plus, TrendingUp } from "lucide-react";
 import type { User } from "@supabase/supabase-js";
 
 type UserProfile = {
@@ -41,12 +32,6 @@ export default function DashboardPage() {
     lecturesCount: 0,
     testsCount: 0,
   });
-
-  const handleSignOut = async () => {
-    await signOut();
-    router.push("/");
-    router.refresh();
-  };
 
   useEffect(() => {
     let isMounted = true;
@@ -118,30 +103,11 @@ export default function DashboardPage() {
     <div className="min-h-screen bg-gray-50 py-8">
       <div className="container-custom">
         {/* Header */}
-        <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-8">
-          <div>
-            <h1 className="text-3xl font-bold text-gray-900 mb-2">
-              Ahoj, {firstName}! 👋
-            </h1>
-            <p className="text-gray-600">Vitaj späť v Študijnom Asistentovi</p>
-          </div>
-
-          <div className="mt-4 md:mt-0 flex items-center space-x-4">
-            <Link
-              href="/profile"
-              className="flex items-center space-x-2 text-gray-600 hover:text-gray-900 transition-colors"
-            >
-              <UserIcon className="w-5 h-5" />
-              <span>Profil</span>
-            </Link>
-            <button
-              onClick={handleSignOut}
-              className="flex items-center space-x-2 text-gray-600 hover:text-red-600 transition-colors"
-            >
-              <LogOut className="w-5 h-5" />
-              <span>Odhlásiť sa</span>
-            </button>
-          </div>
+        <div className="mb-8">
+          <h1 className="text-3xl font-bold text-gray-900 mb-2">
+            Ahoj, {firstName}! 👋
+          </h1>
+          <p className="text-gray-600">Vitaj späť v Študijnom Asistentovi</p>
         </div>
 
         {/* Štatistiky */}
@@ -250,7 +216,7 @@ export default function DashboardPage() {
         </div>
 
         {/* Začni tu */}
-        <div className="bg-gradient-to-r from-blue-600 to-blue-700 rounded-xl shadow-lg p-8 text-white">
+        <div className="bg-linear-to-r from-blue-600 to-blue-700 rounded-xl shadow-lg p-8 text-white">
           <div className="flex items-center space-x-4 mb-6">
             <div className="bg-white/20 p-3 rounded-lg">
               <BookOpen className="w-8 h-8" />

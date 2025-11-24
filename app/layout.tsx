@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/components/universal/Navbar";
@@ -78,15 +78,6 @@ export const metadata: Metadata = {
     images: ["/twitter-image.png"],
     creator: "@studyassistant",
   },
-  viewport: {
-    width: "device-width",
-    initialScale: 1,
-    maximumScale: 5,
-  },
-  themeColor: [
-    { media: "(prefers-color-scheme: light)", color: "#2563eb" },
-    { media: "(prefers-color-scheme: dark)", color: "#1e40af" },
-  ],
   manifest: "/manifest.json",
   icons: {
     icon: [
@@ -100,6 +91,16 @@ export const metadata: Metadata = {
     canonical: "https://studyassistant.app",
   },
   category: "education",
+};
+
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 5,
+  themeColor: [
+    { media: "(prefers-color-scheme: light)", color: "#2563eb" },
+    { media: "(prefers-color-scheme: dark)", color: "#1e40af" },
+  ],
 };
 
 export default function RootLayout({

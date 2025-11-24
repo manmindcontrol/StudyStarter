@@ -200,7 +200,7 @@ export default function CTA() {
                 viewport={{ once: true }}
                 transition={{ duration: 0.6, delay: 0.5 }}
                 whileHover={{ scale: 1.02 }}
-                className="bg-white/10 backdrop-blur-sm border border-white/20 rounded-2xl p-8 hover:bg-white/15 transition-all duration-300"
+                className="bg-white/10 backdrop-blur-sm border border-white/20 rounded-2xl p-8 hover:bg-white/15 transition-all duration-300 flex flex-col"
               >
                 <div className="flex items-center justify-center mb-4">
                   <div className="flex space-x-1">
@@ -216,12 +216,12 @@ export default function CTA() {
                     ))}
                   </div>
                 </div>
-                <p className="text-blue-100 mb-4 leading-relaxed">
+                <p className="text-blue-100 mb-6 leading-relaxed grow">
                   This tool completely changed the way I study. I no longer have
                   to spend hours transcribing lectures, everything is saved
                   automatically.
                 </p>
-                <div className="flex items-center justify-center space-x-3">
+                <div className="flex items-center justify-center space-x-3 mt-auto">
                   <div className="w-10 h-10 bg-linear-to-br from-blue-400 to-cyan-400 rounded-full flex items-center justify-center text-white font-bold">
                     M
                   </div>
@@ -239,7 +239,7 @@ export default function CTA() {
                 viewport={{ once: true }}
                 transition={{ duration: 0.6, delay: 0.6 }}
                 whileHover={{ scale: 1.02 }}
-                className="bg-white/10 backdrop-blur-sm border border-white/20 rounded-2xl p-8 hover:bg-white/15 transition-all duration-300"
+                className="bg-white/10 backdrop-blur-sm border border-white/20 rounded-2xl p-8 hover:bg-white/15 transition-all duration-300 flex flex-col"
               >
                 <div className="flex items-center justify-center mb-4">
                   <div className="flex space-x-1">
@@ -255,11 +255,11 @@ export default function CTA() {
                     ))}
                   </div>
                 </div>
-                <p className="text-blue-100 mb-4 leading-relaxed">
+                <p className="text-blue-100 mb-6 leading-relaxed grow">
                   Generating test questions is great for exam preparation. I
                   finally know what to focus on and what I should know.
                 </p>
-                <div className="flex items-center justify-center space-x-3">
+                <div className="flex items-center justify-center space-x-3 mt-auto">
                   <div className="w-10 h-10 bg-linear-to-br from-purple-400 to-pink-400 rounded-full flex items-center justify-center text-white font-bold">
                     L
                   </div>
@@ -277,7 +277,7 @@ export default function CTA() {
                 viewport={{ once: true }}
                 transition={{ duration: 0.6, delay: 0.7 }}
                 whileHover={{ scale: 1.02 }}
-                className="bg-white/10 backdrop-blur-sm border border-white/20 rounded-2xl p-8 hover:bg-white/15 transition-all duration-300"
+                className="bg-white/10 backdrop-blur-sm border border-white/20 rounded-2xl p-8 hover:bg-white/15 transition-all duration-300 flex flex-col"
               >
                 <div className="flex items-center justify-center mb-4">
                   <div className="flex space-x-1">
@@ -293,11 +293,11 @@ export default function CTA() {
                     ))}
                   </div>
                 </div>
-                <p className="text-blue-100 mb-4 leading-relaxed">
+                <p className="text-blue-100 mb-6 leading-relaxed grow">
                   Simple and intuitive interface. I upload a PDF and in a few
                   minutes I have study materials ready. Brilliant!
                 </p>
-                <div className="flex items-center justify-center space-x-3">
+                <div className="flex items-center justify-center space-x-3 mt-auto">
                   <div className="w-10 h-10 bg-linear-to-br from-green-400 to-emerald-400 rounded-full flex items-center justify-center text-white font-bold">
                     P
                   </div>

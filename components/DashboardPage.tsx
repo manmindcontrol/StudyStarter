@@ -7,6 +7,7 @@ import { getCurrentUser } from "@/lib/auth";
 import { supabase } from "@/lib/supabase";
 import { BookOpen, FileText, Mic, Brain, Plus, TrendingUp } from "lucide-react";
 import type { User } from "@supabase/supabase-js";
+import { useAutoLogout } from "@/hooks/useAutoLogout";
 
 type UserProfile = {
   id: string;
@@ -23,6 +24,9 @@ type Stats = {
 
 export default function DashboardPage() {
   const router = useRouter();
+
+  // Aktivuj automatické odhlásenie pri nečinnosti
+  useAutoLogout();
 
   // undefined = ešte neviem, null = nie je prihlásený, User = prihlásený
   const [user, setUser] = useState<User | null | undefined>(undefined);

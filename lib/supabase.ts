@@ -3,7 +3,19 @@ import { createClient } from '@supabase/supabase-js'
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!
 const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
 
-export const supabase = createClient(supabaseUrl, supabaseAnonKey)
+// Helper funkcia pre vytvorenie Supabase klienta s rôznymi storage nastaveniami
+export const createSupabaseClient = (persistSession: boolean = true) => {
+  return createClient(supabaseUrl, supabaseAnonKey, {
+    auth: {
+      storage: typeof window !== 'undefined' ? (persistSession ? window.localStorage : window.sessionStorage) : undefined,
+      persistSession: persistSession,
+      autoRefreshToken: true,
+      detectSessionInUrl: true,
+    }
+  })
+}
+
+export const supabase = createSupabaseClient(true)
 
 // Typy pre našu databázu
 export type Database = {

@@ -14,6 +14,7 @@ export default function LoginPage() {
     email: "",
     password: "",
   });
+  const [rememberMe, setRememberMe] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
@@ -49,7 +50,7 @@ export default function LoginPage() {
     setLoading(true);
     setError("");
 
-    const { user, error } = await signIn(formData.email, formData.password);
+    const { user, error } = await signIn(formData.email, formData.password, rememberMe);
 
     if (error) {
       setError("Nesprávny email alebo heslo");
@@ -58,6 +59,13 @@ export default function LoginPage() {
     }
 
     if (user) {
+      // Ulož "remember me" preferenziu
+      if (rememberMe) {
+        localStorage.setItem("rememberMe", "true");
+      } else {
+        localStorage.removeItem("rememberMe");
+      }
+
       // Úspešné prihlásenie - presmeruj na dashboard
       router.push("/dashboard");
       router.refresh();
@@ -231,6 +239,25 @@ export default function LoginPage() {
                   autoComplete="current-password"
                 />
               </div>
+            </div>
+
+            {/* Remember Me checkbox */}
+            <div className="flex items-center">
+              <input
+                id="rememberMe"
+                name="rememberMe"
+                type="checkbox"
+                checked={rememberMe}
+                onChange={(e) => setRememberMe(e.target.checked)}
+                className="w-4 h-4 text-blue-500 bg-white/10 border-white/20 rounded focus:ring-2 focus:ring-blue-400"
+                disabled={loading}
+              />
+              <label
+                htmlFor="rememberMe"
+                className="ml-2 block text-sm text-blue-200"
+              >
+                Remember me
+              </label>
             </div>
 
             {/* Google prihlásenie */}

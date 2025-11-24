@@ -2,18 +2,24 @@ import { NextRequest, NextResponse } from "next/server";
 import { createClient } from "@supabase/supabase-js";
 import mammoth from "mammoth";
 import { Buffer } from "buffer";
+import OpenAI from "openai";
+import { toFile } from "openai/uploads";
 
 export const runtime = "nodejs";
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
 const serviceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY!;
+const openaiApiKey = process.env.OPENAI_API_KEY!;
 
-// server-only Supabase klient so service role (obchádza RLS)
 const supabase = createClient(supabaseUrl, serviceRoleKey, {
   auth: {
     persistSession: false,
     autoRefreshToken: false,
   },
+});
+
+const openai = new OpenAI({
+  apiKey: openaiApiKey,
 });
 
 export async function POST(request: NextRequest) {
@@ -34,17 +40,17 @@ export async function POST(request: NextRequest) {
     const buffer = Buffer.from(arrayBuffer);
 
     let extractedText = "";
-    const fileType = file.name.split(".").pop()?.toLowerCase();
+    const fileType = file.name.split(".").pop()?.toLowerCase() ?? null;
 
-    if (fileType === "pdf") {
-      const { default: pdfParse } = await import("pdf-parse");
-      const pdfData = await pdfParse(buffer);
-      extractedText = pdfData.text;
-    } else if (fileType === "docx" || fileType === "doc") {
+    // Extrakcia textu budeme robiť len pre DOC/DOCX/TXT, PDF necháme na LLM
+    if (fileType === "docx" || fileType === "doc") {
       const result = await mammoth.extractRawText({ buffer });
       extractedText = result.value;
     } else if (fileType === "txt") {
       extractedText = buffer.toString("utf-8");
+    } else if (fileType === "pdf") {
+      // PDF: nechávame extractedText prázdny, budeme ho čítať cez OpenAI Files
+      extractedText = "";
     } else {
       return NextResponse.json(
         { error: "Nepodporovaný typ súboru" },
@@ -52,13 +58,21 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const timestamp = Date.now();
-    const fileName = `${userId}/${timestamp}-${file.name}`;
+    // 1️⃣ Upload do OpenAI Files – aby model vedel pracovať s dokumentom
+    const openaiFile = await openai.files.create({
+      file: await toFile(buffer, file.name),
+      purpose: "assistants",
+    });
 
-    // Upload do Storage
+    const openaiFileId = openaiFile.id;
+
+    // 2️⃣ Upload do Supabase Storage
+    const timestamp = Date.now();
+    const storagePath = `${userId}/${timestamp}-${file.name}`;
+
     const { error: uploadError } = await supabase.storage
       .from("materials")
-      .upload(fileName, buffer, {
+      .upload(storagePath, buffer, {
         contentType: file.type,
         upsert: false,
       });
@@ -71,7 +85,7 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Insert do DB
+    // 3️⃣ Insert do DB
     const { data: material, error: dbError } = await supabase
       .from("materials")
       .insert({
@@ -79,8 +93,9 @@ export async function POST(request: NextRequest) {
         title: title || file.name,
         file_name: file.name,
         file_type: fileType,
-        content: extractedText,
-        storage_path: fileName,
+        content: extractedText, // pri PDF bude zatiaľ "", ale nevadí
+        storage_path: storagePath,
+        openai_file_id: openaiFileId,
       })
       .select()
       .single();

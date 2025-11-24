@@ -53,7 +53,7 @@
       "name": "Upload Materials",
       "short_name": "Upload",
       "description": "Upload study materials",
-      "url": "/materialy?action=upload",
+      "url": "/materials?action=upload",
       "icons": [
         {
           "src": "/icon-192.png",

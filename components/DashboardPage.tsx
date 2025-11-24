@@ -161,7 +161,7 @@ export default function DashboardPage() {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             {/* Nahrať materiál */}
             <Link
-              href="/materialy"
+              href="/materials"
               className="bg-white rounded-xl shadow-sm p-6 border border-gray-100 hover:shadow-md transition-shadow group"
             >
               <div className="flex items-center space-x-4">
@@ -232,7 +232,7 @@ export default function DashboardPage() {
           </div>
           <div className="flex flex-wrap gap-4">
             <Link
-              href="/materialy"
+              href="/materials"
               className="bg-white text-blue-600 hover:bg-blue-50 font-semibold py-3 px-6 rounded-lg transition-colors"
             >
               Nahrať materiály

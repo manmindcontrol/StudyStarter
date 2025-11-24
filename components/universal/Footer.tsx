@@ -17,7 +17,9 @@ export default function Footer() {
               <div className="bg-linear-to-br from-blue-500 via-blue-600 to-cyan-600 text-white w-10 h-10 rounded-xl flex items-center justify-center shadow-lg shadow-blue-500/30">
                 <BookOpen className="w-6 h-6" />
               </div>
-              <h3 className="font-bold text-xl bg-linear-to-r from-white to-blue-100 bg-clip-text text-transparent">Study Assistant</h3>
+              <h3 className="font-bold text-xl bg-linear-to-r from-white to-blue-100 bg-clip-text text-transparent">
+                Study Assistant
+              </h3>
             </div>
             <p className="text-gray-300 text-sm leading-relaxed">
               Intelligent helper for effective studying with AI support.
@@ -39,16 +41,20 @@ export default function Footer() {
                   className="text-gray-300 hover:text-blue-400 text-sm transition-all duration-200 flex items-center group"
                 >
                   <span className="w-1.5 h-1.5 bg-blue-500 rounded-full mr-3 group-hover:scale-150 group-hover:bg-blue-400 transition-all duration-200"></span>
-                  <span className="group-hover:translate-x-1 transition-transform duration-200">Lecture recording</span>
+                  <span className="group-hover:translate-x-1 transition-transform duration-200">
+                    Lecture recording
+                  </span>
                 </Link>
               </li>
               <li>
                 <Link
-                  href="/materialy"
+                  href="/materials"
                   className="text-gray-300 hover:text-blue-400 text-sm transition-all duration-200 flex items-center group"
                 >
                   <span className="w-1.5 h-1.5 bg-blue-500 rounded-full mr-3 group-hover:scale-150 group-hover:bg-blue-400 transition-all duration-200"></span>
-                  <span className="group-hover:translate-x-1 transition-transform duration-200">Material processing</span>
+                  <span className="group-hover:translate-x-1 transition-transform duration-200">
+                    Material processing
+                  </span>
                 </Link>
               </li>
               <li>
@@ -57,7 +63,9 @@ export default function Footer() {
                   className="text-gray-300 hover:text-blue-400 text-sm transition-all duration-200 flex items-center group"
                 >
                   <span className="w-1.5 h-1.5 bg-blue-500 rounded-full mr-3 group-hover:scale-150 group-hover:bg-blue-400 transition-all duration-200"></span>
-                  <span className="group-hover:translate-x-1 transition-transform duration-200">Test generation</span>
+                  <span className="group-hover:translate-x-1 transition-transform duration-200">
+                    Test generation
+                  </span>
                 </Link>
               </li>
             </ul>
@@ -73,7 +81,9 @@ export default function Footer() {
                   className="text-gray-300 hover:text-blue-400 text-sm transition-all duration-200 flex items-center group"
                 >
                   <span className="w-1.5 h-1.5 bg-blue-500 rounded-full mr-3 group-hover:scale-150 group-hover:bg-blue-400 transition-all duration-200"></span>
-                  <span className="group-hover:translate-x-1 transition-transform duration-200">Help</span>
+                  <span className="group-hover:translate-x-1 transition-transform duration-200">
+                    Help
+                  </span>
                 </Link>
               </li>
               <li>
@@ -82,7 +92,9 @@ export default function Footer() {
                   className="text-gray-300 hover:text-blue-400 text-sm transition-all duration-200 flex items-center group"
                 >
                   <span className="w-1.5 h-1.5 bg-blue-500 rounded-full mr-3 group-hover:scale-150 group-hover:bg-blue-400 transition-all duration-200"></span>
-                  <span className="group-hover:translate-x-1 transition-transform duration-200">Contact</span>
+                  <span className="group-hover:translate-x-1 transition-transform duration-200">
+                    Contact
+                  </span>
                 </Link>
               </li>
               <li>
@@ -91,7 +103,9 @@ export default function Footer() {
                   className="text-gray-300 hover:text-blue-400 text-sm transition-all duration-200 flex items-center group"
                 >
                   <span className="w-1.5 h-1.5 bg-blue-500 rounded-full mr-3 group-hover:scale-150 group-hover:bg-blue-400 transition-all duration-200"></span>
-                  <span className="group-hover:translate-x-1 transition-transform duration-200">FAQ</span>
+                  <span className="group-hover:translate-x-1 transition-transform duration-200">
+                    FAQ
+                  </span>
                 </Link>
               </li>
               <li>
@@ -100,7 +114,9 @@ export default function Footer() {
                   className="text-gray-300 hover:text-blue-400 text-sm transition-all duration-200 flex items-center group"
                 >
                   <span className="w-1.5 h-1.5 bg-blue-500 rounded-full mr-3 group-hover:scale-150 group-hover:bg-blue-400 transition-all duration-200"></span>
-                  <span className="group-hover:translate-x-1 transition-transform duration-200">Documentation</span>
+                  <span className="group-hover:translate-x-1 transition-transform duration-200">
+                    Documentation
+                  </span>
                 </Link>
               </li>
             </ul>
@@ -116,7 +132,9 @@ export default function Footer() {
                   className="text-gray-300 hover:text-blue-400 text-sm transition-all duration-200 flex items-center group"
                 >
                   <span className="w-1.5 h-1.5 bg-blue-500 rounded-full mr-3 group-hover:scale-150 group-hover:bg-blue-400 transition-all duration-200"></span>
-                  <span className="group-hover:translate-x-1 transition-transform duration-200">Privacy policy</span>
+                  <span className="group-hover:translate-x-1 transition-transform duration-200">
+                    Privacy policy
+                  </span>
                 </Link>
               </li>
               <li>
@@ -125,7 +143,9 @@ export default function Footer() {
                   className="text-gray-300 hover:text-blue-400 text-sm transition-all duration-200 flex items-center group"
                 >
                   <span className="w-1.5 h-1.5 bg-blue-500 rounded-full mr-3 group-hover:scale-150 group-hover:bg-blue-400 transition-all duration-200"></span>
-                  <span className="group-hover:translate-x-1 transition-transform duration-200">Terms of use</span>
+                  <span className="group-hover:translate-x-1 transition-transform duration-200">
+                    Terms of use
+                  </span>
                 </Link>
               </li>
             </ul>

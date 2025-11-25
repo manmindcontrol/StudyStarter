@@ -8,6 +8,7 @@ import { supabase } from "@/lib/supabase";
 import FileUpload from "@/components/FileUpload";
 import { FileText, Clock, Trash2, Eye, Search } from "lucide-react";
 import type { User } from "@supabase/supabase-js";
+import GenerateQuestionsButton from "@/components/GenerateQuestionsButton";
 
 type Material = {
   id: string;
@@ -151,9 +152,12 @@ export default function MaterialsPage() {
         </div>
 
         {/* Upload sekcia */}
-        <div className="mb-8">
-          <FileUpload onUpload={handleUpload} />
-        </div>
+        <FileUpload onUpload={handleUpload} />
+        {uploading && (
+          <p className="mt-2 text-sm text-gray-500">
+            Uploading file, please wait...
+          </p>
+        )}
 
         {/* Vyhľadávanie */}
         {materials.length > 0 && (
@@ -241,21 +245,30 @@ export default function MaterialsPage() {
                     </div>
 
                     {/* Akcie */}
-                    <div className="flex items-center space-x-2">
-                      <Link
-                        href={`/materials/${material.id}`}
-                        className="flex-1 bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold py-2 px-4 rounded-lg transition-colors flex items-center justify-center"
-                      >
-                        <Eye className="w-4 h-4 mr-2" />
-                        Otvoriť
-                      </Link>
-                      <button
-                        onClick={() => handleDelete(material.id)}
-                        className="bg-red-50 hover:bg-red-100 text-red-600 p-2 rounded-lg transition-colors"
-                        title="Vymazať"
-                      >
-                        <Trash2 className="w-4 h-4" />
-                      </button>
+                    <div className="flex flex-col space-y-2">
+                      <div className="flex items-center space-x-2">
+                        <Link
+                          href={`/materials/${material.id}`}
+                          className="flex-1 bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold py-2 px-4 rounded-lg transition-colors flex items-center justify-center"
+                        >
+                          <Eye className="w-4 h-4 mr-2" />
+                          Otvoriť
+                        </Link>
+                        <button
+                          onClick={() => handleDelete(material.id)}
+                          className="bg-red-50 hover:bg-red-100 text-red-600 p-2 rounded-lg transition-colors"
+                          title="Vymazať"
+                        >
+                          <Trash2 className="w-4 h-4" />
+                        </button>
+                      </div>
+
+                      {/* Generate questions button */}
+                      <GenerateQuestionsButton
+                        materialId={material.id}
+                        questionType="exam"
+                        // lang="en" // ak chceš vynútiť angličtinu, odkomentuj
+                      />
                     </div>
                   </div>
                 </div>

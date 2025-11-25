@@ -222,7 +222,7 @@ export default function FileUpload({
       {/* Error správa */}
       {error && (
         <div className="mt-4 p-4 bg-red-50 border border-red-200 rounded-lg flex items-start space-x-3">
-          <AlertCircle className="w-5 h-5 text-red-600 mt-0.5 flex-shrink-0" />
+          <AlertCircle className="w-5 h-5 text-red-600 mt-0.5 shrink-0" />
           <p className="text-sm text-red-700">{error}</p>
         </div>
       )}
@@ -230,7 +230,7 @@ export default function FileUpload({
       {/* Success správa */}
       {success && (
         <div className="mt-4 p-4 bg-green-50 border border-green-200 rounded-lg flex items-start space-x-3">
-          <CheckCircle className="w-5 h-5 text-green-600 mt-0.5 flex-shrink-0" />
+          <CheckCircle className="w-5 h-5 text-green-600 mt-0.5 shrink-0" />
           <p className="text-sm text-green-700">Materiál úspešne nahraný!</p>
         </div>
       )}

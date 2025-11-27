@@ -13,6 +13,7 @@ type UserProfile = {
   id: string;
   email: string | null;
   full_name: string | null;
+  display_name: string | null;
   created_at: string;
 };
 
@@ -101,7 +102,8 @@ export default function DashboardPage() {
     );
   }
 
-  const firstName = profile?.full_name?.split(" ")[0] || "Študent";
+  const displayName =
+    profile?.display_name || profile?.full_name?.split(" ")[0] || "Študent";
 
   return (
     <div className="min-h-screen bg-gray-50 py-8">
@@ -109,7 +111,7 @@ export default function DashboardPage() {
         {/* Header */}
         <div className="mb-8">
           <h1 className="text-3xl font-bold text-gray-900 mb-2">
-            Ahoj, {firstName}! 👋
+            Ahoj, {displayName}! 👋
           </h1>
           <p className="text-gray-600">Vitaj späť v Študijnom Asistentovi</p>
         </div>
@@ -220,7 +222,7 @@ export default function DashboardPage() {
         </div>
 
         {/* Začni tu */}
-        <div className="bg-linear-to-r from-blue-600 to-blue-700 rounded-xl shadow-lg p-8 text-white">
+        <div className="bg-linear-to-r from-blue-600 to-cyan-600 rounded-xl shadow-lg p-8 text-white">
           <div className="flex items-center space-x-4 mb-6">
             <div className="bg-white/20 p-3 rounded-lg">
               <BookOpen className="w-8 h-8" />
@@ -237,13 +239,13 @@ export default function DashboardPage() {
           <div className="flex flex-wrap gap-4">
             <Link
               href="/materials"
-              className="bg-white text-blue-600 hover:bg-blue-50 font-semibold py-3 px-6 rounded-lg transition-colors"
+              className="bg-white text-blue-600 hover:bg-white/80 font-semibold py-3 px-6 rounded-lg transition-colors"
             >
               Nahrať materiály
             </Link>
             <Link
               href="/prednasky"
-              className="bg-white/10 hover:bg-white/20 text-white font-semibold py-3 px-6 rounded-lg transition-colors border border-white/30"
+              className="bg-white/20 hover:bg-white/40 text-white font-semibold py-3 px-6 rounded-lg transition-colors border border-white/30"
             >
               Nahrať prednášku
             </Link>

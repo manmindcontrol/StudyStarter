@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 
 type QuestionType = "exam" | "test" | "summary";
 
@@ -24,13 +25,12 @@ export default function GenerateQuestionsButton({
   lang,
   onGenerated,
 }: GenerateQuestionsButtonProps) {
+  const router = useRouter();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [success, setSuccess] = useState(false);
 
   const handleClick = async () => {
     setError(null);
-    setSuccess(false);
     setLoading(true);
 
     try {
@@ -58,15 +58,14 @@ export default function GenerateQuestionsButton({
         onGenerated(questions);
       }
 
-      setSuccess(true);
-      setTimeout(() => setSuccess(false), 3000);
+      // Presmeruj na stránku s otázkami
+      router.push(`/materials/${materialId}/questions/${data.record.id}`);
     } catch (err) {
       setError(
         err instanceof Error
           ? err.message
           : "Unexpected error while generating questions."
       );
-    } finally {
       setLoading(false);
     }
   };
@@ -83,12 +82,6 @@ export default function GenerateQuestionsButton({
       </button>
 
       {error && <p className="text-xs text-red-600">{error}</p>}
-
-      {success && (
-        <p className="text-xs text-emerald-600">
-          Questions generated and saved.
-        </p>
-      )}
     </div>
   );
 }

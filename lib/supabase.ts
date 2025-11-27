@@ -26,6 +26,7 @@ export type Database = {
           id: string
           email: string | null
           full_name: string | null
+          display_name: string | null
           created_at: string
         }
       }
@@ -38,6 +39,7 @@ export type Database = {
           file_type: string | null
           content: string | null
           storage_path: string | null
+          openai_file_id: string | null
           created_at: string
         }
       }
@@ -49,6 +51,21 @@ export type Database = {
           transcript: string | null
           summary: string | null
           audio_path: string | null
+          created_at: string
+        }
+      }
+      generated_questions: {
+        Row: {
+          id: string
+          material_id: string
+          user_id: string
+          question_type: string
+          questions: Array<{
+            question: string
+            type: "open" | "mcq"
+            options: string[] | null
+            answer: string | null
+          }>
           created_at: string
         }
       }

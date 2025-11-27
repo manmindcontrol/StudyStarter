@@ -4,6 +4,8 @@ import mammoth from "mammoth";
 import { Buffer } from "buffer";
 import OpenAI from "openai";
 import { toFile } from "openai/uploads";
+// @ts-ignore - pdf-parse doesn't have proper types
+import pdfParse from "pdf-parse/lib/pdf-parse.js";
 
 export const runtime = "nodejs";
 
@@ -42,15 +44,22 @@ export async function POST(request: NextRequest) {
     let extractedText = "";
     const fileType = file.name.split(".").pop()?.toLowerCase() ?? null;
 
-    // Extrakcia textu budeme robiť len pre DOC/DOCX/TXT, PDF necháme na LLM
+    // Extrakcia textu z rôznych formátov
     if (fileType === "docx" || fileType === "doc") {
       const result = await mammoth.extractRawText({ buffer });
       extractedText = result.value;
     } else if (fileType === "txt") {
       extractedText = buffer.toString("utf-8");
     } else if (fileType === "pdf") {
-      // PDF: nechávame extractedText prázdny, budeme ho čítať cez OpenAI Files
-      extractedText = "";
+      // PDF: extrahujeme text pomocou pdf-parse
+      try {
+        const pdfData = await pdfParse(buffer);
+        extractedText = pdfData.text;
+      } catch (pdfError) {
+        console.error("PDF parsing error:", pdfError);
+        // Ak zlyhá parsing, aspoň uploadneme súbor bez textu
+        extractedText = "";
+      }
     } else {
       return NextResponse.json(
         { error: "Nepodporovaný typ súboru" },
@@ -93,7 +102,7 @@ export async function POST(request: NextRequest) {
         title: title || file.name,
         file_name: file.name,
         file_type: fileType,
-        content: extractedText, // pri PDF bude zatiaľ "", ale nevadí
+        content: extractedText, // extrahovaný text zo všetkých formátov (PDF, DOCX, TXT)
         storage_path: storagePath,
         openai_file_id: openaiFileId,
       })

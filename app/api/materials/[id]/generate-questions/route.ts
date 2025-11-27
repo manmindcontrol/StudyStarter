@@ -28,35 +28,14 @@ type GeneratedQuestion = {
   answer: string | null;
 };
 
-// Typ bezpečného výsledku OpenAI Responses API
-type OpenAIResponseLike = {
-  output?: Array<{
-    content?: Array<{
-      text?: string;
-    }>;
-  }>;
-  output_text?: string;
-};
-
-function isOpenAIResponseLike(value: unknown): value is OpenAIResponseLike {
-  if (typeof value !== "object" || value === null) return false;
-
-  const obj = value as Record<string, unknown>;
-
-  if ("output" in obj && Array.isArray(obj.output)) return true;
-  if ("output_text" in obj && typeof obj.output_text === "string") return true;
-
-  return false;
-}
-
 // --- API Route ---------------------------------------------------
 
 export async function POST(
   request: NextRequest,
-  context: { params: { id: string } }
+  context: { params: Promise<{ id: string }> }
 ) {
   try {
-    const materialId = context.params.id;
+    const { id: materialId } = await context.params;
     const { searchParams } = new URL(request.url);
 
     const questionType = (searchParams.get("type") as QuestionType) || "exam";
@@ -97,17 +76,25 @@ export async function POST(
 
     const systemPrompt = `
 You are an assistant that generates high-quality study questions from academic documents.
-Your output must ALWAYS be a pure JSON array—no explanations, no descriptions outside JSON.
+Your output must ALWAYS be valid JSON in this exact format:
+
+{
+  "questions": [
+    {
+      "question": "string",
+      "type": "open" | "mcq",
+      "options": ["A", "B", "C", "D"] | null,
+      "answer": "string or explanation" | null
+    }
+  ]
+}
 
 ${languageInstruction}
 
-Each JSON object must be:
-{
-  "question": "string",
-  "type": "open" | "mcq",
-  "options": ["A", "B", "C", "D"] | null,
-  "answer": "string or explanation" | null
-}
+Rules:
+- Return ONLY valid JSON, no explanations outside JSON
+- The root object must have a "questions" array
+- Each question must have all required fields
 `;
 
     const userPrompt = `
@@ -123,43 +110,29 @@ Additional rules:
 - No text outside JSON.
 `;
 
-    // 3️⃣ Call OpenAI (responses.create — WITHOUT response_format!)
-    const aiResponse = await openai.responses.create({
-      model: "gpt-4.1-mini",
-      input: [
+    // 3️⃣ Call OpenAI (using standard Chat Completion API)
+    // Note: Since we have content extracted, we'll use it directly
+    // If you want to use file_id, you'd need to use the Assistants API instead
+    const contentToAnalyze = material.content || "No content available";
+
+    const aiResponse = await openai.chat.completions.create({
+      model: "gpt-4o-mini",
+      messages: [
         {
           role: "system",
-          content: [{ type: "input_text", text: systemPrompt }],
+          content: systemPrompt,
         },
         {
           role: "user",
-          content: [
-            { type: "input_file", file_id: material.openai_file_id },
-            { type: "input_text", text: userPrompt },
-          ],
+          content: `${userPrompt}\n\nDocument content:\n${contentToAnalyze.substring(0, 15000)}`,
         },
       ],
+      response_format: { type: "json_object" },
+      temperature: 0.7,
     });
 
-    // 4️⃣ Extract text safely (no `any`)
-    if (!isOpenAIResponseLike(aiResponse)) {
-      return NextResponse.json(
-        { error: "Invalid OpenAI response format." },
-        { status: 500 }
-      );
-    }
-
-    let jsonText: string | undefined;
-
-    if (
-      aiResponse.output &&
-      aiResponse.output[0]?.content &&
-      aiResponse.output[0].content[0]?.text
-    ) {
-      jsonText = aiResponse.output[0].content[0].text;
-    } else if (typeof aiResponse.output_text === "string") {
-      jsonText = aiResponse.output_text;
-    }
+    // 4️⃣ Extract text safely
+    const jsonText = aiResponse.choices[0]?.message?.content;
 
     if (!jsonText) {
       console.error("OpenAI response:", aiResponse);
@@ -173,7 +146,12 @@ Additional rules:
     let questions: GeneratedQuestion[];
 
     try {
-      questions = JSON.parse(jsonText) as GeneratedQuestion[];
+      const parsed = JSON.parse(jsonText) as { questions: GeneratedQuestion[] };
+      questions = parsed.questions;
+
+      if (!Array.isArray(questions)) {
+        throw new Error("Questions is not an array");
+      }
     } catch (err) {
       console.error("JSON parse error:", jsonText);
       return NextResponse.json(

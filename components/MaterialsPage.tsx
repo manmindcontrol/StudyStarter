@@ -218,10 +218,10 @@ export default function MaterialsPage() {
                   <div className="p-6">
                     {/* Ikona a typ súboru */}
                     <div className="flex items-start justify-between mb-4">
-                      <div className="bg-blue-100 p-3 rounded-lg">
+                      <div className="bg-blue-100 p-3 rounded-lg text-blue-500">
                         {getFileIcon(material.file_type)}
                       </div>
-                      <span className="text-xs font-medium text-gray-500 uppercase">
+                      <span className="text-xs font-medium text-blue-500 uppercase">
                         {material.file_type || "file"}
                       </span>
                     </div>

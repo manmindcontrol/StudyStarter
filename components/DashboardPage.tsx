@@ -236,19 +236,29 @@ export default function DashboardPage() {
               </p>
             </div>
           </div>
-          <div className="flex flex-wrap gap-4">
-            <Link
-              href="/materials"
-              className="bg-white text-blue-600 hover:bg-white/80 font-semibold py-3 px-6 rounded-lg transition-colors"
-            >
-              Nahrať materiály
-            </Link>
-            <Link
-              href="/prednasky"
-              className="bg-white/20 hover:bg-white/40 text-white font-semibold py-3 px-6 rounded-lg transition-colors border border-white/30"
-            >
-              Nahrať prednášku
-            </Link>
+          <div className="flex md:flex-row flex-col justify-between gap-8">
+            <div className="flex flex-wrap gap-4">
+              <Link
+                href="/materials"
+                className="bg-blue-100 hover:bg-blue-200 text-blue-600 font-semibold py-3 px-6 rounded-lg transition-colors"
+              >
+                Nahrať materiály
+              </Link>
+              <Link
+                href="/prednasky"
+                className="bg-green-100 hover:bg-green-200 text-green-600 font-semibold py-3 px-6 rounded-lg transition-colors border border-white/30"
+              >
+                Nahrať prednášku
+              </Link>
+            </div>
+            <div className="flex flex-wrap">
+              <Link
+                href="/materials"
+                className="bg-purple-100 hover:bg-purple-200  text-purple-600 0 font-semibold py-3 px-6 rounded-lg transition-colors"
+              >
+                Zobraziť materiály
+              </Link>
+            </div>
           </div>
         </div>
       </div>

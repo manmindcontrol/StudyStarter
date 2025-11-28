@@ -21,18 +21,18 @@ export default function FileUpload({
   const [success, setSuccess] = useState(false);
 
   const validateFile = (file: File): string | null => {
-    // Kontrola typu súboru
+    // Check file type
     const fileExtension = "." + file.name.split(".").pop()?.toLowerCase();
     if (!acceptedFileTypes.includes(fileExtension)) {
-      return `Nepodporovaný typ súboru. Podporované: ${acceptedFileTypes.join(
+      return `Unsupported file type. Supported: ${acceptedFileTypes.join(
         ", "
       )}`;
     }
 
-    // Kontrola veľkosti
+    // Check size
     const fileSizeMB = file.size / (1024 * 1024);
     if (fileSizeMB > maxSizeMB) {
-      return `Súbor je príliš veľký. Maximum: ${maxSizeMB}MB`;
+      return `File is too large. Maximum: ${maxSizeMB}MB`;
     }
 
     return null;
@@ -92,12 +92,12 @@ export default function FileUpload({
       setSuccess(true);
       setSelectedFile(null);
 
-      // Reset success po 3 sekundách
+      // Reset success after 3 seconds
       setTimeout(() => {
         setSuccess(false);
       }, 3000);
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Chyba pri nahrávaní");
+      setError(err instanceof Error ? err.message : "Upload error");
     } finally {
       setUploading(false);
     }
@@ -111,7 +111,7 @@ export default function FileUpload({
 
   return (
     <div className="w-full">
-      {/* Drag & Drop zóna */}
+      {/* Drag & Drop zone */}
       <div
         onDragOver={handleDragOver}
         onDragLeave={handleDragLeave}
@@ -143,20 +143,20 @@ export default function FileUpload({
           />
 
           <p className="text-lg font-semibold text-gray-900 mb-2">
-            {isDragging ? "Pusť súbor sem" : "Nahraj materiál"}
+            {isDragging ? "Drop file here" : "Upload Material"}
           </p>
 
           <p className="text-sm text-gray-600 mb-4">
-            Potiahni sem súbor alebo klikni na nahratie
+            Drag file here or click to upload
           </p>
 
           <p className="text-xs text-gray-500">
-            Podporované: PDF, Word, TXT (max {maxSizeMB}MB)
+            Supported: PDF, Word, TXT (max {maxSizeMB}MB)
           </p>
         </label>
       </div>
 
-      {/* Vybraný súbor */}
+      {/* Selected file */}
       {selectedFile && (
         <div className="mt-4 p-4 bg-white border border-gray-200 rounded-lg">
           <div className="flex items-center justify-between">
@@ -182,7 +182,7 @@ export default function FileUpload({
             )}
           </div>
 
-          {/* Upload tlačidlo */}
+          {/* Upload button */}
           <button
             onClick={handleUpload}
             disabled={uploading}
@@ -210,16 +210,16 @@ export default function FileUpload({
                     d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
                   ></path>
                 </svg>
-                Nahrávam...
+                Uploading...
               </>
             ) : (
-              "Nahrať materiál"
+              "Upload Material"
             )}
           </button>
         </div>
       )}
 
-      {/* Error správa */}
+      {/* Error message */}
       {error && (
         <div className="mt-4 p-4 bg-red-50 border border-red-200 rounded-lg flex items-start space-x-3">
           <AlertCircle className="w-5 h-5 text-red-600 mt-0.5 shrink-0" />
@@ -227,11 +227,11 @@ export default function FileUpload({
         </div>
       )}
 
-      {/* Success správa */}
+      {/* Success message */}
       {success && (
         <div className="mt-4 p-4 bg-green-50 border border-green-200 rounded-lg flex items-start space-x-3">
           <CheckCircle className="w-5 h-5 text-green-600 mt-0.5 shrink-0" />
-          <p className="text-sm text-green-700">Materiál úspešne nahraný!</p>
+          <p className="text-sm text-green-700">Material successfully uploaded!</p>
         </div>
       )}
     </div>

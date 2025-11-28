@@ -58,7 +58,7 @@ export default function GenerateQuestionsButton({
         onGenerated(questions);
       }
 
-      // Presmeruj na stránku s otázkami
+      // Redirect to questions page
       router.push(`/materials/${materialId}/questions/${data.record.id}`);
     } catch (err) {
       setError(

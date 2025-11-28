@@ -33,7 +33,7 @@ export async function POST(request: NextRequest) {
 
     if (!file || !userId) {
       return NextResponse.json(
-        { error: "Chýba súbor alebo userId" },
+        { error: "Missing file or userId" },
         { status: 400 }
       );
     }
@@ -44,30 +44,30 @@ export async function POST(request: NextRequest) {
     let extractedText = "";
     const fileType = file.name.split(".").pop()?.toLowerCase() ?? null;
 
-    // Extrakcia textu z rôznych formátov
+    // Extract text from various formats
     if (fileType === "docx" || fileType === "doc") {
       const result = await mammoth.extractRawText({ buffer });
       extractedText = result.value;
     } else if (fileType === "txt") {
       extractedText = buffer.toString("utf-8");
     } else if (fileType === "pdf") {
-      // PDF: extrahujeme text pomocou pdf-parse
+      // PDF: extract text using pdf-parse
       try {
         const pdfData = await pdfParse(buffer);
         extractedText = pdfData.text;
       } catch (pdfError) {
         console.error("PDF parsing error:", pdfError);
-        // Ak zlyhá parsing, aspoň uploadneme súbor bez textu
+        // If parsing fails, at least upload the file without text
         extractedText = "";
       }
     } else {
       return NextResponse.json(
-        { error: "Nepodporovaný typ súboru" },
+        { error: "Unsupported file type" },
         { status: 400 }
       );
     }
 
-    // 1️⃣ Upload do OpenAI Files – aby model vedel pracovať s dokumentom
+    // 1️⃣ Upload to OpenAI Files – so the model can work with the document
     const openaiFile = await openai.files.create({
       file: await toFile(buffer, file.name),
       purpose: "assistants",
@@ -75,7 +75,7 @@ export async function POST(request: NextRequest) {
 
     const openaiFileId = openaiFile.id;
 
-    // 2️⃣ Upload do Supabase Storage
+    // 2️⃣ Upload to Supabase Storage
     const timestamp = Date.now();
     const storagePath = `${userId}/${timestamp}-${file.name}`;
 
@@ -89,7 +89,7 @@ export async function POST(request: NextRequest) {
     if (uploadError) {
       console.error("Storage error:", uploadError);
       return NextResponse.json(
-        { error: `Chyba pri nahrávaní súboru: ${uploadError.message}` },
+        { error: `Error uploading file: ${uploadError.message}` },
         { status: 500 }
       );
     }
@@ -102,7 +102,7 @@ export async function POST(request: NextRequest) {
         title: title || file.name,
         file_name: file.name,
         file_type: fileType,
-        content: extractedText, // extrahovaný text zo všetkých formátov (PDF, DOCX, TXT)
+        content: extractedText, // extracted text from all formats (PDF, DOCX, TXT)
         storage_path: storagePath,
         openai_file_id: openaiFileId,
       })
@@ -112,7 +112,7 @@ export async function POST(request: NextRequest) {
     if (dbError) {
       console.error("Database error:", dbError);
       return NextResponse.json(
-        { error: `Chyba pri ukladaní do databázy: ${dbError.message}` },
+        { error: `Error saving to database: ${dbError.message}` },
         { status: 500 }
       );
     }
@@ -125,7 +125,7 @@ export async function POST(request: NextRequest) {
   } catch (error) {
     console.error("Upload error:", error);
     const msg =
-      error instanceof Error ? error.message : "Neočakávaná chyba pri nahrávaní";
+      error instanceof Error ? error.message : "Unexpected upload error";
 
     return NextResponse.json({ error: msg }, { status: 500 });
   }

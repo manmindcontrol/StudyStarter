@@ -92,13 +92,13 @@ export default function MaterialViewPage({ materialId }: Props) {
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-center">
           <h2 className="text-xl font-semibold text-gray-900 mb-2">
-            Materiál sa nenašiel
+            Material not found
           </h2>
           <button
             onClick={() => router.push("/materials")}
             className="text-blue-600 hover:text-blue-700"
           >
-            Späť na materiály
+            Back to materials
           </button>
         </div>
       </div>
@@ -139,7 +139,7 @@ export default function MaterialViewPage({ materialId }: Props) {
                 className="flex items-center space-x-2 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition-colors"
               >
                 <Download className="w-4 h-4" />
-                <span>Stiahnuť</span>
+                <span>Download</span>
               </button>
             )}
           </div>
@@ -152,7 +152,7 @@ export default function MaterialViewPage({ materialId }: Props) {
           <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-8">
             <div className="flex items-center space-x-3 mb-6">
               <FileText className="w-6 h-6 text-blue-600" />
-              <h2 className="text-lg font-semibold text-gray-900">Obsah dokumentu</h2>
+              <h2 className="text-lg font-semibold text-gray-900">Document Content</h2>
             </div>
 
             {material.content ? (
@@ -165,11 +165,11 @@ export default function MaterialViewPage({ materialId }: Props) {
               <div className="text-center py-12">
                 <FileText className="w-16 h-16 text-gray-300 mx-auto mb-4" />
                 <p className="text-gray-600">
-                  Obsah dokumentu nie je k dispozícii na zobrazenie.
+                  Document content is not available for display.
                 </p>
                 {material.storage_path && (
                   <p className="text-sm text-gray-500 mt-2">
-                    Súbor je uložený v úložisku.
+                    File is stored in storage.
                   </p>
                 )}
               </div>

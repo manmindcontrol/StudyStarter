@@ -34,19 +34,19 @@ export async function POST(request: NextRequest) {
     }
 
     // Build context for OpenAI
-    const systemPrompt = `Si AI asistent, ktorý pomáha študentom s otázkami vygenerovanými z ich študijných materiálov.
+    const systemPrompt = `You are an AI assistant helping students with questions generated from their study materials.
 
-Máš prístup k nasledujúcim otázkam z materiálu "${materialTitle}":
+You have access to the following questions from the material "${materialTitle}":
 ${JSON.stringify(questions, null, 2)}
 
-Tvoje úlohy:
-1. Pomôcť študentom pochopiť otázky a odpovede
-2. Vysvetliť zložitejšie koncepty
-3. Navrhnúť úpravy otázok ak o to požiadajú
-4. Pridať nové otázky ak o to požiadajú
-5. Pomôcť s prípravou na skúšku
+Your tasks:
+1. Help students understand the questions and answers
+2. Explain complex concepts
+3. Suggest question modifications if requested
+4. Add new questions if requested
+5. Help with exam preparation
 
-Odpovedaj vždy v slovenčine, buď priateľský a podporujúci. Ak študent chce pridať alebo upraviť otázky, poskytni konkrétne návrhy vo formáte JSON.`;
+Always respond in English, be friendly and supportive. If a student wants to add or modify questions, provide specific suggestions in JSON format.`;
 
     // Convert chat messages to OpenAI format
     const openaiMessages = [
@@ -65,7 +65,7 @@ Odpovedaj vždy v slovenčine, buď priateľský a podporujúci. Ak študent chc
       max_tokens: 1000,
     });
 
-    const assistantMessage = completion.choices[0]?.message?.content || "Prepáč, nedokázal som vygenerovať odpoveď.";
+    const assistantMessage = completion.choices[0]?.message?.content || "Sorry, I couldn't generate a response.";
 
     return NextResponse.json({
       message: assistantMessage,

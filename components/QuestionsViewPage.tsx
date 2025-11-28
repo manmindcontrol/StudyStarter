@@ -114,7 +114,7 @@ export default function QuestionsViewPage({ materialId, questionRecordId }: Prop
       setChatMessages([
         {
           role: "assistant",
-          content: `Ahoj! Vygeneroval som ${questionData.questions.length} otázok z materiálu "${materialData.title}". Môžem ti pomôcť upraviť otázky, pridať nové, alebo vysvetliť odpovede. Čo potrebuješ?`
+          content: `Hello! I've generated ${questionData.questions.length} questions from the material "${materialData.title}". I can help you modify questions, add new ones, or explain answers. What do you need?`
         }
       ]);
     };
@@ -195,7 +195,7 @@ export default function QuestionsViewPage({ materialId, questionRecordId }: Prop
         ...newMessages,
         {
           role: "assistant",
-          content: "Prepáč, vyskytla sa chyba. Skús to prosím znova."
+          content: "Sorry, an error occurred. Please try again."
         }
       ]);
     } finally {
@@ -215,7 +215,7 @@ export default function QuestionsViewPage({ materialId, questionRecordId }: Prop
           });
         }
         if (q.answer) {
-          formatted += `   Odpoveď: ${q.answer}\n`;
+          formatted += `   Answer: ${q.answer}\n`;
         }
         return formatted + "\n";
       })
@@ -225,7 +225,7 @@ export default function QuestionsViewPage({ materialId, questionRecordId }: Prop
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
     a.href = url;
-    a.download = `otazky-${material?.title || "export"}.txt`;
+    a.download = `questions-${material?.title || "export"}.txt`;
     a.click();
     URL.revokeObjectURL(url);
   };
@@ -250,7 +250,7 @@ export default function QuestionsViewPage({ materialId, questionRecordId }: Prop
       new Paragraph({
         children: [
           new TextRun({
-            text: `Vygenerované otázky (${questionRecord.questions.length})`,
+            text: `Generated Questions (${questionRecord.questions.length})`,
             bold: true,
             size: 24,
           }),
@@ -265,7 +265,7 @@ export default function QuestionsViewPage({ materialId, questionRecordId }: Prop
       new Paragraph({
         children: [
           new TextRun({
-            text: `Dátum: ${new Date().toLocaleDateString("sk-SK")}`,
+            text: `Date: ${new Date().toLocaleDateString("en-US")}`,
             italics: true,
             size: 20,
           }),
@@ -299,7 +299,7 @@ export default function QuestionsViewPage({ materialId, questionRecordId }: Prop
         new Paragraph({
           children: [
             new TextRun({
-              text: q.type === "mcq" ? "[Výber odpovede]" : "[Otvorená otázka]",
+              text: q.type === "mcq" ? "[Multiple Choice]" : "[Open Question]",
               italics: true,
               size: 20,
               color: q.type === "mcq" ? "9333EA" : "16A34A",
@@ -332,7 +332,7 @@ export default function QuestionsViewPage({ materialId, questionRecordId }: Prop
           new Paragraph({
             children: [
               new TextRun({
-                text: "Odpoveď: ",
+                text: "Answer: ",
                 bold: true,
                 size: 22,
                 color: "059669",
@@ -367,7 +367,7 @@ export default function QuestionsViewPage({ materialId, questionRecordId }: Prop
       new Paragraph({
         children: [
           new TextRun({
-            text: "Vygenerované pomocou AI asistenta",
+            text: "Generated with AI assistant",
             italics: true,
             size: 18,
             color: "666666",
@@ -387,7 +387,7 @@ export default function QuestionsViewPage({ materialId, questionRecordId }: Prop
     });
 
     const blob = await Packer.toBlob(doc);
-    saveAs(blob, `otazky-${material.title}.docx`);
+    saveAs(blob, `questions-${material.title}.docx`);
   };
 
   if (loading) {
@@ -403,13 +403,13 @@ export default function QuestionsViewPage({ materialId, questionRecordId }: Prop
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-center">
           <h2 className="text-xl font-semibold text-gray-900 mb-2">
-            Otázky sa nenašli
+            Questions not found
           </h2>
           <button
             onClick={() => router.push("/materials")}
             className="text-blue-600 hover:text-blue-700"
           >
-            Späť na materiály
+            Back to materials
           </button>
         </div>
       </div>
@@ -434,7 +434,7 @@ export default function QuestionsViewPage({ materialId, questionRecordId }: Prop
                   {material.title}
                 </h1>
                 <p className="text-sm text-gray-600">
-                  {questionRecord.questions.length} vygenerovaných otázok
+                  {questionRecord.questions.length} generated questions
                 </p>
               </div>
             </div>
@@ -444,7 +444,7 @@ export default function QuestionsViewPage({ materialId, questionRecordId }: Prop
                 className="flex items-center space-x-2 bg-gray-100 hover:bg-gray-200 text-gray-700 px-4 py-2 rounded-lg transition-colors"
               >
                 <ExternalLink className="w-4 h-4" />
-                <span>Otvoriť dokument</span>
+                <span>Open document</span>
               </button>
 
               {/* Export dropdown */}
@@ -494,7 +494,7 @@ export default function QuestionsViewPage({ materialId, questionRecordId }: Prop
           <div className="lg:col-span-2 space-y-4">
             <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
               <h2 className="text-lg font-semibold text-gray-900 mb-4">
-                Vygenerované otázky
+                Generated Questions
               </h2>
 
               <div className="space-y-4">
@@ -528,7 +528,7 @@ export default function QuestionsViewPage({ materialId, questionRecordId }: Prop
                                 : "bg-green-100 text-green-700"
                             }`}
                           >
-                            {q.type === "mcq" ? "Výber odpovede" : "Otvorená"}
+                            {q.type === "mcq" ? "Multiple Choice" : "Open"}
                           </span>
                         </div>
                         <p className="text-gray-900 mb-2">{q.question}</p>
@@ -548,7 +548,7 @@ export default function QuestionsViewPage({ materialId, questionRecordId }: Prop
 
                         {q.answer && (
                           <div className="mt-2 p-2 bg-gray-50 rounded text-sm text-gray-700">
-                            <span className="font-medium">Odpoveď:</span> {q.answer}
+                            <span className="font-medium">Answer:</span> {q.answer}
                           </div>
                         )}
                       </div>
@@ -564,7 +564,7 @@ export default function QuestionsViewPage({ materialId, questionRecordId }: Prop
                 <div className="flex items-center space-x-2 mb-4">
                   <FileText className="w-5 h-5 text-blue-600" />
                   <h2 className="text-lg font-semibold text-gray-900">
-                    Náhľad dokumentu
+                    Document Preview
                   </h2>
                 </div>
                 <div className="prose prose-sm max-w-none">
@@ -584,11 +584,11 @@ export default function QuestionsViewPage({ materialId, questionRecordId }: Prop
                 <div className="flex items-center space-x-2">
                   <MessageSquare className="w-5 h-5 text-blue-600" />
                   <h2 className="text-lg font-semibold text-gray-900">
-                    AI Asistent
+                    AI Assistant
                   </h2>
                 </div>
                 <p className="text-xs text-gray-600 mt-1">
-                  Opýtaj sa na otázky alebo požiadaj o úpravy
+                  Ask questions or request modifications
                 </p>
               </div>
 
@@ -629,7 +629,7 @@ export default function QuestionsViewPage({ materialId, questionRecordId }: Prop
                     type="text"
                     value={chatInput}
                     onChange={(e) => setChatInput(e.target.value)}
-                    placeholder="Napíš správu..."
+                    placeholder="Write a message..."
                     className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                     disabled={chatLoading}
                   />

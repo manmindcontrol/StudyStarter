@@ -50,7 +50,7 @@ export default function MaterialsPage() {
       .order("created_at", { ascending: false });
 
     if (error) {
-      console.error("Chyba pri načítaní materiálov:", error);
+      console.error("Error loading materials:", error);
       return;
     }
 
@@ -80,10 +80,10 @@ export default function MaterialsPage() {
 
       if (!response.ok) {
         const errorData = await response.json();
-        throw new Error(errorData.error || "Chyba pri nahrávaní");
+        throw new Error(errorData.error || "Upload error");
       }
 
-      // Reload materiálov
+      // Reload materials
       await loadMaterials();
     } catch (error) {
       console.error("Upload error:", error);
@@ -94,7 +94,7 @@ export default function MaterialsPage() {
   };
 
   const handleDelete = async (materialId: string) => {
-    if (!confirm("Naozaj chceš vymazať tento materiál?")) return;
+    if (!confirm("Are you sure you want to delete this material?")) return;
 
     const { error } = await supabase
       .from("materials")
@@ -102,12 +102,12 @@ export default function MaterialsPage() {
       .eq("id", materialId);
 
     if (error) {
-      console.error("Chyba pri mazaní:", error);
-      alert("Chyba pri mazaní materiálu");
+      console.error("Error deleting:", error);
+      alert("Error deleting material");
       return;
     }
 
-    // Reload materiálov
+    // Reload materials
     await loadMaterials();
   };
 
@@ -144,14 +144,14 @@ export default function MaterialsPage() {
         {/* Header */}
         <div className="mb-8">
           <h1 className="text-3xl font-bold text-gray-900 mb-2">
-            Študijné materiály
+            Study Materials
           </h1>
           <p className="text-gray-600">
-            Nahraj PDF alebo Word dokumenty a spracuj ich pomocou AI
+            Upload PDF or Word documents and process them with AI
           </p>
         </div>
 
-        {/* Upload sekcia */}
+        {/* Upload section */}
         <FileUpload onUpload={handleUpload} />
         {uploading && (
           <p className="mt-2 text-sm text-gray-500">
@@ -159,14 +159,14 @@ export default function MaterialsPage() {
           </p>
         )}
 
-        {/* Vyhľadávanie */}
+        {/* Search */}
         {materials.length > 0 && (
           <div className="mb-6">
             <div className="relative">
               <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
               <input
                 type="text"
-                placeholder="Vyhľadaj materiál..."
+                placeholder="Search material..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
@@ -175,11 +175,11 @@ export default function MaterialsPage() {
           </div>
         )}
 
-        {/* Zoznam materiálov */}
+        {/* Materials list */}
         <div>
           <div className="flex items-center justify-between mb-4">
             <h2 className="text-xl font-bold text-gray-900">
-              Moje materiály ({filteredMaterials.length})
+              My Materials ({filteredMaterials.length})
             </h2>
           </div>
 
@@ -188,13 +188,13 @@ export default function MaterialsPage() {
               <FileText className="w-16 h-16 text-gray-300 mx-auto mb-4" />
               <h3 className="text-lg font-semibold text-gray-900 mb-2">
                 {searchQuery
-                  ? "Žiadne výsledky"
-                  : "Zatiaľ nemáš žiadne materiály"}
+                  ? "No results"
+                  : "You don't have any materials yet"}
               </h3>
               <p className="text-gray-600 mb-6">
                 {searchQuery
-                  ? "Skús iné kľúčové slovo"
-                  : "Nahraj svoj prvý študijný materiál a začni s AI asistovaným učením"}
+                  ? "Try a different keyword"
+                  : "Upload your first study material and start with AI-assisted learning"}
               </p>
               {!searchQuery && (
                 <button
@@ -203,7 +203,7 @@ export default function MaterialsPage() {
                   }
                   className="btn-primary"
                 >
-                  Nahrať materiál
+                  Upload Material
                 </button>
               )}
             </div>
@@ -216,7 +216,7 @@ export default function MaterialsPage() {
                 >
                   {/* Card content */}
                   <div className="p-6">
-                    {/* Ikona a typ súboru */}
+                    {/* Icon and file type */}
                     <div className="flex items-start justify-between mb-4">
                       <div className="bg-blue-100 p-3 rounded-lg text-blue-500">
                         {getFileIcon(material.file_type)}
@@ -226,25 +226,25 @@ export default function MaterialsPage() {
                       </span>
                     </div>
 
-                    {/* Názov */}
+                    {/* Title */}
                     <h3 className="font-semibold text-gray-900 mb-2 line-clamp-2">
                       {material.title}
                     </h3>
 
-                    {/* Meno súboru */}
+                    {/* File name */}
                     {material.file_name && (
                       <p className="text-sm text-gray-500 mb-3 line-clamp-1">
                         {material.file_name}
                       </p>
                     )}
 
-                    {/* Dátum */}
+                    {/* Date */}
                     <div className="flex items-center text-xs text-gray-500 mb-4">
                       <Clock className="w-4 h-4 mr-1" />
                       {formatDate(material.created_at)}
                     </div>
 
-                    {/* Akcie */}
+                    {/* Actions */}
                     <div className="flex flex-col space-y-2">
                       <div className="flex items-center space-x-2">
                         <Link
@@ -252,12 +252,12 @@ export default function MaterialsPage() {
                           className="flex-1 bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold py-2 px-4 rounded-lg transition-colors flex items-center justify-center"
                         >
                           <Eye className="w-4 h-4 mr-2" />
-                          Otvoriť
+                          Open
                         </Link>
                         <button
                           onClick={() => handleDelete(material.id)}
                           className="bg-red-50 hover:bg-red-100 text-red-600 p-2 rounded-lg transition-colors"
-                          title="Vymazať"
+                          title="Delete"
                         >
                           <Trash2 className="w-4 h-4" />
                         </button>
@@ -267,7 +267,7 @@ export default function MaterialsPage() {
                       <GenerateQuestionsButton
                         materialId={material.id}
                         questionType="exam"
-                        // lang="en" // ak chceš vynútiť angličtinu, odkomentuj
+                        // lang="en" // uncomment to force English
                       />
                     </div>
                   </div>

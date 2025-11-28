@@ -13,10 +13,10 @@ export async function GET(request: Request) {
     // Exchange code for session
     await supabase.auth.exchangeCodeForSession(code)
 
-    // Získaj používateľa
+    // Get user
     const { data: { user } } = await supabase.auth.getUser()
 
-    // Vytvor profil ak neexistuje (pre Google OAuth)
+    // Create profile if it doesn't exist (for Google OAuth)
     if (user) {
       const { data: existingProfile } = await supabase
         .from('user_profiles')
@@ -34,6 +34,6 @@ export async function GET(request: Request) {
     }
   }
 
-  // Presmeruj na dashboard
+  // Redirect to dashboard
   return NextResponse.redirect(new URL('/dashboard', requestUrl.origin))
 }

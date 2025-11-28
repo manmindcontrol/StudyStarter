@@ -82,14 +82,14 @@ export default function Navbar() {
                   className="flex items-center space-x-2 text-gray-700 hover:text-blue-600 transition-all duration-200 font-medium px-5 py-2 rounded-lg hover:bg-gray-50"
                 >
                   <UserIcon className="w-5 h-5" />
-                  <span>Profil</span>
+                  <span>Profile</span>
                 </Link>
                 <button
                   onClick={handleSignOut}
                   className="flex items-center space-x-2 text-gray-700 hover:text-red-600 transition-all duration-200 font-medium px-5 py-2 rounded-lg hover:bg-red-50"
                 >
                   <LogOut className="w-5 h-5" />
-                  <span>Odhlásiť sa</span>
+                  <span>Sign out</span>
                 </button>
               </>
             ) : (
@@ -158,7 +158,7 @@ export default function Navbar() {
                       onClick={() => setMobileMenuOpen(false)}
                     >
                       <UserIcon className="w-5 h-5" />
-                      <span>Profil</span>
+                      <span>Profile</span>
                     </Link>
                     <button
                       onClick={() => {
@@ -168,7 +168,7 @@ export default function Navbar() {
                       className="w-full flex items-center justify-center space-x-2 text-gray-700 hover:text-red-600 hover:bg-red-50 transition-all duration-200 font-medium py-3 rounded-lg"
                     >
                       <LogOut className="w-5 h-5" />
-                      <span>Odhlásiť sa</span>
+                      <span>Sign out</span>
                     </button>
                   </>
                 ) : (

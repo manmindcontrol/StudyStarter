@@ -33,28 +33,28 @@ export default function RegisterPage() {
       ...formData,
       [e.target.name]: e.target.value,
     });
-    setError(""); // Vyčisti error pri písaní
+    setError(""); // Clear error when typing
   };
 
   const validateForm = () => {
     if (!formData.fullName.trim()) {
-      setError("Zadaj svoje meno");
+      setError("Please enter your name");
       return false;
     }
     if (!formData.email.trim()) {
-      setError("Zadaj email");
+      setError("Please enter email");
       return false;
     }
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
-      setError("Neplatný email formát");
+      setError("Invalid email format");
       return false;
     }
     if (formData.password.length < 6) {
-      setError("Heslo musí mať minimálne 6 znakov");
+      setError("Password must be at least 6 characters");
       return false;
     }
     if (formData.password !== formData.confirmPassword) {
-      setError("Heslá sa nezhodujú");
+      setError("Passwords do not match");
       return false;
     }
     return true;
@@ -82,7 +82,7 @@ export default function RegisterPage() {
 
     if (user) {
       setSuccess(true);
-      // Počkaj chvíľu a presmeruj
+      // Wait a moment and redirect
       setTimeout(() => {
         router.push("/dashboard");
       }, 1500);
@@ -97,20 +97,20 @@ export default function RegisterPage() {
     const { error } = await signInWithGoogle();
 
     if (error) {
-      setError("Chyba pri prihlásení cez Google");
+      setError("Error signing in with Google");
       setLoading(false);
     }
-    // Google presmeruje na callback, takže tu netreba robiť nič iné
+    // Google will redirect to callback, so nothing else needed here
   };
 
   return (
     <div className="min-h-screen bg-linear-to-br from-slate-900 via-blue-900 to-slate-900 flex items-center justify-center py-12 px-4 relative overflow-hidden">
-      {/* Dekoratívne pozadie */}
+      {/* Decorative background */}
       <div className="absolute inset-0 overflow-hidden">
         <div className="absolute top-0 right-1/4 w-96 h-96 bg-purple-600/20 rounded-full blur-3xl"></div>
         <div className="absolute bottom-0 left-1/4 w-80 h-80 bg-blue-600/20 rounded-full blur-3xl"></div>
 
-        {/* Animované hviezdičky */}
+        {/* Animated stars */}
         <motion.div
           className="absolute w-2 h-2 bg-white/40 rounded-full"
           animate={{
@@ -173,7 +173,7 @@ export default function RegisterPage() {
       </div>
 
       <div className="max-w-md w-full relative z-10">
-        {/* Logo a nadpis */}
+        {/* Logo and title */}
         <motion.div
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -197,14 +197,14 @@ export default function RegisterPage() {
           <p className="text-blue-200">Start studying more effectively today</p>
         </motion.div>
 
-        {/* Formulár */}
+        {/* Form */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.1 }}
           className="bg-white/10 backdrop-blur-lg rounded-2xl shadow-2xl p-8 border border-white/20"
         >
-          {/* Success správa */}
+          {/* Success message */}
           {success && (
             <motion.div
               initial={{ opacity: 0, scale: 0.95 }}
@@ -223,7 +223,7 @@ export default function RegisterPage() {
             </motion.div>
           )}
 
-          {/* Error správa */}
+          {/* Error message */}
           {error && (
             <motion.div
               initial={{ opacity: 0, scale: 0.95 }}
@@ -236,7 +236,7 @@ export default function RegisterPage() {
           )}
 
           <form onSubmit={handleSubmit} className="space-y-5">
-            {/* Meno */}
+            {/* Name */}
             <div>
               <label
                 htmlFor="fullName"
@@ -284,7 +284,7 @@ export default function RegisterPage() {
               </div>
             </div>
 
-            {/* Heslo */}
+            {/* Password */}
             <div>
               <label
                 htmlFor="password"
@@ -311,7 +311,7 @@ export default function RegisterPage() {
               </p>
             </div>
 
-            {/* Potvrdenie hesla */}
+            {/* Confirm password */}
             <div>
               <label
                 htmlFor="confirmPassword"
@@ -335,7 +335,7 @@ export default function RegisterPage() {
               </div>
             </div>
 
-            {/* Google prihlásenie */}
+            {/* Google sign in */}
             <div className="relative">
               <button
                 type="button"
@@ -361,15 +361,15 @@ export default function RegisterPage() {
                     d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"
                   />
                 </svg>
-                <span>Pokračovať s Google</span>
+                <span>Continue with Google</span>
               </button>
             </div>
 
-            {/* Oddeľovač */}
+            {/* Divider */}
             <div className="relative my-6">
               <div className="relative flex justify-center text-sm">
                 <span className="px-4  bg-white/10 border border-white/20 rounded-lg text-blue-300">
-                  alebo emailom
+                  or with email
                 </span>
               </div>
             </div>
@@ -414,7 +414,7 @@ export default function RegisterPage() {
             </motion.button>
           </form>
 
-          {/* Link na login */}
+          {/* Link to login */}
           <div className="mt-6 text-center">
             <p className="text-sm text-blue-200">
               Already have an account?{" "}
@@ -428,7 +428,7 @@ export default function RegisterPage() {
           </div>
         </motion.div>
 
-        {/* Späť na hlavnú stránku */}
+        {/* Back to home page */}
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}

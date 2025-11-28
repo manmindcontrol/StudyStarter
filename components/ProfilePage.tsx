@@ -4,7 +4,14 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { getCurrentUser } from "@/lib/auth";
 import { supabase } from "@/lib/supabase";
-import { User, Lock, Mail, CreditCard, CheckCircle, XCircle } from "lucide-react";
+import {
+  User,
+  Lock,
+  Mail,
+  CreditCard,
+  CheckCircle,
+  XCircle,
+} from "lucide-react";
 import type { User as SupabaseUser } from "@supabase/supabase-js";
 
 type UserProfile = {
@@ -45,7 +52,9 @@ export default function ProfilePage() {
       setUser(user);
       setProfile(profile);
       setFullName(profile?.full_name || "");
-      setDisplayName(profile?.display_name || profile?.full_name?.split(" ")[0] || "");
+      setDisplayName(
+        profile?.display_name || profile?.full_name?.split(" ")[0] || ""
+      );
       setLoading(false);
     };
 
@@ -71,7 +80,7 @@ export default function ProfilePage() {
 
       if (error) throw error;
 
-      setSuccessMessage("Profil bol úspešne aktualizovaný!");
+      setSuccessMessage("Profile updated successfully!");
 
       // Refresh profile data
       const { data: updatedProfile } = await supabase
@@ -84,7 +93,11 @@ export default function ProfilePage() {
         setProfile(updatedProfile);
       }
     } catch (error) {
-      setErrorMessage(error instanceof Error ? error.message : "Nastala chyba pri aktualizácii profilu");
+      setErrorMessage(
+        error instanceof Error
+          ? error.message
+          : "An error occurred while updating profile"
+      );
     } finally {
       setSaving(false);
     }
@@ -100,13 +113,13 @@ export default function ProfilePage() {
 
     // Validate passwords
     if (newPassword !== confirmPassword) {
-      setErrorMessage("Nové heslá sa nezhodujú");
+      setErrorMessage("New passwords do not match");
       setSaving(false);
       return;
     }
 
     if (newPassword.length < 6) {
-      setErrorMessage("Heslo musí mať aspoň 6 znakov");
+      setErrorMessage("Password must be at least 6 characters");
       setSaving(false);
       return;
     }
@@ -118,12 +131,16 @@ export default function ProfilePage() {
 
       if (error) throw error;
 
-      setSuccessMessage("Heslo bolo úspešne zmenené!");
+      setSuccessMessage("Password changed successfully!");
       setCurrentPassword("");
       setNewPassword("");
       setConfirmPassword("");
     } catch (error) {
-      setErrorMessage(error instanceof Error ? error.message : "Nastala chyba pri zmene hesla");
+      setErrorMessage(
+        error instanceof Error
+          ? error.message
+          : "An error occurred while changing password"
+      );
     } finally {
       setSaving(false);
     }
@@ -137,15 +154,17 @@ export default function ProfilePage() {
     );
   }
 
-  const userPlan = "Free Plan"; // Placeholder - môžeš neskôr pridať logiku pre platobné plány
+  const userPlan = "Free Plan"; // Placeholder - you can add payment plan logic later
 
   return (
     <div className="min-h-screen bg-gray-50 py-8">
       <div className="container-custom max-w-4xl">
         {/* Header */}
         <div className="mb-8">
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">Môj profil</h1>
-          <p className="text-gray-600">Spravuj svoje osobné informácie a nastavenia</p>
+          <h1 className="text-3xl font-bold text-gray-900 mb-2">My Profile</h1>
+          <p className="text-gray-600">
+            Manage your personal information and settings
+          </p>
         </div>
 
         {/* Messages */}
@@ -168,28 +187,28 @@ export default function ProfilePage() {
             {/* User Info Card */}
             <div className="bg-white rounded-xl shadow-sm p-6 border border-gray-100 mb-6">
               <div className="flex flex-col items-center text-center">
-                <div className="bg-gradient-to-br from-blue-500 to-cyan-500 w-20 h-20 rounded-full flex items-center justify-center text-white text-2xl font-bold mb-4">
+                <div className="bg-linear-to-br from-blue-500 to-cyan-500 w-20 h-20 rounded-full flex items-center justify-center text-white text-2xl font-bold mb-4">
                   {displayName.charAt(0).toUpperCase()}
                 </div>
                 <h3 className="font-semibold text-gray-900 text-lg mb-1">
-                  {displayName || fullName || "Používateľ"}
+                  {displayName || fullName || "User"}
                 </h3>
                 <p className="text-sm text-gray-600 mb-4">{user?.email}</p>
               </div>
             </div>
 
             {/* Plan Info Card */}
-            <div className="bg-gradient-to-br from-blue-600 to-cyan-600 rounded-xl shadow-sm p-6 text-white">
+            <div className="bg-linear-to-br from-blue-600 to-cyan-600 rounded-xl shadow-sm p-6 text-white">
               <div className="flex items-center space-x-3 mb-4">
                 <CreditCard className="w-6 h-6" />
-                <h3 className="font-semibold text-lg">Tvoj plán</h3>
+                <h3 className="font-semibold text-lg">Your Plan</h3>
               </div>
               <p className="text-xl font-bold mb-2">{userPlan}</p>
               <p className="text-blue-100 text-sm mb-4">
-                Neobmedzený prístup k základným funkciám
+                Unlimited access to basic features
               </p>
               <button className="w-full bg-white text-blue-600 hover:bg-blue-50 font-semibold py-2 px-4 rounded-lg transition-colors">
-                Upgradovať plán
+                Upgrade Plan
               </button>
             </div>
           </div>
@@ -201,7 +220,7 @@ export default function ProfilePage() {
               <div className="flex items-center space-x-3 mb-6">
                 <User className="w-6 h-6 text-blue-600" />
                 <h2 className="text-xl font-semibold text-gray-900">
-                  Osobné informácie
+                  Personal Information
                 </h2>
               </div>
 
@@ -220,45 +239,45 @@ export default function ProfilePage() {
                     />
                   </div>
                   <p className="text-xs text-gray-500 mt-1">
-                    Email nemožno zmeniť
+                    Email cannot be changed
                   </p>
                 </div>
 
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Celé meno
+                    Full Name
                   </label>
                   <input
                     type="text"
                     value={fullName}
                     onChange={(e) => setFullName(e.target.value)}
-                    placeholder="Zadaj celé meno"
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    placeholder="Enter your full name"
+                    className="w-full px-4 py-2 border text-gray-400 border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                   />
                 </div>
 
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Prezývka (ako ťa chceš byť oslovený)
+                    Display Name (how you want to be addressed)
                   </label>
                   <input
                     type="text"
                     value={displayName}
                     onChange={(e) => setDisplayName(e.target.value)}
-                    placeholder="Napr. Janko, Peťo..."
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    placeholder="e.g. John, Sarah..."
+                    className="w-full px-4 py-2 border text-gray-400 border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                   />
                   <p className="text-xs text-gray-500 mt-1">
-                    Toto meno sa použije v dashboarde pri oslovení
+                    This name will be used in the dashboard greetings
                   </p>
                 </div>
 
                 <button
                   type="submit"
                   disabled={saving}
-                  className="w-full bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-700 hover:to-cyan-700 text-white font-semibold py-3 px-6 rounded-lg transition-all duration-300 shadow-lg shadow-blue-500/30 hover:shadow-xl hover:shadow-blue-500/40 disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="w-full bg-linear-to-r from-blue-600 to-cyan-600 hover:from-blue-700 hover:to-cyan-700 text-white font-semibold py-3 px-6 rounded-lg transition-all duration-300 shadow-lg shadow-blue-500/30 hover:shadow-xl hover:shadow-blue-500/40 disabled:opacity-50 disabled:cursor-not-allowed"
                 >
-                  {saving ? "Ukladám..." : "Uložiť zmeny"}
+                  {saving ? "Saving..." : "Save Changes"}
                 </button>
               </form>
             </div>
@@ -268,43 +287,43 @@ export default function ProfilePage() {
               <div className="flex items-center space-x-3 mb-6">
                 <Lock className="w-6 h-6 text-blue-600" />
                 <h2 className="text-xl font-semibold text-gray-900">
-                  Zmena hesla
+                  Change Password
                 </h2>
               </div>
 
               <form onSubmit={handleChangePassword} className="space-y-4">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Nové heslo
+                  <label className="block text-sm font-medium  text-gray-700 mb-2">
+                    New Password
                   </label>
                   <input
                     type="password"
                     value={newPassword}
                     onChange={(e) => setNewPassword(e.target.value)}
-                    placeholder="Zadaj nové heslo"
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    placeholder="Enter new password"
+                    className="w-full px-4 py-2 border border-gray-300 text-gray-400 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                   />
                 </div>
 
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Potvrď nové heslo
+                    Confirm New Password
                   </label>
                   <input
                     type="password"
                     value={confirmPassword}
                     onChange={(e) => setConfirmPassword(e.target.value)}
-                    placeholder="Zadaj heslo znova"
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    placeholder="Enter password again"
+                    className="w-full px-4 py-2 border text-gray-400 border-gray-300  rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                   />
                 </div>
 
                 <button
                   type="submit"
                   disabled={saving || !newPassword || !confirmPassword}
-                  className="w-full bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-700 hover:to-cyan-700 text-white font-semibold py-3 px-6 rounded-lg transition-all duration-300 shadow-lg shadow-blue-500/30 hover:shadow-xl hover:shadow-blue-500/40 disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="w-full bg-linear-to-r from-blue-600 to-cyan-600 hover:from-blue-700 hover:to-cyan-700 text-white font-semibold py-3 px-6 rounded-lg transition-all duration-300 shadow-lg shadow-blue-500/30 hover:shadow-xl hover:shadow-blue-500/40 disabled:opacity-50 disabled:cursor-not-allowed"
                 >
-                  {saving ? "Mením heslo..." : "Zmeniť heslo"}
+                  {saving ? "Changing password..." : "Change Password"}
                 </button>
               </form>
             </div>

@@ -26,10 +26,10 @@ type Stats = {
 export default function DashboardPage() {
   const router = useRouter();
 
-  // Aktivuj automatické odhlásenie pri nečinnosti
+  // Enable automatic logout on inactivity
   useAutoLogout();
 
-  // undefined = ešte neviem, null = nie je prihlásený, User = prihlásený
+  // undefined = loading, null = not logged in, User = logged in
   const [user, setUser] = useState<User | null | undefined>(undefined);
   const [profile, setProfile] = useState<UserProfile | null>(null);
   const [stats, setStats] = useState<Stats>({
@@ -42,11 +42,11 @@ export default function DashboardPage() {
     let isMounted = true;
 
     const run = async () => {
-      // 1) zisti usera a profil
+      // 1) Get user and profile
       const { user, profile } = await getCurrentUser();
 
       if (!user) {
-        // nie je prihlásený → redirect
+        // Not logged in → redirect
         router.push("/login");
         return;
       }
@@ -56,7 +56,7 @@ export default function DashboardPage() {
       setUser(user);
       setProfile(profile);
 
-      // 2) natiahni štatistiky paralelne
+      // 2) Fetch statistics in parallel
       const [
         { count: materialsCount },
         { count: lecturesCount },
@@ -103,7 +103,7 @@ export default function DashboardPage() {
   }
 
   const displayName =
-    profile?.display_name || profile?.full_name?.split(" ")[0] || "Študent";
+    profile?.display_name || profile?.full_name?.split(" ")[0] || "Student";
 
   return (
     <div className="min-h-screen bg-gray-50 py-8">
@@ -111,14 +111,14 @@ export default function DashboardPage() {
         {/* Header */}
         <div className="mb-8">
           <h1 className="text-3xl font-bold text-gray-900 mb-2">
-            Ahoj, {displayName}! 👋
+            Hello, {displayName}! 👋
           </h1>
-          <p className="text-gray-600">Vitaj späť v Študijnom Asistentovi</p>
+          <p className="text-gray-600">Welcome back to Study Assistant</p>
         </div>
 
-        {/* Štatistiky */}
+        {/* Statistics */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-          {/* Materiály */}
+          {/* Materials */}
           <div className="bg-white rounded-xl shadow-sm p-6 border border-gray-100">
             <div className="flex items-center justify-between mb-4">
               <div className="bg-blue-100 p-3 rounded-lg">
@@ -129,10 +129,10 @@ export default function DashboardPage() {
             <h3 className="text-2xl font-bold text-gray-900 mb-1">
               {stats.materialsCount}
             </h3>
-            <p className="text-gray-600 text-sm">Nahraté materiály</p>
+            <p className="text-gray-600 text-sm">Uploaded Materials</p>
           </div>
 
-          {/* Prednášky */}
+          {/* Lectures */}
           <div className="bg-white rounded-xl shadow-sm p-6 border border-gray-100">
             <div className="flex items-center justify-between mb-4">
               <div className="bg-green-100 p-3 rounded-lg">
@@ -143,10 +143,10 @@ export default function DashboardPage() {
             <h3 className="text-2xl font-bold text-gray-900 mb-1">
               {stats.lecturesCount}
             </h3>
-            <p className="text-gray-600 text-sm">Nahrané prednášky</p>
+            <p className="text-gray-600 text-sm">Uploaded Lectures</p>
           </div>
 
-          {/* Testy */}
+          {/* Tests */}
           <div className="bg-white rounded-xl shadow-sm p-6 border border-gray-100">
             <div className="flex items-center justify-between mb-4">
               <div className="bg-purple-100 p-3 rounded-lg">
@@ -157,15 +157,15 @@ export default function DashboardPage() {
             <h3 className="text-2xl font-bold text-gray-900 mb-1">
               {stats.testsCount}
             </h3>
-            <p className="text-gray-600 text-sm">Vygenerované testy</p>
+            <p className="text-gray-600 text-sm">Generated Tests</p>
           </div>
         </div>
 
-        {/* Rýchle akcie */}
+        {/* Quick Actions */}
         <div className="mb-8">
-          <h2 className="text-xl font-bold text-gray-900 mb-4">Rýchle akcie</h2>
+          <h2 className="text-xl font-bold text-gray-900 mb-4">Quick Actions</h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            {/* Nahrať materiál */}
+            {/* Upload Material */}
             <Link
               href="/materials"
               className="bg-white rounded-xl shadow-sm p-6 border border-gray-100 hover:shadow-md transition-shadow group"
@@ -176,14 +176,14 @@ export default function DashboardPage() {
                 </div>
                 <div>
                   <h3 className="font-semibold text-gray-900 mb-1">
-                    Nahrať materiál
+                    Upload Material
                   </h3>
-                  <p className="text-sm text-gray-600">PDF, Word dokumenty</p>
+                  <p className="text-sm text-gray-600">PDF, Word documents</p>
                 </div>
               </div>
             </Link>
 
-            {/* Nahrať prednášku */}
+            {/* Upload Lecture */}
             <Link
               href="/prednasky"
               className="bg-white rounded-xl shadow-sm p-6 border border-gray-100 hover:shadow-md transition-shadow group"
@@ -194,14 +194,14 @@ export default function DashboardPage() {
                 </div>
                 <div>
                   <h3 className="font-semibold text-gray-900 mb-1">
-                    Nahrať prednášku
+                    Upload Lecture
                   </h3>
-                  <p className="text-sm text-gray-600">Real-time prepis</p>
+                  <p className="text-sm text-gray-600">Real-time transcription</p>
                 </div>
               </div>
             </Link>
 
-            {/* Vytvoriť test */}
+            {/* Create Test */}
             <Link
               href="/testy"
               className="bg-white rounded-xl shadow-sm p-6 border border-gray-100 hover:shadow-md transition-shadow group"
@@ -212,16 +212,16 @@ export default function DashboardPage() {
                 </div>
                 <div>
                   <h3 className="font-semibold text-gray-900 mb-1">
-                    Vytvoriť test
+                    Create Test
                   </h3>
-                  <p className="text-sm text-gray-600">AI testové otázky</p>
+                  <p className="text-sm text-gray-600">AI test questions</p>
                 </div>
               </div>
             </Link>
           </div>
         </div>
 
-        {/* Začni tu */}
+        {/* Get Started */}
         <div className="bg-linear-to-r from-blue-600 to-cyan-600 rounded-xl shadow-lg p-8 text-white">
           <div className="flex items-center space-x-4 mb-6">
             <div className="bg-white/20 p-3 rounded-lg">
@@ -229,10 +229,10 @@ export default function DashboardPage() {
             </div>
             <div>
               <h2 className="text-2xl font-bold mb-1">
-                Začni svoj študijný deň!
+                Start Your Study Day!
               </h2>
               <p className="text-blue-100">
-                Nahraj nový materiál alebo pokračuj v učení
+                Upload new material or continue learning
               </p>
             </div>
           </div>
@@ -242,13 +242,13 @@ export default function DashboardPage() {
                 href="/materials"
                 className="bg-blue-100 hover:bg-blue-200 text-blue-600 font-semibold py-3 px-6 rounded-lg transition-colors"
               >
-                Nahrať materiály
+                Upload Materials
               </Link>
               <Link
                 href="/prednasky"
                 className="bg-green-100 hover:bg-green-200 text-green-600 font-semibold py-3 px-6 rounded-lg transition-colors border border-white/30"
               >
-                Nahrať prednášku
+                Upload Lecture
               </Link>
             </div>
             <div className="flex flex-wrap">
@@ -256,7 +256,7 @@ export default function DashboardPage() {
                 href="/materials"
                 className="bg-purple-100 hover:bg-purple-200  text-purple-600 0 font-semibold py-3 px-6 rounded-lg transition-colors"
               >
-                Zobraziť materiály
+                View Materials
               </Link>
             </div>
           </div>

@@ -9,6 +9,7 @@ import FileUpload from "@/components/FileUpload";
 import { FileText, Clock, Trash2, Eye, Search } from "lucide-react";
 import type { User } from "@supabase/supabase-js";
 import GenerateQuestionsButton from "@/components/GenerateQuestionsButton";
+import GenerateNotesButton from "@/components/GenerateNotesButton";
 
 type Material = {
   id: string;
@@ -132,44 +133,58 @@ export default function MaterialsPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
+      <div className="min-h-screen flex items-center justify-center bg-linear-to-br from-blue-50 via-white to-purple-50">
         <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 py-8">
-      <div className="container-custom">
+    <div className="min-h-screen bg-linear-to-br from-blue-50 via-white to-purple-50">
+      <div className="container-custom py-12">
         {/* Header */}
-        <div className="mb-8">
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">
+        <div className="mb-10 text-center">
+          <h1 className="text-5xl font-extrabold bg-linear-to-r from-blue-600 to-cyan-500 bg-clip-text text-transparent mb-4">
             Study Materials
           </h1>
-          <p className="text-gray-600">
-            Upload PDF or Word documents and process them with AI
+          <p className="text-gray-600 text-lg max-w-2xl mx-auto">
+            Upload PDF or Word documents and process them with AI to generate
+            interactive questions
           </p>
         </div>
 
-        {/* Upload section */}
-        <FileUpload onUpload={handleUpload} />
-        {uploading && (
-          <p className="mt-2 text-sm text-gray-500">
-            Uploading file, please wait...
-          </p>
-        )}
+        {/* Upload section - highlighted card */}
+        <div className="mb-10 bg-white rounded-2xl shadow-lg p-8 border border-gray-100">
+          <div className="mb-4">
+            <h3 className="text-lg font-semibold text-gray-900 mb-2">
+              Upload New Material
+            </h3>
+            <p className="text-sm text-gray-600">
+              Support for PDF and Word documents
+            </p>
+          </div>
+          <FileUpload onUpload={handleUpload} />
+          {uploading && (
+            <div className="mt-4 flex items-center justify-center">
+              <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-blue-600 mr-3"></div>
+              <p className="text-sm text-gray-600 font-medium">
+                Uploading file, please wait...
+              </p>
+            </div>
+          )}
+        </div>
 
         {/* Search */}
         {materials.length > 0 && (
-          <div className="mb-6">
-            <div className="relative">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
+          <div className="mb-8">
+            <div className="relative  mx-auto">
+              <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
               <input
                 type="text"
-                placeholder="Search material..."
+                placeholder="Search materials by title or filename..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className="w-full pl-12 pr-4 py-4 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all shadow-sm bg-white"
               />
             </div>
           </div>
@@ -177,91 +192,104 @@ export default function MaterialsPage() {
 
         {/* Materials list */}
         <div>
-          <div className="flex items-center justify-between mb-4">
-            <h2 className="text-xl font-bold text-gray-900">
-              My Materials ({filteredMaterials.length})
+          <div className="flex items-center justify-between mb-6">
+            <h2 className="text-2xl font-bold text-gray-900">
+              My Materials
+              <span className="ml-3 inline-flex items-center justify-center px-3 py-1 text-sm font-medium text-blue-600 bg-blue-100 rounded-full">
+                {filteredMaterials.length}
+              </span>
             </h2>
           </div>
 
           {filteredMaterials.length === 0 ? (
-            <div className="bg-white rounded-xl shadow-sm p-12 text-center border border-gray-100">
-              <FileText className="w-16 h-16 text-gray-300 mx-auto mb-4" />
-              <h3 className="text-lg font-semibold text-gray-900 mb-2">
-                {searchQuery
-                  ? "No results"
-                  : "You don't have any materials yet"}
+            <div className="bg-white rounded-2xl shadow-md p-16 text-center border border-gray-100">
+              <div className="bg-linear-to-br from-blue-100 to-purple-100 w-24 h-24 rounded-full flex items-center justify-center mx-auto mb-6">
+                <FileText className="w-12 h-12 text-blue-600" />
+              </div>
+              <h3 className="text-2xl font-bold text-gray-900 mb-3">
+                {searchQuery ? "No results found" : "No materials yet"}
               </h3>
-              <p className="text-gray-600 mb-6">
+              <p className="text-gray-600 mb-8 max-w-md mx-auto">
                 {searchQuery
-                  ? "Try a different keyword"
-                  : "Upload your first study material and start with AI-assisted learning"}
+                  ? "Try searching with different keywords"
+                  : "Upload your first study material and start your AI-assisted learning journey"}
               </p>
               {!searchQuery && (
                 <button
                   onClick={() =>
                     window.scrollTo({ top: 0, behavior: "smooth" })
                   }
-                  className="btn-primary"
+                  className="btn-primary px-8 py-3 text-base"
                 >
-                  Upload Material
+                  Upload Your First Material
                 </button>
               )}
             </div>
           ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
               {filteredMaterials.map((material) => (
                 <div
                   key={material.id}
-                  className="bg-white rounded-xl shadow-sm border border-gray-100 hover:shadow-md transition-all group"
+                  className="bg-white rounded-2xl shadow-md border border-gray-100 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 group overflow-hidden"
                 >
+                  {/* linear top bar */}
+                  <div className="h-2 bg-linear-to-r from-blue-500 to-purple-500"></div>
+
                   {/* Card content */}
                   <div className="p-6">
                     {/* Icon and file type */}
-                    <div className="flex items-start justify-between mb-4">
-                      <div className="bg-blue-100 p-3 rounded-lg text-blue-500">
+                    <div className="flex items-start justify-between mb-5">
+                      <div className="bg-linear-to-br from-blue-100 to-blue-200 p-4 rounded-xl text-blue-600 group-hover:from-blue-200 group-hover:to-blue-300 transition-all">
                         {getFileIcon(material.file_type)}
                       </div>
-                      <span className="text-xs font-medium text-blue-500 uppercase">
+                      <span className="text-xs font-bold text-blue-600 bg-blue-50 px-3 py-1 rounded-full uppercase tracking-wide">
                         {material.file_type || "file"}
                       </span>
                     </div>
 
                     {/* Title */}
-                    <h3 className="font-semibold text-gray-900 mb-2 line-clamp-2">
+                    <h3 className="font-bold text-gray-900 mb-3 line-clamp-2 text-lg leading-tight">
                       {material.title}
                     </h3>
 
                     {/* File name */}
                     {material.file_name && (
-                      <p className="text-sm text-gray-500 mb-3 line-clamp-1">
+                      <p className="text-sm text-gray-500 mb-4 line-clamp-1 flex items-center">
+                        <FileText className="w-3.5 h-3.5 mr-1.5 shrink-0" />
                         {material.file_name}
                       </p>
                     )}
 
                     {/* Date */}
-                    <div className="flex items-center text-xs text-gray-500 mb-4">
-                      <Clock className="w-4 h-4 mr-1" />
+                    <div className="flex items-center text-sm text-gray-500 mb-6 pb-6 border-b border-gray-100">
+                      <Clock className="w-4 h-4 mr-2" />
                       {formatDate(material.created_at)}
                     </div>
 
                     {/* Actions */}
-                    <div className="flex flex-col space-y-2">
+                    <div className="flex flex-col space-y-3">
                       <div className="flex items-center space-x-2">
                         <Link
                           href={`/materials/${material.id}`}
-                          className="flex-1 bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold py-2 px-4 rounded-lg transition-colors flex items-center justify-center"
+                          className="flex-1 bg-linear-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white text-sm font-bold py-3 px-4 rounded-xl transition-all shadow-md hover:shadow-lg flex items-center justify-center"
                         >
                           <Eye className="w-4 h-4 mr-2" />
-                          Open
+                          Open Material
                         </Link>
                         <button
                           onClick={() => handleDelete(material.id)}
-                          className="bg-red-50 hover:bg-red-100 text-red-600 p-2 rounded-lg transition-colors"
+                          className="bg-red-50 hover:bg-red-100 text-red-600 p-3 rounded-xl transition-all hover:shadow-md"
                           title="Delete"
                         >
                           <Trash2 className="w-4 h-4" />
                         </button>
                       </div>
+
+                      {/* Generate study notes button */}
+                      <GenerateNotesButton
+                        materialId={material.id}
+                        // lang="en" // uncomment to force English
+                      />
 
                       {/* Generate questions button */}
                       <GenerateQuestionsButton

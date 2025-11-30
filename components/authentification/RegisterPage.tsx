@@ -14,7 +14,6 @@ import {
   CheckCircle,
 } from "lucide-react";
 import { signInWithGoogle } from "@/lib/auth";
-import { div } from "framer-motion/client";
 
 export default function RegisterPage() {
   const router = useRouter();

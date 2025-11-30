@@ -69,6 +69,27 @@ export type Database = {
           created_at: string
         }
       }
+      study_notes: {
+        Row: {
+          id: string
+          material_id: string
+          user_id: string
+          summary: string | null
+          key_points: Array<{
+            title: string
+            description: string
+            importance: "high" | "medium" | "low"
+          }>
+          concepts: Array<{
+            concept: string
+            explanation: string
+            examples: string[]
+          }>
+          study_tips: string | null
+          created_at: string
+          updated_at: string
+        }
+      }
     }
   }
 }

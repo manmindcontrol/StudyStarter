@@ -121,7 +121,7 @@ export default function FileUpload({
           ${
             isDragging
               ? "border-blue-500 bg-blue-50"
-              : "border-gray-300 bg-gray-50 hover:border-gray-400"
+              : "border-gray-300 bg-gray-50/10 hover:border-gray-400"
           }
         `}
       >
@@ -231,7 +231,9 @@ export default function FileUpload({
       {success && (
         <div className="mt-4 p-4 bg-green-50 border border-green-200 rounded-lg flex items-start space-x-3">
           <CheckCircle className="w-5 h-5 text-green-600 mt-0.5 shrink-0" />
-          <p className="text-sm text-green-700">Material successfully uploaded!</p>
+          <p className="text-sm text-green-700">
+            Material successfully uploaded!
+          </p>
         </div>
       )}
     </div>

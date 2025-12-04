@@ -5,9 +5,10 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { getCurrentUser } from "@/lib/auth";
 import { supabase } from "@/lib/supabase";
-import { BookOpen, FileText, Mic, Brain, Plus, TrendingUp } from "lucide-react";
+import { FileText, Mic, Brain, Plus, TrendingUp } from "lucide-react";
 import type { User } from "@supabase/supabase-js";
 import { useAutoLogout } from "@/hooks/useAutoLogout";
+import Sidebar from "@/components/Sidebar";
 
 type UserProfile = {
   id: string;
@@ -106,157 +107,104 @@ export default function DashboardPage() {
     profile?.display_name || profile?.full_name?.split(" ")[0] || "Student";
 
   return (
-    <div className="min-h-screen bg-gray-50 py-8">
-      <div className="container-custom">
-        {/* Header */}
-        <div className="mb-8">
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">
-            Hello, {displayName}! 👋
-          </h1>
-          <p className="text-gray-600">Welcome back to Study Assistant</p>
-        </div>
+    <div className="flex min-h-screen bg-gray-50">
+      {/* Sidebar */}
+      {user && <Sidebar userId={user.id} />}
 
-        {/* Statistics */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-          {/* Materials */}
-          <div className="bg-white rounded-xl shadow-sm p-6 border border-gray-100">
-            <div className="flex items-center justify-between mb-4">
-              <div className="bg-blue-100 p-3 rounded-lg">
-                <FileText className="w-6 h-6 text-blue-600" />
-              </div>
-              <TrendingUp className="w-5 h-5 text-green-500" />
-            </div>
-            <h3 className="text-2xl font-bold text-gray-900 mb-1">
-              {stats.materialsCount}
-            </h3>
-            <p className="text-gray-600 text-sm">Uploaded Materials</p>
+      {/* Main Content */}
+      <div className="flex-1 py-8">
+        <div className="container-custom">
+          {/* Header */}
+          <div className="mb-8">
+            <h1 className="text-3xl font-bold text-gray-900 mb-2">
+              Hello, {displayName}! 👋
+            </h1>
+            <p className="text-gray-600">Welcome back to Study Assistant</p>
           </div>
 
-          {/* Lectures */}
-          <div className="bg-white rounded-xl shadow-sm p-6 border border-gray-100">
-            <div className="flex items-center justify-between mb-4">
-              <div className="bg-green-100 p-3 rounded-lg">
-                <Mic className="w-6 h-6 text-green-600" />
-              </div>
-              <TrendingUp className="w-5 h-5 text-green-500" />
-            </div>
-            <h3 className="text-2xl font-bold text-gray-900 mb-1">
-              {stats.lecturesCount}
-            </h3>
-            <p className="text-gray-600 text-sm">Uploaded Lectures</p>
-          </div>
-
-          {/* Tests */}
-          <div className="bg-white rounded-xl shadow-sm p-6 border border-gray-100">
-            <div className="flex items-center justify-between mb-4">
-              <div className="bg-purple-100 p-3 rounded-lg">
-                <Brain className="w-6 h-6 text-purple-600" />
-              </div>
-              <TrendingUp className="w-5 h-5 text-green-500" />
-            </div>
-            <h3 className="text-2xl font-bold text-gray-900 mb-1">
-              {stats.testsCount}
-            </h3>
-            <p className="text-gray-600 text-sm">Generated Tests</p>
-          </div>
-        </div>
-
-        {/* Quick Actions */}
-        <div className="mb-8">
-          <h2 className="text-xl font-bold text-gray-900 mb-4">Quick Actions</h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            {/* Upload Material */}
-            <Link
-              href="/materials"
-              className="bg-white rounded-xl shadow-sm p-6 border border-gray-100 hover:shadow-md transition-shadow group"
-            >
-              <div className="flex items-center space-x-4">
-                <div className="bg-blue-100 group-hover:bg-blue-200 p-3 rounded-lg transition-colors">
-                  <Plus className="w-6 h-6 text-blue-600" />
+          {/* Statistics */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+            {/* Materials */}
+            <div className="bg-white rounded-xl shadow-sm p-6 border border-gray-100">
+              <div className="flex items-center justify-between mb-4">
+                <div className="bg-blue-100 p-3 rounded-lg">
+                  <FileText className="w-6 h-6 text-blue-600" />
                 </div>
-                <div>
-                  <h3 className="font-semibold text-gray-900 mb-1">
-                    Upload Material
-                  </h3>
-                  <p className="text-sm text-gray-600">PDF, Word documents</p>
-                </div>
+                <TrendingUp className="w-5 h-5 text-green-500" />
               </div>
-            </Link>
+              <h3 className="text-2xl font-bold text-gray-900 mb-1">
+                {stats.materialsCount}
+              </h3>
+              <p className="text-gray-600 text-sm">Uploaded Materials</p>
+            </div>
 
-            {/* Upload Lecture */}
-            <Link
-              href="/prednasky"
-              className="bg-white rounded-xl shadow-sm p-6 border border-gray-100 hover:shadow-md transition-shadow group"
-            >
-              <div className="flex items-center space-x-4">
-                <div className="bg-green-100 group-hover:bg-green-200 p-3 rounded-lg transition-colors">
+            {/* Lectures */}
+            <div className="bg-white rounded-xl shadow-sm p-6 border border-gray-100">
+              <div className="flex items-center justify-between mb-4">
+                <div className="bg-green-100 p-3 rounded-lg">
                   <Mic className="w-6 h-6 text-green-600" />
                 </div>
-                <div>
-                  <h3 className="font-semibold text-gray-900 mb-1">
-                    Upload Lecture
-                  </h3>
-                  <p className="text-sm text-gray-600">Real-time transcription</p>
-                </div>
+                <TrendingUp className="w-5 h-5 text-green-500" />
               </div>
-            </Link>
+              <h3 className="text-2xl font-bold text-gray-900 mb-1">
+                {stats.lecturesCount}
+              </h3>
+              <p className="text-gray-600 text-sm">Uploaded Lectures</p>
+            </div>
 
-            {/* Create Test */}
-            <Link
-              href="/testy"
-              className="bg-white rounded-xl shadow-sm p-6 border border-gray-100 hover:shadow-md transition-shadow group"
-            >
-              <div className="flex items-center space-x-4">
-                <div className="bg-purple-100 group-hover:bg-purple-200 p-3 rounded-lg transition-colors">
+            {/* Tests */}
+            <div className="bg-white rounded-xl shadow-sm p-6 border border-gray-100">
+              <div className="flex items-center justify-between mb-4">
+                <div className="bg-purple-100 p-3 rounded-lg">
                   <Brain className="w-6 h-6 text-purple-600" />
                 </div>
-                <div>
-                  <h3 className="font-semibold text-gray-900 mb-1">
-                    Create Test
-                  </h3>
-                  <p className="text-sm text-gray-600">AI test questions</p>
-                </div>
+                <TrendingUp className="w-5 h-5 text-green-500" />
               </div>
-            </Link>
+              <h3 className="text-2xl font-bold text-gray-900 mb-1">
+                {stats.testsCount}
+              </h3>
+              <p className="text-gray-600 text-sm">Generated Tests</p>
+            </div>
           </div>
-        </div>
 
-        {/* Get Started */}
-        <div className="bg-linear-to-r from-blue-600 to-cyan-600 rounded-xl shadow-lg p-8 text-white">
-          <div className="flex items-center space-x-4 mb-6">
-            <div className="bg-white/20 p-3 rounded-lg">
-              <BookOpen className="w-8 h-8" />
-            </div>
-            <div>
-              <h2 className="text-2xl font-bold mb-1">
-                Start Your Study Day!
-              </h2>
-              <p className="text-blue-100">
-                Upload new material or continue learning
-              </p>
-            </div>
-          </div>
-          <div className="flex md:flex-row flex-col justify-between gap-8">
-            <div className="flex flex-wrap gap-4">
+          {/* Upload Actions */}
+          <div className="mb-8">
+            <h2 className="text-xl font-bold text-gray-900 mb-4">Upload Content</h2>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              {/* Upload Material */}
               <Link
                 href="/materials"
-                className="bg-blue-100 hover:bg-blue-200 text-blue-600 font-semibold py-3 px-6 rounded-lg transition-colors"
+                className="bg-white rounded-xl shadow-sm p-8 border border-gray-100 hover:shadow-md transition-shadow group"
               >
-                Upload Materials
+                <div className="flex flex-col items-center text-center">
+                  <div className="bg-blue-100 group-hover:bg-blue-200 p-6 rounded-full transition-colors mb-4">
+                    <Plus className="w-8 h-8 text-blue-600" />
+                  </div>
+                  <h3 className="text-xl font-semibold text-gray-900 mb-2">
+                    Upload Materials
+                  </h3>
+                  <p className="text-sm text-gray-600">
+                    Upload PDF or Word documents for AI-powered study assistance
+                  </p>
+                </div>
               </Link>
+
+              {/* Upload Lecture */}
               <Link
                 href="/prednasky"
-                className="bg-green-100 hover:bg-green-200 text-green-600 font-semibold py-3 px-6 rounded-lg transition-colors border border-white/30"
+                className="bg-white rounded-xl shadow-sm p-8 border border-gray-100 hover:shadow-md transition-shadow group"
               >
-                Upload Lecture
-              </Link>
-            </div>
-            <div className="flex flex-wrap">
-              <Link
-                href="/materials"
-                className="bg-purple-100 hover:bg-purple-200  text-purple-600 0 font-semibold py-3 px-6 rounded-lg transition-colors"
-              >
-                View Materials
+                <div className="flex flex-col items-center text-center">
+                  <div className="bg-green-100 group-hover:bg-green-200 p-6 rounded-full transition-colors mb-4">
+                    <Mic className="w-8 h-8 text-green-600" />
+                  </div>
+                  <h3 className="text-xl font-semibold text-gray-900 mb-2">
+                    Upload Lecture Recording
+                  </h3>
+                  <p className="text-sm text-gray-600">
+                    Upload audio recordings with real-time transcription
+                  </p>
+                </div>
               </Link>
             </div>
           </div>

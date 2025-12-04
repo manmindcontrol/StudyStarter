@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { FileQuestion, ChevronRight } from "lucide-react";
 
 type QuestionType = "exam" | "test" | "summary";
 
@@ -71,14 +72,25 @@ export default function GenerateQuestionsButton({
   };
 
   return (
-    <div className="flex-1 flex flex-col space-y-2">
+    <div className="flex flex-col space-y-2">
       <button
         type="button"
         onClick={handleClick}
         disabled={loading}
-        className="w-full bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-semibold py-2 px-4 rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+        className="w-full bg-white hover:bg-green-50 border border-gray-200 rounded-xl p-6 transition-all group text-left shadow-sm disabled:opacity-50 disabled:cursor-not-allowed"
       >
-        {loading ? "Generating questions..." : "Generate exam questions"}
+        <div className="flex items-center justify-between mb-3">
+          <div className="bg-green-100 p-3 rounded-lg">
+            <FileQuestion className="w-6 h-6 text-green-600" />
+          </div>
+          <ChevronRight className="w-5 h-5 text-gray-400 group-hover:text-green-600 transition-colors" />
+        </div>
+        <h3 className="text-lg font-semibold text-gray-900 mb-1">
+          {loading ? "Generating questions..." : "Generate Exam Questions"}
+        </h3>
+        <p className="text-sm text-gray-600">
+          Create practice questions and tests from your material
+        </p>
       </button>
 
       {error && <p className="text-xs text-red-600">{error}</p>}

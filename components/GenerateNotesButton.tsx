@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { BookOpen } from "lucide-react";
+import { StickyNote, ChevronRight } from "lucide-react";
 
 type GenerateNotesButtonProps = {
   materialId: string;
@@ -60,10 +60,20 @@ export default function GenerateNotesButton({
         type="button"
         onClick={handleClick}
         disabled={loading}
-        className={`w-full bg-gradient-to-r from-purple-600 to-purple-700 hover:from-purple-700 hover:to-purple-800 text-white text-sm font-bold py-3 px-4 rounded-xl transition-all shadow-md hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center ${className}`}
+        className={`w-full bg-white hover:bg-purple-50 border border-gray-200 rounded-xl p-6 transition-all group text-left shadow-sm disabled:opacity-50 disabled:cursor-not-allowed ${className}`}
       >
-        <BookOpen className="w-4 h-4 mr-2" />
-        {loading ? "Generating notes..." : "Generate Study Notes"}
+        <div className="flex items-center justify-between mb-3">
+          <div className="bg-purple-100 p-3 rounded-lg">
+            <StickyNote className="w-6 h-6 text-purple-600" />
+          </div>
+          <ChevronRight className="w-5 h-5 text-gray-400 group-hover:text-purple-600 transition-colors" />
+        </div>
+        <h3 className="text-lg font-semibold text-gray-900 mb-1">
+          {loading ? "Generating notes..." : "Generate Study Notes"}
+        </h3>
+        <p className="text-sm text-gray-600">
+          Create AI-powered study notes from your document
+        </p>
       </button>
 
       {error && <p className="text-xs text-red-600">{error}</p>}

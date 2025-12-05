@@ -79,7 +79,7 @@ export default function Sidebar({ userId }: SidebarProps) {
         <div className="mb-4">
           <button
             onClick={() => setMaterialsOpen(!materialsOpen)}
-            className="w-full flex items-center justify-between p-3 hover:bg-gray-100 rounded-lg transition-colors"
+            className="w-full bg-slate-100 flex items-center justify-between p-3 hover:bg-blue-100 rounded-lg transition-colors"
           >
             <div className="flex items-center space-x-3">
               <FileText className="w-5 h-5 text-blue-600" />
@@ -139,7 +139,7 @@ export default function Sidebar({ userId }: SidebarProps) {
         <div className="mb-4">
           <button
             onClick={() => setRecordingsOpen(!recordingsOpen)}
-            className="w-full flex items-center justify-between p-3 hover:bg-gray-100 rounded-lg transition-colors"
+            className="w-full bg-slate-100 flex items-center justify-between p-3 hover:bg-green-100 rounded-lg transition-colors"
           >
             <div className="flex items-center space-x-3">
               <Mic className="w-5 h-5 text-green-600" />
@@ -175,7 +175,7 @@ export default function Sidebar({ userId }: SidebarProps) {
                     className="block p-3 hover:bg-green-50 rounded-lg transition-colors group"
                   >
                     <div className="flex items-start space-x-2">
-                      <Eye className="w-4 h-4 text-gray-400 group-hover:text-green-600 mt-0.5 flex-shrink-0" />
+                      <Eye className="w-4 h-4 text-gray-400 group-hover:text-green-600 mt-0.5 shrink-0" />
                       <div className="flex-1 min-w-0">
                         <p className="text-sm font-medium text-gray-900 truncate group-hover:text-green-600">
                           {lecture.title}

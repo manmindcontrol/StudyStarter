@@ -157,7 +157,7 @@ export default function ProfilePage() {
   const userPlan = "Free Plan"; // Placeholder - you can add payment plan logic later
 
   return (
-    <div className="min-h-screen  bg-linear-to-br from-blue-50 via-white to-cyan-50 overflow-hidden py-8">
+    <div className="min-h-screen bg-linear-to-br from-blue-50 via-white to-cyan-50 overflow-hidden py-8">
       <div className="container-custom max-w-4xl">
         {/* Header */}
         <div className="mb-8">
@@ -166,7 +166,6 @@ export default function ProfilePage() {
             Manage your personal information and settings
           </p>
         </div>
-
         {/* Messages */}
         {successMessage && (
           <div className="mb-6 bg-green-50 border border-green-200 text-green-800 px-4 py-3 rounded-lg flex items-center space-x-2">

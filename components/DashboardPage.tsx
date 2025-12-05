@@ -24,6 +24,19 @@ type Stats = {
   testsCount: number;
 };
 
+type Material = {
+  id: string;
+  title: string;
+  created_at: string;
+};
+
+type Lecture = {
+  id: string;
+  title: string;
+  duration: number;
+  created_at: string;
+};
+
 export default function DashboardPage() {
   const router = useRouter();
 
@@ -125,7 +138,7 @@ export default function DashboardPage() {
           {/* Statistics */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
             {/* Materials */}
-            <div className="bg-linear-to-br from-white via-blue-50 to-whitee border border-white/20 rounded-xl shadow-sm p-6 ">
+            <div className="bg-linear-to-br from-white via-blue-100/70 to-whitee border border-white/20 rounded-xl shadow-sm p-6 ">
               <div className="flex items-center justify-between mb-4">
                 <div className="bg-blue-100 p-3 rounded-lg">
                   <FileText className="w-6 h-6 text-blue-600" />
@@ -139,7 +152,7 @@ export default function DashboardPage() {
             </div>
 
             {/* Lectures */}
-            <div className="bg-linear-to-br from-white via-green-50 to-white  border border-white/20 rounded-xl shadow-sm p-6">
+            <div className="bg-linear-to-br from-white via-green-100/50 to-white  border border-white/20 rounded-xl shadow-sm p-6">
               <div className="flex items-center justify-between mb-4">
                 <div className="bg-green-100 p-3 rounded-lg">
                   <Mic className="w-6 h-6 text-green-600" />
@@ -153,7 +166,7 @@ export default function DashboardPage() {
             </div>
 
             {/* Tests */}
-            <div className="bg-linear-to-br from-white via-purple-50 to-white border border-white/20 rounded-xl shadow-sm p-6 ">
+            <div className="bg-linear-to-br from-white via-purple-100/50 to-white border border-white/20 rounded-xl shadow-sm p-6 ">
               <div className="flex items-center justify-between mb-4">
                 <div className="bg-purple-100 p-3 rounded-lg">
                   <Brain className="w-6 h-6 text-purple-600" />
@@ -176,7 +189,7 @@ export default function DashboardPage() {
               {/* Upload Material */}
               <Link
                 href="/materials"
-                className="bg-white backdrop-blur-sm border border-white/20 hover:bg-white/20 rounded-xl shadow-sm p-8  hover:shadow-md transition-shadow group"
+                className="bg-white backdrop-blur-sm border border-white/20 hover:bg-blue-100/20 rounded-xl shadow-sm p-8  hover:shadow-md transition-shadow group"
               >
                 <div className="flex flex-col items-center text-center">
                   <div className="bg-blue-100 group-hover:bg-blue-200 p-6 rounded-full transition-colors mb-4">
@@ -194,7 +207,7 @@ export default function DashboardPage() {
               {/* Record Lecture */}
               <Link
                 href="/record-lecture"
-                className="bg-white backdrop-blur-sm border border-white/20 hover:bg-white/20 rounded-xl shadow-sm p-8  hover:shadow-md transition-shadow group"
+                className="bg-white backdrop-blur-sm border border-white/20 hover:bg-green-100/20 rounded-xl shadow-sm p-8  hover:shadow-md transition-shadow group"
               >
                 <div className="flex flex-col items-center text-center">
                   <div className="bg-green-100 group-hover:bg-green-200 p-6 rounded-full transition-colors mb-4">

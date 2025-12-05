@@ -71,7 +71,10 @@ export default function DocumentViewer({ materialId }: Props) {
 
     const userMessage = inputMessage.trim();
     setInputMessage("");
-    const newMessages = [...messages, { role: "user" as const, content: userMessage }];
+    const newMessages = [
+      ...messages,
+      { role: "user" as const, content: userMessage },
+    ];
     setMessages(newMessages);
     setIsSending(true);
 
@@ -159,7 +162,9 @@ export default function DocumentViewer({ materialId }: Props) {
             <div className="flex items-center space-x-3">
               <FileText className="w-6 h-6 text-blue-600" />
               <div>
-                <h1 className="text-lg font-bold text-gray-900">{material.title}</h1>
+                <h1 className="text-lg font-bold text-gray-900">
+                  {material.title}
+                </h1>
                 {material.file_name && (
                   <p className="text-sm text-gray-500">{material.file_name}</p>
                 )}
@@ -205,7 +210,9 @@ export default function DocumentViewer({ materialId }: Props) {
               </div>
               <div>
                 <h2 className="font-bold text-gray-900">AI Assistant</h2>
-                <p className="text-sm text-gray-500">Ask questions about the document</p>
+                <p className="text-sm text-gray-500">
+                  Ask questions about the document
+                </p>
               </div>
             </div>
           </div>
@@ -220,8 +227,8 @@ export default function DocumentViewer({ materialId }: Props) {
                     Start a conversation
                   </h3>
                   <p className="text-gray-600">
-                    Ask me anything about the document. I can help you understand,
-                    summarize, or explain specific parts.
+                    Ask me anything about the document. I can help you
+                    understand, summarize, or explain specific parts.
                   </p>
                 </div>
               </div>
@@ -236,11 +243,13 @@ export default function DocumentViewer({ materialId }: Props) {
                   >
                     <div
                       className={`flex items-start space-x-2 max-w-[80%] ${
-                        message.role === "user" ? "flex-row-reverse space-x-reverse" : ""
+                        message.role === "user"
+                          ? "flex-row-reverse space-x-reverse"
+                          : ""
                       }`}
                     >
                       <div
-                        className={`p-2 rounded-lg flex-shrink-0 ${
+                        className={`p-2 rounded-lg shrink-0 ${
                           message.role === "user"
                             ? "bg-blue-100"
                             : "bg-purple-100"

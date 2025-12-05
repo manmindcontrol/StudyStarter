@@ -6,7 +6,7 @@ import Link from "next/link";
 import { getCurrentUser } from "@/lib/auth";
 import { supabase } from "@/lib/supabase";
 import FileUpload from "@/components/FileUpload";
-import { FileText, Clock, Trash2, Eye, Search } from "lucide-react";
+import { FileText, Clock, Trash2, Eye, Search, Plus } from "lucide-react";
 import type { User } from "@supabase/supabase-js";
 import GenerateQuestionsButton from "@/components/buttons/GenerateQuestionsButton";
 import GenerateNotesButton from "@/components/buttons/GenerateNotesButton";
@@ -143,26 +143,23 @@ export default function MaterialsPage() {
     <div className="min-h-screen  bg-linear-to-br from-blue-50 via-gray-100 to-cyan-50">
       <div className="container-custom py-12">
         {/* Header */}
-        <div className="mb-10 text-center">
-          <h1 className="text-5xl font-extrabold bg-linear-to-r from-blue-600 to-cyan-500 bg-clip-text text-transparent mb-4">
-            Study Materials
-          </h1>
-          <p className="text-gray-600 text-lg max-w-2xl mx-auto">
-            Upload PDF or Word documents and process them with AI to generate
-            interactive questions
-          </p>
+        <div className="flex items-center space-x-4 bg-linear-to-br from-blue-600 to-cyan-500 p-6 rounded-2xl shadow-md mb-8">
+          <div className="bg-blue-100  p-4 rounded-2xl shadow-lg">
+            <Plus className="w-8 h-8 text-blue-500" />
+          </div>
+          <div>
+            <h1 className="text-4xl font-bold text-white mb-1">
+              Upload study materials
+            </h1>
+            <p className="text-gray-100 text-lg">
+              Upload PDF or Word documents and process them with AI to generate
+              interactive questions
+            </p>
+          </div>
         </div>
 
         {/* Upload section - highlighted card */}
         <div className="mb-10 bg-white rounded-2xl shadow-lg p-8 border border-gray-100">
-          <div className="mb-4">
-            <h3 className="text-lg font-semibold text-gray-900 mb-2">
-              Upload New Material
-            </h3>
-            <p className="text-sm text-gray-600">
-              Support for PDF and Word documents
-            </p>
-          </div>
           <FileUpload onUpload={handleUpload} />
           {uploading && (
             <div className="mt-4 flex items-center justify-center">
@@ -177,14 +174,14 @@ export default function MaterialsPage() {
         {/* Search */}
         {materials.length > 0 && (
           <div className="mb-8">
-            <div className="relative  mx-auto">
+            <div className="relative mx-auto">
               <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
               <input
                 type="text"
                 placeholder="Search materials by title or filename..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full pl-12 pr-4 py-4 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all shadow-sm bg-white"
+                className="w-full pl-12 pr-4 py-4 border-2 text-gray-900 border-gray-100 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all shadow-sm bg-white"
               />
             </div>
           </div>

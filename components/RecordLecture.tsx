@@ -335,15 +335,15 @@ export default function RecordLecture({ user }: RecordLectureProps) {
             <ArrowLeft className="w-5 h-5 group-hover:-translate-x-1 transition-transform" />
             <span className="font-medium">Back to Dashboard</span>
           </button>
-          <div className="flex items-center space-x-4">
-            <div className="bg-linear-to-br from-green-500 to-green-600 p-4 rounded-2xl shadow-lg">
-              <Mic className="w-8 h-8 text-white" />
+          <div className="flex items-center space-x-4 bg-linear-to-br from-emerald-600 to-green-400 p-6 rounded-2xl shadow-md">
+            <div className="bg-green-100  p-4 rounded-2xl shadow-lg">
+              <Mic className="w-8 h-8 text-green-500" />
             </div>
             <div>
-              <h1 className="text-4xl font-bold text-slate-800 mb-1">
+              <h1 className="text-4xl font-bold text-white mb-1">
                 Record Lecture
               </h1>
-              <p className="text-gray-600 text-lg">
+              <p className="text-gray-100 text-lg">
                 Capture audio with AI-powered real-time transcription
               </p>
             </div>
@@ -383,7 +383,7 @@ export default function RecordLecture({ user }: RecordLectureProps) {
                 <div className="flex flex-col items-center">
                   <button
                     onClick={startRecording}
-                    className="group relative w-32 h-32 bg-linear-to-br from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 rounded-full shadow-2xl hover:shadow-3xl transition-all hover:scale-110 flex items-center justify-center mb-4"
+                    className="group relative w-32 h-32 bg-linear-to-br from-green-400 to-emerald-600 hover:from-green-500 hover:to-emeral-700 rounded-full shadow-2xl hover:shadow-3xl transition-all hover:scale-110 flex items-center justify-center mb-4"
                   >
                     <div className="absolute inset-0 rounded-full bg-white/20 group-hover:animate-ping"></div>
                     <Play

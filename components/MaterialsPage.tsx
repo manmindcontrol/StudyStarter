@@ -128,7 +128,7 @@ export default function MaterialsPage() {
   };
 
   const getFileIcon = (fileType: string | null) => {
-    return <FileText className="w-5 h-5" />;
+    return <FileText className="w-4 h-4 sm:w-5 sm:h-5" />;
   };
 
   if (loading) {
@@ -235,31 +235,31 @@ export default function MaterialsPage() {
                   {/* Card content */}
                   <div className="p-6">
                     {/* Icon and file type */}
-                    <div className="flex items-start justify-between mb-5">
-                      <div className="bg-linear-to-br from-blue-100 to-blue-200 p-4 rounded-xl text-blue-600 group-hover:from-blue-200 group-hover:to-blue-300 transition-all">
+                    <div className="flex items-start justify-between mb-4 sm:mb-5">
+                      <div className="bg-linear-to-br from-blue-100 to-blue-200 p-3 sm:p-4 rounded-xl text-blue-600 group-hover:from-blue-200 group-hover:to-blue-300 transition-all">
                         {getFileIcon(material.file_type)}
                       </div>
-                      <span className="text-xs font-bold text-blue-600 bg-blue-50 px-3 py-1 rounded-full uppercase tracking-wide">
+                      <span className="text-[10px] sm:text-xs font-bold text-blue-600 bg-blue-50 px-2 sm:px-3 py-0.5 sm:py-1 rounded-full uppercase tracking-wide">
                         {material.file_type || "file"}
                       </span>
                     </div>
 
                     {/* Title */}
-                    <h3 className="font-bold text-gray-900 mb-3 line-clamp-2 text-lg leading-tight">
+                    <h3 className="font-bold text-gray-900 mb-3 line-clamp-2 text-base sm:text-lg leading-tight">
                       {material.title}
                     </h3>
 
                     {/* File name */}
                     {material.file_name && (
-                      <p className="text-sm text-gray-500 mb-4 line-clamp-1 flex items-center">
-                        <FileText className="w-3.5 h-3.5 mr-1.5 shrink-0" />
+                      <p className="text-xs sm:text-sm text-gray-500 mb-3 sm:mb-4 line-clamp-1 flex items-center">
+                        <FileText className="w-3 h-3 sm:w-3.5 sm:h-3.5 mr-1 sm:mr-1.5 shrink-0" />
                         {material.file_name}
                       </p>
                     )}
 
                     {/* Date */}
-                    <div className="flex items-center text-sm text-gray-500 mb-6 pb-6 border-b border-gray-100">
-                      <Clock className="w-4 h-4 mr-2" />
+                    <div className="flex items-center text-xs sm:text-sm text-gray-500 mb-4 sm:mb-6 pb-4 sm:pb-6 border-b border-gray-100">
+                      <Clock className="w-3.5 h-3.5 sm:w-4 sm:h-4 mr-1.5 sm:mr-2" />
                       {formatDate(material.created_at)}
                     </div>
 
@@ -268,17 +268,17 @@ export default function MaterialsPage() {
                       <div className="flex items-center space-x-2">
                         <Link
                           href={`/materials/${material.id}`}
-                          className="flex-1 bg-linear-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white text-sm font-bold py-3 px-4 rounded-xl transition-all shadow-md hover:shadow-lg flex items-center justify-center"
+                          className="flex-1 bg-linear-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white text-xs sm:text-sm font-bold py-2.5 sm:py-3 px-3 sm:px-4 rounded-xl transition-all shadow-md hover:shadow-lg flex items-center justify-center"
                         >
-                          <Eye className="w-4 h-4 mr-2" />
+                          <Eye className="w-3.5 h-3.5 sm:w-4 sm:h-4 mr-1.5 sm:mr-2" />
                           Open Material
                         </Link>
                         <button
                           onClick={() => handleDelete(material.id)}
-                          className="bg-red-50 hover:bg-red-100 text-red-600 p-3 rounded-xl transition-all hover:shadow-md"
+                          className="bg-red-50 hover:bg-red-100 text-red-600 p-2.5 sm:p-3 rounded-xl transition-all hover:shadow-md"
                           title="Delete"
                         >
-                          <Trash2 className="w-4 h-4" />
+                          <Trash2 className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
                         </button>
                       </div>
 

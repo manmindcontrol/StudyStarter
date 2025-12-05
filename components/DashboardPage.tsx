@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { getCurrentUser } from "@/lib/auth";
 import { supabase } from "@/lib/supabase";
-import { FileText, Mic, Brain, Plus, TrendingUp } from "lucide-react";
+import { FileText, Mic, Brain, Plus, TrendingUp, Menu } from "lucide-react";
 import type { User } from "@supabase/supabase-js";
 import { useAutoLogout } from "@/hooks/useAutoLogout";
 import Sidebar from "@/components/Sidebar";
@@ -51,6 +51,7 @@ export default function DashboardPage() {
     lecturesCount: 0,
     testsCount: 0,
   });
+  const [sidebarOpen, setSidebarOpen] = useState(false);
 
   useEffect(() => {
     let isMounted = true;
@@ -122,83 +123,100 @@ export default function DashboardPage() {
   return (
     <div className="flex min-h-screen bg-linear-to-br from-blue-50 via-gray-100 to-cyan-50">
       {/* Sidebar */}
-      {user && <Sidebar userId={user.id} />}
+      {user && (
+        <Sidebar
+          userId={user.id}
+          isOpen={sidebarOpen}
+          onClose={() => setSidebarOpen(false)}
+        />
+      )}
 
       {/* Main Content */}
-      <div className="flex-1 py-8">
-        <div className="container-custom">
-          {/* Header */}
+      <div className="flex-1 py-8 px-4 md:px-6 lg:px-8">
+        <div className="container-custom max-w-7xl mx-auto">
+          {/* Header with menu button */}
           <div className="mb-8">
-            <h1 className="text-3xl font-bold text-slate-800 mb-2">
-              Hello, {displayName}! 👋
-            </h1>
-            <p className="text-gray-600">Welcome back to Study Assistant</p>
+            <div className="flex items-center gap-4 mb-2">
+              <button
+                onClick={() => setSidebarOpen(true)}
+                className="lg:hidden p-2 hover:bg-white/50 rounded-lg transition-colors"
+                aria-label="Open sidebar"
+              >
+                <Menu className="w-6 h-6 text-slate-800" />
+              </button>
+              <h1 className="text-xl sm:text-2xl lg:text-3xl font-bold text-slate-800">
+                Hello, {displayName}! 👋
+              </h1>
+            </div>
+            <p className="text-sm sm:text-base text-gray-600 ml-0 lg:ml-0">
+              Welcome back to Study Assistant
+            </p>
           </div>
 
           {/* Statistics */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6 mb-8">
             {/* Materials */}
-            <div className="bg-linear-to-br from-white via-blue-100/70 to-whitee border border-white/20 rounded-xl shadow-sm p-6 ">
-              <div className="flex items-center justify-between mb-4">
-                <div className="bg-blue-100 p-3 rounded-lg">
-                  <FileText className="w-6 h-6 text-blue-600" />
+            <div className="bg-linear-to-br from-white via-blue-100/70 to-whitee border border-white/20 rounded-xl shadow-sm p-4 sm:p-6">
+              <div className="flex items-center justify-between mb-3">
+                <div className="bg-blue-100 p-2 sm:p-3 rounded-lg">
+                  <FileText className="w-5 h-5 sm:w-6 sm:h-6 text-blue-600" />
                 </div>
-                <TrendingUp className="w-5 h-5 text-green-500" />
+                <TrendingUp className="w-4 h-4 sm:w-5 sm:h-5 text-green-500" />
               </div>
-              <h3 className="text-2xl font-bold text-slate-800 mb-1">
+              <h3 className="text-xl sm:text-2xl font-bold text-slate-800 mb-1">
                 {stats.materialsCount}
               </h3>
-              <p className="text-gray-600 text-sm">Uploaded Materials</p>
+              <p className="text-gray-600 text-xs sm:text-sm">Uploaded Materials</p>
             </div>
 
             {/* Lectures */}
-            <div className="bg-linear-to-br from-white via-green-100/50 to-white  border border-white/20 rounded-xl shadow-sm p-6">
-              <div className="flex items-center justify-between mb-4">
-                <div className="bg-green-100 p-3 rounded-lg">
-                  <Mic className="w-6 h-6 text-green-600" />
+            <div className="bg-linear-to-br from-white via-green-100/50 to-white  border border-white/20 rounded-xl shadow-sm p-4 sm:p-6">
+              <div className="flex items-center justify-between mb-3">
+                <div className="bg-green-100 p-2 sm:p-3 rounded-lg">
+                  <Mic className="w-5 h-5 sm:w-6 sm:h-6 text-green-600" />
                 </div>
-                <TrendingUp className="w-5 h-5 text-green-500" />
+                <TrendingUp className="w-4 h-4 sm:w-5 sm:h-5 text-green-500" />
               </div>
-              <h3 className="text-2xl font-bold text-slate-800 mb-1">
+              <h3 className="text-xl sm:text-2xl font-bold text-slate-800 mb-1">
                 {stats.lecturesCount}
               </h3>
-              <p className="text-gray-600 text-sm">Uploaded Lectures</p>
+              <p className="text-gray-600 text-xs sm:text-sm">Uploaded Lectures</p>
             </div>
 
             {/* Tests */}
-            <div className="bg-linear-to-br from-white via-purple-100/50 to-white border border-white/20 rounded-xl shadow-sm p-6 ">
-              <div className="flex items-center justify-between mb-4">
-                <div className="bg-purple-100 p-3 rounded-lg">
-                  <Brain className="w-6 h-6 text-purple-600" />
+            <div className="bg-linear-to-br from-white via-purple-100/50 to-white border border-white/20 rounded-xl shadow-sm p-4 sm:p-6">
+              <div className="flex items-center justify-between mb-3">
+                <div className="bg-purple-100 p-2 sm:p-3 rounded-lg">
+                  <Brain className="w-5 h-5 sm:w-6 sm:h-6 text-purple-600" />
                 </div>
-                <TrendingUp className="w-5 h-5 text-green-500" />
+                <TrendingUp className="w-4 h-4 sm:w-5 sm:h-5 text-green-500" />
               </div>
-              <h3 className="text-2xl font-bold text-slate-800 mb-1">
+              <h3 className="text-xl sm:text-2xl font-bold text-slate-800 mb-1">
                 {stats.testsCount}
               </h3>
-              <p className="text-gray-600 text-sm">Generated Tests</p>
+              <p className="text-gray-600 text-xs sm:text-sm">Generated Tests</p>
             </div>
           </div>
 
           {/* Upload Actions */}
           <div className="mb-8">
-            <h2 className="text-xl font-bold text-slate-800 mb-4">
+            <h2 className="text-base sm:text-lg lg:text-xl font-bold text-slate-800 mb-4">
               Upload Content
             </h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
               {/* Upload Material */}
               <Link
                 href="/materials"
-                className="bg-white backdrop-blur-sm border border-white/20 hover:bg-blue-100/20 rounded-xl shadow-sm p-8  hover:shadow-md transition-shadow group"
+                className="bg-white backdrop-blur-sm border border-white/20 hover:bg-blue-100/20 rounded-xl shadow-sm p-6 sm:p-8 hover:shadow-md transition-shadow group"
               >
                 <div className="flex flex-col items-center text-center">
-                  <div className="bg-blue-100 group-hover:bg-blue-200 p-6 rounded-full transition-colors mb-4">
-                    <Plus className="w-8 h-8 text-blue-600" />
+                  <div className="bg-blue-100 group-hover:bg-blue-200 p-4 sm:p-6 rounded-full transition-colors mb-3 sm:mb-4">
+                    <Plus className="w-6 h-6 sm:w-8 sm:h-8 text-blue-600" />
                   </div>
-                  <h3 className="text-xl font-semibold text-slate-800 mb-2">
+                  <h3 className="text-lg sm:text-xl font-semibold text-slate-800 mb-2">
                     Upload Materials
                   </h3>
-                  <p className="text-sm text-gray-600">
+                  <p className="text-xs sm:text-sm text-gray-600">
                     Upload PDF or Word documents for AI-powered study assistance
                   </p>
                 </div>
@@ -207,16 +225,16 @@ export default function DashboardPage() {
               {/* Record Lecture */}
               <Link
                 href="/record-lecture"
-                className="bg-white backdrop-blur-sm border border-white/20 hover:bg-green-100/20 rounded-xl shadow-sm p-8  hover:shadow-md transition-shadow group"
+                className="bg-white backdrop-blur-sm border border-white/20 hover:bg-green-100/20 rounded-xl shadow-sm p-6 sm:p-8 hover:shadow-md transition-shadow group"
               >
                 <div className="flex flex-col items-center text-center">
-                  <div className="bg-green-100 group-hover:bg-green-200 p-6 rounded-full transition-colors mb-4">
-                    <Mic className="w-8 h-8 text-green-600" />
+                  <div className="bg-green-100 group-hover:bg-green-200 p-4 sm:p-6 rounded-full transition-colors mb-3 sm:mb-4">
+                    <Mic className="w-6 h-6 sm:w-8 sm:h-8 text-green-600" />
                   </div>
-                  <h3 className="text-xl font-semibold text-slate-800 mb-2">
+                  <h3 className="text-lg sm:text-xl font-semibold text-slate-800 mb-2">
                     Record Lecture
                   </h3>
-                  <p className="text-sm text-gray-600">
+                  <p className="text-xs sm:text-sm text-gray-600">
                     Record audio with real-time transcription
                   </p>
                 </div>

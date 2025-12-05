@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { FileQuestion, ChevronRight } from "lucide-react";
+import LoadingSpinner from "./LoadingSpinner";
 
 type QuestionType = "exam" | "test" | "summary";
 
@@ -77,8 +78,15 @@ export default function GenerateQuestionsButton({
         type="button"
         onClick={handleClick}
         disabled={loading}
-        className="w-full bg-white hover:bg-green-50 border border-gray-200 rounded-xl p-6 transition-all group text-left shadow-sm disabled:opacity-50 disabled:cursor-not-allowed"
+        className="relative w-full bg-white hover:bg-green-50 border border-gray-200 rounded-xl p-6 transition-all group text-left shadow-sm disabled:opacity-50 disabled:cursor-not-allowed overflow-hidden"
       >
+        {loading && (
+          <div className="absolute inset-0 bg-green-50/80 backdrop-blur-sm flex items-center justify-center z-10">
+            <div className="bg-white rounded-xl p-4 shadow-lg">
+              <LoadingSpinner size="md" text="Generating questions..." />
+            </div>
+          </div>
+        )}
         <div className="flex items-center justify-between mb-3">
           <div className="bg-green-100 p-3 rounded-lg">
             <FileQuestion className="w-6 h-6 text-green-600" />
@@ -86,7 +94,7 @@ export default function GenerateQuestionsButton({
           <ChevronRight className="w-5 h-5 text-gray-400 group-hover:text-green-600 transition-colors" />
         </div>
         <h3 className="text-lg font-semibold text-gray-900 mb-1">
-          {loading ? "Generating questions..." : "Generate Exam Questions"}
+          Generate Exam Questions
         </h3>
         <p className="text-sm text-gray-600">
           Create practice questions and tests from your material

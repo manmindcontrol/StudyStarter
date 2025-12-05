@@ -1,8 +1,15 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect } from "react";
 import { supabase } from "@/lib/supabase";
-import { FileText, Mic, ChevronDown, ChevronRight, Eye, Clock } from "lucide-react";
+import {
+  FileText,
+  Mic,
+  ChevronDown,
+  ChevronRight,
+  Eye,
+  Clock,
+} from "lucide-react";
 import Link from "next/link";
 
 type Material = {
@@ -29,31 +36,31 @@ export default function Sidebar({ userId }: SidebarProps) {
   const [recordingsOpen, setRecordingsOpen] = useState(false);
   const [loading, setLoading] = useState(true);
 
-  const loadData = useCallback(async () => {
-    setLoading(true);
-
-    // Load materials
-    const { data: materialsData } = await supabase
-      .from("materials")
-      .select("id, title, file_name, created_at")
-      .eq("user_id", userId)
-      .order("created_at", { ascending: false });
-
-    // Load lectures
-    const { data: lecturesData } = await supabase
-      .from("lectures")
-      .select("id, title, created_at")
-      .eq("user_id", userId)
-      .order("created_at", { ascending: false });
-
-    setMaterials(materialsData || []);
-    setLectures(lecturesData || []);
-    setLoading(false);
-  }, [userId]);
-
   useEffect(() => {
+    const loadData = async () => {
+      setLoading(true);
+
+      // Load materials
+      const { data: materialsData } = await supabase
+        .from("materials")
+        .select("id, title, file_name, created_at")
+        .eq("user_id", userId)
+        .order("created_at", { ascending: false });
+
+      // Load lectures
+      const { data: lecturesData } = await supabase
+        .from("lectures")
+        .select("id, title, created_at")
+        .eq("user_id", userId)
+        .order("created_at", { ascending: false });
+
+      setMaterials(materialsData || []);
+      setLectures(lecturesData || []);
+      setLoading(false);
+    };
+
     loadData();
-  }, [loadData]);
+  }, [userId]);
 
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);
@@ -64,7 +71,7 @@ export default function Sidebar({ userId }: SidebarProps) {
   };
 
   return (
-    <div className="w-80 bg-white border-r border-gray-200 h-screen overflow-y-auto flex-shrink-0">
+    <div className="w-80 bg-white border-r border-gray-200 h-screen overflow-y-auto shrink-0">
       <div className="p-4">
         <h2 className="text-lg font-bold text-gray-900 mb-4">Library</h2>
 
@@ -72,11 +79,13 @@ export default function Sidebar({ userId }: SidebarProps) {
         <div className="mb-4">
           <button
             onClick={() => setMaterialsOpen(!materialsOpen)}
-            className="w-full flex items-center justify-between p-3 hover:bg-gray-50 rounded-lg transition-colors"
+            className="w-full flex items-center justify-between p-3 hover:bg-gray-100 rounded-lg transition-colors"
           >
             <div className="flex items-center space-x-3">
               <FileText className="w-5 h-5 text-blue-600" />
-              <span className="font-semibold text-gray-900">Uploaded Materials</span>
+              <span className="font-semibold text-gray-900">
+                Uploaded Materials
+              </span>
             </div>
             <div className="flex items-center space-x-2">
               <span className="text-xs bg-blue-100 text-blue-600 px-2 py-1 rounded-full font-medium">
@@ -108,7 +117,7 @@ export default function Sidebar({ userId }: SidebarProps) {
                     className="block p-3 hover:bg-blue-50 rounded-lg transition-colors group"
                   >
                     <div className="flex items-start space-x-2">
-                      <Eye className="w-4 h-4 text-gray-400 group-hover:text-blue-600 mt-0.5 flex-shrink-0" />
+                      <Eye className="w-4 h-4 text-gray-400 group-hover:text-blue-600 mt-0.5 shrink-0" />
                       <div className="flex-1 min-w-0">
                         <p className="text-sm font-medium text-gray-900 truncate group-hover:text-blue-600">
                           {material.title}
@@ -130,7 +139,7 @@ export default function Sidebar({ userId }: SidebarProps) {
         <div className="mb-4">
           <button
             onClick={() => setRecordingsOpen(!recordingsOpen)}
-            className="w-full flex items-center justify-between p-3 hover:bg-gray-50 rounded-lg transition-colors"
+            className="w-full flex items-center justify-between p-3 hover:bg-gray-100 rounded-lg transition-colors"
           >
             <div className="flex items-center space-x-3">
               <Mic className="w-5 h-5 text-green-600" />

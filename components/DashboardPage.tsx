@@ -107,7 +107,7 @@ export default function DashboardPage() {
     profile?.display_name || profile?.full_name?.split(" ")[0] || "Student";
 
   return (
-    <div className="flex min-h-screen relative bg-linear-to-br from-slate-900 via-blue-900 to-slate-900 overflow-hidden">
+    <div className="flex min-h-screen bg-gray-100">
       {/* Sidebar */}
       {user && <Sidebar userId={user.id} />}
 
@@ -116,95 +116,95 @@ export default function DashboardPage() {
         <div className="container-custom">
           {/* Header */}
           <div className="mb-8">
-            <h1 className="text-3xl font-bold text-white mb-2">
+            <h1 className="text-3xl font-bold text-slate-800 mb-2">
               Hello, {displayName}! 👋
             </h1>
-            <p className="text-gray-300">Welcome back to Study Assistant</p>
+            <p className="text-gray-600">Welcome back to Study Assistant</p>
           </div>
 
           {/* Statistics */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
             {/* Materials */}
-            <div className="bg-linear-to-br from-slate-800 via-blue-500/50 to-slate-800 border border-white/20 rounded-xl shadow-sm p-6 ">
+            <div className="bg-linear-to-br from-white via-blue-100/70 to-whitee border border-white/20 rounded-xl shadow-sm p-6 ">
               <div className="flex items-center justify-between mb-4">
                 <div className="bg-blue-100 p-3 rounded-lg">
                   <FileText className="w-6 h-6 text-blue-600" />
                 </div>
                 <TrendingUp className="w-5 h-5 text-green-500" />
               </div>
-              <h3 className="text-2xl font-bold text-gray-100 mb-1">
+              <h3 className="text-2xl font-bold text-slate-800 mb-1">
                 {stats.materialsCount}
               </h3>
-              <p className="text-gray-00 text-sm">Uploaded Materials</p>
+              <p className="text-gray-600 text-sm">Uploaded Materials</p>
             </div>
 
             {/* Lectures */}
-            <div className="bg-linear-to-br from-slate-800 via-green-500/50 to-slate-800  border border-white/20 rounded-xl shadow-sm p-6">
+            <div className="bg-linear-to-br from-white via-green-100/50 to-white  border border-white/20 rounded-xl shadow-sm p-6">
               <div className="flex items-center justify-between mb-4">
                 <div className="bg-green-100 p-3 rounded-lg">
                   <Mic className="w-6 h-6 text-green-600" />
                 </div>
                 <TrendingUp className="w-5 h-5 text-green-500" />
               </div>
-              <h3 className="text-2xl font-bold text-gray-100 mb-1">
+              <h3 className="text-2xl font-bold text-slate-800 mb-1">
                 {stats.lecturesCount}
               </h3>
-              <p className="text-gray-300 text-sm">Uploaded Lectures</p>
+              <p className="text-gray-600 text-sm">Uploaded Lectures</p>
             </div>
 
             {/* Tests */}
-            <div className="bg-linear-to-br from-slate-800 via-purple-500/50 to-slate-800 border border-white/20 rounded-xl shadow-sm p-6 ">
+            <div className="bg-linear-to-br from-white via-purple-100/50 to-white border border-white/20 rounded-xl shadow-sm p-6 ">
               <div className="flex items-center justify-between mb-4">
                 <div className="bg-purple-100 p-3 rounded-lg">
                   <Brain className="w-6 h-6 text-purple-600" />
                 </div>
                 <TrendingUp className="w-5 h-5 text-green-500" />
               </div>
-              <h3 className="text-2xl font-bold text-gray-100 mb-1">
+              <h3 className="text-2xl font-bold text-slate-800 mb-1">
                 {stats.testsCount}
               </h3>
-              <p className="text-gray-300 text-sm">Generated Tests</p>
+              <p className="text-gray-600 text-sm">Generated Tests</p>
             </div>
           </div>
 
           {/* Upload Actions */}
           <div className="mb-8">
-            <h2 className="text-xl font-bold text-white mb-4">
+            <h2 className="text-xl font-bold text-slate-800 mb-4">
               Upload Content
             </h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {/* Upload Material */}
               <Link
                 href="/materials"
-                className="bg-white/10 backdrop-blur-sm border border-white/20 hover:bg-white/20 rounded-xl shadow-sm p-8  hover:shadow-md transition-shadow group"
+                className="bg-white backdrop-blur-sm border border-white/20 hover:bg-white/20 rounded-xl shadow-sm p-8  hover:shadow-md transition-shadow group"
               >
                 <div className="flex flex-col items-center text-center">
                   <div className="bg-blue-100 group-hover:bg-blue-200 p-6 rounded-full transition-colors mb-4">
                     <Plus className="w-8 h-8 text-blue-600" />
                   </div>
-                  <h3 className="text-xl font-semibold text-white mb-2">
+                  <h3 className="text-xl font-semibold text-slate-800 mb-2">
                     Upload Materials
                   </h3>
-                  <p className="text-sm text-gray-300">
+                  <p className="text-sm text-gray-600">
                     Upload PDF or Word documents for AI-powered study assistance
                   </p>
                 </div>
               </Link>
 
-              {/* Upload Lecture */}
+              {/* Record Lecture */}
               <Link
-                href="/prednasky"
-                className="bg-white/10 backdrop-blur-sm border border-white/20 hover:bg-white/20 rounded-xl shadow-sm p-8  hover:shadow-md transition-shadow group"
+                href="/record-lecture"
+                className="bg-white backdrop-blur-sm border border-white/20 hover:bg-white/20 rounded-xl shadow-sm p-8  hover:shadow-md transition-shadow group"
               >
                 <div className="flex flex-col items-center text-center">
                   <div className="bg-green-100 group-hover:bg-green-200 p-6 rounded-full transition-colors mb-4">
                     <Mic className="w-8 h-8 text-green-600" />
                   </div>
-                  <h3 className="text-xl font-semibold text-white-900 mb-2">
-                    Upload Lecture Recording
+                  <h3 className="text-xl font-semibold text-slate-800 mb-2">
+                    Record Lecture
                   </h3>
-                  <p className="text-sm text-gray-300">
-                    Upload audio recordings with real-time transcription
+                  <p className="text-sm text-gray-600">
+                    Record audio with real-time transcription
                   </p>
                 </div>
               </Link>

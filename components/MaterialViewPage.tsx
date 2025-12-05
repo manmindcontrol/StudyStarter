@@ -66,7 +66,6 @@ export default function MaterialViewPage({ materialId }: Props) {
     loadData();
   }, [materialId, router]);
 
-
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);
     return date.toLocaleDateString("en-US", {
@@ -105,7 +104,7 @@ export default function MaterialViewPage({ materialId }: Props) {
   }
 
   return (
-    <div className="min-h-screen bg-linear-to-br from-blue-50 via-gray-100 to-cyan-50">
+    <div className="min-h-screen bg-linear-to-br from-blue-50 via-gray-100 to-cyan-50 overflow-hidden">
       {/* Header */}
       <div className="bg-white border-b border-gray-200">
         <div className="container-custom py-4">
@@ -132,21 +131,21 @@ export default function MaterialViewPage({ materialId }: Props) {
       <div className="container-custom py-8 ">
         <div className="max-w-7xl mx-auto">
           {/* Document Info Card */}
-          <div className="bg-linear-to-r from-blue-600 to-cyan-500 rounded-2xl p-8 mb-8 shadow-sm">
-            <div className="flex items-start space-x-5">
+          <div className="bg-linear-to-r from-blue-600 to-cyan-500 rounded-2xl p-3 mb-3 md:p-8 md:mb-8 shadow-sm">
+            <div className="flex items-start space-x-2 md:space-x-5">
               <div className="bg-white/20 backdrop-blur-sm p-4 rounded-xl">
-                <FileText className="w-10 h-10 text-white" />
+                <FileText className="w-5 h-5 md:w-10 md:h-10 text-white" />
               </div>
               <div className="flex-1">
-                <h2 className="text-3xl font-bold text-white mb-2">
+                <h2 className="text-lg md:text-3xl font-bold text-white mb-2">
                   {material.title}
                 </h2>
                 {material.file_name && (
-                  <p className="text-lg text-white/90 mb-3">
+                  <p className="text-l md:text-lg text-white/90 mb-3">
                     {material.file_name}
                   </p>
                 )}
-                <div className="flex items-center text-sm text-white/80">
+                <div className="flex items-center text-xs md:text-sm text-white/80">
                   <Calendar className="w-4 h-4 mr-2" />
                   <span>Uploaded {formatDate(material.created_at)}</span>
                 </div>

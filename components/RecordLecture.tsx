@@ -324,7 +324,7 @@ export default function RecordLecture({ user }: RecordLectureProps) {
   const hasTranscript = fullText.trim().length > 0;
 
   return (
-    <div className="min-h-screen bg-linear-to-br from-blue-50 via-gray-100 to-cyan-50">
+    <div className="min-h-screen bg-linear-to-br from-blue-50 via-gray-100 to-cyan-50 overflow-hidden">
       <div className="container-custom py-8">
         {/* Header */}
         <div className="mb-8">

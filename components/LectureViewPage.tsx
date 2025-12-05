@@ -143,13 +143,13 @@ export default function LectureViewPage({ lectureId }: Props) {
       <div className="container-custom py-8">
         <div className="max-w-7xl mx-auto">
           {/* Lecture Info Card */}
-          <div className="bg-linear-to-br from-emerald-600 to-green-400 rounded-2xl p-8 mb-8 shadow-sm">
-            <div className="flex items-start space-x-5">
+          <div className="bg-linear-to-br from-emerald-600 to-green-400 rounded-2xl p-3 mb-3 md:p-8 md:mb-8 shadow-sm">
+            <div className="flex items-start space-x-2 md:space-x-5">
               <div className="bg-green-100 backdrop-blur-sm p-4 rounded-xl">
-                <Mic className="w-10 h-10 text-green-500" />
+                <Mic className="w-5 h-5 md:w-10 md:h-10 text-green-500" />
               </div>
               <div className="flex-1">
-                <h2 className="text-3xl font-bold text-white mb-2">
+                <h2 className="text-lg md:text-3xl font-bold text-white mb-2">
                   {lecture.title}
                 </h2>
                 <div className="flex items-center text-sm text-gray-100 space-x-6">

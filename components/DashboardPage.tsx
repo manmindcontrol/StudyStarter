@@ -107,7 +107,7 @@ export default function DashboardPage() {
     profile?.display_name || profile?.full_name?.split(" ")[0] || "Student";
 
   return (
-    <div className="flex min-h-screen bg-gray-100">
+    <div className="flex min-h-screen bg-linear-to-br from-blue-50 via-gray-100 to-cyan-50">
       {/* Sidebar */}
       {user && <Sidebar userId={user.id} />}
 
@@ -125,7 +125,7 @@ export default function DashboardPage() {
           {/* Statistics */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
             {/* Materials */}
-            <div className="bg-linear-to-br from-white via-blue-100/70 to-whitee border border-white/20 rounded-xl shadow-sm p-6 ">
+            <div className="bg-linear-to-br from-white via-blue-50 to-whitee border border-white/20 rounded-xl shadow-sm p-6 ">
               <div className="flex items-center justify-between mb-4">
                 <div className="bg-blue-100 p-3 rounded-lg">
                   <FileText className="w-6 h-6 text-blue-600" />
@@ -139,7 +139,7 @@ export default function DashboardPage() {
             </div>
 
             {/* Lectures */}
-            <div className="bg-linear-to-br from-white via-green-100/50 to-white  border border-white/20 rounded-xl shadow-sm p-6">
+            <div className="bg-linear-to-br from-white via-green-50 to-white  border border-white/20 rounded-xl shadow-sm p-6">
               <div className="flex items-center justify-between mb-4">
                 <div className="bg-green-100 p-3 rounded-lg">
                   <Mic className="w-6 h-6 text-green-600" />
@@ -153,7 +153,7 @@ export default function DashboardPage() {
             </div>
 
             {/* Tests */}
-            <div className="bg-linear-to-br from-white via-purple-100/50 to-white border border-white/20 rounded-xl shadow-sm p-6 ">
+            <div className="bg-linear-to-br from-white via-purple-50 to-white border border-white/20 rounded-xl shadow-sm p-6 ">
               <div className="flex items-center justify-between mb-4">
                 <div className="bg-purple-100 p-3 rounded-lg">
                   <Brain className="w-6 h-6 text-purple-600" />

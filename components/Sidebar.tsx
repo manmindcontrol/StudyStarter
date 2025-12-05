@@ -171,7 +171,7 @@ export default function Sidebar({ userId }: SidebarProps) {
                 lectures.map((lecture) => (
                   <Link
                     key={lecture.id}
-                    href={`/prednasky/${lecture.id}`}
+                    href={`/lectures/${lecture.id}`}
                     className="block p-3 hover:bg-green-50 rounded-lg transition-colors group"
                   >
                     <div className="flex items-start space-x-2">

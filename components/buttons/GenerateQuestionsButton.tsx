@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { FileQuestion, ChevronRight } from "lucide-react";
-import LoadingSpinner from "./LoadingSpinner";
+import LoadingSpinner from "../LoadingSpinner";
 
 type QuestionType = "exam" | "test" | "summary";
 
@@ -15,7 +15,9 @@ export type GeneratedQuestion = {
 };
 
 type GenerateQuestionsButtonProps = {
-  materialId: string;
+  materialId?: string;
+  lectureId?: string;
+  contentType?: "material" | "lecture";
   questionType?: QuestionType; // default "exam"
   lang?: string; // e.g. "en", "sk" ... optional
   onGenerated?: (questions: GeneratedQuestion[]) => void;
@@ -23,6 +25,8 @@ type GenerateQuestionsButtonProps = {
 
 export default function GenerateQuestionsButton({
   materialId,
+  lectureId,
+  contentType = "material",
   questionType = "exam",
   lang,
   onGenerated,
@@ -42,8 +46,13 @@ export default function GenerateQuestionsButton({
         params.set("lang", lang);
       }
 
+      const id = materialId || lectureId;
+      const apiPath = contentType === "lecture"
+        ? `/api/lectures/${id}/generate-questions`
+        : `/api/materials/${id}/generate-questions`;
+
       const res = await fetch(
-        `/api/materials/${materialId}/generate-questions?${params.toString()}`,
+        `${apiPath}?${params.toString()}`,
         {
           method: "POST",
         }

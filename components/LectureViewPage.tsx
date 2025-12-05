@@ -5,9 +5,10 @@ import { useRouter } from "next/navigation";
 import { getCurrentUser } from "@/lib/auth";
 import { supabase } from "@/lib/supabase";
 import {
-  FileText,
+  Mic,
   ChevronLeft,
   Calendar,
+  Clock,
   FileQuestion,
   StickyNote,
 } from "lucide-react";
@@ -15,27 +16,25 @@ import type { User } from "@supabase/supabase-js";
 import GenerateQuestionsButton from "@/components/buttons/GenerateQuestionsButton";
 import GenerateNotesButton from "@/components/buttons/GenerateNotesButton";
 import DeleteButton from "@/components/buttons/DeleteButton";
-import OpenDocumentButton from "@/components/buttons/OpenDocumentButton";
+import OpenLectureButton from "@/components/buttons/OpenLectureButton";
 
-type Material = {
+type Lecture = {
   id: string;
   title: string;
-  content: string | null;
-  file_name: string | null;
-  file_type: string | null;
-  storage_path: string | null;
+  transcript: string;
+  duration: number;
   created_at: string;
 };
 
 type Props = {
-  materialId: string;
+  lectureId: string;
 };
 
-export default function MaterialViewPage({ materialId }: Props) {
+export default function LectureViewPage({ lectureId }: Props) {
   const router = useRouter();
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
-  const [material, setMaterial] = useState<Material | null>(null);
+  const [lecture, setLecture] = useState<Lecture | null>(null);
 
   useEffect(() => {
     const loadData = async () => {
@@ -46,26 +45,25 @@ export default function MaterialViewPage({ materialId }: Props) {
       }
       setUser(user);
 
-      // Load material
-      const { data: materialData, error: materialError } = await supabase
-        .from("materials")
+      // Load lecture
+      const { data: lectureData, error: lectureError } = await supabase
+        .from("lectures")
         .select("*")
-        .eq("id", materialId)
+        .eq("id", lectureId)
         .single();
 
-      if (materialError || !materialData) {
-        console.error("Material error:", materialError);
+      if (lectureError || !lectureData) {
+        console.error("Lecture error:", lectureError);
         setLoading(false);
         return;
       }
 
-      setMaterial(materialData);
+      setLecture(lectureData);
       setLoading(false);
     };
 
     loadData();
-  }, [materialId, router]);
-
+  }, [lectureId, router]);
 
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);
@@ -78,6 +76,19 @@ export default function MaterialViewPage({ materialId }: Props) {
     });
   };
 
+  const formatDuration = (seconds: number) => {
+    const hrs = Math.floor(seconds / 3600);
+    const mins = Math.floor((seconds % 3600) / 60);
+    const secs = seconds % 60;
+    if (hrs > 0) {
+      return `${hrs}h ${mins}m ${secs}s`;
+    }
+    if (mins > 0) {
+      return `${mins}m ${secs}s`;
+    }
+    return `${secs}s`;
+  };
+
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
@@ -86,18 +97,18 @@ export default function MaterialViewPage({ materialId }: Props) {
     );
   }
 
-  if (!material) {
+  if (!lecture) {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-center">
           <h2 className="text-xl font-semibold text-gray-900 mb-2">
-            Material not found
+            Lecture not found
           </h2>
           <button
-            onClick={() => router.push("/materials")}
+            onClick={() => router.push("/dashboard")}
             className="text-blue-600 hover:text-blue-700"
           >
-            Back to materials
+            Back to dashboard
           </button>
         </div>
       </div>
@@ -105,7 +116,7 @@ export default function MaterialViewPage({ materialId }: Props) {
   }
 
   return (
-    <div className="min-h-screen bg-linear-to-br from-blue-50 via-gray-100 to-cyan-50">
+    <div className="min-h-screen bg-linear-to-br from-purple-50 via-gray-100 to-pink-50">
       {/* Header */}
       <div className="bg-white border-b border-gray-200">
         <div className="container-custom py-4">
@@ -118,10 +129,10 @@ export default function MaterialViewPage({ materialId }: Props) {
             </button>
             <div>
               <h1 className="text-lg font-semibold text-gray-900">
-                Material Details
+                Lecture Details
               </h1>
               <p className="text-xs text-gray-500">
-                View and manage your document
+                View and manage your recorded lecture
               </p>
             </div>
           </div>
@@ -129,26 +140,27 @@ export default function MaterialViewPage({ materialId }: Props) {
       </div>
 
       {/* Content */}
-      <div className="container-custom py-8 ">
+      <div className="container-custom py-8">
         <div className="max-w-7xl mx-auto">
-          {/* Document Info Card */}
-          <div className="bg-linear-to-r from-blue-600 to-cyan-500 rounded-2xl p-8 mb-8 shadow-sm">
+          {/* Lecture Info Card */}
+          <div className="bg-linear-to-r from-purple-600 to-pink-500 rounded-2xl p-8 mb-8 shadow-sm">
             <div className="flex items-start space-x-5">
               <div className="bg-white/20 backdrop-blur-sm p-4 rounded-xl">
-                <FileText className="w-10 h-10 text-white" />
+                <Mic className="w-10 h-10 text-white" />
               </div>
               <div className="flex-1">
                 <h2 className="text-3xl font-bold text-white mb-2">
-                  {material.title}
+                  {lecture.title}
                 </h2>
-                {material.file_name && (
-                  <p className="text-lg text-white/90 mb-3">
-                    {material.file_name}
-                  </p>
-                )}
-                <div className="flex items-center text-sm text-white/80">
-                  <Calendar className="w-4 h-4 mr-2" />
-                  <span>Uploaded {formatDate(material.created_at)}</span>
+                <div className="flex items-center text-sm text-white/80 space-x-6">
+                  <div className="flex items-center">
+                    <Calendar className="w-4 h-4 mr-2" />
+                    <span>Recorded {formatDate(lecture.created_at)}</span>
+                  </div>
+                  <div className="flex items-center">
+                    <Clock className="w-4 h-4 mr-2" />
+                    <span>Duration: {formatDuration(lecture.duration)}</span>
+                  </div>
                 </div>
               </div>
             </div>
@@ -158,22 +170,27 @@ export default function MaterialViewPage({ materialId }: Props) {
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
             {/* Left Column - Actions */}
             <div className="lg:col-span-2 space-y-4">
-              {/* Open Document */}
-              <OpenDocumentButton materialId={materialId} />
+              {/* Open Lecture */}
+              <OpenLectureButton lectureId={lectureId} />
 
               {/* Generate Study Notes */}
-              <GenerateNotesButton materialId={materialId} />
+              <GenerateNotesButton
+                lectureId={lectureId}
+                contentType="lecture"
+              />
 
               {/* Generate Exam Questions */}
               <GenerateQuestionsButton
-                materialId={materialId}
+                lectureId={lectureId}
                 questionType="exam"
+                contentType="lecture"
               />
 
-              {/* Delete Document */}
+              {/* Delete Lecture */}
               <DeleteButton
-                materialId={materialId}
-                materialTitle={material.title}
+                lectureId={lectureId}
+                itemTitle={lecture.title}
+                itemType="lecture"
               />
             </div>
 
@@ -224,16 +241,16 @@ export default function MaterialViewPage({ materialId }: Props) {
                     </div>
                   </div>
 
-                  {/* Time Spent */}
+                  {/* Duration */}
                   <div className="flex items-center justify-between p-3 bg-orange-50 rounded-lg">
                     <div className="flex items-center space-x-3">
                       <div className="bg-orange-100 p-2 rounded-lg">
-                        <Calendar className="w-5 h-5 text-orange-600" />
+                        <Clock className="w-5 h-5 text-orange-600" />
                       </div>
                       <div>
-                        <p className="text-sm text-gray-600">Time Spent</p>
+                        <p className="text-sm text-gray-600">Duration</p>
                         <p className="text-2xl font-bold text-gray-900">
-                          0h 0m
+                          {formatDuration(lecture.duration)}
                         </p>
                       </div>
                     </div>
@@ -241,22 +258,22 @@ export default function MaterialViewPage({ materialId }: Props) {
                 </div>
               </div>
 
-              {/* File Info */}
+              {/* Lecture Info */}
               <div className="bg-white border border-gray-200 rounded-xl p-6 shadow-sm">
                 <h3 className="text-lg font-semibold text-gray-900 mb-4">
-                  File Info
+                  Lecture Info
                 </h3>
                 <div className="space-y-3">
                   <div>
-                    <p className="text-xs text-gray-500 mb-1">File Type</p>
+                    <p className="text-xs text-gray-500 mb-1">Words</p>
                     <p className="text-sm font-medium text-gray-900">
-                      {material.file_type || "Unknown"}
+                      {lecture.transcript.split(" ").length} words
                     </p>
                   </div>
                   <div>
-                    <p className="text-xs text-gray-500 mb-1">Uploaded</p>
+                    <p className="text-xs text-gray-500 mb-1">Recorded</p>
                     <p className="text-sm font-medium text-gray-900">
-                      {formatDate(material.created_at)}
+                      {formatDate(lecture.created_at)}
                     </p>
                   </div>
                 </div>

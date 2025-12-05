@@ -14,10 +14,17 @@ import {
   ChevronLeft,
   Download,
   ExternalLink,
-  FileDown
+  FileDown,
 } from "lucide-react";
 import type { User } from "@supabase/supabase-js";
-import { Document, Packer, Paragraph, TextRun, AlignmentType, HeadingLevel } from "docx";
+import {
+  Document,
+  Packer,
+  Paragraph,
+  TextRun,
+  AlignmentType,
+  HeadingLevel,
+} from "docx";
 import { saveAs } from "file-saver";
 
 type GeneratedQuestion = {
@@ -54,13 +61,20 @@ type Props = {
   questionRecordId: string;
 };
 
-export default function QuestionsViewPage({ materialId, questionRecordId }: Props) {
+export default function QuestionsViewPage({
+  materialId,
+  questionRecordId,
+}: Props) {
   const router = useRouter();
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
   const [material, setMaterial] = useState<Material | null>(null);
-  const [questionRecord, setQuestionRecord] = useState<QuestionRecord | null>(null);
-  const [selectedQuestions, setSelectedQuestions] = useState<Set<number>>(new Set());
+  const [questionRecord, setQuestionRecord] = useState<QuestionRecord | null>(
+    null
+  );
+  const [selectedQuestions, setSelectedQuestions] = useState<Set<number>>(
+    new Set()
+  );
 
   // Chat state
   const [chatMessages, setChatMessages] = useState<ChatMessage[]>([]);
@@ -114,8 +128,8 @@ export default function QuestionsViewPage({ materialId, questionRecordId }: Prop
       setChatMessages([
         {
           role: "assistant",
-          content: `Hello! I've generated ${questionData.questions.length} questions from the material "${materialData.title}". I can help you modify questions, add new ones, or explain answers. What do you need?`
-        }
+          content: `Hello! I've generated ${questionData.questions.length} questions from the material "${materialData.title}". I can help you modify questions, add new ones, or explain answers. What do you need?`,
+        },
       ]);
     };
 
@@ -128,7 +142,10 @@ export default function QuestionsViewPage({ materialId, questionRecordId }: Prop
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      if (exportMenuRef.current && !exportMenuRef.current.contains(event.target as Node)) {
+      if (
+        exportMenuRef.current &&
+        !exportMenuRef.current.contains(event.target as Node)
+      ) {
         setShowExportMenu(false);
       }
     };
@@ -163,7 +180,7 @@ export default function QuestionsViewPage({ materialId, questionRecordId }: Prop
     // Add user message
     const newMessages: ChatMessage[] = [
       ...chatMessages,
-      { role: "user", content: userMessage }
+      { role: "user", content: userMessage },
     ];
     setChatMessages(newMessages);
 
@@ -187,7 +204,7 @@ export default function QuestionsViewPage({ materialId, questionRecordId }: Prop
 
       setChatMessages([
         ...newMessages,
-        { role: "assistant", content: data.message }
+        { role: "assistant", content: data.message },
       ]);
     } catch (error) {
       console.error("Chat error:", error);
@@ -195,8 +212,8 @@ export default function QuestionsViewPage({ materialId, questionRecordId }: Prop
         ...newMessages,
         {
           role: "assistant",
-          content: "Sorry, an error occurred. Please try again."
-        }
+          content: "Sorry, an error occurred. Please try again.",
+        },
       ]);
     } finally {
       setChatLoading(false);
@@ -417,7 +434,7 @@ export default function QuestionsViewPage({ materialId, questionRecordId }: Prop
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-linear-to-br from-blue-50 via-gray-100 to-cyan-50">
       {/* Header */}
       <div className="bg-white border-b border-gray-200 sticky top-0 z-10">
         <div className="container-custom py-4">
@@ -548,7 +565,8 @@ export default function QuestionsViewPage({ materialId, questionRecordId }: Prop
 
                         {q.answer && (
                           <div className="mt-2 p-2 bg-gray-50 rounded text-sm text-gray-700">
-                            <span className="font-medium">Answer:</span> {q.answer}
+                            <span className="font-medium">Answer:</span>{" "}
+                            {q.answer}
                           </div>
                         )}
                       </div>
@@ -608,7 +626,9 @@ export default function QuestionsViewPage({ materialId, questionRecordId }: Prop
                           : "bg-gray-100 text-gray-900"
                       }`}
                     >
-                      <p className="text-sm whitespace-pre-wrap">{msg.content}</p>
+                      <p className="text-sm whitespace-pre-wrap">
+                        {msg.content}
+                      </p>
                     </div>
                   </div>
                 ))}
@@ -623,7 +643,10 @@ export default function QuestionsViewPage({ materialId, questionRecordId }: Prop
               </div>
 
               {/* Chat input */}
-              <form onSubmit={handleChatSubmit} className="p-4 border-t border-gray-200">
+              <form
+                onSubmit={handleChatSubmit}
+                className="p-4 border-t border-gray-200"
+              >
                 <div className="flex space-x-2">
                   <input
                     type="text"

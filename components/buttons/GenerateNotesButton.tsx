@@ -3,16 +3,20 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { StickyNote, ChevronRight } from "lucide-react";
-import LoadingSpinner from "./LoadingSpinner";
+import LoadingSpinner from "../LoadingSpinner";
 
 type GenerateNotesButtonProps = {
-  materialId: string;
+  materialId?: string;
+  lectureId?: string;
+  contentType?: "material" | "lecture";
   lang?: string; // e.g. "en", "sk" ... optional
   className?: string;
 };
 
 export default function GenerateNotesButton({
   materialId,
+  lectureId,
+  contentType = "material",
   lang,
   className = "",
 }: GenerateNotesButtonProps) {
@@ -30,8 +34,13 @@ export default function GenerateNotesButton({
         params.set("lang", lang);
       }
 
+      const id = materialId || lectureId;
+      const apiPath = contentType === "lecture"
+        ? `/api/lectures/${id}/generate-notes`
+        : `/api/materials/${id}/generate-notes`;
+
       const res = await fetch(
-        `/api/materials/${materialId}/generate-notes?${params.toString()}`,
+        `${apiPath}?${params.toString()}`,
         {
           method: "POST",
         }
@@ -44,7 +53,10 @@ export default function GenerateNotesButton({
       }
 
       // Redirect to notes page
-      router.push(`/materials/${materialId}/notes/${data.record.id}`);
+      const notesPath = contentType === "lecture"
+        ? `/lectures/${id}/notes/${data.record.id}`
+        : `/materials/${id}/notes/${data.record.id}`;
+      router.push(notesPath);
     } catch (err) {
       setError(
         err instanceof Error

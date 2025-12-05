@@ -8,8 +8,8 @@ import { supabase } from "@/lib/supabase";
 import FileUpload from "@/components/FileUpload";
 import { FileText, Clock, Trash2, Eye, Search } from "lucide-react";
 import type { User } from "@supabase/supabase-js";
-import GenerateQuestionsButton from "@/components/GenerateQuestionsButton";
-import GenerateNotesButton from "@/components/GenerateNotesButton";
+import GenerateQuestionsButton from "@/components/buttons/GenerateQuestionsButton";
+import GenerateNotesButton from "@/components/buttons/GenerateNotesButton";
 
 type Material = {
   id: string;
@@ -140,7 +140,7 @@ export default function MaterialsPage() {
   }
 
   return (
-    <div className="min-h-screen bg-linear-to-br from-blue-50 via-white to-purple-50">
+    <div className="min-h-screen  bg-linear-to-br from-blue-50 via-gray-100 to-cyan-50">
       <div className="container-custom py-12">
         {/* Header */}
         <div className="mb-10 text-center">

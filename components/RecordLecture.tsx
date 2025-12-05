@@ -11,6 +11,7 @@ import {
   FileDown,
   Play,
   Square,
+  Trash2,
 } from "lucide-react";
 import type { User } from "@supabase/supabase-js";
 import { saveAs } from "file-saver";
@@ -304,11 +305,26 @@ export default function RecordLecture({ user }: RecordLectureProps) {
     }
   };
 
+  const discardRecording = () => {
+    if (
+      confirm(
+        "Are you sure you want to discard this recording? This action cannot be undone."
+      )
+    ) {
+      setRecordingTime(0);
+      setTranscript("");
+      setFinalTranscript("");
+      if (isRecording) {
+        stopRecording();
+      }
+    }
+  };
+
   const fullText = finalTranscript + transcript;
   const hasTranscript = fullText.trim().length > 0;
 
   return (
-    <div className="min-h-screen bg-gray-100">
+    <div className="min-h-screen bg-linear-to-br from-blue-50 via-gray-100 to-cyan-50">
       <div className="container-custom py-8">
         {/* Header */}
         <div className="mb-8">
@@ -398,6 +414,19 @@ export default function RecordLecture({ user }: RecordLectureProps) {
               )}
             </div>
 
+            {/* Discard Button - Show if there's a transcript */}
+            {hasTranscript && (
+              <div className="flex justify-center mb-6">
+                <button
+                  onClick={discardRecording}
+                  className="flex items-center space-x-2 px-6 py-3 bg-red-50 hover:bg-red-100 text-red-600 font-medium rounded-lg transition-colors border border-red-200"
+                >
+                  <Trash2 className="w-4 h-4" />
+                  <span>Discard Recording</span>
+                </button>
+              </div>
+            )}
+
             {/* Recording Status */}
             {isRecording && (
               <div className="bg-linear-to-r from-red-50 to-orange-50 border-2 border-red-200 rounded-xl p-5 flex items-center space-x-4 shadow-sm">
@@ -435,7 +464,7 @@ export default function RecordLecture({ user }: RecordLectureProps) {
           <div className="bg-white/80 backdrop-blur-sm rounded-2xl shadow-xl border border-white/50 p-8 hover:shadow-2xl transition-shadow">
             <div className="flex items-center justify-between mb-8">
               <h2 className="text-2xl font-bold text-slate-800 flex items-center">
-                <div className="w-2 h-8 bg-linear-to-b from-blue-500 to-purple-600 rounded-full mr-3"></div>
+                <div className="w-2 h-8 bg-linear-to-b from-blue-500 to-cyan-500 rounded-full mr-3"></div>
                 Live Transcription
               </h2>
               {hasTranscript && (

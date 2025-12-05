@@ -143,15 +143,15 @@ export default function MaterialsPage() {
     <div className="min-h-screen  bg-linear-to-br from-blue-50 via-gray-100 to-cyan-50">
       <div className="container-custom py-12">
         {/* Header */}
-        <div className="flex items-center space-x-4 bg-linear-to-br from-blue-600 to-cyan-500 p-6 rounded-2xl shadow-md mb-8">
-          <div className="bg-blue-100  p-4 rounded-2xl shadow-lg">
-            <Plus className="w-8 h-8 text-blue-500" />
+        <div className="flex items-center space-x-2 md:space-x-5 bg-linear-to-br from-blue-600 to-cyan-500 p-6 rounded-2xl shadow-md mb-8">
+          <div className="bg-blue-100  p-2 md:p-4 rounded-xl md:rounded-2xl shadow-lg">
+            <Plus className="w-5 h-5 md:w-8 md:h-8 text-blue-500" />
           </div>
           <div>
-            <h1 className="text-4xl font-bold text-white mb-1">
+            <h1 className="text-lg md:text-3xl font-bold text-white mb-1">
               Upload study materials
             </h1>
-            <p className="text-gray-100 text-lg">
+            <p className="text-gray-100 text-sm md:text-lg">
               Upload PDF or Word documents and process them with AI to generate
               interactive questions
             </p>

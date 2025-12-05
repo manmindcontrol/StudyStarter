@@ -335,15 +335,15 @@ export default function RecordLecture({ user }: RecordLectureProps) {
             <ArrowLeft className="w-5 h-5 group-hover:-translate-x-1 transition-transform" />
             <span className="font-medium">Back to Dashboard</span>
           </button>
-          <div className="flex items-center space-x-4 bg-linear-to-br from-emerald-600 to-green-400 p-6 rounded-2xl shadow-md">
+          <div className="flex items-center space-x-2 md:space-x-5 bg-linear-to-br from-emerald-600 to-green-400 p-6 rounded-2xl shadow-md">
             <div className="bg-green-100  p-4 rounded-2xl shadow-lg">
-              <Mic className="w-8 h-8 text-green-500" />
+              <Mic className="w-5 h-5 md:w-8 md:h-8 text-green-500" />
             </div>
             <div>
-              <h1 className="text-4xl font-bold text-white mb-1">
+              <h1 className="text-lg md:text-3xl font-bold text-white mb-1">
                 Record Lecture
               </h1>
-              <p className="text-gray-100 text-lg">
+              <p className="text-gray-100 text-l md:text-lg">
                 Capture audio with AI-powered real-time transcription
               </p>
             </div>
@@ -369,7 +369,7 @@ export default function RecordLecture({ user }: RecordLectureProps) {
 
             {/* Timer Display */}
             <div className="mb-10 text-center bg-linear-to-br from-slate-50 to-slate-100 rounded-2xl p-8 border border-slate-200">
-              <div className="text-7xl font-bold bg-linear-to-r from-slate-700 to-slate-900 bg-clip-text text-transparent mb-3 font-mono tracking-tight">
+              <div className="text-4xl md:text-7xl font-bold bg-linear-to-r from-slate-700 to-slate-900 bg-clip-text text-transparent mb-3 font-mono tracking-tight">
                 {formatTime(recordingTime)}
               </div>
               <p className="text-gray-600 font-medium">
@@ -383,11 +383,11 @@ export default function RecordLecture({ user }: RecordLectureProps) {
                 <div className="flex flex-col items-center">
                   <button
                     onClick={startRecording}
-                    className="group relative w-32 h-32 bg-linear-to-br from-green-400 to-emerald-600 hover:from-green-500 hover:to-emeral-700 rounded-full shadow-2xl hover:shadow-3xl transition-all hover:scale-110 flex items-center justify-center mb-4"
+                    className="group relative w-20 h-20 md:w-32 md:h-32 bg-linear-to-br from-green-400 to-emerald-600 hover:from-green-500 hover:to-emeral-700 rounded-full shadow-2xl hover:shadow-3xl transition-all hover:scale-110 flex items-center justify-center mb-4"
                   >
                     <div className="absolute inset-0 rounded-full bg-white/20 group-hover:animate-ping"></div>
                     <Play
-                      className="w-12 h-12 text-white relative z-10 ml-1"
+                      className="w-9 h-9 md:w-12 md:h-12 text-white relative z-10 ml-1"
                       fill="white"
                     />
                   </button>

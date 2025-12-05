@@ -134,7 +134,7 @@ export default function MaterialViewPage({ materialId }: Props) {
           <div className="bg-linear-to-r from-blue-600 to-cyan-500 rounded-2xl p-3 mb-3 md:p-8 md:mb-8 shadow-sm">
             <div className="flex items-start space-x-2 md:space-x-5">
               <div className="bg-white/20 backdrop-blur-sm p-4 rounded-xl">
-                <FileText className="w-5 h-5 md:w-10 md:h-10 text-white" />
+                <FileText className="w-5 h-5 md:w-8 md:h-8 text-white" />
               </div>
               <div className="flex-1">
                 <h2 className="text-lg md:text-3xl font-bold text-white mb-2">

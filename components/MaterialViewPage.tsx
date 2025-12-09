@@ -6,10 +6,10 @@ import { getCurrentUser } from "@/lib/auth";
 import { supabase } from "@/lib/supabase";
 import {
   FileText,
-  ChevronLeft,
   Calendar,
   FileQuestion,
   StickyNote,
+  ArrowLeft,
 } from "lucide-react";
 import type { User } from "@supabase/supabase-js";
 import GenerateQuestionsButton from "@/components/buttons/GenerateQuestionsButton";
@@ -106,30 +106,17 @@ export default function MaterialViewPage({ materialId }: Props) {
   return (
     <div className="min-h-screen bg-linear-to-br from-blue-50 via-gray-100 to-cyan-50 overflow-hidden">
       {/* Header */}
-      <div className="bg-white border-b border-gray-200">
-        <div className="container-custom py-4">
-          <div className="flex items-center space-x-3">
-            <button
-              onClick={() => router.push("/dashboard")}
-              className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
-            >
-              <ChevronLeft className="w-5 h-5 text-gray-600" />
-            </button>
-            <div>
-              <h1 className="text-lg font-semibold text-gray-900">
-                Material Details
-              </h1>
-              <p className="text-xs text-gray-500">
-                View and manage your document
-              </p>
-            </div>
-          </div>
-        </div>
-      </div>
 
       {/* Content */}
       <div className="container-custom py-8 ">
         <div className="max-w-7xl mx-auto">
+          <button
+            onClick={() => router.push("/dashboard")}
+            className="mb-4 flex items-center space-x-2 text-gray-600 hover:text-gray-900 transition-colors group"
+          >
+            <ArrowLeft className="w-5 h-5 group-hover:-translate-x-1 transition-transform" />
+            <span className="font-medium">Back to Dashboard</span>
+          </button>
           {/* Document Info Card */}
           <div className="bg-linear-to-r from-blue-600 to-cyan-500 rounded-2xl p-3 mb-3 md:p-8 md:mb-8 shadow-sm">
             <div className="flex items-start space-x-2 md:space-x-5">

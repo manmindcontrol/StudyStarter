@@ -34,7 +34,7 @@ export default function LandingPage() {
             transition={{ duration: 0.6, delay: 0.1 }}
             className="text-5xl md:text-7xl font-bold mb-6 leading-tight"
           >
-            <span className="bg-linear-to-r from-gray-900 via-gray-800 to-gray-900 bg-clip-text text-transparent">
+            <span className="bg-linear-to-t from-gray-500  to-slate-900 bg-clip-text text-transparent">
               Study more effectively with{" "}
             </span>
             <span className="bg-linear-to-r from-blue-600 via-cyan-500 to-blue-600 bg-clip-text text-transparent animate-linear">
@@ -49,8 +49,8 @@ export default function LandingPage() {
             transition={{ duration: 0.6, delay: 0.2 }}
             className="text-xl md:text-2xl text-gray-600 mb-10 leading-relaxed max-w-3xl mx-auto"
           >
-            Automatic lecture transcription, intelligent study material processing,
-            and test question generation. All in one place.
+            Automatic lecture transcription, intelligent study material
+            processing, and test question generation. All in one place.
           </motion.p>
 
           {/* CTA buttons */}
@@ -76,7 +76,7 @@ export default function LandingPage() {
             <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
               <Link
                 href="#funkcie"
-                className="btn-secondary text-lg bg-white border-2 border-gray-200 px-8 py-4 rounded-xl hover:bg-gray-50 hover:border-blue-300 transition-all duration-300 shadow-lg hover:shadow-xl font-semibold text-gray-700 hover:text-blue-600 inline-block"
+                className="btn-secondary text-lg bg-white border-2 border-gray-100 px-8 py-4 rounded-xl hover:bg-gray-50 hover:border-blue-300 transition-all duration-300 shadow-lg hover:shadow-xl font-semibold text-gray-700 hover:text-blue-600 inline-block"
               >
                 Learn more
               </Link>

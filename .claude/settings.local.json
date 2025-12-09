@@ -5,7 +5,8 @@
       "Bash(npm run build:*)",
       "Bash(git restore:*)",
       "Bash(cat:*)",
-      "Bash(npx tsc:*)"
+      "Bash(npx tsc:*)",
+      "Bash(node:*)"
     ],
     "deny": [],
     "ask": []

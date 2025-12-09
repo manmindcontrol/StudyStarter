@@ -150,9 +150,10 @@ export default function Features() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6, delay: 0.2 }}
-            className="text-lg md:text-xl text-blue-50"
+            className="text-lg md:text-xl text-gray-300"
           >
-            Harness the power of artificial intelligence for more effective learning and exam preparation
+            Harness the power of artificial intelligence for more effective
+            learning and exam preparation
           </motion.p>
         </div>
 

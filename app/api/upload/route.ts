@@ -44,6 +44,19 @@ export async function POST(request: NextRequest) {
     let extractedText = "";
     const fileType = file.name.split(".").pop()?.toLowerCase() ?? null;
 
+    // 🔧 Sanitize filename - remove diacritics, special chars, and spaces
+    const sanitizeFilename = (filename: string): string => {
+      return filename
+        .normalize("NFD") // Decompose accented characters
+        .replace(/[\u0300-\u036f]/g, "") // Remove diacritics
+        .replace(/[^\w\s.-]/g, "") // Remove special characters except dots, hyphens, underscores
+        .replace(/\s+/g, "_") // Replace spaces with underscores
+        .replace(/_{2,}/g, "_") // Replace multiple underscores with single
+        .toLowerCase();
+    };
+
+    const sanitizedFileName = sanitizeFilename(file.name);
+
     // Extract text from various formats
     if (fileType === "docx" || fileType === "doc") {
       const result = await mammoth.extractRawText({ buffer });
@@ -69,7 +82,7 @@ export async function POST(request: NextRequest) {
 
     // 1️⃣ Upload to OpenAI Files – so the model can work with the document
     const openaiFile = await openai.files.create({
-      file: await toFile(buffer, file.name),
+      file: await toFile(buffer, sanitizedFileName),
       purpose: "assistants",
     });
 
@@ -77,7 +90,7 @@ export async function POST(request: NextRequest) {
 
     // 2️⃣ Upload to Supabase Storage
     const timestamp = Date.now();
-    const storagePath = `${userId}/${timestamp}-${file.name}`;
+    const storagePath = `${userId}/${timestamp}-${sanitizedFileName}`;
 
     const { error: uploadError } = await supabase.storage
       .from("materials")

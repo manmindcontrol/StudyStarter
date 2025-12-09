@@ -6,7 +6,15 @@ import Link from "next/link";
 import { getCurrentUser } from "@/lib/auth";
 import { supabase } from "@/lib/supabase";
 import FileUpload from "@/components/FileUpload";
-import { FileText, Clock, Trash2, Eye, Search, Plus } from "lucide-react";
+import {
+  FileText,
+  Clock,
+  Trash2,
+  Eye,
+  Search,
+  Plus,
+  ArrowLeft,
+} from "lucide-react";
 import type { User } from "@supabase/supabase-js";
 import GenerateQuestionsButton from "@/components/buttons/GenerateQuestionsButton";
 import GenerateNotesButton from "@/components/buttons/GenerateNotesButton";
@@ -142,6 +150,13 @@ export default function MaterialsPage() {
   return (
     <div className="min-h-screen  bg-linear-to-br from-blue-50 via-gray-100 to-cyan-50">
       <div className="container-custom py-12">
+        <button
+          onClick={() => router.push("/dashboard")}
+          className="mb-4 flex items-center space-x-2 text-gray-600 hover:text-gray-900 transition-colors group"
+        >
+          <ArrowLeft className="w-5 h-5 group-hover:-translate-x-1 transition-transform" />
+          <span className="font-medium">Back to Dashboard</span>
+        </button>
         {/* Header */}
         <div className="flex items-center space-x-2 md:space-x-5 bg-linear-to-br from-blue-600 to-cyan-500 p-6 rounded-2xl shadow-md mb-8">
           <div className="bg-blue-100  p-2 md:p-4 rounded-xl md:rounded-2xl shadow-lg">

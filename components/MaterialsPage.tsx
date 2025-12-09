@@ -298,17 +298,6 @@ export default function MaterialsPage() {
                       </div>
 
                       {/* Generate study notes button */}
-                      <GenerateNotesButton
-                        materialId={material.id}
-                        // lang="en" // uncomment to force English
-                      />
-
-                      {/* Generate questions button */}
-                      <GenerateQuestionsButton
-                        materialId={material.id}
-                        questionType="exam"
-                        // lang="en" // uncomment to force English
-                      />
                     </div>
                   </div>
                 </div>

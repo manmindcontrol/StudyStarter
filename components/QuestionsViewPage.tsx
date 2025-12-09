@@ -225,14 +225,15 @@ export default function QuestionsViewPage({
 
     const text = questionRecord.questions
       .map((q, i) => {
-        let formatted = `${i + 1}. ${q.question}\n`;
+        let formatted = `${i + 1}. ${q.question}\n\n`;
         if (q.type === "mcq" && q.options) {
           q.options.forEach((opt, idx) => {
-            formatted += `   ${String.fromCharCode(65 + idx)}) ${opt}\n`;
+            formatted += `   ${String.fromCharCode(97 + idx)}) ${opt}\n`;
           });
+          formatted += "\n";
         }
         if (q.answer) {
-          formatted += `   Answer: ${q.answer}\n`;
+          formatted += `   ✓ Správna odpoveď: ${q.answer}\n`;
         }
         return formatted + "\n";
       })
@@ -333,7 +334,7 @@ export default function QuestionsViewPage({
             new Paragraph({
               children: [
                 new TextRun({
-                  text: `   ${String.fromCharCode(65 + optIdx)}) ${opt}`,
+                  text: `   ${String.fromCharCode(97 + optIdx)}) ${opt}`,
                   size: 22,
                 }),
               ],
@@ -349,7 +350,7 @@ export default function QuestionsViewPage({
           new Paragraph({
             children: [
               new TextRun({
-                text: "Answer: ",
+                text: "✓ Správna odpoveď: ",
                 bold: true,
                 size: 22,
                 color: "059669",
@@ -444,7 +445,7 @@ export default function QuestionsViewPage({
                 onClick={() => router.push("/materials")}
                 className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
               >
-                <ChevronLeft className="w-5 h-5" />
+                <ChevronLeft className="w-5 h-5 text-gray-600" />
               </button>
               <div>
                 <h1 className="text-xl font-bold text-gray-900">
@@ -548,25 +549,30 @@ export default function QuestionsViewPage({
                             {q.type === "mcq" ? "Multiple Choice" : "Open"}
                           </span>
                         </div>
-                        <p className="text-gray-900 mb-2">{q.question}</p>
+                        <p className="text-gray-900 mb-3 font-medium">{q.question}</p>
 
                         {q.type === "mcq" && q.options && (
-                          <div className="space-y-1 mb-2">
+                          <div className="space-y-2 mb-3">
                             {q.options.map((option, optIdx) => (
                               <div
                                 key={optIdx}
-                                className="text-sm text-gray-700 pl-4"
+                                className="flex items-start space-x-2 text-sm text-gray-700 p-2 rounded hover:bg-gray-50 transition-colors"
                               >
-                                {String.fromCharCode(65 + optIdx)}) {option}
+                                <span className="font-semibold text-blue-600 min-w-5">
+                                  {String.fromCharCode(97 + optIdx)})
+                                </span>
+                                <span className="flex-1">{option}</span>
                               </div>
                             ))}
                           </div>
                         )}
 
                         {q.answer && (
-                          <div className="mt-2 p-2 bg-gray-50 rounded text-sm text-gray-700">
-                            <span className="font-medium">Answer:</span>{" "}
-                            {q.answer}
+                          <div className="mt-3 p-3 bg-green-50 border border-green-200 rounded-lg">
+                            <div className="flex items-start space-x-2">
+                              <span className="font-semibold text-green-700">✓ Správna odpoveď:</span>
+                              <span className="text-green-800 flex-1">{q.answer}</span>
+                            </div>
                           </div>
                         )}
                       </div>
@@ -575,24 +581,6 @@ export default function QuestionsViewPage({
                 ))}
               </div>
             </div>
-
-            {/* Document preview */}
-            {material.content && (
-              <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-                <div className="flex items-center space-x-2 mb-4">
-                  <FileText className="w-5 h-5 text-blue-600" />
-                  <h2 className="text-lg font-semibold text-gray-900">
-                    Document Preview
-                  </h2>
-                </div>
-                <div className="prose prose-sm max-w-none">
-                  <div className="text-gray-700 whitespace-pre-wrap max-h-96 overflow-y-auto">
-                    {material.content.substring(0, 2000)}
-                    {material.content.length > 2000 && "..."}
-                  </div>
-                </div>
-              </div>
-            )}
           </div>
 
           {/* Chat panel - 1 column on large screens */}

@@ -40,6 +40,8 @@ export async function POST(
 
     const questionType = (searchParams.get("type") as QuestionType) || "exam";
     const targetLanguage = searchParams.get("lang"); // user can request output lang
+    const questionCount = parseInt(searchParams.get("count") || "10", 10); // default 10
+    const questionFormat = searchParams.get("format") || "mixed"; // mcq, open, mixed
 
     // 1️⃣ Load material
     const { data: material, error: materialError } = await supabase
@@ -62,13 +64,15 @@ export async function POST(
       );
     }
 
-    // 2️⃣ Build prompts
-    const baseInstruction =
-      questionType === "exam"
-        ? "Generate around 15 challenging, exam-style questions."
-        : questionType === "test"
-        ? "Generate around 20 multiple-choice test questions (4 options, 1 correct)."
-        : "Generate mixed review questions (both open and MCQ) to help understand the material.";
+    // 2️⃣ Build prompts based on user preferences
+    let formatInstruction = "";
+    if (questionFormat === "mcq") {
+      formatInstruction = `Generate ONLY multiple-choice questions (MCQ) with 4 options (A, B, C, D), where only one is correct.`;
+    } else if (questionFormat === "open") {
+      formatInstruction = `Generate ONLY open-ended questions that require detailed written answers.`;
+    } else {
+      formatInstruction = `Generate a MIX of both multiple-choice (MCQ) and open-ended questions. Aim for roughly 50/50 split.`;
+    }
 
     const languageInstruction = targetLanguage
       ? `Use ${targetLanguage} for all questions and answers.`
@@ -81,33 +85,59 @@ Your output must ALWAYS be valid JSON in this exact format:
 {
   "questions": [
     {
-      "question": "string",
-      "type": "open" | "mcq",
-      "options": ["A", "B", "C", "D"] | null,
-      "answer": "string or explanation" | null
+      "question": "What is photosynthesis?",
+      "type": "mcq",
+      "options": [
+        "Process of breaking down food",
+        "Process plants use to make food from sunlight",
+        "Process of cellular respiration",
+        "Process of water absorption"
+      ],
+      "answer": "b) Process plants use to make food from sunlight - This is correct because photosynthesis is the biological process by which plants convert light energy into chemical energy."
     }
   ]
 }
 
+NOTICE in the example above:
+- options array contains ONLY the text, NO letters
+- answer field contains: letter + full option text + explanation
+
 ${languageInstruction}
 
-Rules:
+IMPORTANT RULES:
 - Return ONLY valid JSON, no explanations outside JSON
 - The root object must have a "questions" array
 - Each question must have all required fields
+- For MCQ questions: type="mcq", options must be an array of 4 strings (ONLY the option text, NO letters like "a)" in the options array)
+- For MCQ answer field: MUST include letter + FULL TEXT of the correct option + explanation
+- Example: If option at index 1 (b) says "Photosynthesis is the process", answer MUST be: "b) Photosynthesis is the process - This is correct because..."
+- CRITICAL: NEVER put just a letter (like "a" or "b") in the answer field - ALWAYS include letter + full option text + explanation
+- For open questions: type="open", options=null, answer must contain a detailed correct answer
+- ALWAYS include the correct answer in the "answer" field for learning purposes
+- Use lowercase letters (a, b, c, d) for MCQ answer format, NOT uppercase (A, B, C, D)
 `;
 
     const userPrompt = `
 Material title: "${material.title}"
 
 Task:
-${baseInstruction}
+Generate EXACTLY ${questionCount} questions from this educational material.
+
+Question Format Requirements:
+${formatInstruction}
 
 Additional rules:
-- Cover different sections of the document.
-- Include conceptual and applied questions.
-- For MCQ: always 3–5 options, only one correct.
-- No text outside JSON.
+- Cover different sections of the document
+- Include both conceptual and applied questions
+- Vary difficulty levels (easy, medium, hard)
+- For MCQ: always exactly 4 options, only one correct
+- For MCQ: in the "answer" field, MUST follow this format: "letter) full option text - explanation why it's correct"
+- Example answer format: "c) The correct option text goes here - This is correct because it explains the concept..."
+- CRITICAL ERROR TO AVOID: Do NOT write just "c)" or just "c) Explanation" - you MUST include the full option text between the letter and the dash
+- For open questions: provide a comprehensive correct answer
+- No text outside JSON
+- Make questions challenging but fair
+- IMPORTANT: Use lowercase letters (a, b, c, d) in answers, NOT uppercase (A, B, C, D)
 `;
 
     // 3️⃣ Call OpenAI (using standard Chat Completion API)

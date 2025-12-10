@@ -1,0 +1,294 @@
+"use client";
+
+import { useState } from "react";
+import {
+  X,
+  FileQuestion,
+  HelpCircle,
+  CheckCircle,
+  Shuffle,
+} from "lucide-react";
+
+type QuestionFormat = "mcq" | "open" | "mixed";
+
+type GenerateQuestionsModalProps = {
+  isOpen: boolean;
+  onClose: () => void;
+  onGenerate: (count: number, format: QuestionFormat) => void;
+  loading?: boolean;
+};
+
+export default function GenerateQuestionsModal({
+  isOpen,
+  onClose,
+  onGenerate,
+  loading = false,
+}: GenerateQuestionsModalProps) {
+  const [questionCount, setQuestionCount] = useState<number>(10);
+  const [questionFormat, setQuestionFormat] = useState<QuestionFormat>("mixed");
+
+  if (!isOpen) return null;
+
+  const handleGenerate = () => {
+    onGenerate(questionCount, questionFormat);
+  };
+
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm">
+      <div className="bg-white rounded-2xl shadow-2xl max-w-lg w-full max-h-[90vh] overflow-y-auto">
+        {/* Header */}
+        <div className="sticky top-0 bg-linear-to-r from-green-600 to-emerald-500 p-6 rounded-t-2xl">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center space-x-3">
+              <div className="bg-white/20 p-2 rounded-lg">
+                <FileQuestion className="w-6 h-6 text-white" />
+              </div>
+              <h2 className="text-2xl font-bold text-white">
+                Generate Questions
+              </h2>
+            </div>
+            <button
+              onClick={onClose}
+              disabled={loading}
+              className="text-white/80 hover:text-white transition-colors disabled:opacity-50"
+            >
+              <X className="w-6 h-6" />
+            </button>
+          </div>
+        </div>
+
+        {/* Content */}
+        <div className="p-6 space-y-6">
+          {/* Question Count */}
+          <div>
+            <label className="block text-sm font-semibold text-gray-900 mb-3">
+              Number of questions
+            </label>
+            <div className="space-y-3">
+              <input
+                type="range"
+                min="5"
+                max="30"
+                step="1"
+                value={questionCount}
+                onChange={(e) => setQuestionCount(Number(e.target.value))}
+                disabled={loading}
+                className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-green-600 disabled:opacity-50"
+              />
+              <div className="flex items-center justify-between">
+                <span className="text-sm text-gray-600">5 questions</span>
+                <div className="bg-green-100 px-4 py-2 rounded-lg">
+                  <span className="text-2xl font-bold text-green-700">
+                    {questionCount}
+                  </span>
+                </div>
+                <span className="text-sm text-gray-600">30 questions</span>
+              </div>
+            </div>
+          </div>
+
+          {/* Question Format */}
+          <div>
+            <label className="block text-sm font-semibold text-gray-900 mb-3">
+              Question type
+            </label>
+            <div className="space-y-3">
+              {/* MCQ Option */}
+              <button
+                type="button"
+                onClick={() => setQuestionFormat("mcq")}
+                disabled={loading}
+                className={`
+                  w-full p-4 rounded-xl border-2 transition-all text-left
+                  ${
+                    questionFormat === "mcq"
+                      ? "border-green-500 bg-green-50"
+                      : "border-gray-200 bg-white hover:border-gray-300"
+                  }
+                  disabled:opacity-50 disabled:cursor-not-allowed
+                `}
+              >
+                <div className="flex items-start space-x-3">
+                  <div
+                    className={`
+                    mt-0.5 w-5 h-5 rounded-full border-2 flex items-center justify-center transition-all
+                    ${
+                      questionFormat === "mcq"
+                        ? "border-green-500 bg-green-500"
+                        : "border-gray-300"
+                    }
+                  `}
+                  >
+                    {questionFormat === "mcq" && (
+                      <CheckCircle className="w-3 h-3 text-white" />
+                    )}
+                  </div>
+                  <div className="flex-1">
+                    <div className="flex items-center space-x-2 mb-1">
+                      <HelpCircle className="w-5 h-5 text-blue-600" />
+                      <h3 className="font-semibold text-gray-900">
+                        A) Quiz Questions (Multiple Choice)
+                      </h3>
+                    </div>
+                    <p className="text-sm text-gray-600">
+                      Questions with 4 options (A, B, C, D), only one correct
+                      answer
+                    </p>
+                  </div>
+                </div>
+              </button>
+
+              {/* Open Question Option */}
+              <button
+                type="button"
+                onClick={() => setQuestionFormat("open")}
+                disabled={loading}
+                className={`
+                  w-full p-4 rounded-xl border-2 transition-all text-left
+                  ${
+                    questionFormat === "open"
+                      ? "border-green-500 bg-green-50"
+                      : "border-gray-200 bg-white hover:border-gray-300"
+                  }
+                  disabled:opacity-50 disabled:cursor-not-allowed
+                `}
+              >
+                <div className="flex items-start space-x-3">
+                  <div
+                    className={`
+                    mt-0.5 w-5 h-5 rounded-full border-2 flex items-center justify-center transition-all
+                    ${
+                      questionFormat === "open"
+                        ? "border-green-500 bg-green-500"
+                        : "border-gray-300"
+                    }
+                  `}
+                  >
+                    {questionFormat === "open" && (
+                      <CheckCircle className="w-3 h-3 text-white" />
+                    )}
+                  </div>
+                  <div className="flex-1">
+                    <div className="flex items-center space-x-2 mb-1">
+                      <FileQuestion className="w-5 h-5 text-purple-600" />
+                      <h3 className="font-semibold text-gray-900">
+                        B) Open-Ended Questions
+                      </h3>
+                    </div>
+                    <p className="text-sm text-gray-600">
+                      Questions requiring detailed written answers
+                    </p>
+                  </div>
+                </div>
+              </button>
+
+              {/* Mixed Option */}
+              <button
+                type="button"
+                onClick={() => setQuestionFormat("mixed")}
+                disabled={loading}
+                className={`
+                  w-full p-4 rounded-xl border-2 transition-all text-left
+                  ${
+                    questionFormat === "mixed"
+                      ? "border-green-500 bg-green-50"
+                      : "border-gray-200 bg-white hover:border-gray-300"
+                  }
+                  disabled:opacity-50 disabled:cursor-not-allowed
+                `}
+              >
+                <div className="flex items-start space-x-3">
+                  <div
+                    className={`
+                    mt-0.5 w-5 h-5 rounded-full border-2 flex items-center justify-center transition-all
+                    ${
+                      questionFormat === "mixed"
+                        ? "border-green-500 bg-green-500"
+                        : "border-gray-300"
+                    }
+                  `}
+                  >
+                    {questionFormat === "mixed" && (
+                      <CheckCircle className="w-3 h-3 text-white" />
+                    )}
+                  </div>
+                  <div className="flex-1">
+                    <div className="flex items-center space-x-2 mb-1">
+                      <Shuffle className="w-5 h-5 text-green-600" />
+                      <h3 className="font-semibold text-gray-900">
+                        C) Mixed (Both Types)
+                      </h3>
+                    </div>
+                    <p className="text-sm text-gray-600">
+                      Combination of quiz and open-ended questions
+                    </p>
+                  </div>
+                </div>
+              </button>
+            </div>
+          </div>
+
+          {/* Info Box */}
+          <div className="bg-blue-50 border border-blue-200 rounded-xl p-4">
+            <div className="flex items-start space-x-3">
+              <HelpCircle className="w-5 h-5 text-blue-600 mt-0.5 shrink-0" />
+              <div className="text-sm text-blue-900">
+                <p className="font-semibold mb-1">Note:</p>
+                <p>
+                  The correct answer will always be displayed below each
+                  question for learning purposes.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Footer */}
+        <div className="sticky bottom-0 bg-gray-50 p-6 rounded-b-2xl border-t border-gray-200">
+          <div className="flex items-center space-x-3">
+            <button
+              onClick={onClose}
+              disabled={loading}
+              className="flex-1 bg-white border border-gray-300 text-gray-700 font-semibold py-3 px-4 rounded-xl hover:bg-gray-50 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              Cancel
+            </button>
+            <button
+              onClick={handleGenerate}
+              disabled={loading}
+              className="flex-1 bg-linear-to-r from-green-600 to-emerald-500 hover:from-green-700 hover:to-emerald-600 text-white font-semibold py-3 px-4 rounded-xl transition-all disabled:opacity-50 disabled:cursor-not-allowed shadow-lg flex items-center justify-center"
+            >
+              {loading ? (
+                <>
+                  <svg
+                    className="animate-spin -ml-1 mr-3 h-5 w-5 text-white"
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                  >
+                    <circle
+                      className="opacity-25"
+                      cx="12"
+                      cy="12"
+                      r="10"
+                      stroke="currentColor"
+                      strokeWidth="4"
+                    ></circle>
+                    <path
+                      className="opacity-75"
+                      fill="currentColor"
+                      d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                    ></path>
+                  </svg>
+                  Generating...
+                </>
+              ) : (
+                "Generate Questions"
+              )}
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}

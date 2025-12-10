@@ -10,6 +10,7 @@ import {
   Eye,
   Clock,
   X,
+  Trash2,
 } from "lucide-react";
 import Link from "next/link";
 
@@ -73,12 +74,54 @@ export default function Sidebar({ userId, isOpen, onClose }: SidebarProps) {
     });
   };
 
+  const handleDeleteMaterial = async (e: React.MouseEvent, materialId: string) => {
+    e.preventDefault(); // Prevent navigation
+    e.stopPropagation();
+
+    if (!confirm("Are you sure you want to delete this material?")) return;
+
+    const { error } = await supabase
+      .from("materials")
+      .delete()
+      .eq("id", materialId);
+
+    if (error) {
+      console.error("Error deleting material:", error);
+      alert("Error deleting material");
+      return;
+    }
+
+    // Reload materials
+    setMaterials(materials.filter((m) => m.id !== materialId));
+  };
+
+  const handleDeleteLecture = async (e: React.MouseEvent, lectureId: string) => {
+    e.preventDefault(); // Prevent navigation
+    e.stopPropagation();
+
+    if (!confirm("Are you sure you want to delete this recording?")) return;
+
+    const { error } = await supabase
+      .from("lectures")
+      .delete()
+      .eq("id", lectureId);
+
+    if (error) {
+      console.error("Error deleting lecture:", error);
+      alert("Error deleting recording");
+      return;
+    }
+
+    // Reload lectures
+    setLectures(lectures.filter((l) => l.id !== lectureId));
+  };
+
   return (
     <>
       {/* Overlay for mobile */}
       {isOpen && (
         <div
-          className="fixed inset-0 bg-black bg-opacity-50 z-40 lg:hidden"
+          className="fixed inset-0 bg-black bg-opacity-50 z-30 lg:hidden"
           onClick={onClose}
         />
       )}
@@ -86,10 +129,15 @@ export default function Sidebar({ userId, isOpen, onClose }: SidebarProps) {
       {/* Sidebar */}
       <div
         className={`
-          fixed lg:sticky top-0 left-0 h-screen
+          fixed left-0 h-screen
+          lg:sticky lg:top-0 lg:h-[calc(100vh)]
           w-80 bg-white border-r border-gray-200 overflow-y-auto shrink-0
-          z-50 transition-transform duration-300 ease-in-out
-          ${isOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0"}
+          z- transition-transform duration-300 ease-in-out
+          ${
+            isOpen
+              ? "translate-x-0 top-0"
+              : "-translate-x-full lg:translate-x-0 top-0 lg:top-0"
+          }
         `}
       >
         <div className="p-3 sm:p-4">
@@ -143,24 +191,35 @@ export default function Sidebar({ userId, isOpen, onClose }: SidebarProps) {
                   </div>
                 ) : (
                   materials.map((material) => (
-                    <Link
+                    <div
                       key={material.id}
-                      href={`/materials/${material.id}`}
-                      className="block p-2 sm:p-3 hover:bg-blue-50 rounded-lg transition-colors group"
+                      className="relative group/item"
                     >
-                      <div className="flex items-start space-x-2">
-                        <Eye className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-gray-400 group-hover:text-blue-600 mt-0.5 shrink-0" />
-                        <div className="flex-1 min-w-0">
-                          <p className="text-xs sm:text-sm font-medium text-gray-900 truncate group-hover:text-blue-600">
-                            {material.title}
-                          </p>
-                          <div className="flex items-center mt-0.5 sm:mt-1 text-[10px] sm:text-xs text-gray-500">
-                            <Clock className="w-2.5 h-2.5 sm:w-3 sm:h-3 mr-1" />
-                            {formatDate(material.created_at)}
+                      <Link
+                        href={`/materials/${material.id}`}
+                        className="block p-2 sm:p-3 hover:bg-blue-50 rounded-lg transition-colors group"
+                      >
+                        <div className="flex items-start space-x-2">
+                          <Eye className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-gray-400 group-hover:text-blue-600 mt-0.5 shrink-0" />
+                          <div className="flex-1 min-w-0 pr-6">
+                            <p className="text-xs sm:text-sm font-medium text-gray-900 truncate group-hover:text-blue-600">
+                              {material.title}
+                            </p>
+                            <div className="flex items-center mt-0.5 sm:mt-1 text-[10px] sm:text-xs text-gray-500">
+                              <Clock className="w-2.5 h-2.5 sm:w-3 sm:h-3 mr-1" />
+                              {formatDate(material.created_at)}
+                            </div>
                           </div>
                         </div>
-                      </div>
-                    </Link>
+                      </Link>
+                      <button
+                        onClick={(e) => handleDeleteMaterial(e, material.id)}
+                        className="absolute right-2 top-1/2 -translate-y-1/2 opacity-0 group-hover/item:opacity-100 p-1.5 hover:bg-red-100 rounded transition-all"
+                        title="Delete material"
+                      >
+                        <Trash2 className="w-3.5 h-3.5 text-red-600" />
+                      </button>
+                    </div>
                   ))
                 )}
               </div>
@@ -203,24 +262,35 @@ export default function Sidebar({ userId, isOpen, onClose }: SidebarProps) {
                   </div>
                 ) : (
                   lectures.map((lecture) => (
-                    <Link
+                    <div
                       key={lecture.id}
-                      href={`/lectures/${lecture.id}`}
-                      className="block p-2 sm:p-3 hover:bg-green-50 rounded-lg transition-colors group"
+                      className="relative group/item"
                     >
-                      <div className="flex items-start space-x-2">
-                        <Eye className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-gray-400 group-hover:text-green-600 mt-0.5 shrink-0" />
-                        <div className="flex-1 min-w-0">
-                          <p className="text-xs sm:text-sm font-medium text-gray-900 truncate group-hover:text-green-600">
-                            {lecture.title}
-                          </p>
-                          <div className="flex items-center mt-0.5 sm:mt-1 text-[10px] sm:text-xs text-gray-500">
-                            <Clock className="w-2.5 h-2.5 sm:w-3 sm:h-3 mr-1" />
-                            {formatDate(lecture.created_at)}
+                      <Link
+                        href={`/lectures/${lecture.id}`}
+                        className="block p-2 sm:p-3 hover:bg-green-50 rounded-lg transition-colors group"
+                      >
+                        <div className="flex items-start space-x-2">
+                          <Eye className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-gray-400 group-hover:text-green-600 mt-0.5 shrink-0" />
+                          <div className="flex-1 min-w-0 pr-6">
+                            <p className="text-xs sm:text-sm font-medium text-gray-900 truncate group-hover:text-green-600">
+                              {lecture.title}
+                            </p>
+                            <div className="flex items-center mt-0.5 sm:mt-1 text-[10px] sm:text-xs text-gray-500">
+                              <Clock className="w-2.5 h-2.5 sm:w-3 sm:h-3 mr-1" />
+                              {formatDate(lecture.created_at)}
+                            </div>
                           </div>
                         </div>
-                      </div>
-                    </Link>
+                      </Link>
+                      <button
+                        onClick={(e) => handleDeleteLecture(e, lecture.id)}
+                        className="absolute right-2 top-1/2 -translate-y-1/2 opacity-0 group-hover/item:opacity-100 p-1.5 hover:bg-red-100 rounded transition-all"
+                        title="Delete recording"
+                      >
+                        <Trash2 className="w-3.5 h-3.5 text-red-600" />
+                      </button>
+                    </div>
                   ))
                 )}
               </div>

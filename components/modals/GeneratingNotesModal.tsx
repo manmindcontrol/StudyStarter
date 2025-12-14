@@ -147,7 +147,7 @@ export default function GeneratingNotesModal({
                 key={index}
                 className={`h-2 rounded-full transition-all duration-300 ${
                   index === currentTextIndex
-                    ? "w-8 bg-linear-to-r from-purple-600 to-pink-500"
+                    ? "w-8 bg-linear-to-r from-purple-600 to-violet-400"
                     : index < currentTextIndex
                     ? "w-2 bg-purple-500"
                     : "w-2 bg-gray-300"

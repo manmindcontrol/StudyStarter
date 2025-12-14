@@ -117,7 +117,7 @@ export default function MaterialViewPage({ materialId }: Props) {
           </h2>
           <button
             onClick={() => router.push("/materials")}
-            className="text-blue-600 hover:text-blue-700"
+            className="text-gray-600 hover:text-gray-900"
           >
             Back to materials
           </button>
@@ -202,7 +202,9 @@ export default function MaterialViewPage({ materialId }: Props) {
                       </div>
                       <div>
                         <p className="text-sm text-gray-600">Question Sets</p>
-                        <p className="text-2xl font-bold text-gray-900">{stats.questionsCount}</p>
+                        <p className="text-2xl font-bold text-gray-900">
+                          {stats.questionsCount}
+                        </p>
                       </div>
                     </div>
                   </div>
@@ -215,7 +217,9 @@ export default function MaterialViewPage({ materialId }: Props) {
                       </div>
                       <div>
                         <p className="text-sm text-gray-600">Study Notes</p>
-                        <p className="text-2xl font-bold text-gray-900">{stats.notesCount}</p>
+                        <p className="text-2xl font-bold text-gray-900">
+                          {stats.notesCount}
+                        </p>
                       </div>
                     </div>
                   </div>

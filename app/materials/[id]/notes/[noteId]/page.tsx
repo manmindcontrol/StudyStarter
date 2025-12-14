@@ -225,7 +225,9 @@ export default function NotesPage() {
     note.key_points.forEach((point, index) => {
       paragraphs.push(
         new Paragraph({
-          text: `${index + 1}. ${point.title} [${point.importance.toUpperCase()}]`,
+          text: `${index + 1}. ${
+            point.title
+          } [${point.importance.toUpperCase()}]`,
           heading: HeadingLevel.HEADING_2,
           spacing: { before: 200, after: 100 },
         })
@@ -368,7 +370,7 @@ export default function NotesPage() {
           </h2>
           <Link
             href={`/materials/${materialId}`}
-            className="text-purple-600 hover:text-purple-700"
+            className="text-gray-600 hover:text-gray-900"
           >
             Back to material
           </Link>
@@ -386,10 +388,9 @@ export default function NotesPage() {
             <div className="flex items-center gap-4">
               <Link
                 href={`/materials/${materialId}`}
-                className="inline-flex items-center text-gray-800 hover:text-gray-500 font-medium"
+                className="inline-flex items-center text-gray-600 hover:text-gray-900 font-medium"
               >
                 <ArrowLeft className="w-4 h-4 mr-2" />
-                Back
               </Link>
               <div className="flex items-center gap-3">
                 <div className="bg-linear-to-br from-purple-100 to-purple-200 p-2 rounded-lg">
@@ -405,7 +406,7 @@ export default function NotesPage() {
             </div>
             <button
               onClick={handleDownloadNotes}
-              className="inline-flex items-center text-white gap-2 bg-linear-to-br from-purple-600 to-violet-500 hover:from-purple-700 hover:to-violet-600 text-white px-4 py-2 rounded-lg font-semibold transition-colors"
+              className="inline-flex items-center text-white gap-2 bg-linear-to-br from-purple-600 to-violet-500 hover:from-purple-700 hover:to-violet-600  px-4 py-2 rounded-lg font-semibold transition-colors"
             >
               <Download className="w-4 h-4 text-white" />
               Download Notes

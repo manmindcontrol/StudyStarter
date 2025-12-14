@@ -138,7 +138,7 @@ export default function DocumentViewer({ materialId }: Props) {
           </h2>
           <button
             onClick={() => router.push("/dashboard")}
-            className="text-blue-600 hover:text-blue-700"
+            className="text-gray-600 hover:text-gray-900"
           >
             Back to dashboard
           </button>

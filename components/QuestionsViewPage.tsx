@@ -13,7 +13,6 @@ import {
   Loader2,
   ChevronLeft,
   Download,
-  ExternalLink,
   FileDown,
 } from "lucide-react";
 import type { User } from "@supabase/supabase-js";
@@ -75,6 +74,21 @@ export default function QuestionsViewPage({
   const [selectedQuestions, setSelectedQuestions] = useState<Set<number>>(
     new Set()
   );
+
+  // Quiz state - track user answers and validation
+  type QuizAnswer = {
+    userAnswer: string;
+    isCorrect: boolean | null;
+    isChecked: boolean;
+    feedback?: string;
+  };
+  const [quizAnswers, setQuizAnswers] = useState<Map<number, QuizAnswer>>(
+    new Map()
+  );
+  const [openAnswerInputs, setOpenAnswerInputs] = useState<Map<number, string>>(
+    new Map()
+  );
+  const [checkingAnswer, setCheckingAnswer] = useState<number | null>(null);
 
   // Chat state
   const [chatMessages, setChatMessages] = useState<ChatMessage[]>([]);
@@ -167,6 +181,102 @@ export default function QuestionsViewPage({
       newSelected.add(index);
     }
     setSelectedQuestions(newSelected);
+  };
+
+  // Handle MCQ answer selection
+  const handleMCQAnswer = (
+    questionIndex: number,
+    selectedAnswer: string,
+    correctAnswer: string | null
+  ) => {
+    if (!correctAnswer) {
+      const newAnswers = new Map(quizAnswers);
+      newAnswers.set(questionIndex, {
+        userAnswer: selectedAnswer,
+        isCorrect: null,
+        isChecked: true,
+      });
+      setQuizAnswers(newAnswers);
+      return;
+    }
+
+    // Extract the option text from the correct answer format: "b) Option text - Explanation"
+    // The correct answer format is: "letter) full option text - explanation"
+    const answerMatch = correctAnswer.match(/^[a-d]\)\s*(.+?)\s*-/i);
+    const correctOptionText = answerMatch ? answerMatch[1].trim() : null;
+
+    // Check if the selected answer matches the correct option text
+    const isCorrect = correctOptionText
+      ? selectedAnswer.trim() === correctOptionText.trim()
+      : selectedAnswer === correctAnswer;
+
+    const newAnswers = new Map(quizAnswers);
+    newAnswers.set(questionIndex, {
+      userAnswer: selectedAnswer,
+      isCorrect,
+      isChecked: true,
+    });
+    setQuizAnswers(newAnswers);
+  };
+
+  // Handle open question answer submission
+  const handleOpenAnswerSubmit = async (
+    questionIndex: number,
+    question: GeneratedQuestion
+  ) => {
+    const userAnswer = openAnswerInputs.get(questionIndex) || "";
+    if (!userAnswer.trim()) return;
+
+    setCheckingAnswer(questionIndex);
+
+    try {
+      // Call API to validate answer
+      const response = await fetch("/api/validate-answer", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          question: question.question,
+          userAnswer: userAnswer.trim(),
+          correctAnswer: question.answer,
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to validate answer");
+      }
+
+      const data = await response.json();
+
+      const newAnswers = new Map(quizAnswers);
+      newAnswers.set(questionIndex, {
+        userAnswer: userAnswer.trim(),
+        isCorrect: data.isCorrect,
+        isChecked: true,
+        feedback: data.feedback,
+      });
+      setQuizAnswers(newAnswers);
+    } catch (error) {
+      console.error("Error validating answer:", error);
+      // Fallback - just mark as checked without validation
+      const newAnswers = new Map(quizAnswers);
+      newAnswers.set(questionIndex, {
+        userAnswer: userAnswer.trim(),
+        isCorrect: null,
+        isChecked: true,
+        feedback:
+          "Could not validate answer. Please check the correct answer below.",
+      });
+      setQuizAnswers(newAnswers);
+    } finally {
+      setCheckingAnswer(null);
+    }
+  };
+
+  // Update open answer input
+  const updateOpenAnswerInput = (questionIndex: number, value: string) => {
+    const newInputs = new Map(openAnswerInputs);
+    newInputs.set(questionIndex, value);
+    setOpenAnswerInputs(newInputs);
   };
 
   const handleChatSubmit = async (e: React.FormEvent) => {
@@ -457,19 +567,11 @@ export default function QuestionsViewPage({
               </div>
             </div>
             <div className="flex items-center space-x-2">
-              <button
-                onClick={() => router.push(`/materials/${materialId}`)}
-                className="flex items-center space-x-2 bg-gray-100 hover:bg-gray-200 text-gray-700 px-4 py-2 rounded-lg transition-colors"
-              >
-                <ExternalLink className="w-4 h-4" />
-                <span>Open document</span>
-              </button>
-
               {/* Export dropdown */}
               <div className="relative" ref={exportMenuRef}>
                 <button
                   onClick={() => setShowExportMenu(!showExportMenu)}
-                  className="flex items-center space-x-2 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition-colors"
+                  className="flex items-center space-x-2 bg-linear-to-br from-blue-600 to-sky-500 hover:from-blue-700 hover:to-sky-600 text-white px-4 py-2 rounded-lg transition-all"
                 >
                   <Download className="w-4 h-4" />
                   <span>Export</span>
@@ -516,27 +618,18 @@ export default function QuestionsViewPage({
               </h2>
 
               <div className="space-y-4">
-                {questionRecord.questions.map((q, index) => (
-                  <div
-                    key={index}
-                    className={`p-4 rounded-lg border-2 transition-all cursor-pointer ${
-                      selectedQuestions.has(index)
-                        ? "border-blue-500 bg-blue-50"
-                        : "border-gray-200 hover:border-gray-300"
-                    }`}
-                    onClick={() => toggleQuestion(index)}
-                  >
-                    <div className="flex items-start space-x-3">
-                      <div className="mt-1">
-                        {selectedQuestions.has(index) ? (
-                          <CheckCircle2 className="w-5 h-5 text-blue-600" />
-                        ) : (
-                          <Circle className="w-5 h-5 text-gray-400" />
-                        )}
-                      </div>
+                {questionRecord.questions.map((q, index) => {
+                  const quizAnswer = quizAnswers.get(index);
+                  const isAnswered = quizAnswer?.isChecked || false;
+
+                  return (
+                    <div
+                      key={index}
+                      className="p-4 rounded-lg border-2 border-gray-200 bg-white"
+                    >
                       <div className="flex-1">
-                        <div className="flex items-center space-x-2 mb-2">
-                          <span className="font-semibold text-gray-900">
+                        <div className="flex items-center space-x-2 mb-3">
+                          <span className="font-semibold text-gray-900 text-lg">
                             {index + 1}.
                           </span>
                           <span
@@ -549,36 +642,182 @@ export default function QuestionsViewPage({
                             {q.type === "mcq" ? "Multiple Choice" : "Open"}
                           </span>
                         </div>
-                        <p className="text-gray-900 mb-3 font-medium">{q.question}</p>
+                        <p className="text-gray-900 mb-4 font-medium text-base">
+                          {q.question}
+                        </p>
 
+                        {/* MCQ Options */}
                         {q.type === "mcq" && q.options && (
                           <div className="space-y-2 mb-3">
-                            {q.options.map((option, optIdx) => (
-                              <div
-                                key={optIdx}
-                                className="flex items-start space-x-2 text-sm text-gray-700 p-2 rounded hover:bg-gray-50 transition-colors"
-                              >
-                                <span className="font-semibold text-blue-600 min-w-5">
-                                  {String.fromCharCode(97 + optIdx)})
-                                </span>
-                                <span className="flex-1">{option}</span>
-                              </div>
-                            ))}
+                            {q.options.map((option, optIdx) => {
+                              const optionLetter = String.fromCharCode(
+                                97 + optIdx
+                              );
+                              const isSelected =
+                                quizAnswer?.userAnswer === option;
+
+                              // Extract correct option text from answer format: "b) Option text - Explanation"
+                              let isCorrectOption = false;
+                              if (q.answer) {
+                                const answerMatch =
+                                  q.answer.match(/^[a-d]\)\s*(.+?)\s*-/i);
+                                const correctOptionText = answerMatch
+                                  ? answerMatch[1].trim()
+                                  : null;
+                                isCorrectOption = correctOptionText
+                                  ? option.trim() === correctOptionText
+                                  : false;
+                              }
+
+                              const showResult = isAnswered;
+
+                              let buttonStyle =
+                                "border-gray-300 hover:border-blue-400 hover:bg-blue-50";
+                              if (showResult) {
+                                if (isSelected && isCorrectOption) {
+                                  buttonStyle = "border-green-500 bg-green-50";
+                                } else if (isSelected && !isCorrectOption) {
+                                  buttonStyle = "border-red-500 bg-red-50";
+                                } else if (isCorrectOption) {
+                                  buttonStyle = "border-green-500 bg-green-50";
+                                } else {
+                                  buttonStyle = "border-gray-300 bg-gray-50";
+                                }
+                              } else if (isSelected) {
+                                buttonStyle = "border-blue-500 bg-blue-50";
+                              }
+
+                              return (
+                                <button
+                                  key={optIdx}
+                                  onClick={() =>
+                                    !isAnswered &&
+                                    handleMCQAnswer(index, option, q.answer)
+                                  }
+                                  disabled={isAnswered}
+                                  className={`w-full flex items-start text-gray-700 space-x-3 text-left p-3 rounded-lg border-2 transition-all ${buttonStyle} ${
+                                    !isAnswered
+                                      ? "cursor-pointer"
+                                      : "cursor-default"
+                                  }`}
+                                >
+                                  <span className="font-bold text-base min-w-6">
+                                    {optionLetter})
+                                  </span>
+                                  <span className="flex-1 text-gray-900">
+                                    {option}
+                                  </span>
+                                  {showResult && isCorrectOption && (
+                                    <CheckCircle2 className="w-5 h-5 text-green-600 shrink-0" />
+                                  )}
+                                </button>
+                              );
+                            })}
                           </div>
                         )}
 
-                        {q.answer && (
+                        {/* Open Question Input */}
+                        {q.type === "open" && !isAnswered && (
+                          <div className="mb-3">
+                            <textarea
+                              value={openAnswerInputs.get(index) || ""}
+                              onChange={(e) =>
+                                updateOpenAnswerInput(index, e.target.value)
+                              }
+                              placeholder="Type your answer here..."
+                              className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-blue-500 focus:outline-none text-gray-900 placeholder:text-gray-400 transition-all resize-none"
+                              rows={4}
+                              disabled={checkingAnswer === index}
+                            />
+                            <button
+                              onClick={() => handleOpenAnswerSubmit(index, q)}
+                              disabled={
+                                !openAnswerInputs.get(index)?.trim() ||
+                                checkingAnswer === index
+                              }
+                              className="mt-2 bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center space-x-2"
+                            >
+                              {checkingAnswer === index ? (
+                                <>
+                                  <Loader2 className="w-4 h-4 animate-spin" />
+                                  <span>Checking...</span>
+                                </>
+                              ) : (
+                                <>
+                                  <Send className="w-4 h-4" />
+                                  <span>Submit Answer</span>
+                                </>
+                              )}
+                            </button>
+                          </div>
+                        )}
+
+                        {/* Show user's answer for open questions */}
+                        {q.type === "open" && isAnswered && quizAnswer && (
+                          <div className="mb-3 p-3 bg-blue-50 border border-blue-200 rounded-lg">
+                            <div className="font-semibold text-blue-900 mb-1">
+                              Your answer:
+                            </div>
+                            <div className="text-blue-800">
+                              {quizAnswer.userAnswer}
+                            </div>
+                            {quizAnswer.feedback && (
+                              <div className="mt-2 text-sm text-blue-700 italic">
+                                {quizAnswer.feedback}
+                              </div>
+                            )}
+                          </div>
+                        )}
+
+                        {/* Show correct answer after user has answered */}
+                        {isAnswered && q.answer && (
                           <div className="mt-3 p-3 bg-green-50 border border-green-200 rounded-lg">
                             <div className="flex items-start space-x-2">
-                              <span className="font-semibold text-green-700">✓ Správna odpoveď:</span>
-                              <span className="text-green-800 flex-1">{q.answer}</span>
+                              <CheckCircle2 className="w-5 h-5 text-green-600 mt-0.5 shrink-0" />
+                              <div className="flex-1">
+                                <span className="font-semibold text-green-700">
+                                  Correct answer:
+                                </span>
+                                <p className="text-green-800 mt-1">
+                                  {q.answer}
+                                </p>
+                              </div>
+                            </div>
+                          </div>
+                        )}
+
+                        {/* Show result feedback for MCQ */}
+                        {q.type === "mcq" && isAnswered && quizAnswer && (
+                          <div
+                            className={`mt-3 p-3 rounded-lg border ${
+                              quizAnswer.isCorrect
+                                ? "bg-green-50 border-green-200"
+                                : "bg-red-50 border-red-200"
+                            }`}
+                          >
+                            <div className="flex items-center space-x-2">
+                              {quizAnswer.isCorrect ? (
+                                <>
+                                  <CheckCircle2 className="w-5 h-5 text-green-600" />
+                                  <span className="font-semibold text-green-700">
+                                    Correct!
+                                  </span>
+                                </>
+                              ) : (
+                                <>
+                                  <Circle className="w-5 h-5 text-red-600" />
+                                  <span className="font-semibold text-red-700">
+                                    Incorrect
+                                  </span>
+                                </>
+                              )}
                             </div>
                           </div>
                         )}
                       </div>
                     </div>
-                  </div>
-                ))}
+                  );
+                })}
               </div>
             </div>
           </div>

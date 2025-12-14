@@ -137,7 +137,7 @@ export default function CTA() {
               </span>
             </Link>
 
-            <div className="flex items-center space-x-2 text-blue-200 text-sm">
+            {/*<div className="flex items-center space-x-2 text-blue-200 text-sm">
               <svg
                 className="w-5 h-5 text-green-400"
                 fill="currentColor"
@@ -150,7 +150,7 @@ export default function CTA() {
                 />
               </svg>
               <span>No credit card required</span>
-            </div>
+            </div>*/}
           </div>
 
           {/* Statistics */}

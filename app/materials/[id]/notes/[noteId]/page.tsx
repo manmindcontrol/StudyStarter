@@ -5,6 +5,14 @@ import { useRouter, useParams } from "next/navigation";
 import Link from "next/link";
 import { supabase } from "@/lib/supabase";
 import {
+  Document,
+  Packer,
+  Paragraph,
+  TextRun,
+  HeadingLevel,
+  AlignmentType,
+} from "docx";
+import {
   BookOpen,
   ArrowLeft,
   Lightbulb,
@@ -118,7 +126,10 @@ export default function NotesPage() {
     setSendingMessage(true);
 
     // Add user message to chat
-    setChatMessages((prev) => [...prev, { role: "user", content: userMessage }]);
+    setChatMessages((prev) => [
+      ...prev,
+      { role: "user", content: userMessage },
+    ]);
 
     try {
       // Call chat API
@@ -163,44 +174,151 @@ export default function NotesPage() {
     }
   };
 
-  const handleDownloadNotes = () => {
+  const handleDownloadNotes = async () => {
     if (!note || !material) return;
 
-    let content = `# Study Notes: ${material.title}\n\n`;
-    content += `Generated on: ${new Date(note.created_at).toLocaleDateString()}\n\n`;
-    content += `---\n\n`;
+    const paragraphs: Paragraph[] = [];
 
-    content += `## Summary\n\n${note.summary}\n\n`;
-    content += `---\n\n`;
+    // Title
+    paragraphs.push(
+      new Paragraph({
+        text: `Study Notes: ${material.title}`,
+        heading: HeadingLevel.TITLE,
+        alignment: AlignmentType.CENTER,
+        spacing: { after: 200 },
+      })
+    );
 
-    content += `## Key Points\n\n`;
+    // Generated date
+    paragraphs.push(
+      new Paragraph({
+        text: `Generated on: ${new Date(note.created_at).toLocaleDateString()}`,
+        alignment: AlignmentType.CENTER,
+        spacing: { after: 400 },
+      })
+    );
+
+    // Summary Section
+    paragraphs.push(
+      new Paragraph({
+        text: "Summary",
+        heading: HeadingLevel.HEADING_1,
+        spacing: { before: 400, after: 200 },
+      })
+    );
+    paragraphs.push(
+      new Paragraph({
+        text: note.summary,
+        spacing: { after: 400 },
+      })
+    );
+
+    // Key Points Section
+    paragraphs.push(
+      new Paragraph({
+        text: "Key Points",
+        heading: HeadingLevel.HEADING_1,
+        spacing: { before: 400, after: 200 },
+      })
+    );
+
     note.key_points.forEach((point, index) => {
-      content += `### ${index + 1}. ${point.title} [${point.importance}]\n\n`;
-      content += `${point.description}\n\n`;
+      paragraphs.push(
+        new Paragraph({
+          text: `${index + 1}. ${point.title} [${point.importance.toUpperCase()}]`,
+          heading: HeadingLevel.HEADING_2,
+          spacing: { before: 200, after: 100 },
+        })
+      );
+      paragraphs.push(
+        new Paragraph({
+          text: point.description,
+          spacing: { after: 200 },
+        })
+      );
     });
-    content += `---\n\n`;
 
-    content += `## Important Concepts\n\n`;
+    // Concepts Section
+    paragraphs.push(
+      new Paragraph({
+        text: "Important Concepts",
+        heading: HeadingLevel.HEADING_1,
+        spacing: { before: 400, after: 200 },
+      })
+    );
+
     note.concepts.forEach((concept, index) => {
-      content += `### ${index + 1}. ${concept.concept}\n\n`;
-      content += `${concept.explanation}\n\n`;
+      paragraphs.push(
+        new Paragraph({
+          text: `${index + 1}. ${concept.concept}`,
+          heading: HeadingLevel.HEADING_2,
+          spacing: { before: 200, after: 100 },
+        })
+      );
+      paragraphs.push(
+        new Paragraph({
+          text: concept.explanation,
+          spacing: { after: 200 },
+        })
+      );
+
       if (concept.examples && concept.examples.length > 0) {
-        content += `**Examples:**\n`;
+        paragraphs.push(
+          new Paragraph({
+            children: [
+              new TextRun({
+                text: "Examples:",
+                bold: true,
+              }),
+            ],
+            spacing: { before: 100, after: 100 },
+          })
+        );
+
         concept.examples.forEach((example) => {
-          content += `- ${example}\n`;
+          paragraphs.push(
+            new Paragraph({
+              text: `• ${example}`,
+              spacing: { after: 100 },
+            })
+          );
         });
-        content += `\n`;
       }
     });
-    content += `---\n\n`;
 
-    content += `## Study Tips & Recommendations\n\n${note.study_tips}\n`;
+    // Study Tips Section
+    paragraphs.push(
+      new Paragraph({
+        text: "Study Tips & Recommendations",
+        heading: HeadingLevel.HEADING_1,
+        spacing: { before: 400, after: 200 },
+      })
+    );
+    paragraphs.push(
+      new Paragraph({
+        text: note.study_tips,
+        spacing: { after: 200 },
+      })
+    );
 
-    const blob = new Blob([content], { type: "text/markdown" });
+    // Create document
+    const doc = new Document({
+      sections: [
+        {
+          properties: {},
+          children: paragraphs,
+        },
+      ],
+    });
+
+    // Generate and download
+    const blob = await Packer.toBlob(doc);
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
     a.href = url;
-    a.download = `study-notes-${material.title.replace(/[^a-z0-9]/gi, "-").toLowerCase()}.md`;
+    a.download = `study-notes-${material.title
+      .replace(/[^a-z0-9]/gi, "-")
+      .toLowerCase()}.docx`;
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);
@@ -268,7 +386,7 @@ export default function NotesPage() {
             <div className="flex items-center gap-4">
               <Link
                 href={`/materials/${materialId}`}
-                className="inline-flex items-center text-purple-600 hover:text-purple-700 font-medium"
+                className="inline-flex items-center text-gray-800 hover:text-gray-500 font-medium"
               >
                 <ArrowLeft className="w-4 h-4 mr-2" />
                 Back
@@ -278,16 +396,18 @@ export default function NotesPage() {
                   <BookOpen className="w-5 h-5 text-purple-600" />
                 </div>
                 <div>
-                  <h1 className="text-lg font-bold text-gray-900">Study Notes</h1>
+                  <h1 className="text-lg font-bold text-gray-900">
+                    Study Notes
+                  </h1>
                   <p className="text-sm text-gray-600">{material.title}</p>
                 </div>
               </div>
             </div>
             <button
               onClick={handleDownloadNotes}
-              className="inline-flex items-center gap-2 bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-lg font-semibold transition-colors"
+              className="inline-flex items-center text-white gap-2 bg-linear-to-br from-purple-600 to-violet-500 hover:from-purple-700 hover:to-violet-600 text-white px-4 py-2 rounded-lg font-semibold transition-colors"
             >
-              <Download className="w-4 h-4" />
+              <Download className="w-4 h-4 text-white" />
               Download Notes
             </button>
           </div>
@@ -424,7 +544,9 @@ export default function NotesPage() {
                   <MessageSquare className="w-5 h-5 text-purple-600" />
                 </div>
                 <div>
-                  <h2 className="text-lg font-bold text-gray-900">AI Assistant</h2>
+                  <h2 className="text-lg font-bold text-gray-900">
+                    AI Assistant
+                  </h2>
                   <p className="text-xs text-gray-600">
                     Ask questions or request modifications to your notes
                   </p>

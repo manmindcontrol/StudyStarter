@@ -35,7 +35,7 @@ export default function GenerateQuestionsModal({
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm">
-      <div className="bg-white rounded-2xl shadow-2xl max-w-lg w-full max-h-[90vh] overflow-y-auto">
+      <div className="bg-white rounded-2xl shadow-2xl max-w-lg w-full max-h-[90vh] overflow-y-auto scrollbar-hide">
         {/* Header */}
         <div className="sticky top-0 bg-linear-to-r from-green-600 to-emerald-500 p-6 rounded-t-2xl">
           <div className="flex items-center justify-between">
@@ -65,16 +65,70 @@ export default function GenerateQuestionsModal({
               Number of questions
             </label>
             <div className="space-y-3">
-              <input
-                type="range"
-                min="5"
-                max="30"
-                step="1"
-                value={questionCount}
-                onChange={(e) => setQuestionCount(Number(e.target.value))}
-                disabled={loading}
-                className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-green-600 disabled:opacity-50"
-              />
+              <div className="relative">
+                <style jsx>{`
+                  input[type="range"] {
+                    -webkit-appearance: none;
+                    appearance: none;
+                    width: 100%;
+                    height: 8px;
+                    border-radius: 9999px;
+                    background: linear-gradient(
+                      to right,
+                      #16a34a 0%,
+                      #16a34a ${((questionCount - 5) / (30 - 5)) * 100}%,
+                      #e5e7eb ${((questionCount - 5) / (30 - 5)) * 100}%,
+                      #e5e7eb 100%
+                    );
+                    outline: none;
+                  }
+
+                  input[type="range"]::-webkit-slider-thumb {
+                    -webkit-appearance: none;
+                    appearance: none;
+                    width: 20px;
+                    height: 20px;
+                    border-radius: 50%;
+                    background: #16a34a;
+                    cursor: pointer;
+                    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+                    transition: transform 0.15s ease;
+                  }
+
+                  input[type="range"]::-webkit-slider-thumb:hover {
+                    transform: scale(1.1);
+                  }
+
+                  input[type="range"]::-moz-range-thumb {
+                    width: 20px;
+                    height: 20px;
+                    border: none;
+                    border-radius: 50%;
+                    background: #16a34a;
+                    cursor: pointer;
+                    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+                    transition: transform 0.15s ease;
+                  }
+
+                  input[type="range"]::-moz-range-thumb:hover {
+                    transform: scale(1.1);
+                  }
+
+                  input[type="range"]:disabled {
+                    opacity: 0.5;
+                    cursor: not-allowed;
+                  }
+                `}</style>
+                <input
+                  type="range"
+                  min="5"
+                  max="30"
+                  step="1"
+                  value={questionCount}
+                  onChange={(e) => setQuestionCount(Number(e.target.value))}
+                  disabled={loading}
+                />
+              </div>
               <div className="flex items-center justify-between">
                 <span className="text-sm text-gray-600">5 questions</span>
                 <div className="bg-green-100 px-4 py-2 rounded-lg">

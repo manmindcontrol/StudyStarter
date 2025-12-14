@@ -74,7 +74,10 @@ export default function Sidebar({ userId, isOpen, onClose }: SidebarProps) {
     });
   };
 
-  const handleDeleteMaterial = async (e: React.MouseEvent, materialId: string) => {
+  const handleDeleteMaterial = async (
+    e: React.MouseEvent,
+    materialId: string
+  ) => {
     e.preventDefault(); // Prevent navigation
     e.stopPropagation();
 
@@ -95,7 +98,10 @@ export default function Sidebar({ userId, isOpen, onClose }: SidebarProps) {
     setMaterials(materials.filter((m) => m.id !== materialId));
   };
 
-  const handleDeleteLecture = async (e: React.MouseEvent, lectureId: string) => {
+  const handleDeleteLecture = async (
+    e: React.MouseEvent,
+    lectureId: string
+  ) => {
     e.preventDefault(); // Prevent navigation
     e.stopPropagation();
 
@@ -121,7 +127,7 @@ export default function Sidebar({ userId, isOpen, onClose }: SidebarProps) {
       {/* Overlay for mobile */}
       {isOpen && (
         <div
-          className="fixed inset-0 bg-black bg-opacity-50 z-30 lg:hidden"
+          className="fixed inset-0 bg-black/50 z-30 lg:hidden"
           onClick={onClose}
         />
       )}
@@ -129,15 +135,11 @@ export default function Sidebar({ userId, isOpen, onClose }: SidebarProps) {
       {/* Sidebar */}
       <div
         className={`
-          fixed left-0 h-screen
-          lg:sticky lg:top-0 lg:h-[calc(100vh)]
+          fixed left-0 top-[72px] h-[calc(100vh-72px)]
+          lg:relative lg:h-[calc(100vh)] lg:top-0
           w-80 bg-white border-r border-gray-200 overflow-y-auto shrink-0
-          z- transition-transform duration-300 ease-in-out
-          ${
-            isOpen
-              ? "translate-x-0 top-0"
-              : "-translate-x-full lg:translate-x-0 top-0 lg:top-0"
-          }
+          z-40 transition-transform duration-300 ease-in-out
+          ${isOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0"}
         `}
       >
         <div className="p-3 sm:p-4">
@@ -191,10 +193,7 @@ export default function Sidebar({ userId, isOpen, onClose }: SidebarProps) {
                   </div>
                 ) : (
                   materials.map((material) => (
-                    <div
-                      key={material.id}
-                      className="relative group/item"
-                    >
+                    <div key={material.id} className="relative group/item">
                       <Link
                         href={`/materials/${material.id}`}
                         className="block p-2 sm:p-3 hover:bg-blue-50 rounded-lg transition-colors group"
@@ -262,10 +261,7 @@ export default function Sidebar({ userId, isOpen, onClose }: SidebarProps) {
                   </div>
                 ) : (
                   lectures.map((lecture) => (
-                    <div
-                      key={lecture.id}
-                      className="relative group/item"
-                    >
+                    <div key={lecture.id} className="relative group/item">
                       <Link
                         href={`/lectures/${lecture.id}`}
                         className="block p-2 sm:p-3 hover:bg-green-50 rounded-lg transition-colors group"

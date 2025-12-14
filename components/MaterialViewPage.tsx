@@ -36,6 +36,10 @@ export default function MaterialViewPage({ materialId }: Props) {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
   const [material, setMaterial] = useState<Material | null>(null);
+  const [stats, setStats] = useState({
+    questionsCount: 0,
+    notesCount: 0,
+  });
 
   useEffect(() => {
     const loadData = async () => {
@@ -60,6 +64,25 @@ export default function MaterialViewPage({ materialId }: Props) {
       }
 
       setMaterial(materialData);
+
+      // Load statistics
+      const [{ count: questionsCount }, { count: notesCount }] =
+        await Promise.all([
+          supabase
+            .from("generated_questions")
+            .select("*", { count: "exact", head: true })
+            .eq("material_id", materialId),
+          supabase
+            .from("study_notes")
+            .select("*", { count: "exact", head: true })
+            .eq("material_id", materialId),
+        ]);
+
+      setStats({
+        questionsCount: questionsCount || 0,
+        notesCount: notesCount || 0,
+      });
+
       setLoading(false);
     };
 
@@ -171,19 +194,6 @@ export default function MaterialViewPage({ materialId }: Props) {
                 </h3>
 
                 <div className="space-y-4">
-                  {/* Tests Created */}
-                  <div className="flex items-center justify-between p-3 bg-blue-50 rounded-lg">
-                    <div className="flex items-center space-x-3">
-                      <div className="bg-blue-100 p-2 rounded-lg">
-                        <FileQuestion className="w-5 h-5 text-blue-600" />
-                      </div>
-                      <div>
-                        <p className="text-sm text-gray-600">Tests Created</p>
-                        <p className="text-2xl font-bold text-gray-900">0</p>
-                      </div>
-                    </div>
-                  </div>
-
                   {/* Questions Generated */}
                   <div className="flex items-center justify-between p-3 bg-green-50 rounded-lg">
                     <div className="flex items-center space-x-3">
@@ -191,8 +201,8 @@ export default function MaterialViewPage({ materialId }: Props) {
                         <FileQuestion className="w-5 h-5 text-green-600" />
                       </div>
                       <div>
-                        <p className="text-sm text-gray-600">Questions</p>
-                        <p className="text-2xl font-bold text-gray-900">0</p>
+                        <p className="text-sm text-gray-600">Question Sets</p>
+                        <p className="text-2xl font-bold text-gray-900">{stats.questionsCount}</p>
                       </div>
                     </div>
                   </div>
@@ -204,23 +214,8 @@ export default function MaterialViewPage({ materialId }: Props) {
                         <StickyNote className="w-5 h-5 text-purple-600" />
                       </div>
                       <div>
-                        <p className="text-sm text-gray-600">Notes</p>
-                        <p className="text-2xl font-bold text-gray-900">0</p>
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Time Spent */}
-                  <div className="flex items-center justify-between p-3 bg-orange-50 rounded-lg">
-                    <div className="flex items-center space-x-3">
-                      <div className="bg-orange-100 p-2 rounded-lg">
-                        <Calendar className="w-5 h-5 text-orange-600" />
-                      </div>
-                      <div>
-                        <p className="text-sm text-gray-600">Time Spent</p>
-                        <p className="text-2xl font-bold text-gray-900">
-                          0h 0m
-                        </p>
+                        <p className="text-sm text-gray-600">Study Notes</p>
+                        <p className="text-2xl font-bold text-gray-900">{stats.notesCount}</p>
                       </div>
                     </div>
                   </div>

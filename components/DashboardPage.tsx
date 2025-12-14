@@ -5,7 +5,15 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { getCurrentUser } from "@/lib/auth";
 import { supabase } from "@/lib/supabase";
-import { FileText, Mic, Brain, Plus, TrendingUp, Menu } from "lucide-react";
+import {
+  FileText,
+  Mic,
+  Brain,
+  Plus,
+  TrendingUp,
+  Menu,
+  StickyNote,
+} from "lucide-react";
 import type { User } from "@supabase/supabase-js";
 import { useAutoLogout } from "@/hooks/useAutoLogout";
 import Sidebar from "@/components/Sidebar";
@@ -22,6 +30,7 @@ type Stats = {
   materialsCount: number;
   lecturesCount: number;
   testsCount: number;
+  notesCount: number;
 };
 
 type Material = {
@@ -50,6 +59,7 @@ export default function DashboardPage() {
     materialsCount: 0,
     lecturesCount: 0,
     testsCount: 0,
+    notesCount: 0,
   });
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
@@ -76,6 +86,7 @@ export default function DashboardPage() {
         { count: materialsCount },
         { count: lecturesCount },
         { count: testsCount },
+        { count: notesCount },
       ] = await Promise.all([
         supabase
           .from("materials")
@@ -89,6 +100,10 @@ export default function DashboardPage() {
           .from("generated_questions")
           .select("*", { count: "exact", head: true })
           .eq("user_id", user.id),
+        supabase
+          .from("study_notes")
+          .select("*", { count: "exact", head: true })
+          .eq("user_id", user.id),
       ]);
 
       if (!isMounted) return;
@@ -97,6 +112,7 @@ export default function DashboardPage() {
         materialsCount: materialsCount || 0,
         lecturesCount: lecturesCount || 0,
         testsCount: testsCount || 0,
+        notesCount: notesCount || 0,
       });
     };
 
@@ -132,8 +148,8 @@ export default function DashboardPage() {
       )}
 
       {/* Main Content */}
-      <div className="flex-1 py-8 px-4 md:px-6 lg:px-8">
-        <div className="container-custom max-w-7xl mx-auto">
+      <div className="flex-1 py-8 px-4 md:px-6 lg:px-8 min-h-screen">
+        <div className="container-custom max-w-7xl mx-auto relative">
           {/* Header with menu button */}
           <div className="mb-8">
             <div className="flex items-center gap-4 mb-2">
@@ -154,9 +170,9 @@ export default function DashboardPage() {
           </div>
 
           {/* Statistics */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6 mb-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6 mb-8">
             {/* Materials */}
-            <div className="bg-linear-to-br from-white via-blue-100/70 to-whitee border border-white/20 rounded-xl shadow-sm p-4 sm:p-6">
+            <div className="bg-linear-to-br from-white via-blue-100/70 to-white border border-white/20 rounded-xl shadow-sm p-4 sm:p-6">
               <div className="flex items-center justify-between mb-3">
                 <div className="bg-blue-100 p-2 sm:p-3 rounded-lg">
                   <FileText className="w-5 h-5 sm:w-6 sm:h-6 text-blue-600" />
@@ -166,7 +182,9 @@ export default function DashboardPage() {
               <h3 className="text-xl sm:text-2xl font-bold text-slate-800 mb-1">
                 {stats.materialsCount}
               </h3>
-              <p className="text-gray-600 text-xs sm:text-sm">Uploaded Materials</p>
+              <p className="text-gray-600 text-xs sm:text-sm">
+                Uploaded Materials
+              </p>
             </div>
 
             {/* Lectures */}
@@ -180,7 +198,9 @@ export default function DashboardPage() {
               <h3 className="text-xl sm:text-2xl font-bold text-slate-800 mb-1">
                 {stats.lecturesCount}
               </h3>
-              <p className="text-gray-600 text-xs sm:text-sm">Uploaded Lectures</p>
+              <p className="text-gray-600 text-xs sm:text-sm">
+                Uploaded Lectures
+              </p>
             </div>
 
             {/* Tests */}
@@ -194,7 +214,25 @@ export default function DashboardPage() {
               <h3 className="text-xl sm:text-2xl font-bold text-slate-800 mb-1">
                 {stats.testsCount}
               </h3>
-              <p className="text-gray-600 text-xs sm:text-sm">Generated Tests</p>
+              <p className="text-gray-600 text-xs sm:text-sm">
+                Generated Tests
+              </p>
+            </div>
+
+            {/* Study Notes */}
+            <div className="bg-linear-to-br from-white via-orange-100/50 to-white border border-white/20 rounded-xl shadow-sm p-4 sm:p-6">
+              <div className="flex items-center justify-between mb-3">
+                <div className="bg-orange-100 p-2 sm:p-3 rounded-lg">
+                  <StickyNote className="w-5 h-5 sm:w-5 sm:h-6 text-orange-500" />
+                </div>
+                <TrendingUp className="w-4 h-4 sm:w-5 sm:h-5 text-green-500" />
+              </div>
+              <h3 className="text-xl sm:text-2xl font-bold text-slate-800 mb-1">
+                {stats.notesCount}
+              </h3>
+              <p className="text-gray-600 text-xs sm:text-sm">
+                Generated Notes
+              </p>
             </div>
           </div>
 

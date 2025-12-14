@@ -82,7 +82,9 @@ CRITICAL: DO NOT create an abstract or short general summary. Create FULL-FLEDGE
 
 Your task:
 1. First, thoroughly read and understand the main ideas, concepts, definitions, examples, and connections in the text
-2. Create STUDY NOTES with this structure:
+2. Identify the document's structure (chapters, sections, subsections) and use it to organize notes logically
+3. Progress from GENERAL concepts to SPECIFIC details, following the document's natural flow
+4. Create STUDY NOTES with this structure:
 
 Your output must ALWAYS be valid JSON in this exact format:
 
@@ -91,14 +93,14 @@ Your output must ALWAYS be valid JSON in this exact format:
   "key_points": [
     {
       "title": "Key Term or Concept Name",
-      "description": "DETAILED explanation in your own words - NOT one sentence without context. Explain what it means, why it matters, how it works. Build understanding from basics to more complex aspects. Include reasoning, applications, and practical significance. Write 6-10 sentences minimum that flow naturally and build upon each other.",
+      "description": "DETAILED explanation in your own words - NOT one sentence without context. Explain what it means, why it matters, how it works. Build understanding from basics to more complex aspects. Include reasoning, applications, and practical significance. Write 6-10 sentences minimum that flow naturally and build upon each other.\n\nIMPORTANT: If this key point has subsections or divisions (e.g., types, categories, phases, components), include them as bullet points within the description:\n• Subsection/Division 1: For IMPORTANT divisions that the document emphasizes, provide 3-4 sentences explaining what this is, why it matters, how it works, and its significance. For LESS IMPORTANT divisions mentioned briefly, provide 1-2 sentences.\n• Subsection/Division 2: For IMPORTANT divisions that the document emphasizes, provide 3-4 sentences explaining what this is, why it matters, how it works, and its significance. For LESS IMPORTANT divisions mentioned briefly, provide 1-2 sentences.\n\nMake bullet points flow naturally within the overall explanation, progressing from general overview to specific divisions. MATCH THE LEVEL OF DETAIL to how much attention the document gives to each division.",
       "importance": "high" | "medium" | "low"
     }
   ],
   "concepts": [
     {
       "concept": "Main Idea / Theory / Process Name",
-      "explanation": "COMPREHENSIVE explanation organized logically from foundations to advanced topics. Include:\n- What this concept is and its theoretical foundation\n- How it works (step-by-step if it's a process)\n- Why it's important and where it's used\n- How it connects to other concepts\n- Common misunderstandings or typical mistakes\n- Important relationships and comparisons\nWrite 8-15 sentences minimum as a flowing, educational narrative.",
+      "explanation": "COMPREHENSIVE explanation organized logically from GENERAL to SPECIFIC, following this progression:\n\n1. START GENERAL: What this concept is and its theoretical foundation (big picture)\n2. MOVE TO STRUCTURE: If this concept has divisions, categories, or phases, list them:\n   • Division/Category 1: For IMPORTANT divisions that the document emphasizes or spends significant time explaining, provide 3-4 sentences covering: what it is, its role, how it works, and why it matters. For LESS IMPORTANT divisions mentioned only briefly in the document, provide 1-2 sentences with a concise description.\n   • Division/Category 2: For IMPORTANT divisions that the document emphasizes or spends significant time explaining, provide 3-4 sentences covering: what it is, its role, how it works, and why it matters. For LESS IMPORTANT divisions mentioned only briefly in the document, provide 1-2 sentences with a concise description.\n   • Division/Category 3: For IMPORTANT divisions that the document emphasizes or spends significant time explaining, provide 3-4 sentences covering: what it is, its role, how it works, and why it matters. For LESS IMPORTANT divisions mentioned only briefly in the document, provide 1-2 sentences with a concise description.\n3. GET SPECIFIC: How it works (step-by-step if it's a process)\n4. EXPLAIN SIGNIFICANCE: Why it's important and where it's used\n5. CONNECT: How it connects to other concepts\n6. CLARIFY: Common misunderstandings or typical mistakes\n7. COMPARE: Important relationships and comparisons\n\nWrite 10-18 sentences minimum as a flowing, educational narrative that progresses naturally from general overview through structural divisions to specific details. Make bullet points integrate smoothly into the explanation. CRITICAL: Match the level of detail in each bullet point to the emphasis the document places on that division - important concepts deserve 3-4 sentences, minor mentions deserve 1-2 sentences.",
       "examples": [
         "Detailed example 1: Explain what it demonstrates, provide full context, walk through the reasoning",
         "Detailed example 2: Show a different application or variation, explain the nuances",
@@ -112,7 +114,7 @@ Your output must ALWAYS be valid JSON in this exact format:
 ${languageInstruction}
 
 MANDATORY REQUIREMENTS:
-✓ Summary: 2-4 sentences explaining the topic's purpose
+✓ Summary: 2-5 sentences explaining the topic's purpose
 ✓ Key Points: 7-12 important terms/definitions, each with 6-10 sentences of explanation
 ✓ Concepts: 4-8 main ideas/theories/processes, each with 8-15 sentences PLUS 3-5 detailed examples
 ✓ Study Tips: 7 structured paragraphs (approach, priorities, practice, mistakes, exam prep, summary, review questions)
@@ -127,7 +129,10 @@ WRITING STYLE:
 - Don't reduce to "a few paragraphs about what it's about"
 - Stick EXCLUSIVELY to information from the provided text - DO NOT invent new facts
 - Explain WHY things matter, not just WHAT they are
-- Build understanding progressively from simple to complex
+- Build understanding progressively from GENERAL to SPECIFIC (big picture → structure/divisions → detailed mechanisms)
+- When a concept has divisions/categories/types, list them with bullet points and 1-2 sentence descriptions
+- Make bullet points flow organically within the narrative - they should enhance, not interrupt the explanation
+- Follow the document's natural progression and structure (chapters, sections, subsections)
 `;
 
     const userPrompt = `
@@ -140,15 +145,23 @@ I DO NOT WANT an abstract or short general summary. I want FULL STUDY NOTES that
 
 Your notes must:
 1. Thoroughly read and understand the main ideas, concepts, definitions, examples, and connections
-2. Follow the exact structure specified: Overview → Key Terms → Main Concepts → Study Guide
-3. Explain every important concept in detail (6-15 sentences per concept)
-4. Include all processes/procedures step-by-step
-5. Incorporate and explain all examples from the text
-6. Highlight important connections, comparisons, and relationships
-7. Identify common mistakes or misunderstandings
-8. Provide a complete study guide with review questions
-9. Write in clear, educational style suitable for first-time learners
-10. Use the text's information exclusively - don't add external facts
+2. Identify and respect the document's structure (chapters, sections, subsections)
+3. Organize content from GENERAL (overview, purpose) to SPECIFIC (detailed mechanisms, examples)
+4. Follow the exact structure specified: Overview → Key Terms → Main Concepts → Study Guide
+5. When a concept has divisions/categories/types, include them as bullet points with VARIABLE LENGTH descriptions:
+   - For IMPORTANT divisions that the document emphasizes or explains in detail: write 3-4 sentences
+   - For LESS IMPORTANT divisions mentioned only briefly: write 1-2 sentences
+   - Match the detail level to the document's emphasis on each division
+6. Explain every important concept in detail (10-18 sentences per concept for main concepts, 6-10 for key points)
+7. Include all processes/procedures step-by-step
+8. Incorporate and explain all examples from the text
+9. Highlight important connections, comparisons, and relationships
+10. Identify common mistakes or misunderstandings
+11. Provide a complete study guide with review questions
+12. Write in clear, educational style suitable for first-time learners
+13. Use the text's information exclusively - don't add external facts
+14. Make bullet points flow naturally within explanations - they should feel organic, not forced
+15. CRITICAL: Gauge the importance of each division/subconcept based on how much the document discusses it
 
 DO NOT:
 - Create a short abstract
@@ -158,11 +171,17 @@ DO NOT:
 - Reduce explanations to superficial summaries
 
 DO:
-- Build understanding from basics to advanced
+- Build understanding from GENERAL to SPECIFIC (overview → structure/divisions → details)
+- When you encounter divisions/categories/types, present them as bullet points with descriptions that MATCH THE DOCUMENT'S EMPHASIS:
+  * Important divisions the document explains thoroughly = 3-4 sentences
+  * Minor divisions mentioned briefly = 1-2 sentences
+- Progress logically: introduce the concept broadly, then break it down into parts, then explain details
 - Explain the "why" and "how", not just "what"
-- Provide complete, flowing educational narratives
+- Provide complete, flowing educational narratives where bullet points enhance rather than interrupt the flow
 - Make notes comprehensive enough to replace the original text for studying
 - Include all relevant details, examples, and procedures from the source material
+- Follow the document's natural organization and progression
+- Analyze how much attention the document gives to each subconcept and reflect that in your explanation length
 `;
 
     // 3️⃣ Call OpenAI

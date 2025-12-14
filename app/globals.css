@@ -105,3 +105,13 @@ body {
 .animate-float-slow {
   animation: float-slow 5s ease-in-out infinite;
 }
+
+/* Skryť scrollbar ale ponechať funkčnosť scrollovania */
+.scrollbar-hide {
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none; /* Chrome, Safari and Opera */
+}

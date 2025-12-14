@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { StickyNote, ChevronRight } from "lucide-react";
-import LoadingSpinner from "../LoadingSpinner";
+import GeneratingNotesModal from "../modals/GeneratingNotesModal";
 
 type GenerateNotesButtonProps = {
   materialId?: string;
@@ -68,35 +68,33 @@ export default function GenerateNotesButton({
   };
 
   return (
-    <div className="flex flex-col space-y-2">
-      <button
-        type="button"
-        onClick={handleClick}
-        disabled={loading}
-        className={`relative w-full bg-white hover:bg-purple-50 border border-gray-200 rounded-xl p-6 transition-all group text-left shadow-sm disabled:opacity-50 disabled:cursor-not-allowed overflow-hidden ${className}`}
-      >
-        {loading && (
-          <div className="absolute inset-0 bg-purple-50/80 backdrop-blur-sm flex items-center justify-center z-10">
-            <div className="bg-white rounded-xl p-4 shadow-lg">
-              <LoadingSpinner size="md" text="Generating notes..." />
-            </div>
-          </div>
-        )}
-        <div className="flex items-center justify-between mb-3">
-          <div className="bg-purple-100 p-3 rounded-lg">
-            <StickyNote className="w-6 h-6 text-purple-600" />
-          </div>
-          <ChevronRight className="w-5 h-5 text-gray-400 group-hover:text-purple-600 transition-colors" />
-        </div>
-        <h3 className="text-lg font-semibold text-gray-900 mb-1">
-          Generate Study Notes
-        </h3>
-        <p className="text-sm text-gray-600">
-          Create AI-powered study notes from your document
-        </p>
-      </button>
+    <>
+      {/* Full-screen modal when loading */}
+      <GeneratingNotesModal key={loading ? "open" : "closed"} isOpen={loading} />
 
-      {error && <p className="text-xs text-red-600">{error}</p>}
-    </div>
+      <div className="flex flex-col space-y-2">
+        <button
+          type="button"
+          onClick={handleClick}
+          disabled={loading}
+          className={`relative w-full bg-white hover:bg-purple-50 border border-gray-200 rounded-xl p-6 transition-all group text-left shadow-sm disabled:opacity-50 disabled:cursor-not-allowed overflow-hidden ${className}`}
+        >
+          <div className="flex items-center justify-between mb-3">
+            <div className="bg-purple-100 p-3 rounded-lg">
+              <StickyNote className="w-6 h-6 text-purple-600" />
+            </div>
+            <ChevronRight className="w-5 h-5 text-gray-400 group-hover:text-purple-600 transition-colors" />
+          </div>
+          <h3 className="text-lg font-semibold text-gray-900 mb-1">
+            Generate Study Notes
+          </h3>
+          <p className="text-sm text-gray-600">
+            Create AI-powered study notes from your document
+          </p>
+        </button>
+
+        {error && <p className="text-xs text-red-600">{error}</p>}
+      </div>
+    </>
   );
 }

@@ -51,16 +51,14 @@ export default function GenerateQuestionsButton({
       }
 
       const id = materialId || lectureId;
-      const apiPath = contentType === "lecture"
-        ? `/api/lectures/${id}/generate-questions`
-        : `/api/materials/${id}/generate-questions`;
+      const apiPath =
+        contentType === "lecture"
+          ? `/api/lectures/${id}/generate-questions`
+          : `/api/materials/${id}/generate-questions`;
 
-      const res = await fetch(
-        `${apiPath}?${params.toString()}`,
-        {
-          method: "POST",
-        }
-      );
+      const res = await fetch(`${apiPath}?${params.toString()}`, {
+        method: "POST",
+      });
 
       const data = await res.json();
 
@@ -73,9 +71,18 @@ export default function GenerateQuestionsButton({
         onGenerated(questions);
       }
 
-      // Close modal and redirect to questions page
+      // Close modal and redirect to questions page with unsaved data
       setIsModalOpen(false);
-      router.push(`/materials/${materialId}/questions/${data.record.id}`);
+      const questionsParam = encodeURIComponent(JSON.stringify(questions));
+      if (contentType === "material") {
+        router.push(
+          `/materials/${id}/questions/new?data=${questionsParam}&type=${questionType}`
+        );
+      } else {
+        router.push(
+          `/lectures/${id}/questions/new?data=${questionsParam}&type=${questionType}`
+        );
+      }
     } catch (err) {
       setError(
         err instanceof Error

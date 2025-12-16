@@ -10,12 +10,14 @@ import {
   FileQuestion,
   StickyNote,
   ArrowLeft,
+  Trash2,
 } from "lucide-react";
 import type { User } from "@supabase/supabase-js";
 import GenerateQuestionsButton from "@/components/buttons/GenerateQuestionsButton";
 import GenerateNotesButton from "@/components/buttons/GenerateNotesButton";
 import DeleteButton from "@/components/buttons/DeleteButton";
 import OpenDocumentButton from "@/components/buttons/OpenDocumentButton";
+import ConfirmDeleteModal from "@/components/modals/ConfirmDeleteModal";
 
 type Material = {
   id: string;
@@ -25,6 +27,40 @@ type Material = {
   file_type: string | null;
   storage_path: string | null;
   created_at: string;
+};
+
+type GeneratedQuestion = {
+  question: string;
+  type: "open" | "mcq";
+  options: string[] | null;
+  answer: string | null;
+};
+
+type KeyPoint = {
+  title: string;
+  description: string;
+  importance: "high" | "medium" | "low";
+};
+
+type Concept = {
+  concept: string;
+  explanation: string;
+  examples: string[];
+};
+
+type QuestionSet = {
+  id: string;
+  created_at: string;
+  question_type: string;
+  questions: GeneratedQuestion[];
+};
+
+type NoteSet = {
+  id: string;
+  created_at: string;
+  summary: string;
+  key_points: KeyPoint[];
+  concepts: Concept[];
 };
 
 type Props = {
@@ -40,6 +76,23 @@ export default function MaterialViewPage({ materialId }: Props) {
     questionsCount: 0,
     notesCount: 0,
   });
+  const [questionSets, setQuestionSets] = useState<QuestionSet[]>([]);
+  const [noteSets, setNoteSets] = useState<NoteSet[]>([]);
+
+  // Delete modal state
+  const [deleteModal, setDeleteModal] = useState<{
+    isOpen: boolean;
+    type: "question" | "note" | "all-questions" | "all-notes";
+    id?: string;
+    title: string;
+    message: string;
+  }>({
+    isOpen: false,
+    type: "question",
+    title: "",
+    message: "",
+  });
+  const [isDeleting, setIsDeleting] = useState(false);
 
   useEffect(() => {
     const loadData = async () => {
@@ -65,23 +118,30 @@ export default function MaterialViewPage({ materialId }: Props) {
 
       setMaterial(materialData);
 
-      // Load statistics
-      const [{ count: questionsCount }, { count: notesCount }] =
-        await Promise.all([
-          supabase
-            .from("generated_questions")
-            .select("*", { count: "exact", head: true })
-            .eq("material_id", materialId),
-          supabase
-            .from("study_notes")
-            .select("*", { count: "exact", head: true })
-            .eq("material_id", materialId),
-        ]);
+      // Load saved question sets and notes
+      const [
+        { data: questionsData, count: questionsCount },
+        { data: notesData, count: notesCount },
+      ] = await Promise.all([
+        supabase
+          .from("generated_questions")
+          .select("*", { count: "exact" })
+          .eq("material_id", materialId)
+          .order("created_at", { ascending: false }),
+        supabase
+          .from("study_notes")
+          .select("*", { count: "exact" })
+          .eq("material_id", materialId)
+          .order("created_at", { ascending: false }),
+      ]);
 
       setStats({
         questionsCount: questionsCount || 0,
         notesCount: notesCount || 0,
       });
+
+      setQuestionSets(questionsData || []);
+      setNoteSets(notesData || []);
 
       setLoading(false);
     };
@@ -98,6 +158,73 @@ export default function MaterialViewPage({ materialId }: Props) {
       hour: "2-digit",
       minute: "2-digit",
     });
+  };
+
+  const handleDeleteConfirm = async () => {
+    setIsDeleting(true);
+    try {
+      if (deleteModal.type === "all-questions") {
+        // Delete all question sets
+        const { error } = await supabase
+          .from("generated_questions")
+          .delete()
+          .eq("material_id", materialId);
+
+        if (!error) {
+          setQuestionSets([]);
+          setStats((prev) => ({ ...prev, questionsCount: 0 }));
+        }
+      } else if (deleteModal.type === "all-notes") {
+        // Delete all note sets
+        const { error } = await supabase
+          .from("study_notes")
+          .delete()
+          .eq("material_id", materialId);
+
+        if (!error) {
+          setNoteSets([]);
+          setStats((prev) => ({ ...prev, notesCount: 0 }));
+        }
+      } else if (deleteModal.type === "question" && deleteModal.id) {
+        // Delete single question set
+        const { error } = await supabase
+          .from("generated_questions")
+          .delete()
+          .eq("id", deleteModal.id);
+
+        if (!error) {
+          setQuestionSets(questionSets.filter((q) => q.id !== deleteModal.id));
+          setStats((prev) => ({
+            ...prev,
+            questionsCount: prev.questionsCount - 1,
+          }));
+        }
+      } else if (deleteModal.type === "note" && deleteModal.id) {
+        // Delete single note set
+        const { error } = await supabase
+          .from("study_notes")
+          .delete()
+          .eq("id", deleteModal.id);
+
+        if (!error) {
+          setNoteSets(noteSets.filter((n) => n.id !== deleteModal.id));
+          setStats((prev) => ({
+            ...prev,
+            notesCount: prev.notesCount - 1,
+          }));
+        }
+      }
+    } catch (error) {
+      console.error("Error deleting:", error);
+    } finally {
+      setIsDeleting(false);
+      setDeleteModal({
+        isOpen: false,
+        type: "question",
+        title: "",
+        message: "",
+      });
+    }
   };
 
   if (loading) {
@@ -150,11 +277,6 @@ export default function MaterialViewPage({ materialId }: Props) {
                 <h2 className="text-lg md:text-3xl font-bold text-white mb-2">
                   {material.title}
                 </h2>
-                {material.file_name && (
-                  <p className="text-l md:text-lg text-white/90 mb-3">
-                    {material.file_name}
-                  </p>
-                )}
                 <div className="flex items-center text-xs md:text-sm text-white/80">
                   <Calendar className="w-4 h-4 mr-2" />
                   <span>Uploaded {formatDate(material.created_at)}</span>
@@ -166,7 +288,7 @@ export default function MaterialViewPage({ materialId }: Props) {
           {/* Two Column Layout */}
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
             {/* Left Column - Actions */}
-            <div className="lg:col-span-2 space-y-4">
+            <div className="lg:col-span-2 space-y-4 cursor-pointer">
               {/* Open Document */}
               <OpenDocumentButton materialId={materialId} />
 
@@ -178,6 +300,148 @@ export default function MaterialViewPage({ materialId }: Props) {
                 materialId={materialId}
                 questionType="exam"
               />
+
+              {/* Saved Question Sets */}
+              {questionSets.length > 0 && (
+                <div className="bg-white border border-gray-200 rounded-xl p-6 shadow-sm cursor-pointer">
+                  <div className="flex items-center justify-between mb-4">
+                    <h3 className="text-lg font-semibold text-gray-900 flex items-center">
+                      <FileQuestion className="w-5 h-5 mr-2 text-green-600" />
+                      Saved Question Sets ({questionSets.length})
+                    </h3>
+                    <button
+                      onClick={() =>
+                        setDeleteModal({
+                          isOpen: true,
+                          type: "all-questions",
+                          title: "Delete All Question Sets?",
+                          message: `Are you sure you want to delete all ${questionSets.length} question sets? This action cannot be undone.`,
+                        })
+                      }
+                      className="text-sm text-red-600 hover:text-red-700 font-medium flex items-center gap-1"
+                    >
+                      <Trash2 className="w-4 h-4" />
+                      Delete All
+                    </button>
+                  </div>
+                  <div className="space-y-3">
+                    {questionSets.map((set) => (
+                      <div key={set.id} className="flex items-center gap-2">
+                        <button
+                          onClick={() =>
+                            router.push(
+                              `/materials/${materialId}/questions/${set.id}`
+                            )
+                          }
+                          className="flex-1 text-left p-4 bg-green-50 hover:bg-green-100 rounded-lg transition-colors border border-green-200 hover:border-green-300"
+                        >
+                          <div className="flex items-center justify-between">
+                            <div>
+                              <p className="font-medium text-gray-900">
+                                {set.question_type.charAt(0).toUpperCase() +
+                                  set.question_type.slice(1)}{" "}
+                                Questions
+                              </p>
+                              <p className="text-sm text-gray-600">
+                                {set.questions.length} questions •{" "}
+                                {formatDate(set.created_at)}
+                              </p>
+                            </div>
+                            <FileQuestion className="w-5 h-5 text-green-600" />
+                          </div>
+                        </button>
+                        <button
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            setDeleteModal({
+                              isOpen: true,
+                              type: "question",
+                              id: set.id,
+                              title: "Delete Question Set?",
+                              message: `Are you sure you want to delete this ${set.question_type} question set with ${set.questions.length} questions?`,
+                            });
+                          }}
+                          className="p-3 bg-red-50 hover:bg-red-100 text-red-600 rounded-lg transition-colors shrink-0"
+                          title="Delete question set"
+                        >
+                          <Trash2 className="w-4 h-4" />
+                        </button>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* Saved Study Notes */}
+              {noteSets.length > 0 && (
+                <div className="bg-white border border-gray-200 rounded-xl p-6 shadow-sm cursor-pointer">
+                  <div className="flex items-center justify-between mb-4">
+                    <h3 className="text-lg font-semibold text-gray-900 flex items-center">
+                      <StickyNote className="w-5 h-5 mr-2 text-purple-600" />
+                      Saved Study Notes ({noteSets.length})
+                    </h3>
+                    <button
+                      onClick={() =>
+                        setDeleteModal({
+                          isOpen: true,
+                          type: "all-notes",
+                          title: "Delete All Study Notes?",
+                          message: `Are you sure you want to delete all ${noteSets.length} study note sets? This action cannot be undone.`,
+                        })
+                      }
+                      className="text-sm text-red-600 hover:text-red-700 font-medium flex items-center gap-1"
+                    >
+                      <Trash2 className="w-4 h-4" />
+                      Delete All
+                    </button>
+                  </div>
+                  <div className="space-y-3">
+                    {noteSets.map((note) => (
+                      <div key={note.id} className="flex items-center gap-2">
+                        <button
+                          onClick={() =>
+                            router.push(
+                              `/materials/${materialId}/notes/${note.id}`
+                            )
+                          }
+                          className="flex-1 text-left p-4 bg-purple-50 hover:bg-purple-100 rounded-lg transition-colors border border-purple-200 hover:border-purple-300"
+                        >
+                          <div className="flex items-center justify-between">
+                            <div>
+                              <p className="font-medium text-gray-900 line-clamp-1">
+                                {note.summary.substring(0, 60)}
+                                {note.summary.length > 60 ? "..." : ""}
+                              </p>
+                              <p className="text-sm text-gray-600">
+                                {note.key_points.length} key points •{" "}
+                                {note.concepts.length} concepts •{" "}
+                                {formatDate(note.created_at)}
+                              </p>
+                            </div>
+                            <StickyNote className="w-5 h-5 text-purple-600" />
+                          </div>
+                        </button>
+                        <button
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            setDeleteModal({
+                              isOpen: true,
+                              type: "note",
+                              id: note.id,
+                              title: "Delete Study Notes?",
+                              message: `Are you sure you want to delete this study note set with ${note.key_points.length} key points and ${note.concepts.length} concepts?`,
+                            });
+                          }}
+                          className="p-3 bg-red-50 hover:bg-red-100 text-red-600 rounded-lg transition-colors shrink-0"
+                          title="Delete note set"
+                        >
+                          <Trash2 className="w-4 h-4" />
+                        </button>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
 
               {/* Delete Document */}
               <DeleteButton
@@ -250,6 +514,23 @@ export default function MaterialViewPage({ materialId }: Props) {
           </div>
         </div>
       </div>
+
+      {/* Delete Confirmation Modal */}
+      <ConfirmDeleteModal
+        isOpen={deleteModal.isOpen}
+        onClose={() =>
+          setDeleteModal({
+            isOpen: false,
+            type: "question",
+            title: "",
+            message: "",
+          })
+        }
+        onConfirm={handleDeleteConfirm}
+        title={deleteModal.title}
+        message={deleteModal.message}
+        isDeleting={isDeleting}
+      />
     </div>
   );
 }

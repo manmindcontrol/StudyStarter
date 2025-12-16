@@ -6,7 +6,8 @@
       "Bash(git restore:*)",
       "Bash(cat:*)",
       "Bash(npx tsc:*)",
-      "Bash(node:*)"
+      "Bash(node:*)",
+      "Bash(find:*)"
     ],
     "deny": [],
     "ask": []

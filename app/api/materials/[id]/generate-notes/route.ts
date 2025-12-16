@@ -231,33 +231,10 @@ DO:
       );
     }
 
-    // 6️⃣ Save to DB
-    const { data: inserted, error: insertError } = await supabase
-      .from("study_notes")
-      .insert({
-        material_id: material.id,
-        user_id: material.user_id,
-        summary: notesData.summary,
-        key_points: notesData.key_points,
-        concepts: notesData.concepts,
-        study_tips: notesData.study_tips,
-      })
-      .select()
-      .single();
-
-    if (insertError) {
-      console.error("Insert error:", insertError);
-      return NextResponse.json(
-        { error: "Failed to save study notes." },
-        { status: 500 }
-      );
-    }
-
-    // 7️⃣ Done
+    // 6️⃣ Done - return notes without saving (user will save manually)
     return NextResponse.json({
       success: true,
       notes: notesData,
-      record: inserted,
     });
   } catch (error) {
     console.error("Generate Notes Error:", error);

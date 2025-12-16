@@ -190,30 +190,10 @@ Additional rules:
       );
     }
 
-    // 6️⃣ Save to DB
-    const { data: inserted, error: insertError } = await supabase
-      .from("generated_questions")
-      .insert({
-        material_id: material.id,
-        user_id: material.user_id,
-        question_type: questionType,
-        questions,
-      })
-      .select()
-      .single();
-
-    if (insertError) {
-      return NextResponse.json(
-        { error: "Failed to save generated questions." },
-        { status: 500 }
-      );
-    }
-
-    // 7️⃣ Done
+    // 6️⃣ Done - return questions without saving (user will save manually)
     return NextResponse.json({
       success: true,
       questions,
-      record: inserted,
     });
   } catch (error) {
     console.error("Generate Questions Error:", error);

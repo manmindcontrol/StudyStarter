@@ -1,12 +1,11 @@
 "use client";
 
 import { useEffect, useState, useRef } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { getCurrentUser } from "@/lib/auth";
 import { supabase } from "@/lib/supabase";
 import {
   FileText,
-  MessageSquare,
   Send,
   CheckCircle2,
   Circle,
@@ -14,7 +13,11 @@ import {
   ChevronLeft,
   Download,
   FileDown,
+  Save,
+  Check,
+  ChevronRight,
 } from "lucide-react";
+import Image from "next/image";
 import type { User } from "@supabase/supabase-js";
 import {
   Document,
@@ -65,6 +68,7 @@ export default function QuestionsViewPage({
   questionRecordId,
 }: Props) {
   const router = useRouter();
+  const searchParams = useSearchParams();
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
   const [material, setMaterial] = useState<Material | null>(null);
@@ -74,6 +78,9 @@ export default function QuestionsViewPage({
   const [selectedQuestions, setSelectedQuestions] = useState<Set<number>>(
     new Set()
   );
+  const [saving, setSaving] = useState(false);
+  const [isUnsaved, setIsUnsaved] = useState(false);
+  const [savedQuestionId, setSavedQuestionId] = useState<string | null>(null);
 
   // Quiz state - track user answers and validation
   type QuizAnswer = {
@@ -122,33 +129,66 @@ export default function QuestionsViewPage({
 
       setMaterial(materialData);
 
-      // Load question record
-      const { data: questionData, error: questionError } = await supabase
-        .from("generated_questions")
-        .select("*")
-        .eq("id", questionRecordId)
-        .single();
+      // Check if this is unsaved data (questionRecordId === "new")
+      if (questionRecordId === "new") {
+        const unsavedData = searchParams.get("data");
+        const questionType = searchParams.get("type") || "exam";
 
-      if (questionError || !questionData) {
-        console.error("Question error:", questionError);
+        if (unsavedData) {
+          const parsedQuestions = JSON.parse(
+            decodeURIComponent(unsavedData)
+          ) as GeneratedQuestion[];
+          setQuestionRecord({
+            id: "new",
+            material_id: materialId,
+            user_id: user.id,
+            question_type: questionType,
+            questions: parsedQuestions,
+            created_at: new Date().toISOString(),
+          });
+          setIsUnsaved(true);
+          setLoading(false);
+
+          // Initial chat message for unsaved questions
+          setChatMessages([
+            {
+              role: "assistant",
+              content: `Hello! I've generated ${parsedQuestions.length} questions from the material "${materialData.title}". You can save them using the Save button above, or I can help you modify questions, add new ones, or explain answers. What do you need?`,
+            },
+          ]);
+        } else {
+          setLoading(false);
+        }
+      } else {
+        // Load existing question record from database
+        const { data: questionData, error: questionError } = await supabase
+          .from("generated_questions")
+          .select("*")
+          .eq("id", questionRecordId)
+          .single();
+
+        if (questionError || !questionData) {
+          console.error("Question error:", questionError);
+          setLoading(false);
+          return;
+        }
+
+        setQuestionRecord(questionData);
+        setIsUnsaved(false);
         setLoading(false);
-        return;
+
+        // Initial chat message for saved questions
+        setChatMessages([
+          {
+            role: "assistant",
+            content: `Hello! I've loaded ${questionData.questions.length} questions from the material "${materialData.title}". I can help you modify questions, add new ones, or explain answers. What do you need?`,
+          },
+        ]);
       }
-
-      setQuestionRecord(questionData);
-      setLoading(false);
-
-      // Initial chat message
-      setChatMessages([
-        {
-          role: "assistant",
-          content: `Hello! I've generated ${questionData.questions.length} questions from the material "${materialData.title}". I can help you modify questions, add new ones, or explain answers. What do you need?`,
-        },
-      ]);
     };
 
     loadData();
-  }, [materialId, questionRecordId, router]);
+  }, [materialId, questionRecordId, router, searchParams]);
 
   useEffect(() => {
     chatEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -358,6 +398,45 @@ export default function QuestionsViewPage({
     URL.revokeObjectURL(url);
   };
 
+  const handleSaveQuestions = async () => {
+    if (!questionRecord || !isUnsaved) return;
+
+    setSaving(true);
+    try {
+      if (!user) {
+        router.push("/login");
+        return;
+      }
+
+      const response = await fetch(
+        `/api/materials/${materialId}/questions/save`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            questions: questionRecord.questions,
+            questionType: questionRecord.question_type,
+            userId: user.id,
+          }),
+        }
+      );
+
+      const data = await response.json();
+      if (!response.ok) {
+        throw new Error(data.error || "Failed to save questions");
+      }
+
+      // Update state to show saved status without redirecting
+      setSavedQuestionId(data.record.id);
+      setIsUnsaved(false);
+      setSaving(false);
+    } catch (error) {
+      console.error("Error saving questions:", error);
+      alert("Failed to save questions. Please try again.");
+      setSaving(false);
+    }
+  };
+
   const exportToWord = async () => {
     if (!questionRecord || !material) return;
 
@@ -548,56 +627,89 @@ export default function QuestionsViewPage({
     <div className="min-h-screen bg-linear-to-br from-blue-50 via-gray-100 to-cyan-50">
       {/* Header */}
       <div className="bg-white border-b border-gray-200 sticky top-0 z-10">
-        <div className="container-custom py-4">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center space-x-4">
+        <div className="container-custom py-3 sm:py-4">
+          <div className="flex items-center justify-between gap-2">
+            <div className="flex items-center space-x-2 sm:space-x-4 flex-1 min-w-0">
               <button
                 onClick={() => router.push("/materials")}
-                className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
+                className="p-2 hover:bg-gray-100 rounded-lg transition-colors shrink-0"
               >
                 <ChevronLeft className="w-5 h-5 text-gray-600" />
               </button>
-              <div>
-                <h1 className="text-xl font-bold text-gray-900">
+              <div className="min-w-0 flex-1">
+                <h1 className="text-base sm:text-xl font-bold text-gray-900 truncate">
                   {material.title}
                 </h1>
-                <p className="text-sm text-gray-600">
-                  {questionRecord.questions.length} generated questions
+                <p className="text-xs sm:text-sm text-gray-600">
+                  {questionRecord.questions.length} questions
                 </p>
               </div>
             </div>
-            <div className="flex items-center space-x-2">
+            <div className="flex items-center space-x-2 shrink-0">
+              {/* Save button - only visible for unsaved questions */}
+              {isUnsaved ? (
+                <button
+                  onClick={handleSaveQuestions}
+                  disabled={saving}
+                  className="flex items-center space-x-1 sm:space-x-2 bg-linear-to-br from-green-600 to-emerald-500 hover:from-green-700 hover:to-emerald-600 text-white px-2 sm:px-4 py-2 rounded-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
+                >
+                  <Save className="w-4 h-4" />
+                  <span className="hidden sm:inline">
+                    {saving ? "Saving..." : "Save Questions"}
+                  </span>
+                  <span className="inline sm:hidden text-xs">
+                    {saving ? "Saving..." : "Save"}
+                  </span>
+                </button>
+              ) : (
+                savedQuestionId && (
+                  <button
+                    disabled
+                    className="flex items-center space-x-1 sm:space-x-2 bg-green-100 text-green-500 px-2 sm:px-4 py-2 rounded-lg transition-all cursor-default"
+                  >
+                    <Check className="w-4 h-4" />
+                    <span className="hidden sm:inline">Questions Saved</span>
+                    <span className="inline sm:hidden text-xs">Saved</span>
+                  </button>
+                )
+              )}
+
               {/* Export dropdown */}
               <div className="relative" ref={exportMenuRef}>
                 <button
                   onClick={() => setShowExportMenu(!showExportMenu)}
-                  className="flex items-center space-x-2 bg-linear-to-br from-blue-600 to-sky-500 hover:from-blue-700 hover:to-sky-600 text-white px-4 py-2 rounded-lg transition-all"
+                  className="flex items-center space-x-1 sm:space-x-2 bg-linear-to-br from-blue-600 to-sky-500 hover:from-blue-700 hover:to-sky-600 text-white px-2 sm:px-4 py-2 rounded-lg transition-all cursor-pointer"
                 >
                   <Download className="w-4 h-4" />
-                  <span>Export</span>
+                  <span className="hidden sm:inline">Download questions</span>
+                  <span className="inline sm:hidden text-xs">Download</span>
                 </button>
 
                 {showExportMenu && (
-                  <div className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg border border-gray-200 py-1 z-20">
+                  <div className="absolute right-0 mt-2 w-44 sm:w-48 bg-white rounded-lg shadow-lg border border-gray-200 py-1 z-20">
                     <button
                       onClick={() => {
                         exportToWord();
                         setShowExportMenu(false);
                       }}
-                      className="w-full text-left px-4 py-2 hover:bg-gray-100 flex items-center space-x-2 transition-colors"
+                      className="w-full text-left px-3 sm:px-4 py-2 hover:bg-gray-100 flex items-center space-x-2 transition-colors"
                     >
                       <FileDown className="w-4 h-4 text-blue-600" />
-                      <span className="text-gray-700">Word (.docx)</span>
+                      <span className="text-sm sm:text-base text-gray-700">
+                        Word (.docx)
+                      </span>
                     </button>
                     <button
                       onClick={() => {
                         exportQuestions();
                         setShowExportMenu(false);
                       }}
-                      className="w-full text-left px-4 py-2 hover:bg-gray-100 flex items-center space-x-2 transition-colors"
+                      className="w-full text-left px-3 sm:px-4 py-2 hover:bg-gray-100 flex items-center space-x-2 transition-colors"
                     >
                       <FileText className="w-4 h-4 text-gray-600" />
-                      <span className="text-gray-700">Text (.txt)</span>
+                      <span className="text-sm sm:text-base text-gray-700">
+                        Text (.txt)
+                      </span>
                     </button>
                   </div>
                 )}
@@ -744,7 +856,7 @@ export default function QuestionsViewPage({
                                 </>
                               ) : (
                                 <>
-                                  <Send className="w-4 h-4" />
+                                  <ChevronRight className="w-4 h-4" />
                                   <span>Submit Answer</span>
                                 </>
                               )}
@@ -824,21 +936,32 @@ export default function QuestionsViewPage({
 
           {/* Chat panel - 1 column on large screens */}
           <div className="lg:col-span-1">
-            <div className="bg-white rounded-xl shadow-sm border border-gray-100 sticky top-24 flex flex-col h-[calc(100vh-8rem)]">
-              <div className="p-4 border-b border-gray-200">
-                <div className="flex items-center space-x-2">
-                  <MessageSquare className="w-5 h-5 text-blue-600" />
-                  <h2 className="text-lg font-semibold text-gray-900">
-                    AI Assistant
-                  </h2>
+            <div className="bg-white rounded-2xl shadow-lg border border-gray-200 sticky top-24 flex flex-col h-[calc(100vh-8rem)] overflow-hidden">
+              {/* Chat Header */}
+              <div className="p-4 border-b border-gray-200 bg-linear-to-r from-purple-50 to-blue-50 rounded-t-2xl shrink-0">
+                <div className="flex items-center gap-3">
+                  <div className="relative w-12 h-12 shrink-0 flex items-center justify-center">
+                    <Image
+                      src="/chatbot.svg"
+                      alt="AI Assistant"
+                      width={48}
+                      height={48}
+                      className="object-contain"
+                    />
+                  </div>
+                  <div>
+                    <h2 className="text-lg font-bold text-gray-900">
+                      AI Assistant
+                    </h2>
+                    <p className="text-xs text-gray-600">
+                      Ask questions or request modifications
+                    </p>
+                  </div>
                 </div>
-                <p className="text-xs text-gray-600 mt-1">
-                  Ask questions or request modifications
-                </p>
               </div>
 
-              {/* Chat messages */}
-              <div className="flex-1 overflow-y-auto p-4 space-y-4">
+              {/* Chat Messages */}
+              <div className="flex-1 overflow-y-auto p-4 space-y-4 custom-scrollbar min-h-0">
                 {chatMessages.map((msg, idx) => (
                   <div
                     key={idx}
@@ -847,13 +970,13 @@ export default function QuestionsViewPage({
                     }`}
                   >
                     <div
-                      className={`max-w-[80%] rounded-lg p-3 ${
+                      className={`max-w-[80%] rounded-2xl px-4 py-3 ${
                         msg.role === "user"
-                          ? "bg-blue-600 text-white"
+                          ? "bg-linear-to-br from-blue-600 to-cyan-500 text-white"
                           : "bg-gray-100 text-gray-900"
                       }`}
                     >
-                      <p className="text-sm whitespace-pre-wrap">
+                      <p className="text-sm whitespace-pre-wrap leading-relaxed">
                         {msg.content}
                       </p>
                     </div>
@@ -861,41 +984,65 @@ export default function QuestionsViewPage({
                 ))}
                 {chatLoading && (
                   <div className="flex justify-start">
-                    <div className="bg-gray-100 rounded-lg p-3">
-                      <Loader2 className="w-5 h-5 animate-spin text-gray-600" />
+                    <div className="bg-gray-100 rounded-2xl px-4 py-3">
+                      <div className="flex items-center gap-2">
+                        <div className="animate-bounce w-2 h-2 bg-gray-400 rounded-full"></div>
+                        <div className="animate-bounce w-2 h-2 bg-gray-400 rounded-full delay-100"></div>
+                        <div className="animate-bounce w-2 h-2 bg-gray-400 rounded-full delay-200"></div>
+                      </div>
                     </div>
                   </div>
                 )}
                 <div ref={chatEndRef} />
               </div>
 
-              {/* Chat input */}
-              <form
-                onSubmit={handleChatSubmit}
-                className="p-4 border-t border-gray-200"
-              >
-                <div className="flex space-x-2">
+              {/* Chat Input */}
+              <div className="p-4 border-t border-gray-200 shrink-0">
+                <div className="flex gap-2">
                   <input
                     type="text"
                     value={chatInput}
                     onChange={(e) => setChatInput(e.target.value)}
+                    onKeyPress={(e) => {
+                      if (e.key === "Enter" && !e.shiftKey) {
+                        e.preventDefault();
+                        handleChatSubmit(e);
+                      }
+                    }}
                     placeholder="Write a message..."
-                    className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    className="flex-1 px-4 py-3 border text-gray-700 border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-600 focus:border-cyan-500 outline-none transition-all"
                     disabled={chatLoading}
                   />
                   <button
-                    type="submit"
+                    onClick={handleChatSubmit}
                     disabled={chatLoading || !chatInput.trim()}
-                    className="bg-blue-600 hover:bg-blue-700 text-white p-2 rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="bg-linear-to-br from-blue-600 to-cyan-500 hover:from-blue-700 hover:to-cyan-600 disabled:bg-gray-300 disabled:cursor-not-allowed cursor-pointer text-white p-3 rounded-xl transition-colors"
                   >
-                    <Send className="w-5 h-5" />
+                    <ChevronRight className="w-6 h-6" />
                   </button>
                 </div>
-              </form>
+              </div>
             </div>
           </div>
         </div>
       </div>
+
+      <style jsx global>{`
+        .custom-scrollbar::-webkit-scrollbar {
+          width: 8px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+          background: #e0f2fe;
+          border-radius: 10px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+          background: linear-gradient(180deg, #2563eb 0%, #06b6d4 100%);
+          border-radius: 10px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+          background: linear-gradient(180deg, #1d4ed8 0%, #0891b2 100%);
+        }
+      `}</style>
     </div>
   );
 }

@@ -11,37 +11,37 @@ const loadingTexts = [
   {
     icon: FileText,
     text: "Analyzing document structure...",
-    color: "text-purple-600",
+    color: "text-blue-600",
   },
   {
     icon: Brain,
     text: "Identifying key concepts...",
-    color: "text-purple-700",
+    color: "text-blue-700",
   },
   {
     icon: Sparkles,
     text: "Extracting important information...",
-    color: "text-purple-600",
+    color: "text-blue-600",
   },
   {
     icon: BookOpen,
     text: "Organizing study materials...",
-    color: "text-purple-700",
+    color: "text-blue-700",
   },
   {
     icon: Brain,
     text: "Creating comprehensive explanations...",
-    color: "text-purple-600",
+    color: "text-blue-600",
   },
   {
     icon: Sparkles,
     text: "Generating examples and connections...",
-    color: "text-purple-700",
+    color: "text-blue-700",
   },
   {
     icon: FileText,
     text: "Finalizing study notes...",
-    color: "text-purple-600",
+    color: "text-blue-600",
   },
 ];
 
@@ -88,10 +88,10 @@ export default function GeneratingNotesModal({
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-md">
       <div className="bg-white rounded-2xl shadow-2xl max-w-md w-full p-8 relative overflow-hidden">
         {/* Animated background gradient */}
-        <div className="absolute inset-0 bg-linear-to-br from-purple-50 via-pink-50 to-purple-50 opacity-50"></div>
+        <div className="absolute inset-0 bg-linear-to-br from-blue-50 via-cyan-50 to-blue-50 opacity-50"></div>
 
         {/* Animated circles */}
-        <div className="absolute top-0 left-0 w-32 h-32 bg-purple-400/20 rounded-full blur-3xl animate-pulse"></div>
+        <div className="absolute top-0 left-0 w-32 h-32 bg-blue-400/20 rounded-full blur-3xl animate-pulse"></div>
         <div
           className="absolute bottom-0 right-0 w-40 h-40 bg-pink-400/20 rounded-full blur-3xl animate-pulse"
           style={{ animationDelay: "1s" }}
@@ -103,7 +103,7 @@ export default function GeneratingNotesModal({
             <div className="relative">
               {/* Spinning ring */}
               <div className="absolute inset-0">
-                <Loader2 className="w-20 h-20 text-purple-600 animate-spin" />
+                <Loader2 className="w-20 h-20 text-blue-500 animate-spin" />
               </div>
               {/* Center icon */}
               <div
@@ -134,7 +134,7 @@ export default function GeneratingNotesModal({
             </div>
             <div className="w-full bg-gray-200 rounded-full h-2 overflow-hidden">
               <div
-                className="h-full bg-linear-to-r from-purple-600 to-violet-400 rounded-full transition-all duration-300 ease-out"
+                className="h-full bg-linear-to-r from-blue-600 to-cyan-400 rounded-full transition-all duration-300 ease-out"
                 style={{ width: `${progress}%` }}
               ></div>
             </div>
@@ -147,9 +147,9 @@ export default function GeneratingNotesModal({
                 key={index}
                 className={`h-2 rounded-full transition-all duration-300 ${
                   index === currentTextIndex
-                    ? "w-8 bg-linear-to-r from-purple-600 to-violet-400"
+                    ? "w-8 bg-linear-to-r from-blue-600 to-cyan-400"
                     : index < currentTextIndex
-                    ? "w-2 bg-purple-500"
+                    ? "w-2 bg-blue-500"
                     : "w-2 bg-gray-300"
                 }`}
               ></div>

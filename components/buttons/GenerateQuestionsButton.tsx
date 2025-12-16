@@ -100,7 +100,7 @@ export default function GenerateQuestionsButton({
           type="button"
           onClick={() => setIsModalOpen(true)}
           disabled={loading}
-          className="relative w-full bg-white hover:bg-green-50 border border-gray-200 rounded-xl p-6 transition-all group text-left shadow-sm disabled:opacity-50 disabled:cursor-not-allowed overflow-hidden"
+          className="relative w-full bg-white hover:bg-green-50 border border-gray-200 rounded-xl p-6 transition-all group text-left shadow-sm disabled:opacity-50 disabled:cursor-not-allowed overflow-hidden cursor-pointer"
         >
           <div className="flex items-center justify-between mb-3">
             <div className="bg-green-100 p-3 rounded-lg">

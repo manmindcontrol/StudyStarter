@@ -288,12 +288,18 @@ export default function MaterialViewPage({ materialId }: Props) {
           {/* Two Column Layout */}
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
             {/* Left Column - Actions */}
-            <div className="lg:col-span-2 space-y-4 cursor-pointer">
+            <div className="lg:col-span-2 space-y-4">
               {/* Open Document */}
-              <OpenDocumentButton materialId={materialId} />
+              <OpenDocumentButton
+                className="cursor-pointer"
+                materialId={materialId}
+              />
 
               {/* Generate Study Notes */}
-              <GenerateNotesButton materialId={materialId} />
+              <GenerateNotesButton
+                className="cursor-pointer"
+                materialId={materialId}
+              />
 
               {/* Generate Exam Questions */}
               <GenerateQuestionsButton
@@ -303,8 +309,8 @@ export default function MaterialViewPage({ materialId }: Props) {
 
               {/* Saved Question Sets */}
               {questionSets.length > 0 && (
-                <div className="bg-white border border-gray-200 rounded-xl p-6 shadow-sm cursor-pointer">
-                  <div className="flex items-center justify-between mb-4">
+                <div className="bg-white border border-gray-200 rounded-xl p-6 shadow-sm ">
+                  <div className="flex items-center justify-between mb-4 ">
                     <h3 className="text-lg font-semibold text-gray-900 flex items-center">
                       <FileQuestion className="w-5 h-5 mr-2 text-green-600" />
                       Saved Question Sets ({questionSets.length})
@@ -318,7 +324,7 @@ export default function MaterialViewPage({ materialId }: Props) {
                           message: `Are you sure you want to delete all ${questionSets.length} question sets? This action cannot be undone.`,
                         })
                       }
-                      className="text-sm text-red-600 hover:text-red-700 font-medium flex items-center gap-1"
+                      className="text-sm text-red-600 hover:text-red-700 font-medium flex items-center gap-1 cursor-pointer"
                     >
                       <Trash2 className="w-4 h-4" />
                       Delete All
@@ -335,7 +341,7 @@ export default function MaterialViewPage({ materialId }: Props) {
                           }
                           className="flex-1 text-left p-4 bg-green-50 hover:bg-green-100 rounded-lg transition-colors border border-green-200 hover:border-green-300"
                         >
-                          <div className="flex items-center justify-between">
+                          <div className="flex items-center justify-between cursor-pointer ">
                             <div>
                               <p className="font-medium text-gray-900">
                                 {set.question_type.charAt(0).toUpperCase() +
@@ -361,7 +367,7 @@ export default function MaterialViewPage({ materialId }: Props) {
                               message: `Are you sure you want to delete this ${set.question_type} question set with ${set.questions.length} questions?`,
                             });
                           }}
-                          className="p-3 bg-red-50 hover:bg-red-100 text-red-600 rounded-lg transition-colors shrink-0"
+                          className="p-3 bg-red-50 hover:bg-red-100 text-red-600 rounded-lg transition-colors shrink-0 cursor-pointer"
                           title="Delete question set"
                         >
                           <Trash2 className="w-4 h-4" />
@@ -374,8 +380,8 @@ export default function MaterialViewPage({ materialId }: Props) {
 
               {/* Saved Study Notes */}
               {noteSets.length > 0 && (
-                <div className="bg-white border border-gray-200 rounded-xl p-6 shadow-sm cursor-pointer">
-                  <div className="flex items-center justify-between mb-4">
+                <div className="bg-white border border-gray-200 rounded-xl p-6 shadow-sm ">
+                  <div className="flex items-center justify-between mb-4 ">
                     <h3 className="text-lg font-semibold text-gray-900 flex items-center">
                       <StickyNote className="w-5 h-5 mr-2 text-purple-600" />
                       Saved Study Notes ({noteSets.length})
@@ -389,13 +395,13 @@ export default function MaterialViewPage({ materialId }: Props) {
                           message: `Are you sure you want to delete all ${noteSets.length} study note sets? This action cannot be undone.`,
                         })
                       }
-                      className="text-sm text-red-600 hover:text-red-700 font-medium flex items-center gap-1"
+                      className="text-sm text-red-600 hover:text-red-700 font-medium flex items-center gap-1 cursor-pointer"
                     >
                       <Trash2 className="w-4 h-4" />
                       Delete All
                     </button>
                   </div>
-                  <div className="space-y-3">
+                  <div className="space-y-3 ">
                     {noteSets.map((note) => (
                       <div key={note.id} className="flex items-center gap-2">
                         <button
@@ -406,7 +412,7 @@ export default function MaterialViewPage({ materialId }: Props) {
                           }
                           className="flex-1 text-left p-4 bg-purple-50 hover:bg-purple-100 rounded-lg transition-colors border border-purple-200 hover:border-purple-300"
                         >
-                          <div className="flex items-center justify-between">
+                          <div className="flex items-center justify-between cursor-pointer">
                             <div>
                               <p className="font-medium text-gray-900 line-clamp-1">
                                 {note.summary.substring(0, 60)}
@@ -432,7 +438,7 @@ export default function MaterialViewPage({ materialId }: Props) {
                               message: `Are you sure you want to delete this study note set with ${note.key_points.length} key points and ${note.concepts.length} concepts?`,
                             });
                           }}
-                          className="p-3 bg-red-50 hover:bg-red-100 text-red-600 rounded-lg transition-colors shrink-0"
+                          className="p-3 bg-red-50 hover:bg-red-100 text-red-600 rounded-lg transition-colors shrink-0 cursor-pointer"
                           title="Delete note set"
                         >
                           <Trash2 className="w-4 h-4" />
@@ -445,6 +451,7 @@ export default function MaterialViewPage({ materialId }: Props) {
 
               {/* Delete Document */}
               <DeleteButton
+                className="cursor-pointer"
                 materialId={materialId}
                 materialTitle={material.title}
               />

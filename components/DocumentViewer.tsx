@@ -304,14 +304,14 @@ export default function DocumentViewer({ materialId }: Props) {
                       handleSendMessage();
                     }
                   }}
-                  placeholder="Ask a question about the document..."
+                  placeholder="Write a message..."
                   className="flex-1 px-4 py-3 border text-gray-700 border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-600 focus:border-cyan-500 outline-none transition-all"
                   disabled={isSending}
                 />
                 <button
                   onClick={handleSendMessage}
                   disabled={isSending || !inputMessage.trim()}
-                  className="bg-linear-to-br from-blue-600 to-cyan-500 hover:from-blue-700 hover:to-cyan-600 disabled:bg-gray-300 disabled:cursor-not-allowed text-white p-3 rounded-xl transition-colors"
+                  className="bg-linear-to-br from-blue-600 to-cyan-500 hover:from-blue-700 hover:to-cyan-600 disabled:bg-gray-300 disabled:cursor-not-allowed text-white p-3 rounded-xl transition-colors cursor-pointer"
                 >
                   <ChevronRight className="w-6 h-6" />
                 </button>

@@ -23,7 +23,6 @@ import {
   CheckCircle2,
   Target,
   Download,
-  Send,
   Save,
   Check,
   ChevronRight,
@@ -457,12 +456,12 @@ export default function NotesViewPage({ materialId, noteId }: Props) {
         <div className="container-custom py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-4">
-              <Link
-                href={`/materials/${materialId}`}
-                className="inline-flex items-center text-gray-600 hover:text-gray-900 font-medium"
+              <button
+                onClick={() => router.push(`/materials/${materialId}`)}
+                className="p-2  text-gray-600 hover:text-gray-900 group rounded-lg transition-colors shrink-0"
               >
-                <ArrowLeft className="w-4 h-4 mr-2" />
-              </Link>
+                <ArrowLeft className="w-5 h-5 group-hover:-translate-x-1 transition-transform" />
+              </button>
               <div className="flex items-center gap-3">
                 <div className="bg-linear-to-br from-purple-100 to-purple-200 p-2 rounded-lg">
                   <BookOpen className="w-5 h-5 text-purple-600" />

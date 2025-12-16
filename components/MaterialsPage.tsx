@@ -283,7 +283,7 @@ export default function MaterialsPage() {
                       <div className="flex items-center space-x-2">
                         <Link
                           href={`/materials/${material.id}`}
-                          className="flex-1 bg-linear-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white text-xs sm:text-sm font-bold py-2.5 sm:py-3 px-3 sm:px-4 rounded-xl transition-all shadow-md hover:shadow-lg flex items-center justify-center"
+                          className="flex-1 bg-linear-to-r from-blue-600 to-cyan-500 hover:from-blue-700 hover:to-cyan-600 text-white text-xs sm:text-sm font-bold py-2.5 sm:py-3 px-3 sm:px-4 rounded-xl transition-all shadow-md hover:shadow-lg flex items-center justify-center"
                         >
                           <Eye className="w-3.5 h-3.5 sm:w-4 sm:h-4 mr-1.5 sm:mr-2" />
                           Open Material

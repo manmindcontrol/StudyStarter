@@ -16,6 +16,7 @@ import {
   Save,
   Check,
   ChevronRight,
+  ArrowLeft,
 } from "lucide-react";
 import Image from "next/image";
 import type { User } from "@supabase/supabase-js";
@@ -631,10 +632,10 @@ export default function QuestionsViewPage({
           <div className="flex items-center justify-between gap-2">
             <div className="flex items-center space-x-2 sm:space-x-4 flex-1 min-w-0">
               <button
-                onClick={() => router.push("/materials")}
-                className="p-2 hover:bg-gray-100 rounded-lg transition-colors shrink-0"
+                onClick={() => router.push(`/materials/${materialId}`)}
+                className="p-2  text-gray-600 hover:text-gray-900 group rounded-lg transition-colors shrink-0"
               >
-                <ChevronLeft className="w-5 h-5 text-gray-600" />
+                <ArrowLeft className="w-5 h-5 group-hover:-translate-x-1 transition-transform" />
               </button>
               <div className="min-w-0 flex-1">
                 <h1 className="text-base sm:text-xl font-bold text-gray-900 truncate">

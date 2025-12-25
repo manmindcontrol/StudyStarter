@@ -139,7 +139,7 @@ WRITING STYLE:
 Material title: "${material.title}"
 
 Task:
-Create DETAILED, STRUCTURED study notes from this educational material.
+Create DETAILED, STRUCTURED study notes from this educational material. Depending of the size and complexity of the document, the notes should always be COMPREHENSIVE enough to fully cover the material and enable effective studying without needing to refer back to the original text. Also based on the document's content and structure, adapt the depth and breadth of the notes to ensure they are complete and thorough. If the document is longer also the notes must be longer and vice versa.
 
 I DO NOT WANT an abstract or short general summary. I want FULL STUDY NOTES that a student can learn from even without access to the original text.
 
@@ -184,11 +184,11 @@ DO:
 - Analyze how much attention the document gives to each subconcept and reflect that in your explanation length
 `;
 
-    // 3️⃣ Call OpenAI
-    const contentToAnalyze = material.content.substring(0, 30000); // Increased limit for more comprehensive analysis
+    // 3️⃣ Call OpenAI with increased content limit for comprehensive notes
+    const contentToAnalyze = material.content.substring(0, 150000); // Significantly increased limit for long documents
 
     const aiResponse = await openai.chat.completions.create({
-      model: "gpt-4o", // Using more powerful model for better comprehensive notes
+      model: "gpt-4o-mini", // Using powerful model for comprehensive notes
       messages: [
         {
           role: "system",
@@ -201,6 +201,7 @@ DO:
       ],
       response_format: { type: "json_object" },
       temperature: 0.7, // Slightly higher for more natural, flowing text
+      max_tokens: 16000, // Increased token limit for comprehensive notes
     });
 
     // 4️⃣ Extract text safely

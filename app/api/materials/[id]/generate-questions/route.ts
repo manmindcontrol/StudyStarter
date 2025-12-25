@@ -145,49 +145,160 @@ Additional rules:
     // If you want to use file_id, you'd need to use the Assistants API instead
     const contentToAnalyze = material.content || "No content available";
 
-    const aiResponse = await openai.chat.completions.create({
-      model: "gpt-4o-mini",
-      messages: [
-        {
-          role: "system",
-          content: systemPrompt,
-        },
-        {
-          role: "user",
-          content: `${userPrompt}\n\nDocument content:\n${contentToAnalyze.substring(0, 15000)}`,
-        },
-      ],
-      response_format: { type: "json_object" },
-      temperature: 0.7,
-    });
+    // Adjust content limit based on question count - increased for longer documents
+    const contentLimit = questionCount > 20 ? 150000 : questionCount > 10 ? 100000 : 80000;
 
-    // 4️⃣ Extract text safely
-    const jsonText = aiResponse.choices[0]?.message?.content;
+    // 4️⃣ Generate questions (split into batches if count > 15 to avoid token limits)
+    let questions: GeneratedQuestion[] = [];
 
-    if (!jsonText) {
-      console.error("OpenAI response:", aiResponse);
+    if (questionCount > 15) {
+      // Split into two batches with different document sections
+      const firstBatch = Math.ceil(questionCount / 2);
+      const secondBatch = questionCount - firstBatch;
+
+      // Split document content for better coverage
+      const halfPoint = Math.floor(contentToAnalyze.length / 2);
+      const firstHalfContent = contentToAnalyze.substring(0, halfPoint);
+      const secondHalfContent = contentToAnalyze.substring(halfPoint, contentLimit);
+
+      // Generate first batch from first half
+      const firstPrompt = userPrompt.replace(
+        `Generate EXACTLY ${questionCount} questions`,
+        `Generate EXACTLY ${firstBatch} questions from this section of the document`
+      );
+
+      const firstResponse = await openai.chat.completions.create({
+        model: "gpt-4o-mini",
+        messages: [
+          { role: "system", content: systemPrompt },
+          { role: "user", content: `${firstPrompt}\n\nDocument content:\n${firstHalfContent}` },
+        ],
+        response_format: { type: "json_object" },
+        temperature: 0.7,
+        max_tokens: 10000,
+      });
+
+      const firstJson = firstResponse.choices[0]?.message?.content;
+      if (firstJson) {
+        const firstParsed = JSON.parse(firstJson) as { questions: GeneratedQuestion[] };
+        questions.push(...firstParsed.questions);
+      }
+
+      // Generate second batch from second half
+      const secondPrompt = userPrompt.replace(
+        `Generate EXACTLY ${questionCount} questions`,
+        `Generate EXACTLY ${secondBatch} questions from this section of the document. Make sure these are DIFFERENT from any previous questions.`
+      );
+
+      const secondResponse = await openai.chat.completions.create({
+        model: "gpt-4o-mini",
+        messages: [
+          { role: "system", content: systemPrompt },
+          { role: "user", content: `${secondPrompt}\n\nDocument content:\n${secondHalfContent}` },
+        ],
+        response_format: { type: "json_object" },
+        temperature: 0.7,
+        max_tokens: 10000,
+      });
+
+      const secondJson = secondResponse.choices[0]?.message?.content;
+      if (secondJson) {
+        const secondParsed = JSON.parse(secondJson) as { questions: GeneratedQuestion[] };
+        questions.push(...secondParsed.questions);
+      }
+
+      // If we're still short, generate missing questions
+      if (questions.length < questionCount) {
+        const missing = questionCount - questions.length;
+        const fillPrompt = userPrompt.replace(
+          `Generate EXACTLY ${questionCount} questions`,
+          `Generate EXACTLY ${missing} additional questions from the document. Make sure these are DIFFERENT from any previous questions.`
+        );
+
+        const fillResponse = await openai.chat.completions.create({
+          model: "gpt-4o-mini",
+          messages: [
+            { role: "system", content: systemPrompt },
+            { role: "user", content: `${fillPrompt}\n\nDocument content:\n${contentToAnalyze.substring(0, contentLimit)}` },
+          ],
+          response_format: { type: "json_object" },
+          temperature: 0.8, // Slightly higher temperature for variety
+          max_tokens: 4000,
+        });
+
+        const fillJson = fillResponse.choices[0]?.message?.content;
+        if (fillJson) {
+          const fillParsed = JSON.parse(fillJson) as { questions: GeneratedQuestion[] };
+          // Only take exactly the number we need to avoid exceeding the requested count
+          const neededQuestions = fillParsed.questions.slice(0, missing);
+          questions.push(...neededQuestions);
+        }
+      }
+    } else {
+      // Single batch for 15 or fewer questions
+      const aiResponse = await openai.chat.completions.create({
+        model: "gpt-4o-mini",
+        messages: [
+          { role: "system", content: systemPrompt },
+          { role: "user", content: `${userPrompt}\n\nDocument content:\n${contentToAnalyze.substring(0, contentLimit)}` },
+        ],
+        response_format: { type: "json_object" },
+        temperature: 0.7,
+        max_tokens: 10000,
+      });
+
+      const jsonText = aiResponse.choices[0]?.message?.content;
+      if (!jsonText) {
+        return NextResponse.json(
+          { error: "Could not extract text from OpenAI response." },
+          { status: 500 }
+        );
+      }
+
+      const parsed = JSON.parse(jsonText) as { questions: GeneratedQuestion[] };
+      questions = parsed.questions;
+
+      // If we're still short, generate missing questions
+      if (questions.length < questionCount) {
+        const missing = questionCount - questions.length;
+        const fillPrompt = userPrompt.replace(
+          `Generate EXACTLY ${questionCount} questions`,
+          `Generate EXACTLY ${missing} additional questions from the document. Make sure these are DIFFERENT from any previous questions.`
+        );
+
+        const fillResponse = await openai.chat.completions.create({
+          model: "gpt-4o-mini",
+          messages: [
+            { role: "system", content: systemPrompt },
+            { role: "user", content: `${fillPrompt}\n\nDocument content:\n${contentToAnalyze.substring(0, contentLimit)}` },
+          ],
+          response_format: { type: "json_object" },
+          temperature: 0.8, // Slightly higher temperature for variety
+          max_tokens: 4000,
+        });
+
+        const fillJson = fillResponse.choices[0]?.message?.content;
+        if (fillJson) {
+          const fillParsed = JSON.parse(fillJson) as { questions: GeneratedQuestion[] };
+          // Only take exactly the number we need to avoid exceeding the requested count
+          const neededQuestions = fillParsed.questions.slice(0, missing);
+          questions.push(...neededQuestions);
+        }
+      }
+    }
+
+    // 5️⃣ Validate results
+    if (!Array.isArray(questions)) {
       return NextResponse.json(
-        { error: "Could not extract text from OpenAI response." },
+        { error: "Invalid response format from AI." },
         { status: 500 }
       );
     }
 
-    // 5️⃣ Parse JSON
-    let questions: GeneratedQuestion[];
-
-    try {
-      const parsed = JSON.parse(jsonText) as { questions: GeneratedQuestion[] };
-      questions = parsed.questions;
-
-      if (!Array.isArray(questions)) {
-        throw new Error("Questions is not an array");
-      }
-    } catch (err) {
-      console.error("JSON parse error:", jsonText);
-      return NextResponse.json(
-        { error: "OpenAI did not return valid JSON." },
-        { status: 500 }
-      );
+    // Validate we got the requested number of questions
+    if (questions.length < questionCount) {
+      console.warn(`Requested ${questionCount} questions but only got ${questions.length}. This may be due to content length or model limitations.`);
+      // Continue anyway - return what we got rather than fail completely
     }
 
     // 6️⃣ Done - return questions without saving (user will save manually)

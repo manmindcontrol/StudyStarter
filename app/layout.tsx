@@ -3,6 +3,7 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/components/universal/Navbar";
 import Footer from "@/components/universal/Footer";
+import CookieConsent from "@/components/CookieConsent";
 import StructuredData from "./structured-data";
 
 const inter = Inter({
@@ -124,6 +125,9 @@ export default function RootLayout({
 
         {/* Footer - displayed on all pages */}
         <Footer />
+
+        {/* Cookie Consent Banner */}
+        <CookieConsent />
       </body>
     </html>
   );

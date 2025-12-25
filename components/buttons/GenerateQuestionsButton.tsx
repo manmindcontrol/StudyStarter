@@ -4,6 +4,8 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { FileQuestion, ChevronRight } from "lucide-react";
 import GenerateQuestionsModal from "../modals/GenerateQuestionsModal";
+import GeneratingQuestionsModal from "../modals/GeneratingQuestionsModal";
+import ErrorModal from "../modals/ErrorModal";
 
 type QuestionType = "exam" | "test" | "summary";
 type QuestionFormat = "mcq" | "open" | "mixed";
@@ -33,13 +35,17 @@ export default function GenerateQuestionsButton({
   onGenerated,
 }: GenerateQuestionsButtonProps) {
   const router = useRouter();
-  const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isGenerating, setIsGenerating] = useState(false);
+  const [isErrorModalOpen, setIsErrorModalOpen] = useState(false);
 
   const handleGenerate = async (count: number, format: QuestionFormat) => {
     setError(null);
-    setLoading(true);
+
+    // Close settings modal and open generating modal
+    setIsModalOpen(false);
+    setIsGenerating(true);
 
     try {
       const params = new URLSearchParams();
@@ -71,8 +77,8 @@ export default function GenerateQuestionsButton({
         onGenerated(questions);
       }
 
-      // Close modal and redirect to questions page with unsaved data
-      setIsModalOpen(false);
+      // Close generating modal and redirect to questions page
+      setIsGenerating(false);
       const questionsParam = encodeURIComponent(JSON.stringify(questions));
       if (contentType === "material") {
         router.push(
@@ -84,12 +90,14 @@ export default function GenerateQuestionsButton({
         );
       }
     } catch (err) {
-      setError(
+      const errorMessage =
         err instanceof Error
           ? err.message
-          : "Unexpected error while generating questions."
-      );
-      setLoading(false);
+          : "Unexpected error while generating questions.";
+
+      setError(errorMessage);
+      setIsGenerating(false);
+      setIsErrorModalOpen(true);
     }
   };
 
@@ -99,7 +107,7 @@ export default function GenerateQuestionsButton({
         <button
           type="button"
           onClick={() => setIsModalOpen(true)}
-          disabled={loading}
+          disabled={isGenerating}
           className="relative w-full bg-white hover:bg-green-50 border border-gray-200 rounded-xl p-6 transition-all group text-left shadow-sm disabled:opacity-50 disabled:cursor-not-allowed overflow-hidden cursor-pointer"
         >
           <div className="flex items-center justify-between mb-3">
@@ -123,7 +131,19 @@ export default function GenerateQuestionsButton({
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
         onGenerate={handleGenerate}
-        loading={loading}
+        loading={false}
+      />
+
+      <GeneratingQuestionsModal isOpen={isGenerating} />
+
+      <ErrorModal
+        isOpen={isErrorModalOpen}
+        onClose={() => {
+          setIsErrorModalOpen(false);
+          setError(null);
+        }}
+        title="Failed to Generate Questions"
+        message={error || "An unexpected error occurred. Please try again."}
       />
     </>
   );

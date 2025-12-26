@@ -4,6 +4,7 @@ import "./globals.css";
 import Navbar from "@/components/universal/Navbar";
 import Footer from "@/components/universal/Footer";
 import CookieConsent from "@/components/CookieConsent";
+import CookieSettingsFloatingButton from "@/components/CookieSettingsFloatingButton";
 import StructuredData from "./structured-data";
 
 const inter = Inter({
@@ -128,6 +129,9 @@ export default function RootLayout({
 
         {/* Cookie Consent Banner */}
         <CookieConsent />
+
+        {/* Floating Cookie Settings Button */}
+        <CookieSettingsFloatingButton />
       </body>
     </html>
   );

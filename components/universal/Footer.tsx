@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { BookOpen, Mail, Github, Linkedin } from "lucide-react";
+import CookieSettingsButton from "./CookieSettingsButton";
 
 export default function Footer() {
   const currentYear = new Date().getFullYear();
@@ -159,6 +160,7 @@ export default function Footer() {
                   </span>
                 </Link>
               </li>
+              <CookieSettingsButton />
             </ul>
 
             {/* Social media */}

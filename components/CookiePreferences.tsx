@@ -32,11 +32,12 @@ export default function CookiePreferences({ isOpen, onClose }: CookiePreferences
     if (savedPreferences) {
       try {
         const parsed = JSON.parse(savedPreferences);
-        setSettings({ ...settings, ...parsed });
+        setSettings((prev) => ({ ...prev, ...parsed }));
       } catch (e) {
         console.error("Failed to parse cookie preferences", e);
       }
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handleToggle = (key: keyof CookieSettings) => {
@@ -82,7 +83,7 @@ export default function CookiePreferences({ isOpen, onClose }: CookiePreferences
   if (!mounted || !isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
+    <div className="fixed inset-0 z-100 flex items-center justify-center p-4">
       {/* Backdrop */}
       <div
         className="absolute inset-0 bg-black/60 backdrop-blur-sm"
@@ -92,7 +93,7 @@ export default function CookiePreferences({ isOpen, onClose }: CookiePreferences
       {/* Modal */}
       <div className="relative bg-white rounded-2xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
         {/* Header */}
-        <div className="sticky top-0 bg-gradient-to-r from-blue-600 to-blue-700 text-white p-6 rounded-t-2xl">
+        <div className="sticky top-0 bg-linear-to-r from-blue-600 to-blue-700 text-white p-6 rounded-t-2xl">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
               <div className="bg-white/20 p-2 rounded-lg">
@@ -278,7 +279,7 @@ export default function CookiePreferences({ isOpen, onClose }: CookiePreferences
             </button>
             <button
               onClick={handleAcceptAll}
-              className="flex-1 px-6 py-3 bg-gradient-to-r from-blue-600 to-blue-700 text-white rounded-xl font-bold hover:from-blue-700 hover:to-blue-800 transition-all duration-200 flex items-center justify-center gap-2 shadow-lg"
+              className="flex-1 px-6 py-3 bg-linear-to-r from-blue-600 to-blue-700 text-white rounded-xl font-bold hover:from-blue-700 hover:to-blue-800 transition-all duration-200 flex items-center justify-center gap-2 shadow-lg"
             >
               <Check className="w-5 h-5" />
               Accept All

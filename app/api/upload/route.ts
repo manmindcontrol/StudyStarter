@@ -9,9 +9,19 @@ import pdfParse from "pdf-parse/lib/pdf-parse.js";
 
 export const runtime = "nodejs";
 
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
-const serviceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY!;
-const openaiApiKey = process.env.OPENAI_API_KEY!;
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+const serviceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+const openaiApiKey = process.env.OPENAI_API_KEY;
+
+if (!supabaseUrl || !serviceRoleKey || !openaiApiKey) {
+  throw new Error(
+    `Missing required environment variables: ${
+      !supabaseUrl ? "NEXT_PUBLIC_SUPABASE_URL " : ""
+    }${!serviceRoleKey ? "SUPABASE_SERVICE_ROLE_KEY " : ""}${
+      !openaiApiKey ? "OPENAI_API_KEY" : ""
+    }`
+  );
+}
 
 const supabase = createClient(supabaseUrl, serviceRoleKey, {
   auth: {
@@ -107,7 +117,7 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // 3️⃣ Insert do DB
+    // 3️⃣ Insert to DB
     const { data: material, error: dbError } = await supabase
       .from("materials")
       .insert({

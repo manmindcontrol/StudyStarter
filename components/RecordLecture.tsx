@@ -157,6 +157,26 @@ export default function RecordLecture({ user }: RecordLectureProps) {
 
         recognition.onerror = (event: ISpeechRecognitionErrorEvent) => {
           console.error("Speech recognition error:", event.error);
+
+          // Don't restart on abort error (user stopped intentionally)
+          if (event.error === "aborted" || event.error === "no-speech") {
+            return;
+          }
+
+          // For other errors, log but continue recording
+          console.warn("Recognition error occurred, but continuing...");
+        };
+
+        recognition.onend = () => {
+          // Auto-restart recognition if still recording
+          // This handles cases where recognition stops due to silence or timeout
+          if (mediaRecorderRef.current?.state === "recording") {
+            try {
+              recognition.start();
+            } catch (error) {
+              console.error("Failed to restart recognition:", error);
+            }
+          }
         };
 
         recognition.start();
@@ -191,11 +211,35 @@ export default function RecordLecture({ user }: RecordLectureProps) {
       }
 
       setIsRecording(false);
-      setIsProcessing(true);
 
-      setTimeout(() => {
-        setIsProcessing(false);
-      }, 2000);
+      // Format transcript in background - don't block UI
+      const rawTranscript = finalTranscript + transcript;
+      if (rawTranscript.trim().length > 0) {
+        setIsProcessing(true);
+
+        // Run formatting async without blocking
+        fetch("/api/format-transcript", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ transcript: rawTranscript }),
+        })
+          .then((response) => response.json())
+          .then((data) => {
+            if (data.formattedTranscript) {
+              setFinalTranscript(data.formattedTranscript);
+              setTranscript("");
+            }
+          })
+          .catch((error) => {
+            console.error("Error formatting transcript:", error);
+            // Keep original transcript if formatting fails
+          })
+          .finally(() => {
+            setIsProcessing(false);
+          });
+      }
     }
   };
 
@@ -302,6 +346,41 @@ export default function RecordLecture({ user }: RecordLectureProps) {
       alert("Failed to save lecture.");
     } finally {
       setDownloadingFormat(null);
+    }
+  };
+
+  const reformatTranscript = async () => {
+    setIsProcessing(true);
+    try {
+      const currentText = finalTranscript + transcript;
+
+      if (currentText.trim().length === 0) {
+        alert("No transcript to format");
+        return;
+      }
+
+      const response = await fetch("/api/format-transcript", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ transcript: currentText }),
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        if (data.formattedTranscript) {
+          setFinalTranscript(data.formattedTranscript);
+          setTranscript("");
+        }
+      } else {
+        alert("Failed to format transcript");
+      }
+    } catch (error) {
+      console.error("Error reformatting transcript:", error);
+      alert("Failed to format transcript");
+    } finally {
+      setIsProcessing(false);
     }
   };
 
@@ -414,9 +493,17 @@ export default function RecordLecture({ user }: RecordLectureProps) {
               )}
             </div>
 
-            {/* Discard Button - Show if there's a transcript */}
+            {/* Action Buttons - Show if there's a transcript */}
             {hasTranscript && (
-              <div className="flex justify-center mb-6">
+              <div className="flex justify-center gap-3 mb-6">
+                <button
+                  onClick={reformatTranscript}
+                  disabled={isProcessing}
+                  className="flex items-center space-x-2 px-6 py-3 bg-blue-50 hover:bg-blue-100 text-blue-600 font-medium rounded-lg transition-colors border border-blue-200 disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  <FileText className="w-4 h-4" />
+                  <span>Reformat Text</span>
+                </button>
                 <button
                   onClick={discardRecording}
                   className="flex items-center space-x-2 px-6 py-3 bg-red-50 hover:bg-red-100 text-red-600 font-medium rounded-lg transition-colors border border-red-200"
@@ -453,7 +540,7 @@ export default function RecordLecture({ user }: RecordLectureProps) {
                     Processing
                   </span>
                   <span className="text-blue-600 text-sm">
-                    Finalizing transcription...
+                    Adding punctuation and formatting text...
                   </span>
                 </div>
               </div>

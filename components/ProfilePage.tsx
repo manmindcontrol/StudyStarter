@@ -39,6 +39,7 @@ export default function ProfilePage() {
   // Message states
   const [successMessage, setSuccessMessage] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
+  const [currentPasswordError, setCurrentPasswordError] = useState("");
 
   useEffect(() => {
     const loadUserData = async () => {
@@ -110,8 +111,15 @@ export default function ProfilePage() {
     setSaving(true);
     setErrorMessage("");
     setSuccessMessage("");
+    setCurrentPasswordError("");
 
     // Validate passwords
+    if (!currentPassword) {
+      setCurrentPasswordError("Please enter your current password");
+      setSaving(false);
+      return;
+    }
+
     if (newPassword !== confirmPassword) {
       setErrorMessage("New passwords do not match");
       setSaving(false);
@@ -119,22 +127,64 @@ export default function ProfilePage() {
     }
 
     if (newPassword.length < 6) {
-      setErrorMessage("Password must be at least 6 characters");
+      setErrorMessage("New password must be at least 6 characters");
+      setSaving(false);
+      return;
+    }
+
+    if (currentPassword === newPassword) {
+      setErrorMessage("New password must be different from current password");
       setSaving(false);
       return;
     }
 
     try {
-      const { error } = await supabase.auth.updateUser({
-        password: newPassword,
+      // Get current session for access token
+      const {
+        data: { session },
+      } = await supabase.auth.getSession();
+
+      if (!session) {
+        setErrorMessage("Session expired. Please log in again.");
+        setSaving(false);
+        return;
+      }
+
+      // Call API endpoint to change password
+      const response = await fetch("/api/auth/change-password", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          currentPassword,
+          newPassword,
+          accessToken: session.access_token,
+        }),
       });
 
-      if (error) throw error;
+      const data = await response.json();
+
+      if (!response.ok) {
+        // Check if it's a wrong password error
+        if (data.error?.includes("incorrect") || data.error?.includes("password")) {
+          setCurrentPasswordError(data.error);
+        } else {
+          setErrorMessage(data.error || "Failed to change password");
+        }
+        setSaving(false);
+        return;
+      }
 
       setSuccessMessage("Password changed successfully!");
       setCurrentPassword("");
       setNewPassword("");
       setConfirmPassword("");
+
+      // Auto-hide success message after 5 seconds
+      setTimeout(() => {
+        setSuccessMessage("");
+      }, 5000);
     } catch (error) {
       setErrorMessage(
         error instanceof Error
@@ -168,15 +218,20 @@ export default function ProfilePage() {
         </div>
         {/* Messages */}
         {successMessage && (
-          <div className="mb-6 bg-green-50 border border-green-200 text-green-800 px-4 py-3 rounded-lg flex items-center space-x-2">
-            <CheckCircle className="w-5 h-5" />
-            <span>{successMessage}</span>
+          <div className="mb-6 bg-green-50 border-2 border-green-300 text-green-800 px-6 py-4 rounded-xl flex items-center space-x-3 shadow-lg shadow-green-500/20 animate-fade-in">
+            <CheckCircle className="w-6 h-6 flex-shrink-0" />
+            <div>
+              <p className="font-semibold">{successMessage}</p>
+              <p className="text-sm text-green-700 mt-0.5">
+                You can now use your new password to sign in.
+              </p>
+            </div>
           </div>
         )}
         {errorMessage && (
-          <div className="mb-6 bg-red-50 border border-red-200 text-red-800 px-4 py-3 rounded-lg flex items-center space-x-2">
-            <XCircle className="w-5 h-5" />
-            <span>{errorMessage}</span>
+          <div className="mb-6 bg-red-50 border-2 border-red-300 text-red-800 px-6 py-4 rounded-xl flex items-center space-x-3 shadow-lg shadow-red-500/20">
+            <XCircle className="w-6 h-6 flex-shrink-0" />
+            <span className="font-medium">{errorMessage}</span>
           </div>
         )}
 
@@ -251,7 +306,7 @@ export default function ProfilePage() {
                     value={fullName}
                     onChange={(e) => setFullName(e.target.value)}
                     placeholder="Enter your full name"
-                    className="w-full px-4 py-2 border text-gray-400 border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    className="w-full px-4 py-2 border text-gray-900 border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                   />
                 </div>
 
@@ -264,7 +319,7 @@ export default function ProfilePage() {
                     value={displayName}
                     onChange={(e) => setDisplayName(e.target.value)}
                     placeholder="e.g. John, Sarah..."
-                    className="w-full px-4 py-2 border text-gray-400 border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    className="w-full px-4 py-2 border text-gray-900 border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                   />
                   <p className="text-xs text-gray-500 mt-1">
                     This name will be used in the dashboard greetings
@@ -292,15 +347,47 @@ export default function ProfilePage() {
 
               <form onSubmit={handleChangePassword} className="space-y-4">
                 <div>
-                  <label className="block text-sm font-medium  text-gray-700 mb-2">
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Current Password
+                  </label>
+                  <input
+                    type="password"
+                    value={currentPassword}
+                    onChange={(e) => {
+                      setCurrentPassword(e.target.value);
+                      setCurrentPasswordError(""); // Clear error on change
+                    }}
+                    placeholder="Enter current password"
+                    className={`w-full px-4 py-2 border text-gray-900 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent ${
+                      currentPasswordError
+                        ? "border-red-300 bg-red-50"
+                        : "border-gray-300"
+                    }`}
+                    required
+                  />
+                  {currentPasswordError ? (
+                    <p className="text-xs text-red-600 mt-1 flex items-center gap-1">
+                      <XCircle className="w-3 h-3" />
+                      {currentPasswordError}
+                    </p>
+                  ) : (
+                    <p className="text-xs text-gray-500 mt-1">
+                      Required to verify your identity
+                    </p>
+                  )}
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
                     New Password
                   </label>
                   <input
                     type="password"
                     value={newPassword}
                     onChange={(e) => setNewPassword(e.target.value)}
-                    placeholder="Enter new password"
-                    className="w-full px-4 py-2 border border-gray-300 text-gray-400 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    placeholder="Enter new password (min. 6 characters)"
+                    className="w-full px-4 py-2 border border-gray-300 text-gray-900 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    required
                   />
                 </div>
 
@@ -312,14 +399,17 @@ export default function ProfilePage() {
                     type="password"
                     value={confirmPassword}
                     onChange={(e) => setConfirmPassword(e.target.value)}
-                    placeholder="Enter password again"
-                    className="w-full px-4 py-2 border text-gray-400 border-gray-300  rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    placeholder="Enter new password again"
+                    className="w-full px-4 py-2 border border-gray-300 text-gray-900 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    required
                   />
                 </div>
 
                 <button
                   type="submit"
-                  disabled={saving || !newPassword || !confirmPassword}
+                  disabled={
+                    saving || !currentPassword || !newPassword || !confirmPassword
+                  }
                   className="w-full bg-linear-to-r from-blue-600 to-cyan-600 hover:from-blue-700 hover:to-cyan-700 text-white font-semibold py-3 px-6 rounded-lg transition-all duration-300 shadow-lg shadow-blue-500/30 hover:shadow-xl hover:shadow-blue-500/40 disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   {saving ? "Changing password..." : "Change Password"}

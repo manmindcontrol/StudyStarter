@@ -725,7 +725,7 @@ export default function QuestionsViewPage({
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           {/* Questions panel - 2 columns on large screens */}
           <div className="lg:col-span-2 space-y-4">
-            <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+            <div className="p-6">
               <h2 className="text-lg font-semibold text-gray-900 mb-4">
                 Generated Questions
               </h2>
@@ -738,7 +738,7 @@ export default function QuestionsViewPage({
                   return (
                     <div
                       key={index}
-                      className="p-4 rounded-lg border-2 border-gray-200 bg-white"
+                      className="p-4 rounded-lg border border-gray-200 bg-white"
                     >
                       <div className="flex-1">
                         <div className="flex items-center space-x-2 mb-3">
@@ -785,7 +785,7 @@ export default function QuestionsViewPage({
                               const showResult = isAnswered;
 
                               let buttonStyle =
-                                "border-gray-300 hover:border-blue-400 hover:bg-blue-50";
+                                "border-gray-200 hover:border-blue-400 hover:bg-blue-50";
                               if (showResult) {
                                 if (isSelected && isCorrectOption) {
                                   buttonStyle = "border-green-500 bg-green-50";
@@ -808,7 +808,7 @@ export default function QuestionsViewPage({
                                     handleMCQAnswer(index, option, q.answer)
                                   }
                                   disabled={isAnswered}
-                                  className={`w-full flex items-start text-gray-700 space-x-3 text-left p-3 rounded-lg border-2 transition-all ${buttonStyle} ${
+                                  className={`w-full flex items-start text-gray-700 space-x-3 text-left p-3 rounded-lg border-1 transition-all ${buttonStyle} ${
                                     !isAnswered
                                       ? "cursor-pointer"
                                       : "cursor-default"
@@ -838,7 +838,7 @@ export default function QuestionsViewPage({
                                 updateOpenAnswerInput(index, e.target.value)
                               }
                               placeholder="Type your answer here..."
-                              className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-blue-500 focus:outline-none text-gray-900 placeholder:text-gray-400 transition-all resize-none"
+                              className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:border-blue-500 focus:outline-none text-gray-900 placeholder:text-gray-400 transition-all resize-none"
                               rows={4}
                               disabled={checkingAnswer === index}
                             />

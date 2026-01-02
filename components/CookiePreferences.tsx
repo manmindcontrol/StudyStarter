@@ -1,7 +1,14 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { X, Cookie, Shield, BarChart3, Settings as SettingsIcon, Check } from "lucide-react";
+import {
+  X,
+  Cookie,
+  Shield,
+  BarChart3,
+  Settings as SettingsIcon,
+  Check,
+} from "lucide-react";
 
 interface CookiePreferencesProps {
   isOpen: boolean;
@@ -15,7 +22,10 @@ interface CookieSettings {
   marketing: boolean;
 }
 
-export default function CookiePreferences({ isOpen, onClose }: CookiePreferencesProps) {
+export default function CookiePreferences({
+  isOpen,
+  onClose,
+}: CookiePreferencesProps) {
   const [settings, setSettings] = useState<CookieSettings>({
     necessary: true, // Always true, can't be disabled
     functional: false,
@@ -93,7 +103,7 @@ export default function CookiePreferences({ isOpen, onClose }: CookiePreferences
       {/* Modal */}
       <div className="relative bg-white rounded-2xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
         {/* Header */}
-        <div className="sticky top-0 bg-linear-to-r from-blue-600 to-blue-700 text-white p-6 rounded-t-2xl">
+        <div className="sticky top-0 bg-linear-to-r from-blue-600 to-sky-500 text-white p-6 rounded-t-2xl">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
               <div className="bg-white/20 p-2 rounded-lg">
@@ -101,7 +111,9 @@ export default function CookiePreferences({ isOpen, onClose }: CookiePreferences
               </div>
               <div>
                 <h2 className="text-2xl font-bold">Cookie Preferences</h2>
-                <p className="text-blue-100 text-sm">Manage your privacy settings</p>
+                <p className="text-blue-100 text-sm">
+                  Manage your privacy settings
+                </p>
               </div>
             </div>
             <button
@@ -117,7 +129,9 @@ export default function CookiePreferences({ isOpen, onClose }: CookiePreferences
         {/* Content */}
         <div className="p-6 space-y-6">
           <p className="text-gray-600 text-sm leading-relaxed">
-            We use cookies to enhance your browsing experience, serve personalized content, and analyze our traffic. You can customize your cookie preferences below.
+            We use cookies to enhance your browsing experience, serve
+            personalized content, and analyze our traffic. You can customize
+            your cookie preferences below.
           </p>
 
           {/* Necessary Cookies */}
@@ -132,7 +146,11 @@ export default function CookiePreferences({ isOpen, onClose }: CookiePreferences
                     Necessary Cookies
                   </h3>
                   <p className="text-sm text-gray-600 leading-relaxed">
-                    These cookies are essential for the website to function properly. They enable basic functions like page navigation, access to secure areas, and remembering your cookie preferences. The website cannot function properly without these cookies.
+                    These cookies are essential for the website to function
+                    properly. They enable basic functions like page navigation,
+                    access to secure areas, and remembering your cookie
+                    preferences. The website cannot function properly without
+                    these cookies.
                   </p>
                 </div>
               </div>
@@ -161,7 +179,10 @@ export default function CookiePreferences({ isOpen, onClose }: CookiePreferences
                     Functional Cookies
                   </h3>
                   <p className="text-sm text-gray-600 leading-relaxed">
-                    These cookies enable enhanced functionality and personalization, such as remembering your preferences, language settings, and customized features. They may be set by us or by third-party providers.
+                    These cookies enable enhanced functionality and
+                    personalization, such as remembering your preferences,
+                    language settings, and customized features. They may be set
+                    by us or by third-party providers.
                   </p>
                 </div>
               </div>
@@ -197,7 +218,10 @@ export default function CookiePreferences({ isOpen, onClose }: CookiePreferences
                     Analytics Cookies
                   </h3>
                   <p className="text-sm text-gray-600 leading-relaxed">
-                    These cookies help us understand how visitors interact with our website by collecting and reporting information anonymously. This helps us improve our website and provide better services.
+                    These cookies help us understand how visitors interact with
+                    our website by collecting and reporting information
+                    anonymously. This helps us improve our website and provide
+                    better services.
                   </p>
                 </div>
               </div>
@@ -226,7 +250,11 @@ export default function CookiePreferences({ isOpen, onClose }: CookiePreferences
             <div className="flex items-start justify-between gap-4">
               <div className="flex items-start gap-3 flex-1">
                 <div className="bg-orange-100 p-2 rounded-lg mt-1">
-                  <svg className="w-5 h-5 text-orange-600" fill="currentColor" viewBox="0 0 20 20">
+                  <svg
+                    className="w-5 h-5 text-orange-600"
+                    fill="currentColor"
+                    viewBox="0 0 20 20"
+                  >
                     <path d="M2 5a2 2 0 012-2h7a2 2 0 012 2v4a2 2 0 01-2 2H9l-3 3v-3H4a2 2 0 01-2-2V5z" />
                     <path d="M15 7v2a4 4 0 01-4 4H9.828l-1.766 1.767c.28.149.599.233.938.233h2l3 3v-3h2a2 2 0 002-2V9a2 2 0 00-2-2h-1z" />
                   </svg>
@@ -236,7 +264,10 @@ export default function CookiePreferences({ isOpen, onClose }: CookiePreferences
                     Marketing Cookies
                   </h3>
                   <p className="text-sm text-gray-600 leading-relaxed">
-                    These cookies are used to track visitors across websites to display relevant advertisements. They help measure advertising campaign effectiveness and limit the number of times you see an advertisement.
+                    These cookies are used to track visitors across websites to
+                    display relevant advertisements. They help measure
+                    advertising campaign effectiveness and limit the number of
+                    times you see an advertisement.
                   </p>
                 </div>
               </div>
@@ -279,7 +310,7 @@ export default function CookiePreferences({ isOpen, onClose }: CookiePreferences
             </button>
             <button
               onClick={handleAcceptAll}
-              className="flex-1 px-6 py-3 bg-linear-to-r from-blue-600 to-blue-700 text-white rounded-xl font-bold hover:from-blue-700 hover:to-blue-800 transition-all duration-200 flex items-center justify-center gap-2 shadow-lg"
+              className="flex-1 px-6 py-3 bg-linear-to-r from-blue-600 to-sky-500 text-white rounded-xl font-bold hover:from-blue-700 hover:to-blue-800 transition-all duration-200 flex items-center justify-center gap-2 shadow-lg"
             >
               <Check className="w-5 h-5" />
               Accept All

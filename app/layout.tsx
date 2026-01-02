@@ -6,6 +6,7 @@ import Footer from "@/components/universal/Footer";
 import CookieConsent from "@/components/CookieConsent";
 import CookieSettingsFloatingButton from "@/components/CookieSettingsFloatingButton";
 import StructuredData from "./structured-data";
+import ThemeWrapper from "@/components/ThemeWrapper";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -114,24 +115,40 @@ export default function RootLayout({
     <html lang="en" className="scroll-smooth">
       <head>
         <StructuredData />
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              (function() {
+                try {
+                  var darkMode = localStorage.getItem('darkMode');
+                  if (darkMode === 'true') {
+                    document.documentElement.classList.add('dark');
+                  }
+                } catch (e) {}
+              })();
+            `,
+          }}
+        />
       </head>
       <body
         className={`${inter.className} flex flex-col min-h-screen antialiased`}
       >
-        {/* Navbar - displayed on all pages */}
-        <Navbar />
+        <ThemeWrapper>
+          {/* Navbar - displayed on all pages */}
+          <Navbar />
 
-        {/* Main page content */}
-        <main className="grow">{children}</main>
+          {/* Main page content */}
+          <main className="grow">{children}</main>
 
-        {/* Footer - displayed on all pages */}
-        <Footer />
+          {/* Footer - displayed on all pages */}
+          <Footer />
 
-        {/* Cookie Consent Banner */}
-        <CookieConsent />
+          {/* Cookie Consent Banner */}
+          <CookieConsent />
 
-        {/* Floating Cookie Settings Button */}
-        <CookieSettingsFloatingButton />
+          {/* Floating Cookie Settings Button */}
+          <CookieSettingsFloatingButton />
+        </ThemeWrapper>
       </body>
     </html>
   );

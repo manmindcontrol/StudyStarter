@@ -35,16 +35,14 @@ export default function GenerateNotesButton({
       }
 
       const id = materialId || lectureId;
-      const apiPath = contentType === "lecture"
-        ? `/api/lectures/${id}/generate-notes`
-        : `/api/materials/${id}/generate-notes`;
+      const apiPath =
+        contentType === "lecture"
+          ? `/api/lectures/${id}/generate-notes`
+          : `/api/materials/${id}/generate-notes`;
 
-      const res = await fetch(
-        `${apiPath}?${params.toString()}`,
-        {
-          method: "POST",
-        }
-      );
+      const res = await fetch(`${apiPath}?${params.toString()}`, {
+        method: "POST",
+      });
 
       const data = await res.json();
 
@@ -73,25 +71,28 @@ export default function GenerateNotesButton({
   return (
     <>
       {/* Full-screen modal when loading */}
-      <GeneratingNotesModal key={loading ? "open" : "closed"} isOpen={loading} />
+      <GeneratingNotesModal
+        key={loading ? "open" : "closed"}
+        isOpen={loading}
+      />
 
       <div className="flex flex-col space-y-2">
         <button
           type="button"
           onClick={handleClick}
           disabled={loading}
-          className={`relative w-full bg-white hover:bg-purple-50 border border-gray-200 rounded-xl p-6 transition-all group text-left shadow-sm disabled:opacity-50 disabled:cursor-not-allowed overflow-hidden cursor-pointer ${className}`}
+          className={`relative w-full bg-white hover:bg-purple-50 dark:bg-slate-800 dark:hover:bg-purple-800/20 border border-gray-200 dark:border-slate-700 rounded-xl p-6 transition-all group text-left shadow-sm disabled:opacity-50 disabled:cursor-not-allowed overflow-hidden cursor-pointer ${className}`}
         >
           <div className="flex items-center justify-between mb-3">
-            <div className="bg-purple-100 p-3 rounded-lg">
-              <StickyNote className="w-6 h-6 text-purple-600" />
+            <div className="bg-purple-100 dark:bg-purple-900 p-3 rounded-lg">
+              <StickyNote className="w-6 h-6 text-purple-600 dark:text-purple-400" />
             </div>
             <ChevronRight className="w-5 h-5 text-gray-400 group-hover:text-purple-600 transition-colors" />
           </div>
-          <h3 className="text-lg font-semibold text-gray-900 mb-1">
+          <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-300 mb-1">
             Generate Study Notes
           </h3>
-          <p className="text-sm text-gray-600">
+          <p className="text-sm text-gray-600 dark:text-gray-400">
             Create AI-powered study notes from your document
           </p>
         </button>

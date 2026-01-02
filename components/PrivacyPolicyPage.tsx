@@ -34,7 +34,7 @@ export default function PrivacyPolicyPage() {
             initial={{ scale: 0 }}
             animate={{ scale: 1 }}
             transition={{ duration: 0.5, delay: 0.2 }}
-            className="inline-flex items-center justify-center w-20 h-20 bg-linear-to-br from-blue-500 to-cyan-500 rounded-full mb-6 shadow-xl shadow-blue-500/30"
+            className="inline-flex items-center justify-center w-20 h-20 bg-linear-to-br from-blue-600 to-cyan-500 rounded-full mb-6 shadow-xl shadow-blue-500/30"
           >
             <Shield className="w-10 h-10 text-white" />
           </motion.div>

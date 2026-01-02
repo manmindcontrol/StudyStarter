@@ -108,18 +108,18 @@ export default function GenerateQuestionsButton({
           type="button"
           onClick={() => setIsModalOpen(true)}
           disabled={isGenerating}
-          className="relative w-full bg-white hover:bg-green-50 border border-gray-200 rounded-xl p-6 transition-all group text-left shadow-sm disabled:opacity-50 disabled:cursor-not-allowed overflow-hidden cursor-pointer"
+          className="relative w-full bg-white hover:bg-green-50 dark:bg-slate-800 dark:hover:bg-green-800/20 border border-gray-200 dark:border-slate-700 rounded-xl p-6 transition-all group text-left shadow-sm disabled:opacity-50 disabled:cursor-not-allowed overflow-hidden cursor-pointer"
         >
           <div className="flex items-center justify-between mb-3">
-            <div className="bg-green-100 p-3 rounded-lg">
-              <FileQuestion className="w-6 h-6 text-green-600" />
+            <div className="bg-green-100 dark:bg-green-900 p-3 rounded-lg">
+              <FileQuestion className="w-6 h-6 text-green-600 dark:text-green-400" />
             </div>
             <ChevronRight className="w-5 h-5 text-gray-400 group-hover:text-green-600 transition-colors" />
           </div>
-          <h3 className="text-lg font-semibold text-gray-900 mb-1">
+          <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-300 mb-1">
             Generate Exam Questions
           </h3>
-          <p className="text-sm text-gray-600">
+          <p className="text-sm text-gray-600 dark:text-gray-400">
             Create practice questions and tests from your material
           </p>
         </button>

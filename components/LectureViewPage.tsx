@@ -116,7 +116,7 @@ export default function LectureViewPage({ lectureId }: Props) {
   }
 
   return (
-    <div className="min-h-screen bg-linear-to-br from-purple-50 via-gray-100 to-pink-50">
+    <div className="min-h-screen bg-linear-to-br from-purple-50 via-gray-100 to-pink-50 dark:from-slate-900 dark:via-slate-800 dark:to-slate-900">
       {/* Header */}
 
       {/* Content */}
@@ -124,7 +124,7 @@ export default function LectureViewPage({ lectureId }: Props) {
         <div className="max-w-7xl mx-auto">
           <button
             onClick={() => router.push("/dashboard")}
-            className="mb-4 flex items-center space-x-2 text-gray-600 hover:text-gray-900 transition-colors group"
+            className="mb-4 flex items-center space-x-2 text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-200 transition-colors group"
           >
             <ArrowLeft className="w-5 h-5 group-hover:-translate-x-1 transition-transform" />
             <span className="font-medium">Back to Dashboard</span>
@@ -183,60 +183,74 @@ export default function LectureViewPage({ lectureId }: Props) {
 
             {/* Right Column - Statistics */}
             <div className="space-y-4">
-              <div className="bg-white border border-gray-200 rounded-xl p-6 shadow-sm">
-                <h3 className="text-lg font-semibold text-gray-900 mb-4">
+              <div className="bg-white border dark:bg-slate-800 border-gray-200 dark:border-gray-700 rounded-xl p-6 shadow-sm">
+                <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-200 mb-4">
                   Statistics
                 </h3>
 
                 <div className="space-y-4">
                   {/* Tests Created */}
-                  <div className="flex items-center justify-between p-3 bg-blue-50 rounded-lg">
+                  <div className="flex items-center justify-between p-3 bg-blue-50 dark:bg-blue-900/20 rounded-lg">
                     <div className="flex items-center space-x-3">
-                      <div className="bg-blue-100 p-2 rounded-lg">
-                        <FileQuestion className="w-5 h-5 text-blue-600" />
+                      <div className="bg-blue-100 dark:bg-blue-900/20 p-2 rounded-lg">
+                        <FileQuestion className="w-5 h-5 text-blue-600 dark:text-blue-400" />
                       </div>
                       <div>
-                        <p className="text-sm text-gray-600">Tests Created</p>
-                        <p className="text-2xl font-bold text-gray-900">0</p>
+                        <p className="text-sm text-gray-600 dark:text-gray-400">
+                          Tests Created
+                        </p>
+                        <p className="text-2xl font-bold text-gray-900 dark:text-gray-200">
+                          0
+                        </p>
                       </div>
                     </div>
                   </div>
 
                   {/* Questions Generated */}
-                  <div className="flex items-center justify-between p-3 bg-green-50 rounded-lg">
+                  <div className="flex items-center justify-between p-3 bg-green-50 dark:bg-green-900/20 rounded-lg">
                     <div className="flex items-center space-x-3">
-                      <div className="bg-green-100 p-2 rounded-lg">
-                        <FileQuestion className="w-5 h-5 text-green-600" />
+                      <div className="bg-green-100 dark:bg-green-900/20 p-2 rounded-lg">
+                        <FileQuestion className="w-5 h-5 text-green-600 dark:text-green-400" />
                       </div>
                       <div>
-                        <p className="text-sm text-gray-600">Questions</p>
-                        <p className="text-2xl font-bold text-gray-900">0</p>
+                        <p className="text-sm text-gray-600 dark:text-gray-400">
+                          Questions
+                        </p>
+                        <p className="text-2xl font-bold text-gray-900 dark:text-gray-200">
+                          0
+                        </p>
                       </div>
                     </div>
                   </div>
 
                   {/* Notes Generated */}
-                  <div className="flex items-center justify-between p-3 bg-purple-50 rounded-lg">
+                  <div className="flex items-center justify-between p-3 bg-purple-50 dark:bg-purple-900/20 rounded-lg">
                     <div className="flex items-center space-x-3">
-                      <div className="bg-purple-100 p-2 rounded-lg">
-                        <StickyNote className="w-5 h-5 text-purple-600" />
+                      <div className="bg-purple-100 dark:bg-purple-900/20 p-2 rounded-lg">
+                        <StickyNote className="w-5 h-5 text-purple-600 dark:text-purple-400" />
                       </div>
                       <div>
-                        <p className="text-sm text-gray-600">Notes</p>
-                        <p className="text-2xl font-bold text-gray-900">0</p>
+                        <p className="text-sm text-gray-600 dark:text-gray-400">
+                          Notes
+                        </p>
+                        <p className="text-2xl font-bold text-gray-900 dark:text-gray-200">
+                          0
+                        </p>
                       </div>
                     </div>
                   </div>
 
                   {/* Duration */}
-                  <div className="flex items-center justify-between p-3 bg-orange-50 rounded-lg">
+                  <div className="flex items-center justify-between p-3 bg-orange-50 dark:bg-orange-900/20 rounded-lg">
                     <div className="flex items-center space-x-3">
-                      <div className="bg-orange-100 p-2 rounded-lg">
-                        <Clock className="w-5 h-5 text-orange-600" />
+                      <div className="bg-orange-100 dark:bg-orange-900/20 p-2 rounded-lg">
+                        <Clock className="w-5 h-5 text-orange-600 dark:text-orange-400" />
                       </div>
                       <div>
-                        <p className="text-sm text-gray-600">Duration</p>
-                        <p className="text-2xl font-bold text-gray-900">
+                        <p className="text-sm text-gray-600 dark:text-gray-400">
+                          Duration
+                        </p>
+                        <p className="text-2xl font-bold text-gray-900 dark:text-gray-200">
                           {formatDuration(lecture.duration)}
                         </p>
                       </div>
@@ -246,20 +260,24 @@ export default function LectureViewPage({ lectureId }: Props) {
               </div>
 
               {/* Lecture Info */}
-              <div className="bg-white border border-gray-200 rounded-xl p-6 shadow-sm">
-                <h3 className="text-lg font-semibold text-gray-900 mb-4">
+              <div className="bg-white border dark:bg-slate-800 border-gray-200 dark:border-gray-700 rounded-xl p-6 shadow-sm">
+                <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-200 mb-4">
                   Lecture Info
                 </h3>
                 <div className="space-y-3">
                   <div>
-                    <p className="text-xs text-gray-500 mb-1">Words</p>
-                    <p className="text-sm font-medium text-gray-900">
+                    <p className="text-xs text-gray-500 dark:text-gray-400 mb-1">
+                      Words
+                    </p>
+                    <p className="text-sm font-medium text-gray-900 dark:text-gray-200">
                       {lecture.transcript.split(" ").length} words
                     </p>
                   </div>
                   <div>
-                    <p className="text-xs text-gray-500 mb-1">Recorded</p>
-                    <p className="text-sm font-medium text-gray-900">
+                    <p className="text-xs text-gray-500 dark:text-gray-400 mb-1">
+                      Recorded
+                    </p>
+                    <p className="text-sm font-medium text-gray-900 dark:text-gray-200">
                       {formatDate(lecture.created_at)}
                     </p>
                   </div>

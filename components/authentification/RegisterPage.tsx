@@ -185,7 +185,7 @@ export default function RegisterPage() {
           >
             <motion.div
               whileHover={{ scale: 1.05, rotate: -5 }}
-              className="bg-linear-to-br from-purple-400 to-blue-400 text-white w-14 h-14 rounded-xl flex items-center justify-center shadow-2xl shadow-purple-500/50"
+              className="bg-linear-to-br from-blue-600 to-sky-500 text-white w-14 h-14 rounded-xl flex items-center justify-center shadow-2xl shadow-purple-500/50"
             >
               <BookOpen className="w-8 h-8" />
             </motion.div>
@@ -340,7 +340,7 @@ export default function RegisterPage() {
                 type="button"
                 onClick={handleGoogleSignIn}
                 disabled={loading}
-                className="w-full bg-white border-2 border-gray-300 hover:border-gray-400 hover:scale-105 text-gray-700 font-semibold py-3 px-4 rounded-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center space-x-3"
+                className="w-full bg-white border-2 border-gray-300 hover:border-gray-400 hover:scale-105 text-gray-700 font-semibold py-3 px-4 rounded-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center space-x-3 cursor-pointer"
               >
                 <svg className="w-5 h-5" viewBox="0 0 24 24">
                   <path
@@ -379,7 +379,7 @@ export default function RegisterPage() {
               whileTap={{ scale: 0.98 }}
               type="submit"
               disabled={loading || success}
-              className="w-full bg-linear-to-r from-purple-500 to-blue-500 hover:from-purple-600 hover:to-blue-600 text-white font-bold py-3 px-4 rounded-lg transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center shadow-lg shadow-purple-500/30"
+              className="w-full cursor-pointer bg-linear-to-r from-blue-600 to-sky-500 hover:from-blue-700 hover:to-sky-600 text-white font-bold py-3 px-4 rounded-lg transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center shadow-lg shadow-purple-500/30"
             >
               {loading ? (
                 <>

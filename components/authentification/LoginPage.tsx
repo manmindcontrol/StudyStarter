@@ -50,7 +50,11 @@ export default function LoginPage() {
     setLoading(true);
     setError("");
 
-    const { user, error } = await signIn(formData.email, formData.password, rememberMe);
+    const { user, error } = await signIn(
+      formData.email,
+      formData.password,
+      rememberMe
+    );
 
     if (error) {
       setError("Incorrect email or password");
@@ -154,7 +158,7 @@ export default function LoginPage() {
           >
             <motion.div
               whileHover={{ scale: 1.05, rotate: 5 }}
-              className="bg-linear-to-br from-blue-400 to-cyan-400 text-white w-14 h-14 rounded-xl flex items-center justify-center shadow-2xl shadow-blue-500/50"
+              className="bg-linear-to-br from-blue-600 to-sky-500 text-white w-14 h-14 rounded-xl flex items-center justify-center shadow-2xl shadow-blue-500/50"
             >
               <BookOpen className="w-8 h-8" />
             </motion.div>
@@ -233,7 +237,7 @@ export default function LoginPage() {
                   required
                   value={formData.password}
                   onChange={handleChange}
-                  className="w-full pl-10 pr-4 py-3 bg-white/10 border border-white/20 rounded-lg focus:ring-2 focus:ring-blue-400 focus:border-transparent transition-all text-white placeholder-blue-300/50 backdrop-blur-sm"
+                  className="w-full pl-10 pr-4 py-3 bg-white/10 border border-white/20 rounded-lg focus:ring-1 focus:ring-blue-400 focus:border-transparent transition-all text-white placeholder-blue-300/50 backdrop-blur-sm"
                   placeholder="••••••••"
                   disabled={loading}
                   autoComplete="current-password"
@@ -266,7 +270,7 @@ export default function LoginPage() {
                 type="button"
                 onClick={handleGoogleSignIn}
                 disabled={loading}
-                className="w-full bg-white border-2 border-gray-300 hover:border-gray-400 text-gray-700 font-semibold py-3 px-4 rounded-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center space-x-3"
+                className="w-full bg-white border-2 border-gray-300 hover:border-gray-400 text-gray-700 font-semibold py-3 px-4 rounded-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center space-x-3 cursor-pointer"
               >
                 <svg className="w-5 h-5" viewBox="0 0 24 24">
                   <path
@@ -304,7 +308,7 @@ export default function LoginPage() {
               whileTap={{ scale: 0.98 }}
               type="submit"
               disabled={loading}
-              className="w-full bg-linear-to-r from-blue-500 to-cyan-500 hover:from-blue-600 hover:to-cyan-600 text-white font-bold py-3 px-4 rounded-lg transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center shadow-lg shadow-blue-500/30"
+              className="w-full bg-linear-to-r from-blue-600 to-sky-500 hover:from-blue-600 hover:to-sky-600 text-white font-bold py-3 px-4 rounded-lg transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center shadow-lg shadow-blue-500/30 cursor-pointer"
             >
               {loading ? (
                 <>

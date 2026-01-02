@@ -23,7 +23,7 @@ export default function CookieSettingsFloatingButton() {
     <>
       <button
         onClick={() => setShowPreferences(true)}
-        className="fixed bottom-6 right-6 z-50 bg-linear-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white p-4 rounded-full shadow-2xl hover:shadow-blue-500/50 transition-all duration-300 hover:scale-110 group"
+        className="fixed bottom-6 right-6 z-50 bg-linear-to-r from-blue-600 to-sky-500 hover:from-blue-700 hover:to-sky-600 text-white p-4 rounded-full shadow-2xl hover:shadow-blue-500/50 transition-all duration-300 hover:scale-110 group"
         aria-label="Cookie Settings"
         title="Manage Cookie Preferences"
       >

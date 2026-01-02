@@ -16,9 +16,9 @@ export default function CookiePolicyPage() {
     <div className="min-h-screen bg-linear-to-br from-slate-900 via-blue-900 to-slate-900 overflow-hidden relative">
       {/* Animated Background */}
       <div className="absolute inset-0 overflow-hidden">
-        <div className="absolute top-0 left-1/4 w-96 h-96 bg-orange-600/20 rounded-full blur-3xl"></div>
+        <div className="absolute top-0 left-1/4 w-96 h-96 bg-blue-600/20 rounded-full blur-3xl"></div>
         <div className="absolute bottom-0 right-1/4 w-80 h-80 bg-amber-600/20 rounded-full blur-3xl"></div>
-        <div className="absolute top-1/2 left-1/2 w-72 h-72 bg-orange-600/10 rounded-full blur-3xl"></div>
+        <div className="absolute top-1/2 left-1/2 w-72 h-72 bg-blue-600/10 rounded-full blur-3xl"></div>
 
         {/* Animated stars */}
         <motion.div
@@ -124,7 +124,7 @@ export default function CookiePolicyPage() {
             initial={{ scale: 0 }}
             animate={{ scale: 1 }}
             transition={{ duration: 0.5, delay: 0.2 }}
-            className="inline-flex items-center justify-center w-20 h-20 bg-linear-to-br from-orange-500 to-amber-500 rounded-full mb-6 shadow-xl shadow-orange-500/30"
+            className="inline-flex items-center justify-center w-20 h-20 bg-linear-to-br from-blue-600 to-cyan-500 rounded-full mb-6 shadow-xl shadow-blue-500/30"
           >
             <Cookie className="w-10 h-10 text-white" />
           </motion.div>
@@ -140,7 +140,7 @@ export default function CookiePolicyPage() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.6, delay: 0.4 }}
-            className="text-orange-200 text-lg"
+            className="text-blue-200 text-lg"
           >
             Last updated:{" "}
             {new Date().toLocaleDateString("en-US", {
@@ -162,7 +162,7 @@ export default function CookiePolicyPage() {
             className="bg-white/95 backdrop-blur-sm rounded-2xl shadow-xl p-6 sm:p-8 border border-white/20 hover:shadow-2xl transition-shadow duration-300"
           >
             <div className="flex items-center gap-3 mb-4">
-              <Info className="w-6 h-6 text-orange-600" />
+              <Info className="w-6 h-6 text-blue-600" />
               <h2 className="text-2xl font-bold text-gray-900">
                 What Are Cookies
               </h2>
@@ -203,7 +203,7 @@ export default function CookiePolicyPage() {
             className="bg-white/95 backdrop-blur-sm rounded-2xl shadow-xl p-6 sm:p-8 border border-white/20 hover:shadow-2xl transition-shadow duration-300"
           >
             <div className="flex items-center gap-3 mb-4">
-              <Settings className="w-6 h-6 text-orange-600" />
+              <Settings className="w-6 h-6 text-blue-600" />
               <h2 className="text-2xl font-bold text-gray-900">
                 Why We Use Cookies
               </h2>
@@ -228,16 +228,16 @@ export default function CookiePolicyPage() {
             className="bg-white/95 backdrop-blur-sm rounded-2xl shadow-xl p-6 sm:p-8 border border-white/20 hover:shadow-2xl transition-shadow duration-300"
           >
             <div className="flex items-center gap-3 mb-4">
-              <Cookie className="w-6 h-6 text-orange-600" />
+              <Cookie className="w-6 h-6 text-blue-600" />
               <h2 className="text-2xl font-bold text-gray-900">
                 Types of Cookies We Use
               </h2>
             </div>
 
             {/* Essential Cookies */}
-            <div className="bg-orange-50 rounded-lg p-6 mb-6 border border-orange-100">
+            <div className="bg-blue-50 rounded-lg p-6 mb-6 border border-blue-100">
               <h3 className="text-xl font-semibold text-gray-800 mb-3 flex items-center gap-2">
-                <Shield className="w-5 h-5 text-orange-600" />
+                <Shield className="w-5 h-5 text-blue-600" />
                 Essential Website Cookies
               </h3>
               <p className="text-gray-700 leading-relaxed mb-3">
@@ -398,7 +398,7 @@ export default function CookiePolicyPage() {
             className="bg-white/95 backdrop-blur-sm rounded-2xl shadow-xl p-6 sm:p-8 border border-white/20 hover:shadow-2xl transition-shadow duration-300"
           >
             <div className="flex items-center gap-3 mb-4">
-              <Shield className="w-6 h-6 text-orange-600" />
+              <Shield className="w-6 h-6 text-blue-600" />
               <h2 className="text-2xl font-bold text-gray-900">
                 Third-Party Cookies
               </h2>
@@ -425,7 +425,7 @@ export default function CookiePolicyPage() {
                   href="https://policies.google.com/privacy"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-sm text-orange-600 hover:text-orange-700 underline"
+                  className="text-sm text-blue-600 hover:text-blue-700 underline"
                 >
                   Google Privacy Policy
                 </a>
@@ -435,15 +435,15 @@ export default function CookiePolicyPage() {
                 <h4 className="font-semibold text-gray-800 mb-2">OpenAI</h4>
                 <p className="text-sm text-gray-600 mb-2">
                   When you use our AI-powered features, your content is
-                  processed by OpenAI&apos;s services. While OpenAI may use cookies
-                  for their service operation, your content is not used to train
-                  their models.
+                  processed by OpenAI&apos;s services. While OpenAI may use
+                  cookies for their service operation, your content is not used
+                  to train their models.
                 </p>
                 <a
                   href="https://openai.com/privacy"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-sm text-orange-600 hover:text-orange-700 underline"
+                  className="text-sm text-blue-600 hover:text-blue-700 underline"
                 >
                   OpenAI Privacy Policy
                 </a>
@@ -460,7 +460,7 @@ export default function CookiePolicyPage() {
                   href="https://supabase.com/privacy"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-sm text-orange-600 hover:text-orange-700 underline"
+                  className="text-sm text-blue-600 hover:text-blue-700 underline"
                 >
                   Supabase Privacy Policy
                 </a>
@@ -477,7 +477,7 @@ export default function CookiePolicyPage() {
             className="bg-white/95 backdrop-blur-sm rounded-2xl shadow-xl p-6 sm:p-8 border border-white/20 hover:shadow-2xl transition-shadow duration-300"
           >
             <div className="flex items-center gap-3 mb-4">
-              <Settings className="w-6 h-6 text-orange-600" />
+              <Settings className="w-6 h-6 text-blue-600" />
               <h2 className="text-2xl font-bold text-gray-900">
                 How to Control Cookies
               </h2>
@@ -498,9 +498,10 @@ export default function CookiePolicyPage() {
               our Application though your access to some functionality and areas
               may be restricted. As the means by which you can refuse cookies
               through your web browser controls vary from browser to browser,
-              you should visit your browser&apos;s help menu for more information.
+              you should visit your browser&apos;s help menu for more
+              information.
             </p>
-            <div className="bg-orange-50 rounded-lg p-6 border border-orange-100">
+            <div className="bg-blue-50 rounded-lg p-6 border border-blue-100">
               <p className="text-sm text-gray-700 mb-3">
                 <strong>Popular browser cookie settings:</strong>
               </p>
@@ -511,7 +512,7 @@ export default function CookiePolicyPage() {
                     href="https://support.google.com/chrome/answer/95647"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-orange-600 hover:text-orange-700 underline"
+                    className="text-blue-600 hover:text-blue-700 underline"
                   >
                     Cookie settings in Chrome
                   </a>
@@ -522,7 +523,7 @@ export default function CookiePolicyPage() {
                     href="https://support.mozilla.org/en-US/kb/cookies-information-websites-store-on-your-computer"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-orange-600 hover:text-orange-700 underline"
+                    className="text-blue-600 hover:text-blue-700 underline"
                   >
                     Cookie settings in Firefox
                   </a>
@@ -533,7 +534,7 @@ export default function CookiePolicyPage() {
                     href="https://support.apple.com/guide/safari/manage-cookies-and-website-data-sfri11471/mac"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-orange-600 hover:text-orange-700 underline"
+                    className="text-blue-600 hover:text-blue-700 underline"
                   >
                     Cookie settings in Safari
                   </a>
@@ -544,7 +545,7 @@ export default function CookiePolicyPage() {
                     href="https://support.microsoft.com/en-us/microsoft-edge/delete-cookies-in-microsoft-edge-63947406-40ac-c3b8-57b9-2a946a29ae09"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-orange-600 hover:text-orange-700 underline"
+                    className="text-blue-600 hover:text-blue-700 underline"
                   >
                     Cookie settings in Edge
                   </a>
@@ -566,7 +567,7 @@ export default function CookiePolicyPage() {
                   href="https://tools.google.com/dlpage/gaoptout"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-orange-600 hover:text-orange-700 underline"
+                  className="text-blue-600 hover:text-blue-700 underline"
                 >
                   Google Analytics Opt-out Browser Add-on
                 </a>
@@ -577,7 +578,7 @@ export default function CookiePolicyPage() {
                   href="https://www.youronlinechoices.com/"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-orange-600 hover:text-orange-700 underline"
+                  className="text-blue-600 hover:text-blue-700 underline"
                 >
                   Your Online Choices
                 </a>{" "}
@@ -586,7 +587,7 @@ export default function CookiePolicyPage() {
                   href="https://www.networkadvertising.org/choices/"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-orange-600 hover:text-orange-700 underline"
+                  className="text-blue-600 hover:text-blue-700 underline"
                 >
                   Network Advertising Initiative
                 </a>
@@ -603,7 +604,7 @@ export default function CookiePolicyPage() {
             className="bg-white/95 backdrop-blur-sm rounded-2xl shadow-xl p-6 sm:p-8 border border-white/20 hover:shadow-2xl transition-shadow duration-300"
           >
             <div className="flex items-center gap-3 mb-4">
-              <Trash2 className="w-6 h-6 text-orange-600" />
+              <Trash2 className="w-6 h-6 text-blue-600" />
               <h2 className="text-2xl font-bold text-gray-900">
                 How to Delete Cookies
               </h2>
@@ -618,9 +619,13 @@ export default function CookiePolicyPage() {
               <li>Look for the privacy or security section</li>
               <li>Find the option to clear browsing data or cookies</li>
               <li>
-                Select the time range (e.g., &quot;All time&quot; to delete all cookies)
+                Select the time range (e.g., &quot;All time&quot; to delete all
+                cookies)
               </li>
-              <li>Make sure &quot;Cookies&quot; or &quot;Cookies and site data&quot; is checked</li>
+              <li>
+                Make sure &quot;Cookies&quot; or &quot;Cookies and site
+                data&quot; is checked
+              </li>
               <li>Click &quot;Clear data&quot; or &quot;Delete&quot;</li>
             </ol>
             <p className="text-gray-700 leading-relaxed mt-4">
@@ -638,21 +643,21 @@ export default function CookiePolicyPage() {
             className="bg-white/95 backdrop-blur-sm rounded-2xl shadow-xl p-6 sm:p-8 border border-white/20 hover:shadow-2xl transition-shadow duration-300"
           >
             <div className="flex items-center gap-3 mb-4">
-              <Shield className="w-6 h-6 text-orange-600" />
+              <Shield className="w-6 h-6 text-blue-600" />
               <h2 className="text-2xl font-bold text-gray-900">
                 Do Not Track Signals
               </h2>
             </div>
             <p className="text-gray-700 leading-relaxed">
-              Some browsers incorporate a &quot;Do Not Track&quot; (DNT) feature that
-              signals to websites you visit that you do not want to have your
-              online activity tracked. Currently, there is no uniform technology
-              standard for recognizing and implementing DNT signals, and as
-              such, we do not currently respond to DNT browser signals or any
-              other mechanism that automatically communicates your choice not to
-              be tracked online. If a standard for online tracking is adopted
-              that we must follow in the future, we will inform you about that
-              practice in a revised version of this Cookie Policy.
+              Some browsers incorporate a &quot;Do Not Track&quot; (DNT) feature
+              that signals to websites you visit that you do not want to have
+              your online activity tracked. Currently, there is no uniform
+              technology standard for recognizing and implementing DNT signals,
+              and as such, we do not currently respond to DNT browser signals or
+              any other mechanism that automatically communicates your choice
+              not to be tracked online. If a standard for online tracking is
+              adopted that we must follow in the future, we will inform you
+              about that practice in a revised version of this Cookie Policy.
             </p>
           </motion.section>
 
@@ -665,7 +670,7 @@ export default function CookiePolicyPage() {
             className="bg-white/95 backdrop-blur-sm rounded-2xl shadow-xl p-6 sm:p-8 border border-white/20 hover:shadow-2xl transition-shadow duration-300"
           >
             <div className="flex items-center gap-3 mb-4">
-              <Info className="w-6 h-6 text-orange-600" />
+              <Info className="w-6 h-6 text-blue-600" />
               <h2 className="text-2xl font-bold text-gray-900">
                 Updates to This Cookie Policy
               </h2>
@@ -689,14 +694,14 @@ export default function CookiePolicyPage() {
             className="bg-white/95 backdrop-blur-sm rounded-2xl shadow-xl p-6 sm:p-8 border border-white/20 hover:shadow-2xl transition-shadow duration-300"
           >
             <div className="flex items-center gap-3 mb-4">
-              <Mail className="w-6 h-6 text-orange-600" />
+              <Mail className="w-6 h-6 text-blue-600" />
               <h2 className="text-2xl font-bold text-gray-900">Contact Us</h2>
             </div>
             <p className="text-gray-700 leading-relaxed mb-4">
               If you have any questions about our use of cookies or this Cookie
               Policy, please contact us:
             </p>
-            <div className="bg-orange-50 rounded-lg p-6 border border-orange-100">
+            <div className="bg-blue-100/50 rounded-lg p-6 border border-gray-100">
               <p className="text-gray-700">
                 <strong>Email:</strong> cookies@studyassistant.com
               </p>

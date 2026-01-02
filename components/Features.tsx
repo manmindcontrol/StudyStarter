@@ -9,14 +9,14 @@ export default function Features() {
       title: "Automatic lecture recording",
       description:
         "Record your lecture in real-time using a microphone. AI automatically transcribes speech to text and creates a clear transcript with editing options.",
-      color: "blue",
+      color: "green",
     },
     {
       icon: FileText,
       title: "Study materials processing",
       description:
         "Upload PDF or Word documents. AI analyzes them and prepares study materials precisely according to your exam questions from the provided materials.",
-      color: "green",
+      color: "blue",
     },
     {
       icon: Brain,
@@ -32,6 +32,7 @@ export default function Features() {
       blue: "bg-blue-100 text-blue-600",
       green: "bg-green-100 text-green-600",
       purple: "bg-purple-100 text-purple-600",
+      orange: "bg-orange-100 text-orange-600",
     };
     return colors[color as keyof typeof colors];
   };

@@ -403,13 +403,13 @@ export default function RecordLecture({ user }: RecordLectureProps) {
   const hasTranscript = fullText.trim().length > 0;
 
   return (
-    <div className="min-h-screen bg-linear-to-br from-blue-50 via-gray-100 to-cyan-50 overflow-hidden">
+    <div className="min-h-screen bg-gray-100 dark:bg-slate-800 overflow-hidden">
       <div className="container-custom py-8">
         {/* Header */}
         <div className="mb-8">
           <button
             onClick={() => router.push("/dashboard")}
-            className="mb-4 flex items-center space-x-2 text-gray-600 hover:text-gray-900 transition-colors group"
+            className="mb-4 flex items-center space-x-2 text-gray-600 hover:text-gray-900 dark:text-gray-300 dark:hover:text-gray-400 transition-colors group cursor-pointer"
           >
             <ArrowLeft className="w-5 h-5 group-hover:-translate-x-1 transition-transform" />
             <span className="font-medium">Back to Dashboard</span>
@@ -432,9 +432,9 @@ export default function RecordLecture({ user }: RecordLectureProps) {
         {/* Main Content - Split Layout */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
           {/* Left Side - Recording Controls */}
-          <div className="bg-white/80 backdrop-blur-sm rounded-2xl shadow-xl border border-white/50 p-8 hover:shadow-2xl transition-shadow">
+          <div className="bg-white/80 dark:bg-slate-700 backdrop-blur-sm rounded-2xl shadow-xl border border-white/50 dark:border-slate-700 p-8 hover:shadow-2xl transition-shadow">
             <div className="flex items-center justify-between mb-8">
-              <h2 className="text-2xl font-bold text-slate-800 flex items-center">
+              <h2 className="text-2xl font-bold text-slate-800 dark:text-gray-200 flex items-center">
                 <div className="w-2 h-8 bg-linear-to-b from-green-500 to-green-600 rounded-full mr-3"></div>
                 Recording Studio
               </h2>
@@ -447,8 +447,8 @@ export default function RecordLecture({ user }: RecordLectureProps) {
             </div>
 
             {/* Timer Display */}
-            <div className="mb-10 text-center bg-linear-to-br from-slate-50 to-slate-100 rounded-2xl p-8 border border-slate-200">
-              <div className="text-4xl md:text-7xl font-bold bg-linear-to-r from-slate-700 to-slate-900 bg-clip-text text-transparent mb-3 font-mono tracking-tight">
+            <div className="mb-10 text-center bg-white dark:bg-slate-500 rounded-2xl p-8 border border-slate-200 dark:border-slate-700">
+              <div className="text-4xl md:text-7xl font-bold bg-linear-to-r from-slate-700 to-slate-900 dark:from-gray-300 dark:to-gray-200 bg-clip-text text-transparent mb-3 font-mono tracking-tight">
                 {formatTime(recordingTime)}
               </div>
               <p className="text-gray-600 font-medium">
@@ -462,7 +462,7 @@ export default function RecordLecture({ user }: RecordLectureProps) {
                 <div className="flex flex-col items-center">
                   <button
                     onClick={startRecording}
-                    className="group relative w-20 h-20 md:w-32 md:h-32 bg-linear-to-br from-green-400 to-emerald-600 hover:from-green-500 hover:to-emeral-700 rounded-full shadow-2xl hover:shadow-3xl transition-all hover:scale-110 flex items-center justify-center mb-4"
+                    className="cursor-pointer group relative w-20 h-20 md:w-32 md:h-32 bg-linear-to-br from-green-400 to-emerald-600 hover:from-green-500 hover:to-emeral-700 rounded-full shadow-2xl hover:shadow-3xl transition-all hover:scale-110 flex items-center justify-center mb-4"
                   >
                     <div className="absolute inset-0 rounded-full bg-white/20 group-hover:animate-ping"></div>
                     <Play
@@ -470,7 +470,7 @@ export default function RecordLecture({ user }: RecordLectureProps) {
                       fill="white"
                     />
                   </button>
-                  <span className="text-slate-800 text-lg font-semibold">
+                  <span className="text-slate-800 dark:text-gray-300 text-lg font-semibold">
                     Start Recording
                   </span>
                 </div>
@@ -486,7 +486,7 @@ export default function RecordLecture({ user }: RecordLectureProps) {
                       fill="white"
                     />
                   </button>
-                  <span className="text-slate-800 text-lg font-semibold">
+                  <span className="text-slate-800 dark:text-gray-300 text-lg font-semibold">
                     Stop Recording
                   </span>
                 </div>
@@ -499,14 +499,14 @@ export default function RecordLecture({ user }: RecordLectureProps) {
                 <button
                   onClick={reformatTranscript}
                   disabled={isProcessing}
-                  className="flex items-center space-x-2 px-6 py-3 bg-blue-50 hover:bg-blue-100 text-blue-600 font-medium rounded-lg transition-colors border border-blue-200 disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="flex items-center space-x-2 px-6 py-3 bg-blue-50 hover:bg-blue-100 text-blue-600 dark:text-blue-300 dark:bg-blue-300/20 dark:hover:bg-blue-600/20 font-medium rounded-lg transition-colors border border-blue-200 dark:border-blue-900/20 disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
                 >
                   <FileText className="w-4 h-4" />
                   <span>Reformat Text</span>
                 </button>
                 <button
                   onClick={discardRecording}
-                  className="flex items-center space-x-2 px-6 py-3 bg-red-50 hover:bg-red-100 text-red-600 font-medium rounded-lg transition-colors border border-red-200"
+                  className="flex items-center space-x-2 px-6 py-3 bg-red-50 hover:bg-red-100 text-red-600 dark:bg-red-900/20 dark:text-red-400 dark:hover:bg-red-600/20 font-medium rounded-lg transition-colors border border-red-200 dark:border-red-900/20 cursor-pointer"
                 >
                   <Trash2 className="w-4 h-4" />
                   <span>Discard Recording</span>
@@ -548,9 +548,9 @@ export default function RecordLecture({ user }: RecordLectureProps) {
           </div>
 
           {/* Right Side - Live Transcription */}
-          <div className="bg-white/80 backdrop-blur-sm rounded-2xl shadow-xl border border-white/50 p-8 hover:shadow-2xl transition-shadow">
+          <div className="bg-white/80 dark:bg-slate-700 backdrop-blur-sm rounded-2xl shadow-xl border border-white/50 dark:border-slate-700 p-8 hover:shadow-2xl transition-shadow">
             <div className="flex items-center justify-between mb-8">
-              <h2 className="text-2xl font-bold text-slate-800 flex items-center">
+              <h2 className="text-2xl font-bold text-slate-800 dark:text-gray-200 flex items-center">
                 <div className="w-2 h-8 bg-linear-to-b from-blue-500 to-cyan-500 rounded-full mr-3"></div>
                 Live Transcription
               </h2>
@@ -563,12 +563,12 @@ export default function RecordLecture({ user }: RecordLectureProps) {
               )}
             </div>
 
-            <div className="bg-linear-to-br from-gray-50 to-blue-50/30 rounded-2xl p-6 min-h-[500px] max-h-[600px] overflow-y-auto border border-gray-200 shadow-inner">
+            <div className="bg-gray-50 dark:bg-slate-500 rounded-2xl p-6 min-h-[500px] max-h-[600px] overflow-y-auto border border-gray-200 dark:border-slate-700 shadow-inner">
               {hasTranscript ? (
                 <div className="space-y-2">
-                  <p className="text-gray-800 text-lg leading-relaxed whitespace-pre-wrap">
+                  <p className="text-gray-800 dark:text-gray-200 text-lg leading-relaxed whitespace-pre-wrap">
                     {finalTranscript}
-                    <span className="text-blue-600 italic font-medium">
+                    <span className="text-blue-600 dark:text-blue-400 italic font-medium">
                       {transcript}
                     </span>
                   </p>
@@ -594,10 +594,10 @@ export default function RecordLecture({ user }: RecordLectureProps) {
 
         {/* Download Section */}
         {!isRecording && hasTranscript && (
-          <div className="bg-white/80 backdrop-blur-sm rounded-2xl shadow-xl border border-white/50 p-8 hover:shadow-2xl transition-shadow">
+          <div className="bg-white/80 dark:bg-slate-700 backdrop-blur-sm rounded-2xl shadow-xl border border-white/50 dark:border-slate-700 p-8 hover:shadow-2xl transition-shadow">
             <div className="flex items-center mb-8">
               <div className="w-2 h-8 bg-linear-to-b from-purple-500 to-pink-600 rounded-full mr-3"></div>
-              <h2 className="text-2xl font-bold text-slate-800">
+              <h2 className="text-2xl font-bold text-slate-800 dark:text-gray-200">
                 Export Your Transcript
               </h2>
             </div>
@@ -606,7 +606,7 @@ export default function RecordLecture({ user }: RecordLectureProps) {
               <button
                 onClick={downloadAsText}
                 disabled={downloadingFormat !== null}
-                className="relative group flex items-center justify-center space-x-3 bg-linear-to-br from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white px-6 py-4 rounded-xl transition-all shadow-lg hover:shadow-xl hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
+                className="relative group flex items-center justify-center space-x-3 bg-linear-to-br from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 dark:bg-blue-900/20 text-white px-6 py-4 rounded-xl transition-all shadow-lg hover:shadow-xl hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
               >
                 {downloadingFormat === "txt" ? (
                   <LoadingSpinner size="sm" />

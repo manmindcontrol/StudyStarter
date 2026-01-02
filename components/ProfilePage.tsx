@@ -11,8 +11,11 @@ import {
   CreditCard,
   CheckCircle,
   XCircle,
+  Moon,
+  Sun,
 } from "lucide-react";
 import type { User as SupabaseUser } from "@supabase/supabase-js";
+import { useTheme } from "@/contexts/ThemeContext";
 
 type UserProfile = {
   id: string;
@@ -20,6 +23,7 @@ type UserProfile = {
   full_name: string | null;
   display_name: string | null;
   created_at: string;
+  dark_mode?: boolean;
 };
 
 export default function ProfilePage() {
@@ -32,6 +36,7 @@ export default function ProfilePage() {
   // Form states
   const [displayName, setDisplayName] = useState("");
   const [fullName, setFullName] = useState("");
+  const { isDarkMode, toggleDarkMode } = useTheme();
   const [currentPassword, setCurrentPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
@@ -167,7 +172,10 @@ export default function ProfilePage() {
 
       if (!response.ok) {
         // Check if it's a wrong password error
-        if (data.error?.includes("incorrect") || data.error?.includes("password")) {
+        if (
+          data.error?.includes("incorrect") ||
+          data.error?.includes("password")
+        ) {
           setCurrentPasswordError(data.error);
         } else {
           setErrorMessage(data.error || "Failed to change password");
@@ -198,7 +206,7 @@ export default function ProfilePage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
+      <div className="min-h-screen flex items-center justify-center bg-linear-to-br from-blue-50 via-gray-100 to-cyan-50">
         <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
       </div>
     );
@@ -207,12 +215,14 @@ export default function ProfilePage() {
   const userPlan = "Free Plan"; // Placeholder - you can add payment plan logic later
 
   return (
-    <div className="min-h-screen bg-linear-to-br from-blue-50 via-gray-100 to-cyan-50 overflow-hidden py-8">
+    <div className="min-h-screen bg-linear-to-br from-blue-50 via-gray-100 to-cyan-50 dark:bg-linear-to-br dark:from-slate-900 dark:via-slate-800 dark:to-slate-900 overflow-hidden py-8">
       <div className="container-custom max-w-4xl">
         {/* Header */}
         <div className="mb-8">
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">My Profile</h1>
-          <p className="text-gray-600">
+          <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">
+            My Profile
+          </h1>
+          <p className="text-gray-600 dark:text-gray-300">
             Manage your personal information and settings
           </p>
         </div>
@@ -239,15 +249,17 @@ export default function ProfilePage() {
           {/* Sidebar */}
           <div className="lg:col-span-1">
             {/* User Info Card */}
-            <div className="bg-white rounded-xl shadow-sm p-6 border border-gray-100 mb-6">
+            <div className="bg-white dark:bg-slate-800 rounded-xl shadow-sm p-6 border border-gray-100 dark:border-slate-700 mb-6">
               <div className="flex flex-col items-center text-center">
                 <div className="bg-linear-to-br from-blue-500 to-cyan-500 w-20 h-20 rounded-full flex items-center justify-center text-white text-2xl font-bold mb-4">
                   {displayName.charAt(0).toUpperCase()}
                 </div>
-                <h3 className="font-semibold text-gray-900 text-lg mb-1">
+                <h3 className="font-semibold text-gray-900 dark:text-white text-lg mb-1">
                   {displayName || fullName || "User"}
                 </h3>
-                <p className="text-sm text-gray-600 mb-4">{user?.email}</p>
+                <p className="text-sm text-gray-600 dark:text-gray-300 mb-4">
+                  {user?.email}
+                </p>
               </div>
             </div>
 
@@ -261,7 +273,7 @@ export default function ProfilePage() {
               <p className="text-blue-100 text-sm mb-4">
                 Unlimited access to basic features
               </p>
-              <button className="w-full bg-white text-blue-600 hover:bg-blue-50 font-semibold py-2 px-4 rounded-lg transition-colors">
+              <button className="w-full bg-white  text-blue-600  hover:bg-blue-50 dark:bg-slate-800 dark:text-gray-300 dark:hover:bg-slate-700 font-semibold py-2 px-4 rounded-lg transition-colors cursor-pointer">
                 Upgrade Plan
               </button>
             </div>
@@ -270,35 +282,35 @@ export default function ProfilePage() {
           {/* Main Content */}
           <div className="lg:col-span-2 space-y-6">
             {/* Profile Information */}
-            <div className="bg-white rounded-xl shadow-sm p-6 border border-gray-100">
+            <div className="bg-white dark:bg-slate-800 rounded-xl shadow-sm p-6 border border-gray-100 dark:border-slate-700">
               <div className="flex items-center space-x-3 mb-6">
-                <User className="w-6 h-6 text-blue-600" />
-                <h2 className="text-xl font-semibold text-gray-900">
+                <User className="w-6 h-6 text-blue-600 dark:text-blue-400" />
+                <h2 className="text-xl font-semibold text-gray-900 dark:text-white">
                   Personal Information
                 </h2>
               </div>
 
               <form onSubmit={handleUpdateProfile} className="space-y-4">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                     Email
                   </label>
                   <div className="relative">
-                    <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+                    <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400 dark:text-gray-500" />
                     <input
                       type="email"
                       value={user?.email || ""}
                       disabled
-                      className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg bg-gray-50 text-gray-600 cursor-not-allowed"
+                      className="w-full pl-10 pr-4 py-2 border border-gray-300 dark:border-slate-600 rounded-lg bg-gray-50 dark:bg-slate-900 text-gray-600 dark:text-gray-400 cursor-not-allowed"
                     />
                   </div>
-                  <p className="text-xs text-gray-500 mt-1">
+                  <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
                     Email cannot be changed
                   </p>
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                     Full Name
                   </label>
                   <input
@@ -306,12 +318,12 @@ export default function ProfilePage() {
                     value={fullName}
                     onChange={(e) => setFullName(e.target.value)}
                     placeholder="Enter your full name"
-                    className="w-full px-4 py-2 border text-gray-900 border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    className="w-full px-4 py-2 border text-gray-900 dark:text-white border-gray-300 dark:border-slate-600 bg-white dark:bg-slate-900 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                     Display Name (how you want to be addressed)
                   </label>
                   <input
@@ -319,11 +331,44 @@ export default function ProfilePage() {
                     value={displayName}
                     onChange={(e) => setDisplayName(e.target.value)}
                     placeholder="e.g. John, Sarah..."
-                    className="w-full px-4 py-2 border text-gray-900 border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    className="w-full px-4 py-2 border text-gray-900 dark:text-white border-gray-300 dark:border-slate-600 bg-white dark:bg-slate-900 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                   />
-                  <p className="text-xs text-gray-500 mt-1">
+                  <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
                     This name will be used in the dashboard greetings
                   </p>
+                </div>
+
+                {/* Dark Mode Toggle */}
+                <div className="border-t border-gray-200 dark:border-slate-600 pt-4">
+                  <div className="flex items-center justify-between">
+                    <div className="flex-1">
+                      <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                        Dark Mode
+                      </label>
+                      <p className="text-xs text-gray-500 dark:text-gray-400">
+                        Switch between light and dark theme for the dashboard
+                      </p>
+                    </div>
+                    <button
+                      type="button"
+                      onClick={toggleDarkMode}
+                      className={`relative inline-flex h-8 w-14 items-center rounded-full transition-colors duration-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 ${
+                        isDarkMode ? "bg-blue-600" : "bg-gray-300"
+                      }`}
+                    >
+                      <span
+                        className={`inline-block h-6 w-6 transform rounded-full bg-white transition-transform duration-300 ${
+                          isDarkMode ? "translate-x-7" : "translate-x-1"
+                        }`}
+                      >
+                        {isDarkMode ? (
+                          <Moon className="w-4 h-4 text-blue-600 m-1" />
+                        ) : (
+                          <Sun className="w-4 h-4 text-gray-400 m-1" />
+                        )}
+                      </span>
+                    </button>
+                  </div>
                 </div>
 
                 <button
@@ -337,17 +382,17 @@ export default function ProfilePage() {
             </div>
 
             {/* Change Password */}
-            <div className="bg-white rounded-xl shadow-sm p-6 border border-gray-100">
+            <div className="bg-white dark:bg-slate-800 rounded-xl shadow-sm p-6 border border-gray-100 dark:border-slate-700">
               <div className="flex items-center space-x-3 mb-6">
-                <Lock className="w-6 h-6 text-blue-600" />
-                <h2 className="text-xl font-semibold text-gray-900">
+                <Lock className="w-6 h-6 text-blue-600 dark:text-blue-400" />
+                <h2 className="text-xl font-semibold text-gray-900 dark:text-white">
                   Change Password
                 </h2>
               </div>
 
               <form onSubmit={handleChangePassword} className="space-y-4">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                     Current Password
                   </label>
                   <input
@@ -358,27 +403,27 @@ export default function ProfilePage() {
                       setCurrentPasswordError(""); // Clear error on change
                     }}
                     placeholder="Enter current password"
-                    className={`w-full px-4 py-2 border text-gray-900 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent ${
+                    className={`w-full px-4 py-2 border text-gray-900 dark:text-white rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent ${
                       currentPasswordError
-                        ? "border-red-300 bg-red-50"
-                        : "border-gray-300"
+                        ? "border-red-300 bg-red-50 dark:border-red-700 dark:bg-red-900/30"
+                        : "border-gray-300 dark:border-slate-600 bg-white dark:bg-slate-900"
                     }`}
                     required
                   />
                   {currentPasswordError ? (
-                    <p className="text-xs text-red-600 mt-1 flex items-center gap-1">
+                    <p className="text-xs text-red-600 dark:text-red-400 mt-1 flex items-center gap-1">
                       <XCircle className="w-3 h-3" />
                       {currentPasswordError}
                     </p>
                   ) : (
-                    <p className="text-xs text-gray-500 mt-1">
+                    <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
                       Required to verify your identity
                     </p>
                   )}
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                     New Password
                   </label>
                   <input
@@ -386,13 +431,13 @@ export default function ProfilePage() {
                     value={newPassword}
                     onChange={(e) => setNewPassword(e.target.value)}
                     placeholder="Enter new password (min. 6 characters)"
-                    className="w-full px-4 py-2 border border-gray-300 text-gray-900 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    className="w-full px-4 py-2 border border-gray-300 dark:border-slate-600 text-gray-900 dark:text-white bg-white dark:bg-slate-900 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                     required
                   />
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                     Confirm New Password
                   </label>
                   <input
@@ -400,7 +445,7 @@ export default function ProfilePage() {
                     value={confirmPassword}
                     onChange={(e) => setConfirmPassword(e.target.value)}
                     placeholder="Enter new password again"
-                    className="w-full px-4 py-2 border border-gray-300 text-gray-900 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    className="w-full px-4 py-2 border border-gray-300 dark:border-slate-600 text-gray-900 dark:text-white bg-white dark:bg-slate-900 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                     required
                   />
                 </div>
@@ -408,7 +453,10 @@ export default function ProfilePage() {
                 <button
                   type="submit"
                   disabled={
-                    saving || !currentPassword || !newPassword || !confirmPassword
+                    saving ||
+                    !currentPassword ||
+                    !newPassword ||
+                    !confirmPassword
                   }
                   className="w-full bg-linear-to-r from-blue-600 to-cyan-600 hover:from-blue-700 hover:to-cyan-700 text-white font-semibold py-3 px-6 rounded-lg transition-all duration-300 shadow-lg shadow-blue-500/30 hover:shadow-xl hover:shadow-blue-500/40 disabled:opacity-50 disabled:cursor-not-allowed"
                 >

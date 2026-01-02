@@ -95,12 +95,12 @@ export default function LandingPage() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.5 }}
               whileHover={{ scale: 1.05, y: -5 }}
-              className="group flex flex-col items-center p-6 rounded-2xl hover:bg-white transition-all duration-300 hover:shadow-xl"
+              className="group flex flex-col items-center p-6 rounded-2xl "
             >
-              <div className="bg-linear-to-br from-blue-100 to-blue-200 p-5 rounded-2xl mb-4 shadow-lg shadow-blue-500/20 group-hover:shadow-xl group-hover:shadow-blue-500/30 transition-all duration-300">
+              <div className="bg-linear-to-br from-blue-100 to-blue-200 p-5 rounded-2xl mb-4 shadow-lg shadow-blue-500/20 ">
                 <Mic className="w-8 h-8 text-blue-600" />
               </div>
-              <span className="text-sm font-semibold text-gray-700 group-hover:text-blue-600 transition-colors">
+              <span className="text-sm font-semibold text-gray-700 ">
                 Lecture recording
               </span>
             </motion.div>
@@ -110,12 +110,12 @@ export default function LandingPage() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.6 }}
               whileHover={{ scale: 1.05, y: -5 }}
-              className="group flex flex-col items-center p-6 rounded-2xl hover:bg-white transition-all duration-300 hover:shadow-xl"
+              className="group flex flex-col items-center p-6 rounded-2xl "
             >
-              <div className="bg-linear-to-br from-green-100 to-green-200 p-5 rounded-2xl mb-4 shadow-lg shadow-green-500/20 group-hover:shadow-xl group-hover:shadow-green-500/30 transition-all duration-300">
+              <div className="bg-linear-to-br from-green-100 to-green-200 p-5 rounded-2xl mb-4 shadow-lg shadow-green-500/20 ">
                 <FileText className="w-8 h-8 text-green-600" />
               </div>
-              <span className="text-sm font-semibold text-gray-700 group-hover:text-green-600 transition-colors">
+              <span className="text-sm font-semibold text-gray-700 ">
                 Material analysis
               </span>
             </motion.div>
@@ -125,12 +125,12 @@ export default function LandingPage() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.7 }}
               whileHover={{ scale: 1.05, y: -5 }}
-              className="group flex flex-col items-center p-6 rounded-2xl hover:bg-white transition-all duration-300 hover:shadow-xl"
+              className="group flex flex-col items-center p-6 rounded-2xl "
             >
-              <div className="bg-linear-to-br from-purple-100 to-purple-200 p-5 rounded-2xl mb-4 shadow-lg shadow-purple-500/20 group-hover:shadow-xl group-hover:shadow-purple-500/30 transition-all duration-300">
+              <div className="bg-linear-to-br from-purple-100 to-purple-200 p-5 rounded-2xl mb-4 shadow-lg shadow-purple-500/20 ">
                 <Brain className="w-8 h-8 text-purple-600" />
               </div>
-              <span className="text-sm font-semibold text-gray-700 group-hover:text-purple-600 transition-colors">
+              <span className="text-sm font-semibold text-gray-700 ">
                 AI study guide
               </span>
             </motion.div>
@@ -140,12 +140,12 @@ export default function LandingPage() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.8 }}
               whileHover={{ scale: 1.05, y: -5 }}
-              className="group flex flex-col items-center p-6 rounded-2xl hover:bg-white transition-all duration-300 hover:shadow-xl"
+              className="group flex flex-col items-center p-6 rounded-2xl "
             >
-              <div className="bg-linear-to-br from-orange-100 to-orange-200 p-5 rounded-2xl mb-4 shadow-lg shadow-orange-500/20 group-hover:shadow-xl group-hover:shadow-orange-500/30 transition-all duration-300">
+              <div className="bg-linear-to-br from-orange-100 to-orange-200 p-5 rounded-2xl mb-4 shadow-lg shadow-orange-500/20 ">
                 <BookOpen className="w-8 h-8 text-orange-600" />
               </div>
-              <span className="text-sm font-semibold text-gray-700 group-hover:text-orange-600 transition-colors">
+              <span className="text-sm font-semibold text-gray-700 ">
                 Test questions
               </span>
             </motion.div>

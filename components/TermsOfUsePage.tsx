@@ -17,8 +17,8 @@ export default function TermsOfUsePage() {
     <div className="min-h-screen bg-linear-to-br from-slate-900 via-blue-900 to-slate-900 overflow-hidden relative">
       {/* Animated Background */}
       <div className="absolute inset-0 overflow-hidden">
-        <div className="absolute top-0 left-1/4 w-96 h-96 bg-purple-600/20 rounded-full blur-3xl"></div>
-        <div className="absolute bottom-0 right-1/4 w-80 h-80 bg-pink-600/20 rounded-full blur-3xl"></div>
+        <div className="absolute top-0 left-1/4 w-96 h-96 bg-blue-600/20 rounded-full blur-3xl"></div>
+        <div className="absolute bottom-0 right-1/4 w-80 h-80 bg-sky-500/20 rounded-full blur-3xl"></div>
         <div className="absolute top-1/2 left-1/2 w-72 h-72 bg-blue-600/10 rounded-full blur-3xl"></div>
       </div>
 
@@ -34,7 +34,7 @@ export default function TermsOfUsePage() {
             initial={{ scale: 0 }}
             animate={{ scale: 1 }}
             transition={{ duration: 0.5, delay: 0.2 }}
-            className="inline-flex items-center justify-center w-20 h-20 bg-linear-to-br from-purple-500 to-pink-500 rounded-full mb-6 shadow-xl shadow-purple-500/30"
+            className="inline-flex items-center justify-center w-20 h-20 bg-linear-to-br from-blue-600 to-cyan-500 rounded-full mb-6 shadow-xl shadow-blue-500/30"
           >
             <Scale className="w-10 h-10 text-white" />
           </motion.div>
@@ -50,7 +50,7 @@ export default function TermsOfUsePage() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.6, delay: 0.4 }}
-            className="text-purple-200 text-lg"
+            className="text-blue-200 text-lg"
           >
             Last updated:{" "}
             {new Date().toLocaleDateString("en-US", {
@@ -72,7 +72,7 @@ export default function TermsOfUsePage() {
             className="bg-white/95 backdrop-blur-sm rounded-2xl shadow-xl p-6 sm:p-8 border border-white/20 hover:shadow-2xl transition-shadow duration-300"
           >
             <div className="flex items-center gap-3 mb-4">
-              <FileText className="w-6 h-6 text-purple-600" />
+              <FileText className="w-6 h-6 text-blue-600" />
               <h2 className="text-2xl font-bold text-gray-900">
                 Agreement to Terms
               </h2>
@@ -113,7 +113,7 @@ export default function TermsOfUsePage() {
             className="bg-white/95 backdrop-blur-sm rounded-2xl shadow-xl p-6 sm:p-8 border border-white/20 hover:shadow-2xl transition-shadow duration-300"
           >
             <div className="flex items-center gap-3 mb-4">
-              <Shield className="w-6 h-6 text-purple-600" />
+              <Shield className="w-6 h-6 text-blue-600" />
               <h2 className="text-2xl font-bold text-gray-900">
                 Intellectual Property Rights
               </h2>
@@ -158,7 +158,7 @@ export default function TermsOfUsePage() {
             className="bg-white/95 backdrop-blur-sm rounded-2xl shadow-xl p-6 sm:p-8 border border-white/20 hover:shadow-2xl transition-shadow duration-300"
           >
             <div className="flex items-center gap-3 mb-4">
-              <UserCheck className="w-6 h-6 text-purple-600" />
+              <UserCheck className="w-6 h-6 text-blue-600" />
               <h2 className="text-2xl font-bold text-gray-900">
                 User Representations
               </h2>
@@ -222,14 +222,14 @@ export default function TermsOfUsePage() {
             className="bg-white/95 backdrop-blur-sm rounded-2xl shadow-xl p-6 sm:p-8 border border-white/20 hover:shadow-2xl transition-shadow duration-300"
           >
             <div className="flex items-center gap-3 mb-4">
-              <Mail className="w-6 h-6 text-purple-600" />
+              <Mail className="w-6 h-6 text-blue-600" />
               <h2 className="text-2xl font-bold text-gray-900">Contact Us</h2>
             </div>
             <p className="text-gray-700 leading-relaxed mb-4">
               If you have any questions about these Terms of Use, please contact
               us:
             </p>
-            <div className="bg-purple-50 rounded-lg p-6 border border-purple-100">
+            <div className="bg-blue-50 rounded-lg p-6 border border-blue-100">
               <p className="text-gray-700">
                 <strong>Email:</strong> legal@studyassistant.com
               </p>

@@ -110,7 +110,7 @@ export default function FileUpload({
   };
 
   return (
-    <div className="w-full">
+    <div className="w-full dark:bg-slate-700">
       {/* Drag & Drop zone */}
       <div
         onDragOver={handleDragOver}
@@ -121,7 +121,7 @@ export default function FileUpload({
           ${
             isDragging
               ? "border-blue-500 bg-blue-50"
-              : "border-gray-300 bg-gray-50/10 hover:border-gray-400"
+              : "border-gray-300 bg-gray-50/10 hover:border-gray-400 dark:bg-slate-700"
           }
         `}
       >
@@ -142,15 +142,15 @@ export default function FileUpload({
           `}
           />
 
-          <p className="text-lg font-semibold text-gray-900 mb-2">
+          <p className="text-lg font-semibold text-gray-900 dark:text-gray-300 mb-2">
             {isDragging ? "Drop file here" : "Upload Material"}
           </p>
 
-          <p className="text-sm text-gray-600 mb-4">
+          <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">
             Drag file here or click to upload
           </p>
 
-          <p className="text-xs text-gray-500">
+          <p className="text-xs text-gray-500 dark:text-gray-400  ">
             Supported: PDF, Word, TXT (max {maxSizeMB}MB)
           </p>
         </label>

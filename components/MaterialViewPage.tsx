@@ -18,6 +18,7 @@ import GenerateNotesButton from "@/components/buttons/GenerateNotesButton";
 import DeleteButton from "@/components/buttons/DeleteButton";
 import OpenDocumentButton from "@/components/buttons/OpenDocumentButton";
 import ConfirmDeleteModal from "@/components/modals/ConfirmDeleteModal";
+import { useTheme } from "@/contexts/ThemeContext";
 
 type Material = {
   id: string;
@@ -27,6 +28,7 @@ type Material = {
   file_type: string | null;
   storage_path: string | null;
   created_at: string;
+  dark_mode?: boolean;
 };
 
 type GeneratedQuestion = {
@@ -159,7 +161,7 @@ export default function MaterialViewPage({ materialId }: Props) {
       minute: "2-digit",
     });
   };
-
+  const { isDarkMode, toggleDarkMode } = useTheme();
   const handleDeleteConfirm = async () => {
     setIsDeleting(true);
     try {
@@ -254,7 +256,7 @@ export default function MaterialViewPage({ materialId }: Props) {
   }
 
   return (
-    <div className="min-h-screen bg-linear-to-br from-blue-50 via-gray-100 to-cyan-50 overflow-hidden">
+    <div className="min-h-screen bg-linear-to-br from-blue-50 via-gray-100 to-cyan-50 dark:bg-linear-to-br dark:from-slate-900 dark:via-slate-800 dark:to-slate-900 overflow-hidden">
       {/* Header */}
 
       {/* Content */}
@@ -262,13 +264,13 @@ export default function MaterialViewPage({ materialId }: Props) {
         <div className="max-w-7xl mx-auto">
           <button
             onClick={() => router.push("/dashboard")}
-            className="mb-4 flex items-center space-x-2 text-gray-600 hover:text-gray-900 transition-colors group"
+            className="mb-4 flex items-center space-x-2 text-gray-600 hover:text-gray-900 dark:text-gray-300 dark:hover:text-gray-500 transition-colors group cursor-pointer"
           >
             <ArrowLeft className="w-5 h-5 group-hover:-translate-x-1 transition-transform" />
             <span className="font-medium">Back to Dashboard</span>
           </button>
           {/* Document Info Card */}
-          <div className="bg-linear-to-r from-blue-600 to-cyan-500 rounded-2xl p-3 mb-3 md:p-8 md:mb-8 shadow-sm">
+          <div className="bg-linear-to-r from-blue-600 to-cyan-500 dark:bg-linear-to-r dark:from-blue-700 dark:to-cyan-600 rounded-2xl p-3 mb-3 md:p-8 md:mb-8 shadow-sm">
             <div className="flex items-start space-x-2 md:space-x-5">
               <div className="bg-white/20 backdrop-blur-sm p-4 rounded-xl">
                 <FileText className="w-5 h-5 md:w-8 md:h-8 text-white" />
@@ -309,10 +311,10 @@ export default function MaterialViewPage({ materialId }: Props) {
 
               {/* Saved Question Sets */}
               {questionSets.length > 0 && (
-                <div className="bg-white border border-gray-200 rounded-xl p-6 shadow-sm ">
+                <div className="bg-white border dark:bg-slate-800   border-gray-200 dark:border-slate-700 rounded-xl p-6 shadow-sm ">
                   <div className="flex items-center justify-between mb-4 ">
-                    <h3 className="text-lg font-semibold text-gray-900 flex items-center">
-                      <FileQuestion className="w-5 h-5 mr-2 text-green-600" />
+                    <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-300 flex items-center">
+                      <FileQuestion className="w-5 h-5 mr-2 text-green-600 dark:text-green-400" />
                       Saved Question Sets ({questionSets.length})
                     </h3>
                     <button
@@ -324,7 +326,7 @@ export default function MaterialViewPage({ materialId }: Props) {
                           message: `Are you sure you want to delete all ${questionSets.length} question sets? This action cannot be undone.`,
                         })
                       }
-                      className="text-sm text-red-600 hover:text-red-700 font-medium flex items-center gap-1 cursor-pointer"
+                      className="text-sm text-red-600 hover:text-red-700 dark:text-red-400 dark:hover:text-red-500 font-medium flex items-center gap-1 cursor-pointer"
                     >
                       <Trash2 className="w-4 h-4" />
                       Delete All
@@ -339,21 +341,21 @@ export default function MaterialViewPage({ materialId }: Props) {
                               `/materials/${materialId}/questions/${set.id}`
                             )
                           }
-                          className="flex-1 text-left p-4 bg-green-50 hover:bg-green-100 rounded-lg transition-colors border border-green-200 hover:border-green-300"
+                          className="flex-1 text-left p-4 bg-green-50 hover:bg-green-100 dark:bg-green-900/20 dark:hover:bg-green-800/30 rounded-lg transition-colors border border-green-200 hover:border-green-300 dark:border-none"
                         >
                           <div className="flex items-center justify-between cursor-pointer ">
                             <div>
-                              <p className="font-medium text-gray-900">
+                              <p className="font-medium text-gray-900 dark:text-gray-300">
                                 {set.question_type.charAt(0).toUpperCase() +
                                   set.question_type.slice(1)}{" "}
                                 Questions
                               </p>
-                              <p className="text-sm text-gray-600">
+                              <p className="text-sm text-gray-600 dark:text-gray-400">
                                 {set.questions.length} questions •{" "}
                                 {formatDate(set.created_at)}
                               </p>
                             </div>
-                            <FileQuestion className="w-5 h-5 text-green-600" />
+                            <FileQuestion className="w-5 h-5 text-green-600 dark:text-green-400" />
                           </div>
                         </button>
                         <button
@@ -367,7 +369,7 @@ export default function MaterialViewPage({ materialId }: Props) {
                               message: `Are you sure you want to delete this ${set.question_type} question set with ${set.questions.length} questions?`,
                             });
                           }}
-                          className="p-3 bg-red-50 hover:bg-red-100 text-red-600 rounded-lg transition-colors shrink-0 cursor-pointer"
+                          className="p-3 bg-red-50 hover:bg-red-100 text-red-600 dark:text-red-400 dark:bg-slate-800 dark:hover:bg-slate-800 dark:hover:text-red-500 rounded-lg transition-colors shrink-0 cursor-pointer"
                           title="Delete question set"
                         >
                           <Trash2 className="w-4 h-4" />
@@ -380,10 +382,10 @@ export default function MaterialViewPage({ materialId }: Props) {
 
               {/* Saved Study Notes */}
               {noteSets.length > 0 && (
-                <div className="bg-white border border-gray-200 rounded-xl p-6 shadow-sm ">
+                <div className="bg-white border border-gray-200 dark:border-slate-700 dark:bg-slate-800 rounded-xl p-6 shadow-sm ">
                   <div className="flex items-center justify-between mb-4 ">
-                    <h3 className="text-lg font-semibold text-gray-900 flex items-center">
-                      <StickyNote className="w-5 h-5 mr-2 text-purple-600" />
+                    <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-300 flex items-center">
+                      <StickyNote className="w-5 h-5 mr-2 text-purple-600 dark:text-purple-400" />
                       Saved Study Notes ({noteSets.length})
                     </h3>
                     <button
@@ -395,7 +397,7 @@ export default function MaterialViewPage({ materialId }: Props) {
                           message: `Are you sure you want to delete all ${noteSets.length} study note sets? This action cannot be undone.`,
                         })
                       }
-                      className="text-sm text-red-600 hover:text-red-700 font-medium flex items-center gap-1 cursor-pointer"
+                      className="text-sm text-red-600 hover:text-red-700 dark:text-red-400 dark:hover:text-red-500 font-medium flex items-center gap-1 cursor-pointer"
                     >
                       <Trash2 className="w-4 h-4" />
                       Delete All
@@ -410,15 +412,15 @@ export default function MaterialViewPage({ materialId }: Props) {
                               `/materials/${materialId}/notes/${note.id}`
                             )
                           }
-                          className="flex-1 text-left p-4 bg-purple-50 hover:bg-purple-100 rounded-lg transition-colors border border-purple-200 hover:border-purple-300"
+                          className="flex-1 text-left p-4 bg-purple-50 hover:bg-purple-100 dark:bg-purple-800/20 dark:hover:bg-purple-800/30 rounded-lg transition-colors border border-purple-200 hover:border-purple-300 dark:border-none  "
                         >
                           <div className="flex items-center justify-between cursor-pointer">
                             <div>
-                              <p className="font-medium text-gray-900 line-clamp-1">
+                              <p className="font-medium text-gray-900 dark:text-gray-300 line-clamp-1">
                                 {note.summary.substring(0, 60)}
                                 {note.summary.length > 60 ? "..." : ""}
                               </p>
-                              <p className="text-sm text-gray-600">
+                              <p className="text-sm text-gray-600 dark:text-gray-400">
                                 {note.key_points.length} key points •{" "}
                                 {note.concepts.length} concepts •{" "}
                                 {formatDate(note.created_at)}
@@ -438,7 +440,7 @@ export default function MaterialViewPage({ materialId }: Props) {
                               message: `Are you sure you want to delete this study note set with ${note.key_points.length} key points and ${note.concepts.length} concepts?`,
                             });
                           }}
-                          className="p-3 bg-red-50 hover:bg-red-100 text-red-600 rounded-lg transition-colors shrink-0 cursor-pointer"
+                          className="p-3 bg-red-50 hover:bg-red-100 text-red-600 dark:text-red-400 dark:bg-slate-800 dark:hover:bg-slate-800 dark:hover:text-red-500 rounded-lg transition-colors shrink-0 cursor-pointer"
                           title="Delete note set"
                         >
                           <Trash2 className="w-4 h-4" />
@@ -459,21 +461,23 @@ export default function MaterialViewPage({ materialId }: Props) {
 
             {/* Right Column - Statistics */}
             <div className="space-y-4">
-              <div className="bg-white border border-gray-200 rounded-xl p-6 shadow-sm">
-                <h3 className="text-lg font-semibold text-gray-900 mb-4">
+              <div className="bg-white border border-gray-200 dark:bg-slate-800  dark:border-slate-700 rounded-xl p-6 shadow-sm">
+                <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-300 mb-4">
                   Statistics
                 </h3>
 
                 <div className="space-y-4">
                   {/* Questions Generated */}
-                  <div className="flex items-center justify-between p-3 bg-green-50 rounded-lg">
+                  <div className="flex items-center justify-between p-3 bg-green-50 dark:bg-green-900/20 rounded-lg">
                     <div className="flex items-center space-x-3">
-                      <div className="bg-green-100 p-2 rounded-lg">
-                        <FileQuestion className="w-5 h-5 text-green-600" />
+                      <div className="bg-green-100 dark:bg-green-900 p-2 rounded-lg">
+                        <FileQuestion className="w-5 h-5 text-green-600 dark:text-green-400" />
                       </div>
                       <div>
-                        <p className="text-sm text-gray-600">Question Sets</p>
-                        <p className="text-2xl font-bold text-gray-900">
+                        <p className="text-sm text-gray-600 dark:text-gray-400">
+                          Question Sets
+                        </p>
+                        <p className="text-2xl font-bold text-gray-900 dark:text-gray-300">
                           {stats.questionsCount}
                         </p>
                       </div>
@@ -481,14 +485,16 @@ export default function MaterialViewPage({ materialId }: Props) {
                   </div>
 
                   {/* Notes Generated */}
-                  <div className="flex items-center justify-between p-3 bg-purple-50 rounded-lg">
+                  <div className="flex items-center justify-between p-3 bg-purple-50 dark:bg-purple-900/20 rounded-lg">
                     <div className="flex items-center space-x-3">
-                      <div className="bg-purple-100 p-2 rounded-lg">
-                        <StickyNote className="w-5 h-5 text-purple-600" />
+                      <div className="bg-purple-100 dark:bg-purple-900 p-2 rounded-lg">
+                        <StickyNote className="w-5 h-5 text-purple-600 dark:text-purple-400" />
                       </div>
                       <div>
-                        <p className="text-sm text-gray-600">Study Notes</p>
-                        <p className="text-2xl font-bold text-gray-900">
+                        <p className="text-sm text-gray-600 dark:text-gray-400">
+                          Study Notes
+                        </p>
+                        <p className="text-2xl font-bold text-gray-900 dark:text-gray-300">
                           {stats.notesCount}
                         </p>
                       </div>
@@ -498,20 +504,20 @@ export default function MaterialViewPage({ materialId }: Props) {
               </div>
 
               {/* File Info */}
-              <div className="bg-white border border-gray-200 rounded-xl p-6 shadow-sm">
-                <h3 className="text-lg font-semibold text-gray-900 mb-4">
+              <div className="bg-white border border-gray-200 dark:bg-slate-800 dark:border-slate-700 rounded-xl p-6 shadow-sm">
+                <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-300 mb-4">
                   File Info
                 </h3>
                 <div className="space-y-3">
                   <div>
                     <p className="text-xs text-gray-500 mb-1">File Type</p>
-                    <p className="text-sm font-medium text-gray-900">
+                    <p className="text-sm font-medium text-gray-900 dark:text-gray-300">
                       {material.file_type || "Unknown"}
                     </p>
                   </div>
                   <div>
                     <p className="text-xs text-gray-500 mb-1">Uploaded</p>
-                    <p className="text-sm font-medium text-gray-900">
+                    <p className="text-sm font-medium text-gray-900 dark:text-gray-300">
                       {formatDate(material.created_at)}
                     </p>
                   </div>

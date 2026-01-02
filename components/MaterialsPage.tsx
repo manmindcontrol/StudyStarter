@@ -148,11 +148,11 @@ export default function MaterialsPage() {
   }
 
   return (
-    <div className="min-h-screen  bg-linear-to-br from-blue-50 via-gray-100 to-cyan-50">
+    <div className="min-h-screen bg-gray-100 dark:bg-slate-800">
       <div className="container-custom py-12">
         <button
           onClick={() => router.push("/dashboard")}
-          className="mb-4 flex items-center space-x-2 text-gray-600 hover:text-gray-900 transition-colors group"
+          className="mb-4 flex items-center space-x-2 text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-200 transition-colors group cursor-pointer"
         >
           <ArrowLeft className="w-5 h-5 group-hover:-translate-x-1 transition-transform" />
           <span className="font-medium">Back to Dashboard</span>
@@ -174,7 +174,7 @@ export default function MaterialsPage() {
         </div>
 
         {/* Upload section - highlighted card */}
-        <div className="mb-10 bg-white rounded-2xl shadow-lg p-8 border border-gray-100">
+        <div className="mb-10 bg-white rounded-2xl shadow-lg p-8 border border-gray-100 dark:bg-slate-700 dark:border-gray-700">
           <FileUpload onUpload={handleUpload} />
           {uploading && (
             <div className="mt-4 flex items-center justify-center">
@@ -189,14 +189,14 @@ export default function MaterialsPage() {
         {/* Search */}
         {materials.length > 0 && (
           <div className="mb-8">
-            <div className="relative mx-auto">
+            <div className="relative mx-auto ">
               <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
               <input
                 type="text"
                 placeholder="Search materials by title or filename..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full pl-12 pr-4 py-4 border-2 text-gray-900 border-gray-100 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all shadow-sm bg-white"
+                className="w-full pl-12 pr-4 py-4 border-2 dark:bg-slate-700 text-gray-900 dark:text-gray-300 border-gray-100 dark:border-gray-700 rounded-xl  shadow-sm bg-white"
               />
             </div>
           </div>
@@ -205,9 +205,9 @@ export default function MaterialsPage() {
         {/* Materials list */}
         <div>
           <div className="flex items-center justify-between mb-6">
-            <h2 className="text-2xl font-bold text-gray-900">
+            <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-200">
               My Materials
-              <span className="ml-3 inline-flex items-center justify-center px-3 py-1 text-sm font-medium text-blue-600 bg-blue-100 rounded-full">
+              <span className="ml-3 inline-flex items-center justify-center px-3 py-1 text-sm font-medium text-blue-600 bg-blue-100 dark:bg-blue-900/20 dark:text-blue-400 rounded-full">
                 {filteredMaterials.length}
               </span>
             </h2>
@@ -242,7 +242,7 @@ export default function MaterialsPage() {
               {filteredMaterials.map((material) => (
                 <div
                   key={material.id}
-                  className="bg-white rounded-2xl shadow-md border border-gray-100 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 group overflow-hidden"
+                  className="bg-white dark:bg-slate-700 rounded-2xl shadow-md border border-gray-100 dark:border-gray-700 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 group overflow-hidden"
                 >
                   {/* linear top bar */}
                   <div className="h-2 bg-linear-to-r from-blue-500 to-purple-500"></div>
@@ -251,29 +251,21 @@ export default function MaterialsPage() {
                   <div className="p-6">
                     {/* Icon and file type */}
                     <div className="flex items-start justify-between mb-4 sm:mb-5">
-                      <div className="bg-linear-to-br from-blue-100 to-blue-200 p-3 sm:p-4 rounded-xl text-blue-600 group-hover:from-blue-200 group-hover:to-blue-300 transition-all">
+                      <div className="bg-blue-100 dark:bg-slate-700 p-3 sm:p-4 rounded-xl text-blue-600 dark:text-blue-400 group-hover:from-blue-200 group-hover:to-blue-300 transition-all">
                         {getFileIcon(material.file_type)}
                       </div>
-                      <span className="text-[10px] sm:text-xs font-bold text-blue-600 bg-blue-50 px-2 sm:px-3 py-0.5 sm:py-1 rounded-full uppercase tracking-wide">
+                      <span className="text-[10px] sm:text-xs font-bold text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-900/20 px-2 sm:px-3 py-0.5 sm:py-1 rounded-full uppercase tracking-wide">
                         {material.file_type || "file"}
                       </span>
                     </div>
 
                     {/* Title */}
-                    <h3 className="font-bold text-gray-900 mb-3 line-clamp-2 text-base sm:text-lg leading-tight">
+                    <h3 className="font-bold text-gray-900 dark:text-gray-300 mb-3 line-clamp-2 text-base sm:text-lg leading-tight">
                       {material.title}
                     </h3>
 
-                    {/* File name */}
-                    {material.file_name && (
-                      <p className="text-xs sm:text-sm text-gray-500 mb-3 sm:mb-4 line-clamp-1 flex items-center">
-                        <FileText className="w-3 h-3 sm:w-3.5 sm:h-3.5 mr-1 sm:mr-1.5 shrink-0" />
-                        {material.file_name}
-                      </p>
-                    )}
-
                     {/* Date */}
-                    <div className="flex items-center text-xs sm:text-sm text-gray-500 mb-4 sm:mb-6 pb-4 sm:pb-6 border-b border-gray-100">
+                    <div className="flex items-center text-xs sm:text-sm text-gray-500 dark:text-gray-400 mb-4 sm:mb-6 pb-4 sm:pb-6 border-b border-gray-100">
                       <Clock className="w-3.5 h-3.5 sm:w-4 sm:h-4 mr-1.5 sm:mr-2" />
                       {formatDate(material.created_at)}
                     </div>
@@ -283,14 +275,14 @@ export default function MaterialsPage() {
                       <div className="flex items-center space-x-2">
                         <Link
                           href={`/materials/${material.id}`}
-                          className="flex-1 bg-linear-to-r from-blue-600 to-cyan-500 hover:from-blue-700 hover:to-cyan-600 text-white text-xs sm:text-sm font-bold py-2.5 sm:py-3 px-3 sm:px-4 rounded-xl transition-all shadow-md hover:shadow-lg flex items-center justify-center"
+                          className="flex-1 bg-blue-600 hover:bg-blue-500 dark:bg-slate-800 dark:hover:bg-slate-600 text-white dark:text-gray-300 text-xs sm:text-sm font-bold py-2.5 sm:py-3 px-3 sm:px-4 rounded-xl transition-all shadow-md hover:shadow-lg flex items-center justify-center"
                         >
                           <Eye className="w-3.5 h-3.5 sm:w-4 sm:h-4 mr-1.5 sm:mr-2" />
                           Open Material
                         </Link>
                         <button
                           onClick={() => handleDelete(material.id)}
-                          className="bg-red-50 hover:bg-red-100 text-red-600 p-2.5 sm:p-3 rounded-xl transition-all hover:shadow-md"
+                          className="bg-red-50 hover:bg-red-100 text-red-600 dark:text-red-400 dark:hover:text-red-500 dark:bg-slate-700 dark:hover:bg-slate-700 p-2.5 sm:p-3 rounded-xl transition-all cursor-pointer "
                           title="Delete"
                         >
                           <Trash2 className="w-3.5 h-3.5 sm:w-4 sm:h-4" />

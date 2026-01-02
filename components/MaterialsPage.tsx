@@ -158,7 +158,7 @@ export default function MaterialsPage() {
           <span className="font-medium">Back to Dashboard</span>
         </button>
         {/* Header */}
-        <div className="flex items-center space-x-2 md:space-x-5 bg-linear-to-br from-blue-600 to-cyan-500 p-6 rounded-2xl shadow-md mb-8">
+        <div className="flex items-center space-x-2 md:space-x-5 bg-linear-to-br from-blue-600 to-cyan-500 dark:bg-linear-to-br dark:from-blue-700 dark:to-cyan-700 p-6 rounded-2xl shadow-md mb-8">
           <div className="bg-blue-100  p-2 md:p-4 rounded-xl md:rounded-2xl shadow-lg">
             <Plus className="w-5 h-5 md:w-8 md:h-8 text-blue-500" />
           </div>
@@ -245,7 +245,7 @@ export default function MaterialsPage() {
                   className="bg-white dark:bg-slate-700 rounded-2xl shadow-md border border-gray-100 dark:border-gray-700 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 group overflow-hidden"
                 >
                   {/* linear top bar */}
-                  <div className="h-2 bg-linear-to-r from-blue-500 to-purple-500"></div>
+                  <div className="h-2 bg-linear-to-r from-blue-500 to-cyan-500 dark:bg-linear-to-r dark:from-blue-700/50 dark:to-cyan-700/50"></div>
 
                   {/* Card content */}
                   <div className="p-6">

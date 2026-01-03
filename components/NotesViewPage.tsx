@@ -358,13 +358,13 @@ export default function NotesViewPage({ materialId, noteId }: Props) {
   const getImportanceColor = (importance: string) => {
     switch (importance) {
       case "high":
-        return "bg-red-100 text-red-700 border-red-200";
+        return "bg-red-100 text-red-700 border-red-200 dark:border-red-700/20 dark:bg-red-900/20 dark:text-red-400";
       case "medium":
-        return "bg-yellow-100 text-yellow-700 border-yellow-200";
+        return "bg-yellow-100 text-yellow-700 border-yellow-200 dark:border-yellow-700/20 dark:bg-yellow-900/20 dark:text-yellow-400";
       case "low":
-        return "bg-green-100 text-green-700 border-green-200";
+        return "bg-green-100 text-green-700 border-green-200 dark:border-green-700/20 dark:bg-green-900/20 dark:text-green-400";
       default:
-        return "bg-gray-100 text-gray-700 border-gray-200";
+        return "bg-gray-100 text-gray-700 border-gray-200 dark:border-gray-700/20 dark:bg-gray-900/20 dark:text-gray-400";
     }
   };
 
@@ -425,22 +425,22 @@ export default function NotesViewPage({ materialId, noteId }: Props) {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-linear-to-br from-purple-50 via-white to-blue-50">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-purple-600"></div>
+      <div className="min-h-screen flex items-center justify-center bg-linear-to-br from-purple-50 via-white to-blue-50 dark:bg-linear-to-br dark:from-slate-900 dark:via-slate-800 dark:to-slate-900">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-purple-600 dark:border-purple-400"></div>
       </div>
     );
   }
 
   if (!note || !material) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-linear-to-br from-purple-50 via-white to-blue-50">
+      <div className="min-h-screen flex items-center justify-center bg-linear-to-br from-purple-50 via-white to-blue-50 dark:bg-linear-to-br dark:from-slate-900 dark:via-slate-800 dark:to-slate-900">
         <div className="text-center">
-          <h2 className="text-2xl font-bold text-gray-900 mb-4">
+          <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">
             Notes not found
           </h2>
           <Link
             href={`/materials/${materialId}`}
-            className="text-gray-600 hover:text-gray-900"
+            className="text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white"
           >
             Back to material
           </Link>
@@ -450,27 +450,29 @@ export default function NotesViewPage({ materialId, noteId }: Props) {
   }
 
   return (
-    <div className="min-h-screen bg-linear-to-br from-purple-50 via-white to-blue-50">
+    <div className="min-h-screen bg-linear-to-br from-purple-50 via-white to-blue-50 dark:bg-linear-to-br dark:from-slate-900 dark:via-slate-800 dark:to-slate-900">
       {/* Header */}
-      <div className="bg-white border-b border-gray-200 sticky top-0 z-10 shadow-sm">
+      <div className="bg-white border-b border-gray-200 dark:border-slate-700 dark:bg-slate-800/80 sticky top-0 z-10 shadow-sm">
         <div className="container-custom py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-4">
               <button
                 onClick={() => router.push(`/materials/${materialId}`)}
-                className="p-2  text-gray-600 hover:text-gray-900 group rounded-lg transition-colors shrink-0"
+                className="p-2  text-gray-600 dark:text-gray-300 dark:hover:text-gray-400 hover:text-gray-900 group rounded-lg transition-colors shrink-0"
               >
                 <ArrowLeft className="w-5 h-5 group-hover:-translate-x-1 transition-transform" />
               </button>
               <div className="flex items-center gap-3">
-                <div className="bg-linear-to-br from-purple-100 to-purple-200 p-2 rounded-lg">
-                  <BookOpen className="w-5 h-5 text-purple-600" />
+                <div className="bg-purple-100 dark:bg-purple-900/50 p-2 rounded-lg">
+                  <BookOpen className="w-5 h-5 text-purple-600 dark:text-purple-400" />
                 </div>
                 <div>
-                  <h1 className="text-lg font-bold text-gray-900">
+                  <h1 className="text-lg font-bold text-gray-900 dark:text-gray-300">
                     Study Notes
                   </h1>
-                  <p className="text-sm text-gray-600">{material.title}</p>
+                  <p className="text-sm text-gray-600 dark:text-gray-400  ">
+                    {material.title}
+                  </p>
                 </div>
               </div>
             </div>
@@ -513,36 +515,40 @@ export default function NotesViewPage({ materialId, noteId }: Props) {
           {/* Left Column - Notes Content */}
           <div className="overflow-y-auto pr-4 space-y-6 custom-scrollbar">
             {/* Summary Section */}
-            <div className="bg-white rounded-2xl shadow-lg p-6 border border-gray-100">
+            <div className="bg-white dark:bg-slate-700/70 rounded-2xl shadow-lg p-6 border border-gray-100  dark:border-slate-700">
               <div className="flex items-center gap-3 mb-4">
-                <div className="bg-blue-100 p-2 rounded-lg">
-                  <BookOpen className="w-5 h-5 text-blue-600" />
+                <div className="bg-blue-100 dark:bg-blue-700/20 p-2 rounded-lg">
+                  <BookOpen className="w-5 h-5 text-blue-600 dark:text-blue-400" />
                 </div>
-                <h2 className="text-xl font-bold text-gray-900">Summary</h2>
+                <h2 className="text-xl font-bold text-gray-900 dark:text-gray-300">
+                  Summary
+                </h2>
               </div>
               <div className="prose prose-lg max-w-none">
-                <div className="text-gray-700 leading-relaxed space-y-4 whitespace-pre-wrap text-justify">
+                <div className="text-gray-700 dark:text-gray-300 leading-relaxed space-y-4 whitespace-pre-wrap text-justify">
                   {note.summary}
                 </div>
               </div>
             </div>
 
             {/* Key Points Section */}
-            <div className="bg-white rounded-2xl shadow-lg p-6 border border-gray-100">
+            <div className="bg-white dark:bg-slate-700/70 rounded-2xl shadow-lg p-6 border border-gray-100 dark:border-slate-700">
               <div className="flex items-center gap-3 mb-4">
-                <div className="bg-green-100 p-2 rounded-lg">
-                  <Star className="w-5 h-5 text-green-600" />
+                <div className="bg-green-100 dark:bg-green-700/20 p-2 rounded-lg">
+                  <Star className="w-5 h-5 text-green-600 dark:text-green-400" />
                 </div>
-                <h2 className="text-xl font-bold text-gray-900">Key Points</h2>
+                <h2 className="text-xl font-bold text-gray-900 dark:text-gray-300">
+                  Key Points
+                </h2>
               </div>
               <div className="space-y-4">
                 {note.key_points.map((point, index) => (
                   <div
                     key={index}
-                    className="border-l-4 border-purple-500 bg-linear-to-r from-purple-50 to-transparent p-4 rounded-r-xl"
+                    className="border-l-4 border-purple-500 bg-linear-to-r from-purple-50 to-transparent dark:bg-linear-to-r dark:from-purple-900/20 dark:to-transparent p-4 rounded-r-xl"
                   >
                     <div className="flex items-start justify-between gap-4 mb-2">
-                      <h3 className="text-base font-bold text-gray-900 flex-1">
+                      <h3 className="text-base font-bold text-gray-900 dark:text-gray-300 flex-1">
                         {point.title}
                       </h3>
                       <span
@@ -554,7 +560,7 @@ export default function NotesViewPage({ materialId, noteId }: Props) {
                         {point.importance}
                       </span>
                     </div>
-                    <div className="text-gray-700 leading-relaxed space-y-2 whitespace-pre-wrap text-justify text-sm">
+                    <div className="text-gray-700 dark:text-gray-300 leading-relaxed space-y-2 whitespace-pre-wrap text-justify text-sm">
                       {point.description}
                     </div>
                   </div>
@@ -563,12 +569,12 @@ export default function NotesViewPage({ materialId, noteId }: Props) {
             </div>
 
             {/* Concepts Section */}
-            <div className="bg-white rounded-2xl shadow-lg p-6 border border-gray-100">
+            <div className="bg-white dark:bg-slate-700/70 rounded-2xl shadow-lg p-6 border border-gray-100 dark:border-slate-700">
               <div className="flex items-center gap-3 mb-4">
-                <div className="bg-purple-100 p-2 rounded-lg">
-                  <Brain className="w-5 h-5 text-purple-600" />
+                <div className="bg-purple-100 dark:bg-purple-700/20 p-2 rounded-lg">
+                  <Brain className="w-5 h-5 text-purple-600 dark:text-purple-400" />
                 </div>
-                <h2 className="text-xl font-bold text-gray-900">
+                <h2 className="text-xl font-bold text-gray-900 dark:text-gray-300">
                   Important Concepts
                 </h2>
               </div>
@@ -576,17 +582,17 @@ export default function NotesViewPage({ materialId, noteId }: Props) {
                 {note.concepts.map((concept, index) => (
                   <div
                     key={index}
-                    className="bg-linear-to-br from-purple-50 to-blue-50 rounded-xl p-5 border border-purple-100"
+                    className="bg-linear-to-br from-purple-50 to-blue-50 dark:from-purple-900/20 dark:to-blue-900/20 rounded-xl p-5 border border-purple-100 dark:border-purple-700/20"
                   >
-                    <h3 className="text-lg font-bold text-purple-900 mb-3">
+                    <h3 className="text-lg font-bold text-purple-900 dark:text-purple-400 mb-3">
                       {concept.concept}
                     </h3>
-                    <div className="text-gray-700 mb-4 leading-relaxed space-y-2 whitespace-pre-wrap text-justify text-sm">
+                    <div className="text-gray-700 dark:text-gray-300 mb-4 leading-relaxed space-y-2 whitespace-pre-wrap text-justify text-sm">
                       {concept.explanation}
                     </div>
                     {concept.examples && concept.examples.length > 0 && (
                       <div className="mt-3">
-                        <h4 className="text-xs font-semibold text-gray-900 mb-2 flex items-center">
+                        <h4 className="text-xs font-semibold text-gray-900 dark:text-gray-300 mb-2 flex items-center">
                           <Lightbulb className="w-3.5 h-3.5 mr-1.5 text-yellow-600" />
                           Examples:
                         </h4>
@@ -594,7 +600,7 @@ export default function NotesViewPage({ materialId, noteId }: Props) {
                           {concept.examples.map((example, exIndex) => (
                             <li
                               key={exIndex}
-                              className="flex items-start gap-2 text-gray-700 text-sm"
+                              className="flex items-start gap-2 text-gray-700 dark:text-gray-300 text-sm"
                             >
                               <span className="text-purple-600 font-bold mt-0.5">
                                 •
@@ -611,17 +617,17 @@ export default function NotesViewPage({ materialId, noteId }: Props) {
             </div>
 
             {/* Study Tips Section */}
-            <div className="bg-linear-to-br from-yellow-50 to-orange-50 rounded-2xl shadow-lg p-6 border border-yellow-200">
+            <div className="bg-linear-to-br from-yellow-50 to-orange-50 dark:from-yellow-900/20 dark:to-yellow-900/20 rounded-2xl shadow-lg p-6 border border-yellow-200 dark:border-yellow-700/20">
               <div className="flex items-center gap-3 mb-4">
-                <div className="bg-yellow-100 p-2 rounded-lg">
-                  <Lightbulb className="w-5 h-5 text-yellow-600" />
+                <div className="bg-yellow-100 dark:bg-yellow-700/20 p-2 rounded-lg">
+                  <Lightbulb className="w-5 h-5 text-yellow-600 dark:text-yellow-400" />
                 </div>
-                <h2 className="text-xl font-bold text-gray-900">
+                <h2 className="text-xl font-bold text-gray-900 dark:text-gray-300">
                   Study Tips & Recommendations
                 </h2>
               </div>
               <div className="prose prose-lg max-w-none">
-                <div className="text-gray-700 leading-relaxed space-y-4 whitespace-pre-wrap text-justify">
+                <div className="text-gray-700 dark:text-gray-300 leading-relaxed space-y-4 whitespace-pre-wrap text-justify">
                   {note.study_tips}
                 </div>
               </div>
@@ -629,9 +635,9 @@ export default function NotesViewPage({ materialId, noteId }: Props) {
           </div>
 
           {/* Right Column - Chat */}
-          <div className="bg-white rounded-2xl shadow-lg border border-gray-200 flex flex-col h-full overflow-hidden">
+          <div className="bg-white dark:bg-slate-800/80 rounded-2xl shadow-lg border border-gray-200 dark:border-slate-700 flex flex-col h-full overflow-hidden">
             {/* Chat Header */}
-            <div className="p-4 border-b border-gray-200 bg-linear-to-r from-purple-50 to-blue-50 rounded-t-2xl shrink-0">
+            <div className="p-4 border-b border-gray-200 dark:border-slate-700 bg-linear-to-r from-purple-50 to-blue-50 dark:from-purple-900/20 dark:to-blue-900/20 rounded-t-2xl shrink-0">
               <div className="flex items-center gap-3">
                 <div className="relative w-12 h-12 shrink-0 flex items-center justify-center">
                   <Image
@@ -643,10 +649,10 @@ export default function NotesViewPage({ materialId, noteId }: Props) {
                   />
                 </div>
                 <div>
-                  <h2 className="text-lg font-bold text-gray-900">
+                  <h2 className="text-lg font-bold text-gray-900 dark:text-white">
                     AI Assistant
                   </h2>
-                  <p className="text-xs text-gray-600">
+                  <p className="text-xs text-gray-600 dark:text-gray-400">
                     Ask questions or request modifications to your notes
                   </p>
                 </div>
@@ -666,7 +672,7 @@ export default function NotesViewPage({ materialId, noteId }: Props) {
                     className={`max-w-[80%] rounded-2xl px-4 py-3 ${
                       msg.role === "user"
                         ? "bg-linear-to-br from-blue-600 to-cyan-500 text-white"
-                        : "bg-gray-100 text-gray-900"
+                        : "bg-gray-100 dark:bg-slate-700 text-gray-900 dark:text-gray-200"
                     }`}
                   >
                     <p className="text-sm whitespace-pre-wrap leading-relaxed">
@@ -677,11 +683,11 @@ export default function NotesViewPage({ materialId, noteId }: Props) {
               ))}
               {sendingMessage && (
                 <div className="flex justify-start">
-                  <div className="bg-gray-100 rounded-2xl px-4 py-3">
+                  <div className="bg-gray-100 dark:bg-slate-700 rounded-2xl px-4 py-3">
                     <div className="flex items-center gap-2">
-                      <div className="animate-bounce w-2 h-2 bg-gray-400 rounded-full"></div>
-                      <div className="animate-bounce w-2 h-2 bg-gray-400 rounded-full delay-100"></div>
-                      <div className="animate-bounce w-2 h-2 bg-gray-400 rounded-full delay-200"></div>
+                      <div className="animate-bounce w-2 h-2 bg-gray-400 dark:bg-gray-500 rounded-full"></div>
+                      <div className="animate-bounce w-2 h-2 bg-gray-400 dark:bg-gray-500 rounded-full delay-100"></div>
+                      <div className="animate-bounce w-2 h-2 bg-gray-400 dark:bg-gray-500 rounded-full delay-200"></div>
                     </div>
                   </div>
                 </div>
@@ -690,7 +696,7 @@ export default function NotesViewPage({ materialId, noteId }: Props) {
             </div>
 
             {/* Chat Input */}
-            <div className="p-4 border-t border-gray-200 shrink-0">
+            <div className="p-4 border-t border-gray-200 dark:border-slate-700 shrink-0">
               <div className="flex gap-2">
                 <input
                   type="text"
@@ -703,13 +709,13 @@ export default function NotesViewPage({ materialId, noteId }: Props) {
                     }
                   }}
                   placeholder="Ask about the notes or request changes..."
-                  className="flex-1 px-4 py-3 border text-gray-700 border-gray-300 rounded-xl focus:ring-1 focus:border-blue-500  outline-none"
+                  className="flex-1 px-4 py-3 border text-gray-700 dark:text-gray-200 border-gray-300 dark:border-slate-600 bg-white dark:bg-slate-700 rounded-xl focus:ring-1 focus:border-blue-500 dark:focus:border-blue-400 outline-none placeholder:text-gray-400 dark:placeholder:text-gray-500"
                   disabled={sendingMessage}
                 />
                 <button
                   onClick={handleSendMessage}
                   disabled={sendingMessage || !inputMessage.trim()}
-                  className="bg-linear-to-br from-blue-600 to-cyan-500 hover:from-blue-700 hover:to-cyan-600 disabled:bg-gray-300 disabled:cursor-not-allowed text-white p-3 rounded-xl transition-colors"
+                  className="bg-linear-to-br from-blue-600 to-cyan-500 hover:from-blue-700 hover:to-cyan-600 disabled:bg-gray-300 dark:disabled:bg-gray-600 disabled:cursor-not-allowed text-white p-3 rounded-xl transition-colors"
                 >
                   <ChevronRight className="w-6 h-6" />
                 </button>
@@ -727,12 +733,23 @@ export default function NotesViewPage({ materialId, noteId }: Props) {
           background: #e0f2fe;
           border-radius: 10px;
         }
+        .dark .custom-scrollbar::-webkit-scrollbar-track {
+          background: #1e293b;
+          border-radius: 10px;
+        }
         .custom-scrollbar::-webkit-scrollbar-thumb {
           background: linear-gradient(180deg, #2563eb 0%, #06b6d4 100%);
           border-radius: 10px;
         }
+        .dark .custom-scrollbar::-webkit-scrollbar-thumb {
+          background: linear-gradient(180deg, #3b82f6 0%, #22d3ee 100%);
+          border-radius: 10px;
+        }
         .custom-scrollbar::-webkit-scrollbar-thumb:hover {
           background: linear-gradient(180deg, #1d4ed8 0%, #0891b2 100%);
+        }
+        .dark .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+          background: linear-gradient(180deg, #2563eb 0%, #06b6d4 100%);
         }
       `}</style>
     </div>

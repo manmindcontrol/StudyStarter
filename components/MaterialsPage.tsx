@@ -141,8 +141,8 @@ export default function MaterialsPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-linear-to-br from-blue-50 via-white to-purple-50">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+      <div className="min-h-screen flex items-center justify-center bg-linear-to-br from-blue-50 via-white to-purple-50 dark:bg-linear-to-br dark:from-slate-900 dark:via-slate-800 dark:to-slate-900">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 dark:border-blue-400"></div>
       </div>
     );
   }
@@ -178,8 +178,8 @@ export default function MaterialsPage() {
           <FileUpload onUpload={handleUpload} />
           {uploading && (
             <div className="mt-4 flex items-center justify-center">
-              <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-blue-600 mr-3"></div>
-              <p className="text-sm text-gray-600 font-medium">
+              <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-blue-600 dark:border-blue-400 mr-3"></div>
+              <p className="text-sm text-gray-600 dark:text-gray-400 font-medium">
                 Uploading file, please wait...
               </p>
             </div>
@@ -214,14 +214,14 @@ export default function MaterialsPage() {
           </div>
 
           {filteredMaterials.length === 0 ? (
-            <div className="bg-white rounded-2xl shadow-md p-16 text-center border border-gray-100">
-              <div className="bg-linear-to-br from-blue-100 to-purple-100 w-24 h-24 rounded-full flex items-center justify-center mx-auto mb-6">
-                <FileText className="w-12 h-12 text-blue-600" />
+            <div className="bg-white dark:bg-slate-800/80 rounded-2xl shadow-md p-16 text-center border border-gray-100 dark:border-gray-700">
+              <div className="bg-linear-to-br from-blue-100 to-purple-100 dark:from-blue-900/30 dark:to-purple-900/30 w-24 h-24 rounded-full flex items-center justify-center mx-auto mb-6">
+                <FileText className="w-12 h-12 text-blue-600 dark:text-blue-400" />
               </div>
-              <h3 className="text-2xl font-bold text-gray-900 mb-3">
+              <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-3">
                 {searchQuery ? "No results found" : "No materials yet"}
               </h3>
-              <p className="text-gray-600 mb-8 max-w-md mx-auto">
+              <p className="text-gray-600 dark:text-gray-400 mb-8 max-w-md mx-auto">
                 {searchQuery
                   ? "Try searching with different keywords"
                   : "Upload your first study material and start your AI-assisted learning journey"}
@@ -265,7 +265,7 @@ export default function MaterialsPage() {
                     </h3>
 
                     {/* Date */}
-                    <div className="flex items-center text-xs sm:text-sm text-gray-500 dark:text-gray-400 mb-4 sm:mb-6 pb-4 sm:pb-6 border-b border-gray-100">
+                    <div className="flex items-center text-xs sm:text-sm text-gray-500 dark:text-gray-400 mb-4 sm:mb-6 pb-4 sm:pb-6 border-b border-gray-100 dark:border-slate-700">
                       <Clock className="w-3.5 h-3.5 sm:w-4 sm:h-4 mr-1.5 sm:mr-2" />
                       {formatDate(material.created_at)}
                     </div>

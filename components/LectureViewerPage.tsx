@@ -76,22 +76,22 @@ export default function LectureViewerPage({ lectureId }: Props) {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-purple-600"></div>
+      <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-linear-to-br dark:from-slate-900 dark:via-slate-800 dark:to-slate-900">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-purple-600 dark:border-purple-400"></div>
       </div>
     );
   }
 
   if (!lecture) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
+      <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-linear-to-br dark:from-slate-900 dark:via-slate-800 dark:to-slate-900">
         <div className="text-center">
-          <h2 className="text-xl font-semibold text-gray-900 mb-2">
+          <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">
             Lecture not found
           </h2>
           <button
             onClick={() => router.push("/dashboard")}
-            className="text-purple-600 hover:text-purple-700"
+            className="text-purple-600 dark:text-purple-400 hover:text-purple-700 dark:hover:text-purple-300"
           >
             Back to dashboard
           </button>
@@ -101,22 +101,22 @@ export default function LectureViewerPage({ lectureId }: Props) {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gray-50 dark:bg-linear-to-br dark:from-slate-900 dark:via-slate-800 dark:to-slate-900">
       {/* Header */}
-      <div className="bg-white border-b border-gray-200 sticky top-0 z-10 shadow-sm">
+      <div className="bg-white dark:bg-slate-800/80 border-b border-gray-200 dark:border-slate-700 sticky top-0 z-10 shadow-sm">
         <div className="container-custom py-4">
           <div className="flex items-center space-x-3">
             <button
               onClick={() => router.push(`/lectures/${lectureId}`)}
-              className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
+              className="p-2 hover:bg-gray-100 dark:hover:bg-slate-700 rounded-lg transition-colors"
             >
-              <ChevronLeft className="w-5 h-5 text-gray-600" />
+              <ChevronLeft className="w-5 h-5 text-gray-600 dark:text-gray-300" />
             </button>
             <div className="flex-1">
-              <h1 className="text-lg font-semibold text-gray-900">
+              <h1 className="text-lg font-semibold text-gray-900 dark:text-white">
                 {lecture.title}
               </h1>
-              <div className="flex items-center text-xs text-gray-500 space-x-4 mt-1">
+              <div className="flex items-center text-xs text-gray-500 dark:text-gray-400 space-x-4 mt-1">
                 <div className="flex items-center">
                   <Calendar className="w-3 h-3 mr-1" />
                   {formatDate(lecture.created_at)}
@@ -134,12 +134,12 @@ export default function LectureViewerPage({ lectureId }: Props) {
       {/* Content */}
       <div className="container-custom py-8">
         <div className="max-w-4xl mx-auto">
-          <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-8">
-            <h2 className="text-2xl font-bold text-gray-900 mb-6">
+          <div className="bg-white dark:bg-slate-800/80 rounded-xl shadow-sm border border-gray-200 dark:border-slate-700 p-8">
+            <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">
               Transcript
             </h2>
-            <div className="prose prose-gray max-w-none">
-              <p className="text-gray-700 leading-relaxed whitespace-pre-wrap">
+            <div className="prose prose-gray dark:prose-invert max-w-none">
+              <p className="text-gray-700 dark:text-gray-300 leading-relaxed whitespace-pre-wrap">
                 {lecture.transcript}
               </p>
             </div>

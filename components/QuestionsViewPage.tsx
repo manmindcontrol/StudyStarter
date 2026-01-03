@@ -600,22 +600,22 @@ export default function QuestionsViewPage({
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+      <div className="min-h-screen flex items-center justify-center bg-linear-to-br from-blue-50 via-gray-100 to-cyan-50 dark:bg-linear-to-br dark:from-slate-900 dark:via-slate-800 dark:to-slate-900">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 dark:border-blue-400"></div>
       </div>
     );
   }
 
   if (!questionRecord || !material) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
+      <div className="min-h-screen flex items-center justify-center bg-linear-to-br from-blue-50 via-gray-100 to-cyan-50 dark:bg-linear-to-br dark:from-slate-900 dark:via-slate-800 dark:to-slate-900">
         <div className="text-center">
-          <h2 className="text-xl font-semibold text-gray-900 mb-2">
+          <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">
             Questions not found
           </h2>
           <button
             onClick={() => router.push("/materials")}
-            className="text-gray-600 hover:text-gray-900"
+            className="text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white"
           >
             Back to materials
           </button>
@@ -625,23 +625,23 @@ export default function QuestionsViewPage({
   }
 
   return (
-    <div className="min-h-screen bg-linear-to-br from-blue-50 via-gray-100 to-cyan-50">
+    <div className="min-h-screen bg-linear-to-br from-blue-50 via-gray-100 to-cyan-50 dark:bg-linear-to-br dark:from-slate-900 dark:via-slate-800 dark:to-slate-900">
       {/* Header */}
-      <div className="bg-white border-b border-gray-200 sticky top-0 z-10">
+      <div className="bg-white dark:bg-slate-800/80 border-b border-gray-200 dark:border-slate-700 sticky top-0 z-10">
         <div className="container-custom py-3 sm:py-4">
           <div className="flex items-center justify-between gap-2">
             <div className="flex items-center space-x-2 sm:space-x-4 flex-1 min-w-0">
               <button
                 onClick={() => router.push(`/materials/${materialId}`)}
-                className="p-2  text-gray-600 hover:text-gray-900 group rounded-lg transition-colors shrink-0"
+                className="p-2 text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white group rounded-lg transition-colors shrink-0"
               >
                 <ArrowLeft className="w-5 h-5 group-hover:-translate-x-1 transition-transform" />
               </button>
               <div className="min-w-0 flex-1">
-                <h1 className="text-base sm:text-xl font-bold text-gray-900 truncate">
+                <h1 className="text-base sm:text-xl font-bold text-gray-900 dark:text-white truncate">
                   {material.title}
                 </h1>
-                <p className="text-xs sm:text-sm text-gray-600">
+                <p className="text-xs sm:text-sm text-gray-600 dark:text-gray-400">
                   {questionRecord.questions.length} questions
                 </p>
               </div>
@@ -687,16 +687,16 @@ export default function QuestionsViewPage({
                 </button>
 
                 {showExportMenu && (
-                  <div className="absolute right-0 mt-2 w-44 sm:w-48 bg-white rounded-lg shadow-lg border border-gray-200 py-1 z-20">
+                  <div className="absolute right-0 mt-2 w-44 sm:w-48 bg-white dark:bg-slate-800 rounded-lg shadow-lg border border-gray-200 dark:border-slate-700 py-1 z-20">
                     <button
                       onClick={() => {
                         exportToWord();
                         setShowExportMenu(false);
                       }}
-                      className="w-full text-left px-3 sm:px-4 py-2 hover:bg-gray-100 flex items-center space-x-2 transition-colors"
+                      className="w-full text-left px-3 sm:px-4 py-2 hover:bg-gray-100 dark:hover:bg-slate-700 flex items-center space-x-2 transition-colors"
                     >
-                      <FileDown className="w-4 h-4 text-blue-600" />
-                      <span className="text-sm sm:text-base text-gray-700">
+                      <FileDown className="w-4 h-4 text-blue-600 dark:text-blue-400" />
+                      <span className="text-sm sm:text-base text-gray-700 dark:text-gray-300">
                         Word (.docx)
                       </span>
                     </button>
@@ -705,10 +705,10 @@ export default function QuestionsViewPage({
                         exportQuestions();
                         setShowExportMenu(false);
                       }}
-                      className="w-full text-left px-3 sm:px-4 py-2 hover:bg-gray-100 flex items-center space-x-2 transition-colors"
+                      className="w-full text-left px-3 sm:px-4 py-2 hover:bg-gray-100 dark:hover:bg-slate-700 flex items-center space-x-2 transition-colors"
                     >
-                      <FileText className="w-4 h-4 text-gray-600" />
-                      <span className="text-sm sm:text-base text-gray-700">
+                      <FileText className="w-4 h-4 text-gray-600 dark:text-gray-400" />
+                      <span className="text-sm sm:text-base text-gray-700 dark:text-gray-300">
                         Text (.txt)
                       </span>
                     </button>
@@ -726,7 +726,7 @@ export default function QuestionsViewPage({
           {/* Questions panel - 2 columns on large screens */}
           <div className="lg:col-span-2 space-y-4">
             <div className="p-6">
-              <h2 className="text-lg font-semibold text-gray-900 mb-4">
+              <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
                 Generated Questions
               </h2>
 
@@ -738,24 +738,24 @@ export default function QuestionsViewPage({
                   return (
                     <div
                       key={index}
-                      className="p-4 rounded-lg border border-gray-200 bg-white"
+                      className="p-4 rounded-lg border border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-800/70"
                     >
                       <div className="flex-1">
                         <div className="flex items-center space-x-2 mb-3">
-                          <span className="font-semibold text-gray-900 text-lg">
+                          <span className="font-semibold text-gray-900 dark:text-white text-lg">
                             {index + 1}.
                           </span>
                           <span
                             className={`text-xs px-2 py-1 rounded-full ${
                               q.type === "mcq"
-                                ? "bg-purple-100 text-purple-700"
-                                : "bg-green-100 text-green-700"
+                                ? "bg-purple-100 text-purple-700 dark:bg-purple-900/30 dark:text-purple-400"
+                                : "bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400"
                             }`}
                           >
                             {q.type === "mcq" ? "Multiple Choice" : "Open"}
                           </span>
                         </div>
-                        <p className="text-gray-900 mb-4 font-medium text-base">
+                        <p className="text-gray-900 dark:text-gray-200 mb-4 font-medium text-base">
                           {q.question}
                         </p>
 
@@ -785,19 +785,19 @@ export default function QuestionsViewPage({
                               const showResult = isAnswered;
 
                               let buttonStyle =
-                                "border-gray-200 hover:border-blue-400 hover:bg-blue-50";
+                                "border-gray-200 dark:border-slate-600 hover:border-blue-400 dark:hover:border-blue-500 hover:bg-blue-50 dark:hover:bg-blue-900/20";
                               if (showResult) {
                                 if (isSelected && isCorrectOption) {
-                                  buttonStyle = "border-green-500 bg-green-50";
+                                  buttonStyle = "border-green-500 dark:border-green-500 bg-green-50 dark:bg-green-900/30";
                                 } else if (isSelected && !isCorrectOption) {
-                                  buttonStyle = "border-red-500 bg-red-50";
+                                  buttonStyle = "border-red-500 dark:border-red-500 bg-red-50 dark:bg-red-900/30";
                                 } else if (isCorrectOption) {
-                                  buttonStyle = "border-green-500 bg-green-50";
+                                  buttonStyle = "border-green-500 dark:border-green-500 bg-green-50 dark:bg-green-900/30";
                                 } else {
-                                  buttonStyle = "border-gray-300 bg-gray-50";
+                                  buttonStyle = "border-gray-300 dark:border-slate-600 bg-gray-50 dark:bg-slate-700/50";
                                 }
                               } else if (isSelected) {
-                                buttonStyle = "border-blue-500 bg-blue-50";
+                                buttonStyle = "border-blue-500 dark:border-blue-400 bg-blue-50 dark:bg-blue-900/30";
                               }
 
                               return (
@@ -808,7 +808,7 @@ export default function QuestionsViewPage({
                                     handleMCQAnswer(index, option, q.answer)
                                   }
                                   disabled={isAnswered}
-                                  className={`w-full flex items-start text-gray-700 space-x-3 text-left p-3 rounded-lg border-1 transition-all ${buttonStyle} ${
+                                  className={`w-full flex items-start text-gray-700 dark:text-gray-300 space-x-3 text-left p-3 rounded-lg border-1 transition-all ${buttonStyle} ${
                                     !isAnswered
                                       ? "cursor-pointer"
                                       : "cursor-default"
@@ -817,11 +817,11 @@ export default function QuestionsViewPage({
                                   <span className="font-bold text-base min-w-6">
                                     {optionLetter})
                                   </span>
-                                  <span className="flex-1 text-gray-900">
+                                  <span className="flex-1 text-gray-900 dark:text-gray-200">
                                     {option}
                                   </span>
                                   {showResult && isCorrectOption && (
-                                    <CheckCircle2 className="w-5 h-5 text-green-600 shrink-0" />
+                                    <CheckCircle2 className="w-5 h-5 text-green-600 dark:text-green-400 shrink-0" />
                                   )}
                                 </button>
                               );
@@ -838,7 +838,7 @@ export default function QuestionsViewPage({
                                 updateOpenAnswerInput(index, e.target.value)
                               }
                               placeholder="Type your answer here..."
-                              className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:border-blue-500 focus:outline-none text-gray-900 placeholder:text-gray-400 transition-all resize-none"
+                              className="w-full px-4 py-3 border border-gray-200 dark:border-slate-600 bg-white dark:bg-slate-700 rounded-lg focus:border-blue-500 dark:focus:border-blue-400 focus:outline-none text-gray-900 dark:text-gray-200 placeholder:text-gray-400 dark:placeholder:text-gray-500 transition-all resize-none"
                               rows={4}
                               disabled={checkingAnswer === index}
                             />
@@ -848,7 +848,7 @@ export default function QuestionsViewPage({
                                 !openAnswerInputs.get(index)?.trim() ||
                                 checkingAnswer === index
                               }
-                              className="mt-2 bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center space-x-2"
+                              className="mt-2 bg-blue-600 hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600 text-white px-6 py-2 rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center space-x-2"
                             >
                               {checkingAnswer === index ? (
                                 <>
@@ -867,15 +867,15 @@ export default function QuestionsViewPage({
 
                         {/* Show user's answer for open questions */}
                         {q.type === "open" && isAnswered && quizAnswer && (
-                          <div className="mb-3 p-3 bg-blue-50 border border-blue-200 rounded-lg">
-                            <div className="font-semibold text-blue-900 mb-1">
+                          <div className="mb-3 p-3 bg-blue-50 dark:bg-blue-900/30 border border-blue-200 dark:border-blue-700/30 rounded-lg">
+                            <div className="font-semibold text-blue-900 dark:text-blue-300 mb-1">
                               Your answer:
                             </div>
-                            <div className="text-blue-800">
+                            <div className="text-blue-800 dark:text-blue-200">
                               {quizAnswer.userAnswer}
                             </div>
                             {quizAnswer.feedback && (
-                              <div className="mt-2 text-sm text-blue-700 italic">
+                              <div className="mt-2 text-sm text-blue-700 dark:text-blue-300 italic">
                                 {quizAnswer.feedback}
                               </div>
                             )}
@@ -884,14 +884,14 @@ export default function QuestionsViewPage({
 
                         {/* Show correct answer after user has answered */}
                         {isAnswered && q.answer && (
-                          <div className="mt-3 p-3 bg-green-50 border border-green-200 rounded-lg">
+                          <div className="mt-3 p-3 bg-green-50 dark:bg-green-900/30 border border-green-200 dark:border-green-700/30 rounded-lg">
                             <div className="flex items-start space-x-2">
-                              <CheckCircle2 className="w-5 h-5 text-green-600 mt-0.5 shrink-0" />
+                              <CheckCircle2 className="w-5 h-5 text-green-600 dark:text-green-400 mt-0.5 shrink-0" />
                               <div className="flex-1">
-                                <span className="font-semibold text-green-700">
+                                <span className="font-semibold text-green-700 dark:text-green-300">
                                   Correct answer:
                                 </span>
-                                <p className="text-green-800 mt-1">
+                                <p className="text-green-800 dark:text-green-200 mt-1">
                                   {q.answer}
                                 </p>
                               </div>
@@ -904,22 +904,22 @@ export default function QuestionsViewPage({
                           <div
                             className={`mt-3 p-3 rounded-lg border ${
                               quizAnswer.isCorrect
-                                ? "bg-green-50 border-green-200"
-                                : "bg-red-50 border-red-200"
+                                ? "bg-green-50 dark:bg-green-900/30 border-green-200 dark:border-green-700/30"
+                                : "bg-red-50 dark:bg-red-900/30 border-red-200 dark:border-red-700/30"
                             }`}
                           >
                             <div className="flex items-center space-x-2">
                               {quizAnswer.isCorrect ? (
                                 <>
-                                  <CheckCircle2 className="w-5 h-5 text-green-600" />
-                                  <span className="font-semibold text-green-700">
+                                  <CheckCircle2 className="w-5 h-5 text-green-600 dark:text-green-400" />
+                                  <span className="font-semibold text-green-700 dark:text-green-300">
                                     Correct!
                                   </span>
                                 </>
                               ) : (
                                 <>
-                                  <Circle className="w-5 h-5 text-red-600" />
-                                  <span className="font-semibold text-red-700">
+                                  <Circle className="w-5 h-5 text-red-600 dark:text-red-400" />
+                                  <span className="font-semibold text-red-700 dark:text-red-300">
                                     Incorrect
                                   </span>
                                 </>
@@ -937,9 +937,9 @@ export default function QuestionsViewPage({
 
           {/* Chat panel - 1 column on large screens */}
           <div className="lg:col-span-1">
-            <div className="bg-white rounded-2xl shadow-lg border border-gray-200 sticky top-24 flex flex-col h-[calc(100vh-8rem)] overflow-hidden">
+            <div className="bg-white dark:bg-slate-800/80 rounded-2xl shadow-lg border border-gray-200 dark:border-slate-700 sticky top-24 flex flex-col h-[calc(100vh-8rem)] overflow-hidden">
               {/* Chat Header */}
-              <div className="p-4 border-b border-gray-200 bg-linear-to-r from-purple-50 to-blue-50 rounded-t-2xl shrink-0">
+              <div className="p-4 border-b border-gray-200 dark:border-slate-700 bg-linear-to-r from-purple-50 to-blue-50 dark:from-purple-900/20 dark:to-blue-900/20 rounded-t-2xl shrink-0">
                 <div className="flex items-center gap-3">
                   <div className="relative w-12 h-12 shrink-0 flex items-center justify-center">
                     <Image
@@ -951,10 +951,10 @@ export default function QuestionsViewPage({
                     />
                   </div>
                   <div>
-                    <h2 className="text-lg font-bold text-gray-900">
+                    <h2 className="text-lg font-bold text-gray-900 dark:text-white">
                       AI Assistant
                     </h2>
-                    <p className="text-xs text-gray-600">
+                    <p className="text-xs text-gray-600 dark:text-gray-400">
                       Ask questions or request modifications
                     </p>
                   </div>
@@ -974,7 +974,7 @@ export default function QuestionsViewPage({
                       className={`max-w-[80%] rounded-2xl px-4 py-3 ${
                         msg.role === "user"
                           ? "bg-linear-to-br from-blue-600 to-cyan-500 text-white"
-                          : "bg-gray-100 text-gray-900"
+                          : "bg-gray-100 dark:bg-slate-700 text-gray-900 dark:text-gray-200"
                       }`}
                     >
                       <p className="text-sm whitespace-pre-wrap leading-relaxed">
@@ -985,11 +985,11 @@ export default function QuestionsViewPage({
                 ))}
                 {chatLoading && (
                   <div className="flex justify-start">
-                    <div className="bg-gray-100 rounded-2xl px-4 py-3">
+                    <div className="bg-gray-100 dark:bg-slate-700 rounded-2xl px-4 py-3">
                       <div className="flex items-center gap-2">
-                        <div className="animate-bounce w-2 h-2 bg-gray-400 rounded-full"></div>
-                        <div className="animate-bounce w-2 h-2 bg-gray-400 rounded-full delay-100"></div>
-                        <div className="animate-bounce w-2 h-2 bg-gray-400 rounded-full delay-200"></div>
+                        <div className="animate-bounce w-2 h-2 bg-gray-400 dark:bg-gray-500 rounded-full"></div>
+                        <div className="animate-bounce w-2 h-2 bg-gray-400 dark:bg-gray-500 rounded-full delay-100"></div>
+                        <div className="animate-bounce w-2 h-2 bg-gray-400 dark:bg-gray-500 rounded-full delay-200"></div>
                       </div>
                     </div>
                   </div>
@@ -998,7 +998,7 @@ export default function QuestionsViewPage({
               </div>
 
               {/* Chat Input */}
-              <div className="p-4 border-t border-gray-200 shrink-0">
+              <div className="p-4 border-t border-gray-200 dark:border-slate-700 shrink-0">
                 <div className="flex gap-2">
                   <input
                     type="text"
@@ -1011,13 +1011,13 @@ export default function QuestionsViewPage({
                       }
                     }}
                     placeholder="Write a message..."
-                    className="flex-1 px-4 py-3 border text-gray-700 border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-600 focus:border-cyan-500 outline-none transition-all"
+                    className="flex-1 px-4 py-3 border text-gray-700 dark:text-gray-200 border-gray-300 dark:border-slate-600 bg-white dark:bg-slate-700 rounded-xl focus:ring-2 focus:ring-blue-600 dark:focus:ring-blue-500 focus:border-cyan-500 dark:focus:border-cyan-400 outline-none transition-all placeholder:text-gray-400 dark:placeholder:text-gray-500"
                     disabled={chatLoading}
                   />
                   <button
                     onClick={handleChatSubmit}
                     disabled={chatLoading || !chatInput.trim()}
-                    className="bg-linear-to-br from-blue-600 to-cyan-500 hover:from-blue-700 hover:to-cyan-600 disabled:bg-gray-300 disabled:cursor-not-allowed cursor-pointer text-white p-3 rounded-xl transition-colors"
+                    className="bg-linear-to-br from-blue-600 to-cyan-500 hover:from-blue-700 hover:to-cyan-600 disabled:bg-gray-300 dark:disabled:bg-gray-600 disabled:cursor-not-allowed cursor-pointer text-white p-3 rounded-xl transition-colors"
                   >
                     <ChevronRight className="w-6 h-6" />
                   </button>
@@ -1036,12 +1036,23 @@ export default function QuestionsViewPage({
           background: #e0f2fe;
           border-radius: 10px;
         }
+        .dark .custom-scrollbar::-webkit-scrollbar-track {
+          background: #1e293b;
+          border-radius: 10px;
+        }
         .custom-scrollbar::-webkit-scrollbar-thumb {
           background: linear-gradient(180deg, #2563eb 0%, #06b6d4 100%);
           border-radius: 10px;
         }
+        .dark .custom-scrollbar::-webkit-scrollbar-thumb {
+          background: linear-gradient(180deg, #3b82f6 0%, #22d3ee 100%);
+          border-radius: 10px;
+        }
         .custom-scrollbar::-webkit-scrollbar-thumb:hover {
           background: linear-gradient(180deg, #1d4ed8 0%, #0891b2 100%);
+        }
+        .dark .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+          background: linear-gradient(180deg, #2563eb 0%, #06b6d4 100%);
         }
       `}</style>
     </div>

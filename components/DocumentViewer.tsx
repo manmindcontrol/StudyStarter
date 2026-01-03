@@ -124,22 +124,22 @@ export default function DocumentViewer({ materialId }: Props) {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+      <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-linear-to-br dark:from-slate-900 dark:via-slate-800 dark:to-slate-900">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 dark:border-blue-400"></div>
       </div>
     );
   }
 
   if (!material) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
+      <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-linear-to-br dark:from-slate-900 dark:via-slate-800 dark:to-slate-900">
         <div className="text-center">
-          <h2 className="text-xl font-semibold text-gray-900 mb-2">
+          <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">
             Material not found
           </h2>
           <button
             onClick={() => router.push("/dashboard")}
-            className="text-gray-600 hover:text-gray-900"
+            className="text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white"
           >
             Back to dashboard
           </button>
@@ -149,25 +149,25 @@ export default function DocumentViewer({ materialId }: Props) {
   }
 
   return (
-    <div className="h-screen flex flex-col bg-gray-50">
+    <div className="h-screen flex flex-col bg-gray-50  dark:bg-linear-to-br dark:from-slate-900 dark:via-slate-800 dark:to-slate-900">
       {/* Header */}
-      <div className="bg-white border-b border-gray-200">
+      <div className="bg-white dark:bg-slate-800 border-b border-gray-200 dark:border-slate-700">
         <div className="container-custom py-4">
           <div className="flex items-center space-x-4">
             <button
               onClick={() => router.push(`/materials/${materialId}`)}
-              className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
+              className="p-2 hover:bg-gray-100 dark:hover:bg-slate-700 rounded-lg transition-colors"
             >
-              <ChevronLeft className="w-5 h-5" />
+              <ChevronLeft className="w-5 h-5 text-gray-800 hover:text-gray-700 dark:text-gray-300 dark:hover:text-gray-400" />
             </button>
             <div className="flex items-center space-x-3">
-              <FileText className="w-6 h-6 text-blue-600" />
+              <FileText className="w-6 h-6 text-blue-600 dark:text-blue-400" />
               <div>
-                <h1 className="text-lg font-bold text-gray-900">
+                <h1 className="text-lg font-bold text-gray-900 dark:text-gray-300">
                   {material.title}
                 </h1>
                 {material.file_name && (
-                  <p className="text-sm text-gray-500">{material.file_name}</p>
+                  <p className="text-sm text-gray-400 dark:text-gray-500">{material.file_name}</p>
                 )}
               </div>
             </div>
@@ -178,22 +178,22 @@ export default function DocumentViewer({ materialId }: Props) {
       {/* Main Content - Split View */}
       <div className="flex-1 flex overflow-hidden">
         {/* Document Content - Left Side */}
-        <div className="w-1/2 border-r border-gray-200 overflow-y-auto bg-white">
+        <div className="w-1/2 border-r border-gray-200 dark:border-slate-700  overflow-y-auto bg-white dark:bg-slate-800/80">
           <div className="p-8">
             <div className="max-w-3xl mx-auto">
-              <h2 className="text-2xl font-bold text-gray-900 mb-6">
+              <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-300 mb-6">
                 Document Content
               </h2>
               {material.content ? (
                 <div className="prose prose-sm max-w-none">
-                  <div className="text-gray-700 whitespace-pre-wrap leading-relaxed">
+                  <div className="text-gray-700 dark:text-gray-300 whitespace-pre-wrap leading-relaxed">
                     {material.content}
                   </div>
                 </div>
               ) : (
                 <div className="text-center py-12">
-                  <FileText className="w-16 h-16 text-gray-300 mx-auto mb-4" />
-                  <p className="text-gray-600">
+                  <FileText className="w-16 h-16 text-gray-300 dark:text-gray-600 mx-auto mb-4" />
+                  <p className="text-gray-600 dark:text-gray-400">
                     Document content is not available.
                   </p>
                 </div>
@@ -203,10 +203,10 @@ export default function DocumentViewer({ materialId }: Props) {
         </div>
 
         {/* AI Chat - Right Side */}
-        <div className="w-1/2 flex flex-col bg-gray-50">
-          <div className="bg-white rounded-2xl shadow-lg border border-gray-200 flex flex-col h-full m-4 overflow-hidden">
+        <div className="w-1/2 flex flex-col bg-gray-50 dark:bg-slate-800">
+          <div className="bg-white dark:bg-slate-700/70 rounded-2xl shadow-lg border border-gray-200 dark:border-slate-700 flex flex-col h-full m-4 overflow-hidden">
             {/* Chat Header */}
-            <div className="p-4 border-b border-gray-200 bg-linear-to-r from-purple-50 to-blue-50 rounded-t-2xl shrink-0">
+            <div className="p-4 border-b border-gray-200 bg-gray-50 dark:border-slate-700 dark:bg-slate-800/80 rounded-t-2xl shrink-0">
               <div className="flex items-center gap-3">
                 <div className="relative w-12 h-12 shrink-0 flex items-center justify-center">
                   <Image
@@ -218,10 +218,10 @@ export default function DocumentViewer({ materialId }: Props) {
                   />
                 </div>
                 <div>
-                  <h2 className="text-lg font-bold text-gray-900">
+                  <h2 className="text-lg font-bold text-gray-900 dark:text-gray-300">
                     AI Assistant
                   </h2>
-                  <p className="text-xs text-gray-600">
+                  <p className="text-xs text-gray-600 dark:text-gray-400">
                     Ask questions about the document
                   </p>
                 </div>
@@ -242,10 +242,10 @@ export default function DocumentViewer({ materialId }: Props) {
                         className="opacity-60 object-contain"
                       />
                     </div>
-                    <h3 className="text-lg font-semibold text-gray-900 mb-2">
+                    <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-300 mb-2">
                       Start a conversation
                     </h3>
-                    <p className="text-gray-600">
+                    <p className="text-gray-600 dark:text-gray-400">
                       Ask me anything about the document. I can help you
                       understand, summarize, or explain specific parts.
                     </p>
@@ -265,8 +265,8 @@ export default function DocumentViewer({ materialId }: Props) {
                       <div
                         className={`max-w-[80%] rounded-2xl px-4 py-3 ${
                           message.role === "user"
-                            ? "bg-linear-to-br from-blue-600 to-cyan-500 text-white"
-                            : "bg-gray-100 text-gray-900"
+                            ? "bg-linear-to-br from-blue-600 to-cyan-500 dark:bg-linear-to-br dark:from-blue-700 dark:to-cyan-700 text-white"
+                            : "bg-gray-100 text-gray-900 dark:bg-gray-800/80 dark:text-gray-300"
                         }`}
                       >
                         <p className="text-sm whitespace-pre-wrap leading-relaxed">
@@ -277,7 +277,7 @@ export default function DocumentViewer({ materialId }: Props) {
                   ))}
                   {isSending && (
                     <div className="flex justify-start">
-                      <div className="bg-gray-100 rounded-2xl px-4 py-3">
+                      <div className="bg-gray-100 dark:bg-gray-800 rounded-2xl px-4 py-3">
                         <div className="flex items-center gap-2">
                           <div className="animate-bounce w-2 h-2 bg-gray-400 rounded-full"></div>
                           <div className="animate-bounce w-2 h-2 bg-gray-400 rounded-full delay-100"></div>
@@ -292,7 +292,7 @@ export default function DocumentViewer({ materialId }: Props) {
             </div>
 
             {/* Chat Input */}
-            <div className="p-4 border-t border-gray-200 shrink-0">
+            <div className="p-4 border-t border-gray-200 dark:border-slate-600 shrink-0">
               <div className="flex gap-2">
                 <input
                   type="text"
@@ -305,13 +305,13 @@ export default function DocumentViewer({ materialId }: Props) {
                     }
                   }}
                   placeholder="Write a message..."
-                  className="flex-1 px-4 py-3 border text-gray-700 border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-600 focus:border-cyan-500 outline-none transition-all"
+                  className="flex-1 px-4 py-3 border text-gray-700 dark:text-gray-200 border-gray-300 dark:border-slate-600 bg-white dark:bg-slate-700 rounded-xl focus:ring-2 focus:ring-blue-600 dark:focus:ring-blue-500 focus:border-cyan-500 dark:focus:border-cyan-400 outline-none transition-all placeholder:text-gray-400 dark:placeholder:text-gray-500"
                   disabled={isSending}
                 />
                 <button
                   onClick={handleSendMessage}
                   disabled={isSending || !inputMessage.trim()}
-                  className="bg-linear-to-br from-blue-600 to-cyan-500 hover:from-blue-700 hover:to-cyan-600 disabled:bg-gray-300 disabled:cursor-not-allowed text-white p-3 rounded-xl transition-colors cursor-pointer"
+                  className="bg-linear-to-br from-blue-600 to-cyan-500 hover:from-blue-700 hover:to-cyan-600 dark:bg-linear-to-br dark:from-blue-700 dark:to-cyan-700 disabled:bg-gray-300 disabled:cursor-not-allowed text-white p-3 rounded-xl transition-colors cursor-pointer"
                 >
                   <ChevronRight className="w-6 h-6" />
                 </button>
@@ -329,12 +329,23 @@ export default function DocumentViewer({ materialId }: Props) {
           background: #e0f2fe;
           border-radius: 10px;
         }
+        .dark .custom-scrollbar::-webkit-scrollbar-track {
+          background: #1e293b;
+          border-radius: 10px;
+        }
         .custom-scrollbar::-webkit-scrollbar-thumb {
           background: linear-gradient(180deg, #2563eb 0%, #06b6d4 100%);
           border-radius: 10px;
         }
+        .dark .custom-scrollbar::-webkit-scrollbar-thumb {
+          background: linear-gradient(180deg, #3b82f6 0%, #22d3ee 100%);
+          border-radius: 10px;
+        }
         .custom-scrollbar::-webkit-scrollbar-thumb:hover {
           background: linear-gradient(180deg, #1d4ed8 0%, #0891b2 100%);
+        }
+        .dark .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+          background: linear-gradient(180deg, #2563eb 0%, #06b6d4 100%);
         }
       `}</style>
     </div>

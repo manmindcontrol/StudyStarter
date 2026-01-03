@@ -112,7 +112,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className="scroll-smooth">
+    <html lang="en" className="scroll-smooth" suppressHydrationWarning>
       <head>
         <StructuredData />
         <script
@@ -132,6 +132,7 @@ export default function RootLayout({
       </head>
       <body
         className={`${inter.className} flex flex-col min-h-screen antialiased`}
+        suppressHydrationWarning
       >
         <ThemeWrapper>
           {/* Navbar - displayed on all pages */}

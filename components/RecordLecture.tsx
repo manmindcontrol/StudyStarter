@@ -26,6 +26,7 @@ interface ISpeechRecognition extends EventTarget {
   lang: string;
   onresult: ((event: ISpeechRecognitionEvent) => void) | null;
   onerror: ((event: ISpeechRecognitionErrorEvent) => void) | null;
+  onend: (() => void) | null;
   start(): void;
   stop(): void;
 }
@@ -403,7 +404,7 @@ export default function RecordLecture({ user }: RecordLectureProps) {
   const hasTranscript = fullText.trim().length > 0;
 
   return (
-    <div className="min-h-screen bg-gray-100 dark:bg-slate-800 overflow-hidden">
+    <div className="min-h-screen bg-gray-100 dark:bg-linear-to-br dark:from-slate-900 dark:via-slate-800 dark:to-slate-900 overflow-hidden">
       <div className="container-custom py-8">
         {/* Header */}
         <div className="mb-8">
@@ -432,7 +433,7 @@ export default function RecordLecture({ user }: RecordLectureProps) {
         {/* Main Content - Split Layout */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
           {/* Left Side - Recording Controls */}
-          <div className="bg-white/80 dark:bg-slate-700 backdrop-blur-sm rounded-2xl shadow-xl border border-white/50 dark:border-slate-700 p-8 hover:shadow-2xl transition-shadow">
+          <div className="bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm rounded-2xl shadow-xl border border-white/50 dark:border-slate-700 p-8 hover:shadow-2xl transition-shadow">
             <div className="flex items-center justify-between mb-8">
               <h2 className="text-2xl font-bold text-slate-800 dark:text-gray-200 flex items-center">
                 <div className="w-2 h-8 bg-linear-to-b from-green-500 to-green-600 rounded-full mr-3"></div>
@@ -447,7 +448,7 @@ export default function RecordLecture({ user }: RecordLectureProps) {
             </div>
 
             {/* Timer Display */}
-            <div className="mb-10 text-center bg-white dark:bg-slate-500 rounded-2xl p-8 border border-slate-200 dark:border-slate-700">
+            <div className="mb-10 text-center bg-white dark:bg-slate-700/70 rounded-2xl p-8 border border-slate-200 dark:border-slate-700">
               <div className="text-4xl md:text-7xl font-bold bg-linear-to-r from-slate-700 to-slate-900 dark:from-gray-300 dark:to-gray-200 bg-clip-text text-transparent mb-3 font-mono tracking-tight">
                 {formatTime(recordingTime)}
               </div>
@@ -548,7 +549,7 @@ export default function RecordLecture({ user }: RecordLectureProps) {
           </div>
 
           {/* Right Side - Live Transcription */}
-          <div className="bg-white/80 dark:bg-slate-700 backdrop-blur-sm rounded-2xl shadow-xl border border-white/50 dark:border-slate-700 p-8 hover:shadow-2xl transition-shadow">
+          <div className="bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm rounded-2xl shadow-xl border border-white/50 dark:border-slate-700 p-8 hover:shadow-2xl transition-shadow">
             <div className="flex items-center justify-between mb-8">
               <h2 className="text-2xl font-bold text-slate-800 dark:text-gray-200 flex items-center">
                 <div className="w-2 h-8 bg-linear-to-b from-blue-500 to-cyan-500 rounded-full mr-3"></div>
@@ -563,7 +564,7 @@ export default function RecordLecture({ user }: RecordLectureProps) {
               )}
             </div>
 
-            <div className="bg-gray-50 dark:bg-slate-500 rounded-2xl p-6 min-h-[500px] max-h-[600px] overflow-y-auto border border-gray-200 dark:border-slate-700 shadow-inner">
+            <div className="bg-gray-50 dark:bg-slate-700/70 rounded-2xl p-6 min-h-[500px] max-h-[600px] overflow-y-auto border border-gray-200 dark:border-slate-700 shadow-inner">
               {hasTranscript ? (
                 <div className="space-y-2">
                   <p className="text-gray-800 dark:text-gray-200 text-lg leading-relaxed whitespace-pre-wrap">
@@ -576,7 +577,7 @@ export default function RecordLecture({ user }: RecordLectureProps) {
               ) : (
                 <div className="flex items-center justify-center h-full">
                   <div className="text-center text-gray-400">
-                    <div className="bg-linear-to-br from-gray-100 to-gray-200 p-6 rounded-full mx-auto mb-6 w-fit">
+                    <div className="bg-linear-to-br from-gray-100 to-gray-200 dark:bg-linear-to-br dark:from-gray-700 dark:to-gray-600 p-6 rounded-full mx-auto mb-6 w-fit">
                       <FileText className="w-16 h-16 opacity-50" />
                     </div>
                     <p className="text-lg font-medium mb-2">

@@ -311,7 +311,7 @@ export default function MaterialViewPage({ materialId }: Props) {
 
               {/* Saved Question Sets */}
               {questionSets.length > 0 && (
-                <div className="bg-white border dark:bg-slate-800   border-gray-200 dark:border-slate-700 rounded-xl p-6 shadow-sm ">
+                <div className="bg-white border dark:bg-slate-800/80   border-gray-200 dark:border-slate-700 rounded-xl p-6 shadow-sm ">
                   <div className="flex items-center justify-between mb-4 ">
                     <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-300 flex items-center">
                       <FileQuestion className="w-5 h-5 mr-2 text-green-600 dark:text-green-400" />
@@ -382,7 +382,7 @@ export default function MaterialViewPage({ materialId }: Props) {
 
               {/* Saved Study Notes */}
               {noteSets.length > 0 && (
-                <div className="bg-white border border-gray-200 dark:border-slate-700 dark:bg-slate-800 rounded-xl p-6 shadow-sm ">
+                <div className="bg-white border border-gray-200 dark:border-slate-700 dark:bg-slate-800/80 rounded-xl p-6 shadow-sm ">
                   <div className="flex items-center justify-between mb-4 ">
                     <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-300 flex items-center">
                       <StickyNote className="w-5 h-5 mr-2 text-purple-600 dark:text-purple-400" />
@@ -412,7 +412,7 @@ export default function MaterialViewPage({ materialId }: Props) {
                               `/materials/${materialId}/notes/${note.id}`
                             )
                           }
-                          className="flex-1 text-left p-4 bg-purple-50 hover:bg-purple-100 dark:bg-purple-800/20 dark:hover:bg-purple-800/30 rounded-lg transition-colors border border-purple-200 hover:border-purple-300 dark:border-none  "
+                          className="flex-1 text-left p-4 bg-purple-50 hover:bg-purple-100 dark:bg-purple-900/20 dark:hover:bg-purple-800/30 rounded-lg transition-colors border border-purple-200 hover:border-purple-300 dark:border-none  "
                         >
                           <div className="flex items-center justify-between cursor-pointer">
                             <div>
@@ -461,7 +461,7 @@ export default function MaterialViewPage({ materialId }: Props) {
 
             {/* Right Column - Statistics */}
             <div className="space-y-4">
-              <div className="bg-white border border-gray-200 dark:bg-slate-800  dark:border-slate-700 rounded-xl p-6 shadow-sm">
+              <div className="bg-white border border-gray-200 dark:bg-slate-800/80  dark:border-slate-700 rounded-xl p-6 shadow-sm">
                 <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-300 mb-4">
                   Statistics
                 </h3>
@@ -504,7 +504,7 @@ export default function MaterialViewPage({ materialId }: Props) {
               </div>
 
               {/* File Info */}
-              <div className="bg-white border border-gray-200 dark:bg-slate-800 dark:border-slate-700 rounded-xl p-6 shadow-sm">
+              <div className="bg-white border border-gray-200 dark:bg-slate-800/80 dark:border-slate-700 rounded-xl p-6 shadow-sm">
                 <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-300 mb-4">
                   File Info
                 </h3>

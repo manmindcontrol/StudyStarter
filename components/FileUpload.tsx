@@ -110,7 +110,7 @@ export default function FileUpload({
   };
 
   return (
-    <div className="w-full dark:bg-slate-700">
+    <div className="w-full dark:bg-slate-800">
       {/* Drag & Drop zone */}
       <div
         onDragOver={handleDragOver}
@@ -121,7 +121,7 @@ export default function FileUpload({
           ${
             isDragging
               ? "border-blue-500 bg-blue-50"
-              : "border-gray-300 bg-gray-50/10 hover:border-gray-400 dark:bg-slate-700"
+              : "border-gray-300 bg-gray-50/10 hover:border-gray-400 dark:bg-slate-800"
           }
         `}
       >

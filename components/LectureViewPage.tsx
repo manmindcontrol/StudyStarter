@@ -183,7 +183,7 @@ export default function LectureViewPage({ lectureId }: Props) {
 
             {/* Right Column - Statistics */}
             <div className="space-y-4">
-              <div className="bg-white border dark:bg-slate-800 border-gray-200 dark:border-gray-700 rounded-xl p-6 shadow-sm">
+              <div className="bg-white border dark:bg-slate-800/80 border-gray-200 dark:border-gray-700 rounded-xl p-6 shadow-sm">
                 <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-200 mb-4">
                   Statistics
                 </h3>
@@ -260,7 +260,7 @@ export default function LectureViewPage({ lectureId }: Props) {
               </div>
 
               {/* Lecture Info */}
-              <div className="bg-white border dark:bg-slate-800 border-gray-200 dark:border-gray-700 rounded-xl p-6 shadow-sm">
+              <div className="bg-white border dark:bg-slate-800/80 border-gray-200 dark:border-gray-700 rounded-xl p-6 shadow-sm">
                 <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-200 mb-4">
                   Lecture Info
                 </h3>

@@ -148,7 +148,7 @@ export default function MaterialsPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-100 dark:bg-slate-800">
+    <div className="min-h-screen bg-gray-100 dark:bg-linear-to-br dark:from-slate-900 dark:via-slate-800 dark:to-slate-900 ">
       <div className="container-custom py-12">
         <button
           onClick={() => router.push("/dashboard")}
@@ -174,7 +174,7 @@ export default function MaterialsPage() {
         </div>
 
         {/* Upload section - highlighted card */}
-        <div className="mb-10 bg-white rounded-2xl shadow-lg p-8 border border-gray-100 dark:bg-slate-700 dark:border-gray-700">
+        <div className="mb-10 bg-white rounded-2xl shadow-lg p-8 border border-gray-100 dark:bg-slate-800/80 dark:border-gray-700">
           <FileUpload onUpload={handleUpload} />
           {uploading && (
             <div className="mt-4 flex items-center justify-center">
@@ -196,7 +196,7 @@ export default function MaterialsPage() {
                 placeholder="Search materials by title or filename..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full pl-12 pr-4 py-4 border-2 dark:bg-slate-700 text-gray-900 dark:text-gray-300 border-gray-100 dark:border-gray-700 rounded-xl  shadow-sm bg-white"
+                className="w-full pl-12 pr-4 py-4 border-2 dark:bg-slate-800/80 text-gray-900 dark:text-gray-300 border-gray-100 dark:border-gray-700 rounded-xl  shadow-sm bg-white"
               />
             </div>
           </div>
@@ -242,7 +242,7 @@ export default function MaterialsPage() {
               {filteredMaterials.map((material) => (
                 <div
                   key={material.id}
-                  className="bg-white dark:bg-slate-700 rounded-2xl shadow-md border border-gray-100 dark:border-gray-700 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 group overflow-hidden"
+                  className="bg-white dark:bg-slate-800/80 rounded-2xl shadow-md border border-gray-100 dark:border-gray-700 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 group overflow-hidden"
                 >
                   {/* linear top bar */}
                   <div className="h-2 bg-linear-to-r from-blue-500 to-cyan-500 dark:bg-linear-to-r dark:from-blue-700/50 dark:to-cyan-700/50"></div>
@@ -275,7 +275,7 @@ export default function MaterialsPage() {
                       <div className="flex items-center space-x-2">
                         <Link
                           href={`/materials/${material.id}`}
-                          className="flex-1 bg-blue-600 hover:bg-blue-500 dark:bg-slate-800 dark:hover:bg-slate-600 text-white dark:text-gray-300 text-xs sm:text-sm font-bold py-2.5 sm:py-3 px-3 sm:px-4 rounded-xl transition-all shadow-md hover:shadow-lg flex items-center justify-center"
+                          className="flex-1 bg-blue-600 hover:bg-blue-500 dark:bg-slate-700 dark:hover:bg-slate-600 text-white dark:text-gray-300 text-xs sm:text-sm font-bold py-2.5 sm:py-3 px-3 sm:px-4 rounded-xl transition-all shadow-md hover:shadow-lg flex items-center justify-center"
                         >
                           <Eye className="w-3.5 h-3.5 sm:w-4 sm:h-4 mr-1.5 sm:mr-2" />
                           Open Material

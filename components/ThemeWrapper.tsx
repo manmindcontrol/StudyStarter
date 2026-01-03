@@ -8,24 +8,17 @@ import type { User } from "@supabase/supabase-js";
 function ThemeApplier({ children }: { children: React.ReactNode }) {
   const { isDarkMode } = useTheme();
 
-  // Apply dark class immediately when isDarkMode changes
+  // Apply dark class to html element when isDarkMode changes
   useEffect(() => {
+    const htmlElement = document.documentElement;
     if (isDarkMode) {
-      document.documentElement.classList.add("dark");
+      htmlElement.classList.add("dark");
     } else {
-      document.documentElement.classList.remove("dark");
+      htmlElement.classList.remove("dark");
     }
   }, [isDarkMode]);
 
   return <>{children}</>;
-}
-
-// Apply dark mode from localStorage immediately to prevent flash
-if (typeof window !== 'undefined') {
-  const stored = localStorage.getItem('darkMode');
-  if (stored && JSON.parse(stored)) {
-    document.documentElement.classList.add('dark');
-  }
 }
 
 export default function ThemeWrapper({
@@ -34,13 +27,11 @@ export default function ThemeWrapper({
   children: React.ReactNode;
 }) {
   const [user, setUser] = useState<User | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const loadUser = async () => {
       const { user } = await getCurrentUser();
       setUser(user);
-      setIsLoading(false);
     };
     loadUser();
   }, []);

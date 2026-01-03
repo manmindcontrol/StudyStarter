@@ -81,7 +81,7 @@ export default function GenerateNotesButton({
           type="button"
           onClick={handleClick}
           disabled={loading}
-          className={`relative w-full bg-white hover:bg-purple-50 dark:bg-slate-800 dark:hover:bg-purple-800/20 border border-gray-200 dark:border-slate-700 rounded-xl p-6 transition-all group text-left shadow-sm disabled:opacity-50 disabled:cursor-not-allowed overflow-hidden cursor-pointer ${className}`}
+          className={`relative w-full bg-white hover:bg-purple-50 dark:bg-slate-800/80 dark:hover:bg-purple-900/20 border border-gray-200 dark:border-slate-700 rounded-xl p-6 transition-all group text-left shadow-sm disabled:opacity-50 disabled:cursor-not-allowed overflow-hidden cursor-pointer ${className}`}
         >
           <div className="flex items-center justify-between mb-3">
             <div className="bg-purple-100 dark:bg-purple-900 p-3 rounded-lg">

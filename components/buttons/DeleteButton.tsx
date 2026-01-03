@@ -70,7 +70,7 @@ export default function DeleteButton({
         type="button"
         onClick={handleDelete}
         disabled={loading}
-        className={`relative w-full bg-white hover:bg-red-50 border dark:bg-slate-800 dark:hover:bg-red-500/10  border-gray-200 dark:border-slate-700 rounded-xl p-6 transition-all group text-left shadow-sm disabled:opacity-50 disabled:cursor-not-allowed overflow-hidden ${className}`}
+        className={`relative w-full bg-white hover:bg-red-50 border dark:bg-slate-800/80 dark:hover:bg-red-800/10  border-gray-200 dark:border-slate-700 rounded-xl p-6 transition-all group text-left shadow-sm disabled:opacity-50 disabled:cursor-not-allowed overflow-hidden ${className}`}
       >
         {loading && (
           <div className="absolute inset-0 bg-red-50/80 backdrop-blur-sm flex items-center justify-center z-10">

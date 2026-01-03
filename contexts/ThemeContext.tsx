@@ -32,17 +32,23 @@ export function ThemeProvider({
   useEffect(() => {
     const loadDarkModePreference = async () => {
       if (user) {
-        const { data } = await supabase
+        const { data, error } = await supabase
           .from("user_profiles")
           .select("dark_mode")
           .eq("id", user.id)
           .single();
 
+        if (error) {
+          console.error('[ThemeContext] Error loading dark mode from database:', error);
+        }
+
         if (data?.dark_mode !== undefined) {
           setIsDarkMode(data.dark_mode);
-          localStorage.setItem('darkMode', JSON.stringify(data.dark_mode));
+          if (typeof window !== 'undefined') {
+            localStorage.setItem('darkMode', JSON.stringify(data.dark_mode));
+          }
         }
-      } else {
+      } else if (typeof window !== 'undefined') {
         // If no user, load from localStorage only
         const stored = localStorage.getItem('darkMode');
         if (stored !== null) {
@@ -59,14 +65,26 @@ export function ThemeProvider({
     setIsDarkMode(newValue);
 
     // Save to localStorage immediately
-    localStorage.setItem('darkMode', JSON.stringify(newValue));
+    if (typeof window !== 'undefined') {
+      localStorage.setItem('darkMode', JSON.stringify(newValue));
+    }
 
-    // Save to database if user is logged in
-    if (user) {
-      await supabase
-        .from("user_profiles")
-        .update({ dark_mode: newValue })
-        .eq("id", user.id);
+    // Save to database - get current user from session
+    try {
+      const { data: { user: sessionUser } } = await supabase.auth.getUser();
+
+      if (sessionUser) {
+        const { error } = await supabase
+          .from("user_profiles")
+          .update({ dark_mode: newValue })
+          .eq("id", sessionUser.id);
+
+        if (error) {
+          console.error('[ThemeContext] Error saving dark mode:', error);
+        }
+      }
+    } catch (err) {
+      console.error('[ThemeContext] Exception while saving dark mode:', err);
     }
   };
 
@@ -74,7 +92,9 @@ export function ThemeProvider({
     setIsDarkMode(value);
 
     // Save to localStorage immediately
-    localStorage.setItem('darkMode', JSON.stringify(value));
+    if (typeof window !== 'undefined') {
+      localStorage.setItem('darkMode', JSON.stringify(value));
+    }
 
     // Save to database if user is logged in
     if (user) {

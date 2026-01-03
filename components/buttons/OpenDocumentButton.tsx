@@ -22,7 +22,7 @@ export default function OpenDocumentButton({
     <button
       type="button"
       onClick={handleOpen}
-      className={`w-full bg-white hover:bg-blue-50 dark:bg-slate-800 dark:hover:bg-slate-700/50 border border-gray-200 dark:border-slate-700  rounded-xl p-6 transition-all group text-left shadow-sm ${className}`}
+      className={`w-full bg-white hover:bg-blue-50 dark:bg-slate-800/80 dark:hover:bg-slate-700/40 border border-gray-200 dark:border-slate-700  rounded-xl p-6 transition-all group text-left shadow-sm ${className}`}
     >
       <div className="flex items-center justify-between mb-3">
         <div className="bg-blue-100 dark:bg-blue-900 p-3 rounded-lg">

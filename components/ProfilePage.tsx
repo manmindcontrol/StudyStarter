@@ -229,7 +229,7 @@ export default function ProfilePage() {
         {/* Messages */}
         {successMessage && (
           <div className="mb-6 bg-green-50 border-2 border-green-300 text-green-800 px-6 py-4 rounded-xl flex items-center space-x-3 shadow-lg shadow-green-500/20 animate-fade-in">
-            <CheckCircle className="w-6 h-6 flex-shrink-0" />
+            <CheckCircle className="w-6 h-6 shrink-0" />
             <div>
               <p className="font-semibold">{successMessage}</p>
               <p className="text-sm text-green-700 mt-0.5">
@@ -240,7 +240,7 @@ export default function ProfilePage() {
         )}
         {errorMessage && (
           <div className="mb-6 bg-red-50 border-2 border-red-300 text-red-800 px-6 py-4 rounded-xl flex items-center space-x-3 shadow-lg shadow-red-500/20">
-            <XCircle className="w-6 h-6 flex-shrink-0" />
+            <XCircle className="w-6 h-6 shrink-0" />
             <span className="font-medium">{errorMessage}</span>
           </div>
         )}
@@ -249,7 +249,7 @@ export default function ProfilePage() {
           {/* Sidebar */}
           <div className="lg:col-span-1">
             {/* User Info Card */}
-            <div className="bg-white dark:bg-slate-800 rounded-xl shadow-sm p-6 border border-gray-100 dark:border-slate-700 mb-6">
+            <div className="bg-white dark:bg-slate-800/80  rounded-xl shadow-sm p-6 border border-gray-100 dark:border-slate-700 mb-6">
               <div className="flex flex-col items-center text-center">
                 <div className="bg-linear-to-br from-blue-500 to-cyan-500 w-20 h-20 rounded-full flex items-center justify-center text-white text-2xl font-bold mb-4">
                   {displayName.charAt(0).toUpperCase()}
@@ -282,7 +282,7 @@ export default function ProfilePage() {
           {/* Main Content */}
           <div className="lg:col-span-2 space-y-6">
             {/* Profile Information */}
-            <div className="bg-white dark:bg-slate-800 rounded-xl shadow-sm p-6 border border-gray-100 dark:border-slate-700">
+            <div className="bg-white dark:bg-slate-800/80 rounded-xl shadow-sm p-6 border border-gray-100 dark:border-slate-700">
               <div className="flex items-center space-x-3 mb-6">
                 <User className="w-6 h-6 text-blue-600 dark:text-blue-400" />
                 <h2 className="text-xl font-semibold text-gray-900 dark:text-white">
@@ -301,7 +301,7 @@ export default function ProfilePage() {
                       type="email"
                       value={user?.email || ""}
                       disabled
-                      className="w-full pl-10 pr-4 py-2 border border-gray-300 dark:border-slate-600 rounded-lg bg-gray-50 dark:bg-slate-900 text-gray-600 dark:text-gray-400 cursor-not-allowed"
+                      className="w-full pl-10 pr-4 py-2 border border-gray-300 dark:border-slate-600 rounded-lg bg-gray-50 dark:bg-slate-700/40 text-gray-600 dark:text-gray-400 cursor-not-allowed"
                     />
                   </div>
                   <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
@@ -318,7 +318,7 @@ export default function ProfilePage() {
                     value={fullName}
                     onChange={(e) => setFullName(e.target.value)}
                     placeholder="Enter your full name"
-                    className="w-full px-4 py-2 border text-gray-900 dark:text-white border-gray-300 dark:border-slate-600 bg-white dark:bg-slate-900 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    className="w-full px-4 py-2 border text-gray-900 dark:text-white border-gray-300 dark:border-slate-600 bg-white dark:bg-slate-700/40 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                   />
                 </div>
 
@@ -331,7 +331,7 @@ export default function ProfilePage() {
                     value={displayName}
                     onChange={(e) => setDisplayName(e.target.value)}
                     placeholder="e.g. John, Sarah..."
-                    className="w-full px-4 py-2 border text-gray-900 dark:text-white border-gray-300 dark:border-slate-600 bg-white dark:bg-slate-900 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    className="w-full px-4 py-2 border text-gray-900 dark:text-white border-gray-300 dark:border-slate-600 bg-white dark:bg-slate-700/40 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                   />
                   <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
                     This name will be used in the dashboard greetings
@@ -406,7 +406,7 @@ export default function ProfilePage() {
                     className={`w-full px-4 py-2 border text-gray-900 dark:text-white rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent ${
                       currentPasswordError
                         ? "border-red-300 bg-red-50 dark:border-red-700 dark:bg-red-900/30"
-                        : "border-gray-300 dark:border-slate-600 bg-white dark:bg-slate-900"
+                        : "border-gray-300 dark:border-slate-600 bg-white dark:bg-slate-700/40"
                     }`}
                     required
                   />
@@ -431,7 +431,7 @@ export default function ProfilePage() {
                     value={newPassword}
                     onChange={(e) => setNewPassword(e.target.value)}
                     placeholder="Enter new password (min. 6 characters)"
-                    className="w-full px-4 py-2 border border-gray-300 dark:border-slate-600 text-gray-900 dark:text-white bg-white dark:bg-slate-900 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    className="w-full px-4 py-2 border border-gray-300 dark:border-slate-600 text-gray-900 dark:text-white bg-white dark:bg-slate-700/40 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                     required
                   />
                 </div>
@@ -445,7 +445,7 @@ export default function ProfilePage() {
                     value={confirmPassword}
                     onChange={(e) => setConfirmPassword(e.target.value)}
                     placeholder="Enter new password again"
-                    className="w-full px-4 py-2 border border-gray-300 dark:border-slate-600 text-gray-900 dark:text-white bg-white dark:bg-slate-900 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    className="w-full px-4 py-2 border border-gray-300 dark:border-slate-600 text-gray-900 dark:text-white bg-white dark:bg-slate-700/40 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                     required
                   />
                 </div>

@@ -167,7 +167,9 @@ export default function DocumentViewer({ materialId }: Props) {
                   {material.title}
                 </h1>
                 {material.file_name && (
-                  <p className="text-sm text-gray-400 dark:text-gray-500">{material.file_name}</p>
+                  <p className="text-sm text-gray-400 dark:text-gray-500">
+                    {material.file_name}
+                  </p>
                 )}
               </div>
             </div>
@@ -204,9 +206,9 @@ export default function DocumentViewer({ materialId }: Props) {
 
         {/* AI Chat - Right Side */}
         <div className="w-1/2 flex flex-col bg-gray-50 dark:bg-slate-800">
-          <div className="bg-white dark:bg-slate-700/70 rounded-2xl shadow-lg border border-gray-200 dark:border-slate-700 flex flex-col h-full m-4 overflow-hidden">
+          <div className="bg-white dark:bg-slate-800/0 rounded-2xl shadow-lg border border-gray-200 dark:border-slate-700 flex flex-col h-full m-4 overflow-hidden">
             {/* Chat Header */}
-            <div className="p-4 border-b border-gray-200 bg-gray-50 dark:border-slate-700 dark:bg-slate-800/80 rounded-t-2xl shrink-0">
+            <div className="p-4 border-b border-gray-200 dark:border-slate-700 bg-linear-to-r from-purple-50 to-blue-50 dark:from-purple-900/20 dark:to-blue-900/20 rounded-t-2xl shrink-0">
               <div className="flex items-center gap-3">
                 <div className="relative w-12 h-12 shrink-0 flex items-center justify-center">
                   <Image

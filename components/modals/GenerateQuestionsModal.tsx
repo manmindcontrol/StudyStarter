@@ -34,13 +34,13 @@ export default function GenerateQuestionsModal({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm">
-      <div className="bg-white rounded-2xl shadow-2xl max-w-lg w-full max-h-[90vh] overflow-y-auto scrollbar-hide">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
+      <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-2xl max-w-lg w-full max-h-[90vh] overflow-y-auto scrollbar-hide">
         {/* Header */}
-        <div className="sticky top-0 bg-linear-to-r from-green-600 to-emerald-500 p-6 rounded-t-2xl">
+        <div className="sticky top-0 bg-linear-to-r from-green-600 to-emerald-500 dark:bg-linear-to-r dark:from-green-700 dark:to-emerald-600 p-6 rounded-t-2xl">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-3">
-              <div className="bg-white/20 p-2 rounded-lg">
+              <div className="bg-white/20  p-2 rounded-lg">
                 <FileQuestion className="w-6 h-6 text-white" />
               </div>
               <h2 className="text-2xl font-bold text-white">
@@ -61,7 +61,7 @@ export default function GenerateQuestionsModal({
         <div className="p-6 space-y-6">
           {/* Question Count */}
           <div>
-            <label className="block text-sm font-semibold text-gray-900 mb-3">
+            <label className="block text-sm font-semibold text-gray-900 dark:text-gray-300 mb-3">
               Number of questions
             </label>
             <div className="space-y-3">
@@ -130,20 +130,24 @@ export default function GenerateQuestionsModal({
                 />
               </div>
               <div className="flex items-center justify-between">
-                <span className="text-sm text-gray-600">5 questions</span>
-                <div className="bg-green-100 px-4 py-2 rounded-lg">
-                  <span className="text-2xl font-bold text-green-700">
+                <span className="text-sm text-gray-600 dark:text-gray-400">
+                  5 questions
+                </span>
+                <div className="bg-green-100 dark:bg-green-900/50 px-4 py-2 rounded-lg">
+                  <span className="text-2xl font-bold text-green-700 dark:text-green-400">
                     {questionCount}
                   </span>
                 </div>
-                <span className="text-sm text-gray-600">30 questions</span>
+                <span className="text-sm text-gray-600 dark:text-gray-400">
+                  30 questions
+                </span>
               </div>
             </div>
           </div>
 
           {/* Question Format */}
           <div>
-            <label className="block text-sm font-semibold text-gray-900 mb-3">
+            <label className="block text-sm font-semibold text-gray-900 dark:text-gray-300 mb-3">
               Question type
             </label>
             <div className="space-y-3">
@@ -156,8 +160,8 @@ export default function GenerateQuestionsModal({
                   w-full p-4 rounded-xl border-2 transition-all text-left
                   ${
                     questionFormat === "mcq"
-                      ? "border-green-500 bg-green-50"
-                      : "border-gray-200 bg-white hover:border-gray-300"
+                      ? "border-green-500 bg-green-50 dark:bg-green-900/50 dark:border-green-700/50"
+                      : "border-gray-200 bg-white dark:bg-slate-700/70 dark:border-slate-700/70 hover:border-gray-300"
                   }
                   disabled:opacity-50 disabled:cursor-not-allowed
                 `}
@@ -168,7 +172,7 @@ export default function GenerateQuestionsModal({
                     mt-0.5 w-5 h-5 rounded-full border-2 flex items-center justify-center transition-all
                     ${
                       questionFormat === "mcq"
-                        ? "border-green-500 bg-green-500"
+                        ? "border-green-500 bg-green-500 "
                         : "border-gray-300"
                     }
                   `}
@@ -179,12 +183,12 @@ export default function GenerateQuestionsModal({
                   </div>
                   <div className="flex-1">
                     <div className="flex items-center space-x-2 mb-1">
-                      <HelpCircle className="w-5 h-5 text-blue-600" />
-                      <h3 className="font-semibold text-gray-900">
+                      <HelpCircle className="w-5 h-5 text-blue-600 dark:text-blue-400" />
+                      <h3 className="font-semibold text-gray-900 dark:text-gray-300">
                         A) Quiz Questions (Multiple Choice)
                       </h3>
                     </div>
-                    <p className="text-sm text-gray-600">
+                    <p className="text-sm text-gray-600 dark:text-gray-400">
                       Questions with 4 options (A, B, C, D), only one correct
                       answer
                     </p>
@@ -201,8 +205,8 @@ export default function GenerateQuestionsModal({
                   w-full p-4 rounded-xl border-2 transition-all text-left
                   ${
                     questionFormat === "open"
-                      ? "border-green-500 bg-green-50"
-                      : "border-gray-200 bg-white hover:border-gray-300"
+                      ? "border-green-500 bg-green-50 dark:bg-green-900/50 dark:border-green-700/50"
+                      : "border-gray-200 bg-white dark:bg-slate-700/70 dark:border-slate-700/70 hover:border-gray-300"
                   }
                   disabled:opacity-50 disabled:cursor-not-allowed
                 `}
@@ -224,12 +228,12 @@ export default function GenerateQuestionsModal({
                   </div>
                   <div className="flex-1">
                     <div className="flex items-center space-x-2 mb-1">
-                      <FileQuestion className="w-5 h-5 text-purple-600" />
-                      <h3 className="font-semibold text-gray-900">
+                      <FileQuestion className="w-5 h-5 text-purple-600 dark:text-purple-400" />
+                      <h3 className="font-semibold text-gray-900 dark:text-gray-300">
                         B) Open-Ended Questions
                       </h3>
                     </div>
-                    <p className="text-sm text-gray-600">
+                    <p className="text-sm text-gray-600 dark:text-gray-400">
                       Questions requiring detailed written answers
                     </p>
                   </div>
@@ -245,8 +249,8 @@ export default function GenerateQuestionsModal({
                   w-full p-4 rounded-xl border-2 transition-all text-left
                   ${
                     questionFormat === "mixed"
-                      ? "border-green-500 bg-green-50"
-                      : "border-gray-200 bg-white hover:border-gray-300"
+                      ? "border-green-500 bg-green-50 dark:bg-green-900/50 dark:border-green-700/50"
+                      : "border-gray-200 bg-white dark:bg-slate-700/70 dark:border-slate-700/70 hover:border-gray-300"
                   }
                   disabled:opacity-50 disabled:cursor-not-allowed
                 `}
@@ -268,12 +272,12 @@ export default function GenerateQuestionsModal({
                   </div>
                   <div className="flex-1">
                     <div className="flex items-center space-x-2 mb-1">
-                      <Shuffle className="w-5 h-5 text-green-600" />
-                      <h3 className="font-semibold text-gray-900">
+                      <Shuffle className="w-5 h-5 text-green-600 dark:text-green-400" />
+                      <h3 className="font-semibold text-gray-900 dark:text-gray-300">
                         C) Mixed (Both Types)
                       </h3>
                     </div>
-                    <p className="text-sm text-gray-600">
+                    <p className="text-sm text-gray-600 dark:text-gray-400">
                       Combination of quiz and open-ended questions
                     </p>
                   </div>
@@ -283,10 +287,10 @@ export default function GenerateQuestionsModal({
           </div>
 
           {/* Info Box */}
-          <div className="bg-blue-50 border border-blue-200 rounded-xl p-4">
+          <div className="bg-blue-50 border border-blue-200 dark:border-blue-900/40 dark:bg-blue-900/20 rounded-xl p-4">
             <div className="flex items-start space-x-3">
-              <HelpCircle className="w-5 h-5 text-blue-600 mt-0.5 shrink-0" />
-              <div className="text-sm text-blue-900">
+              <HelpCircle className="w-5 h-5 text-blue-600 dark:text-blue-400 mt-0.5 shrink-0" />
+              <div className="text-sm text-blue-900 dark:text-blue-200">
                 <p className="font-semibold mb-1">Note:</p>
                 <p>
                   The correct answer will always be displayed below each
@@ -298,12 +302,12 @@ export default function GenerateQuestionsModal({
         </div>
 
         {/* Footer */}
-        <div className="sticky bottom-0 bg-gray-50 p-6 rounded-b-2xl border-t border-gray-200">
+        <div className="sticky bottom-0 bg-gray-50 dark:bg-slate-800/80 p-6 rounded-b-2xl border-t border-gray-200 dark:border-slate-700/70">
           <div className="flex items-center space-x-3">
             <button
               onClick={onClose}
               disabled={loading}
-              className="flex-1 bg-white border border-gray-300 text-gray-700 font-semibold py-3 px-4 rounded-xl hover:bg-gray-50 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+              className="flex-1 bg-white dark:bg-slate-700/70 border border-gray-300 dark:border-slate-700 text-gray-700 dark:text-gray-300 font-semibold py-3 px-4 rounded-xl hover:bg-gray-50 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
             >
               Cancel
             </button>

@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { getCurrentUser } from "@/lib/auth";
@@ -25,9 +25,8 @@ import {
   Download,
   Save,
   Check,
-  ChevronRight,
 } from "lucide-react";
-import Image from "next/image";
+import SlidingChatPanel from "./SlidingChatPanel";
 
 type KeyPoint = {
   title: string;
@@ -80,7 +79,7 @@ export default function NotesViewPage({ materialId, noteId }: Props) {
   const [saving, setSaving] = useState(false);
   const [isUnsaved, setIsUnsaved] = useState(false);
   const [savedNoteId, setSavedNoteId] = useState<string | null>(null);
-  const chatEndRef = useRef<HTMLDivElement>(null);
+  const [isChatOpen, setIsChatOpen] = useState(false);
 
   useEffect(() => {
     const loadData = async () => {
@@ -141,10 +140,6 @@ export default function NotesViewPage({ materialId, noteId }: Props) {
 
     loadData();
   }, [noteId, materialId, searchParams]);
-
-  useEffect(() => {
-    chatEndRef.current?.scrollIntoView({ behavior: "smooth" });
-  }, [chatMessages]);
 
   const handleSendMessage = async () => {
     if (!inputMessage.trim() || sendingMessage || !material || !note) return;
@@ -453,54 +448,68 @@ export default function NotesViewPage({ materialId, noteId }: Props) {
     <div className="min-h-screen bg-linear-to-br from-purple-50 via-white to-blue-50 dark:bg-linear-to-br dark:from-slate-900 dark:via-slate-800 dark:to-slate-900">
       {/* Header */}
       <div className="bg-white border-b border-gray-200 dark:border-slate-700 dark:bg-slate-800/80 sticky top-0 z-10 shadow-sm">
-        <div className="container-custom py-4">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-4">
+        <div className="container-custom py-3 sm:py-4 md:py-5 px-3 sm:px-4">
+          <div className="flex items-center justify-between gap-2">
+            <div className="flex items-center gap-2 sm:gap-3 md:gap-4 flex-1 min-w-0">
               <button
                 onClick={() => router.push(`/materials/${materialId}`)}
-                className="p-2  text-gray-600 dark:text-gray-300 dark:hover:text-gray-400 hover:text-gray-900 group rounded-lg transition-colors shrink-0"
+                className="p-2.5 sm:p-3 text-gray-600 dark:text-gray-300 dark:hover:text-gray-400 hover:text-gray-900 group rounded-lg transition-colors shrink-0"
               >
-                <ArrowLeft className="w-5 h-5 group-hover:-translate-x-1 transition-transform" />
+                <ArrowLeft className="w-4 h-4 sm:w-5 sm:h-5 group-hover:-translate-x-1 transition-transform" />
               </button>
-              <div className="flex items-center gap-3">
-                <div className="bg-purple-100 dark:bg-purple-900/50 p-2 rounded-lg">
-                  <BookOpen className="w-5 h-5 text-purple-600 dark:text-purple-400" />
+              <div className="flex items-center gap-2 sm:gap-3 min-w-0">
+                <div className="bg-purple-100 dark:bg-purple-900/50 p-1.5 sm:p-2 rounded-lg shrink-0">
+                  <BookOpen className="w-4 h-4 sm:w-5 sm:h-5 text-purple-600 dark:text-purple-400" />
                 </div>
-                <div>
-                  <h1 className="text-lg font-bold text-gray-900 dark:text-gray-300">
+                <div className="min-w-0">
+                  <h1 className="text-sm sm:text-base md:text-lg font-bold text-gray-900 dark:text-gray-300 truncate">
                     Study Notes
                   </h1>
-                  <p className="text-sm text-gray-600 dark:text-gray-400  ">
+                  <p className="text-xs sm:text-sm text-gray-600 dark:text-gray-400 truncate">
                     {material.title}
                   </p>
                 </div>
               </div>
             </div>
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-3 sm:gap-2 shrink-0">
+              {/* Chat Toggle Button - Mobile Only */}
+              <button
+                onClick={() => setIsChatOpen(true)}
+                className="md:hidden px-4 py-2.5 bg-linear-to-br from-blue-600 to-purple-600 text-white rounded-lg transition-colors shrink-0 relative font-bold text-sm"
+              >
+                AI
+                {chatMessages.length > 0 && (
+                  <span className="absolute -top-1 -right-1 w-4 h-4 bg-red-500 rounded-full text-[10px] flex items-center justify-center font-bold">
+                    {chatMessages.length}
+                  </span>
+                )}
+              </button>
               <button
                 onClick={handleDownloadNotes}
-                className="inline-flex items-center text-white gap-2 bg-linear-to-br from-blue-600 to-cyan-500 hover:from-blue-700 hover:to-cyan-600 px-4 py-2 rounded-lg font-semibold transition-colors cursor-pointer"
+                className="inline-flex items-center justify-center text-white gap-2 bg-linear-to-br from-blue-600 to-cyan-500 hover:from-blue-700 hover:to-cyan-600 px-3 sm:px-4 py-2.5 sm:py-3 rounded-lg text-xs sm:text-sm font-semibold transition-colors cursor-pointer min-h-[42px] sm:min-h-[44px]"
               >
-                <Download className="w-4 h-4 text-white" />
-                Download Notes
+                <Download className="w-4 h-4 sm:w-4.5 sm:h-4.5 text-white" />
+                <span className="hidden sm:inline">Download Notes</span>
               </button>
               {isUnsaved ? (
                 <button
                   onClick={handleSaveNotes}
                   disabled={saving}
-                  className="inline-flex items-center gap-2 bg-linear-to-br from-green-600 to-emerald-500 hover:from-green-700 hover:to-emerald-600 text-white px-4 py-2 rounded-lg font-semibold transition-colors disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
+                  className="inline-flex items-center justify-center gap-2 bg-linear-to-br from-green-600 to-emerald-500 hover:from-green-700 hover:to-emerald-600 text-white px-3 sm:px-4 py-2.5 sm:py-3 rounded-lg text-xs sm:text-sm font-semibold transition-colors disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer min-h-[42px] sm:min-h-[44px]"
                 >
-                  <Save className="w-4 h-4" />
-                  {saving ? "Saving..." : "Save Notes"}
+                  <Save className="w-4 h-4 sm:w-4.5 sm:h-4.5" />
+                  <span className="hidden sm:inline">
+                    {saving ? "Saving..." : "Save Notes"}
+                  </span>
                 </button>
               ) : (
                 savedNoteId && (
                   <button
                     disabled
-                    className="inline-flex items-center gap-2 bg-green-100 text-green-500 px-4 py-2 rounded-lg font-semibold cursor-default"
+                    className="inline-flex items-center justify-center gap-2 bg-green-100 text-green-500 px-3 sm:px-4 py-2.5 sm:py-3 rounded-lg text-xs sm:text-sm font-semibold cursor-default min-h-[42px] sm:min-h-[44px]"
                   >
-                    <Check className="w-4 h-4" />
-                    Notes Saved
+                    <Check className="w-4 h-4 sm:w-4.5 sm:h-4.5" />
+                    <span className="hidden sm:inline">Notes Saved</span>
                   </button>
                 )
               )}
@@ -510,57 +519,59 @@ export default function NotesViewPage({ materialId, noteId }: Props) {
       </div>
 
       {/* Two Column Layout */}
-      <div className="container-custom py-6">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 h-[calc(100vh-12rem)]">
+      <div className="container-custom py-3 sm:py-4 md:py-6 px-3 sm:px-4">
+        <div className="flex flex-col lg:grid lg:grid-cols-2 gap-3 sm:gap-4 md:gap-6">
           {/* Left Column - Notes Content */}
-          <div className="overflow-y-auto pr-4 space-y-6 custom-scrollbar">
+          <div className="overflow-y-auto lg:pr-4 space-y-3 sm:space-y-4 md:space-y-6 custom-scrollbar lg:h-[calc(100vh-12rem)]">
             {/* Summary Section */}
-            <div className="bg-white dark:bg-slate-700/70 rounded-2xl shadow-lg p-6 border border-gray-100  dark:border-slate-700">
-              <div className="flex items-center gap-3 mb-4">
-                <div className="bg-blue-100 dark:bg-blue-700/20 p-2 rounded-lg">
-                  <BookOpen className="w-5 h-5 text-blue-600 dark:text-blue-400" />
+            <div className="bg-white dark:bg-slate-700/70 rounded-lg sm:rounded-xl md:rounded-2xl shadow-sm sm:shadow-md md:shadow-lg p-3 sm:p-4 md:p-6 border border-gray-100 dark:border-slate-700">
+              <div className="flex items-center gap-2 sm:gap-3 mb-2 sm:mb-3 md:mb-4">
+                <div className="bg-blue-100 dark:bg-blue-700/20 p-1.5 sm:p-2 rounded-lg">
+                  <BookOpen className="w-4 h-4 sm:w-5 sm:h-5 text-blue-600 dark:text-blue-400" />
                 </div>
-                <h2 className="text-xl font-bold text-gray-900 dark:text-gray-300">
+                <h2 className="text-base sm:text-lg md:text-xl font-bold text-gray-900 dark:text-gray-300">
                   Summary
                 </h2>
               </div>
-              <div className="prose prose-lg max-w-none">
-                <div className="text-gray-700 dark:text-gray-300 leading-relaxed space-y-4 whitespace-pre-wrap text-justify">
+              <div className="prose prose-sm sm:prose-base md:prose-lg max-w-none">
+                <div className="text-gray-700 dark:text-gray-300 text-xs sm:text-sm md:text-base leading-relaxed space-y-2 sm:space-y-3 md:space-y-4 whitespace-pre-wrap text-justify">
                   {note.summary}
                 </div>
               </div>
             </div>
 
             {/* Key Points Section */}
-            <div className="bg-white dark:bg-slate-700/70 rounded-2xl shadow-lg p-6 border border-gray-100 dark:border-slate-700">
-              <div className="flex items-center gap-3 mb-4">
-                <div className="bg-green-100 dark:bg-green-700/20 p-2 rounded-lg">
-                  <Star className="w-5 h-5 text-green-600 dark:text-green-400" />
+            <div className="bg-white dark:bg-slate-700/70 rounded-lg sm:rounded-xl md:rounded-2xl shadow-sm sm:shadow-md md:shadow-lg p-3 sm:p-4 md:p-6 border border-gray-100 dark:border-slate-700">
+              <div className="flex items-center gap-2 sm:gap-3 mb-2 sm:mb-3 md:mb-4">
+                <div className="bg-green-100 dark:bg-green-700/20 p-1.5 sm:p-2 rounded-lg">
+                  <Star className="w-4 h-4 sm:w-5 sm:h-5 text-green-600 dark:text-green-400" />
                 </div>
-                <h2 className="text-xl font-bold text-gray-900 dark:text-gray-300">
+                <h2 className="text-base sm:text-lg md:text-xl font-bold text-gray-900 dark:text-gray-300">
                   Key Points
                 </h2>
               </div>
-              <div className="space-y-4">
+              <div className="space-y-2 sm:space-y-3 md:space-y-4">
                 {note.key_points.map((point, index) => (
                   <div
                     key={index}
-                    className="border-l-4 border-purple-500 bg-linear-to-r from-purple-50 to-transparent dark:bg-linear-to-r dark:from-purple-900/20 dark:to-transparent p-4 rounded-r-xl"
+                    className="border-l-3 sm:border-l-4 border-purple-500 bg-linear-to-r from-purple-50 to-transparent dark:bg-linear-to-r dark:from-purple-900/20 dark:to-transparent p-2.5 sm:p-3 md:p-4 rounded-r-lg sm:rounded-r-xl"
                   >
-                    <div className="flex items-start justify-between gap-4 mb-2">
-                      <h3 className="text-base font-bold text-gray-900 dark:text-gray-300 flex-1">
+                    <div className="flex items-start justify-between gap-2 sm:gap-3 md:gap-4 mb-1.5 sm:mb-2">
+                      <h3 className="text-sm sm:text-base font-bold text-gray-900 dark:text-gray-300 flex-1 leading-tight">
                         {point.title}
                       </h3>
                       <span
-                        className={`inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs font-bold border ${getImportanceColor(
+                        className={`inline-flex items-center gap-0.5 sm:gap-1 px-1.5 sm:px-2 py-0.5 sm:py-1 rounded-full text-[10px] sm:text-xs font-bold border ${getImportanceColor(
                           point.importance
-                        )}`}
+                        )} shrink-0`}
                       >
                         {getImportanceIcon(point.importance)}
-                        {point.importance}
+                        <span className="hidden sm:inline">
+                          {point.importance}
+                        </span>
                       </span>
                     </div>
-                    <div className="text-gray-700 dark:text-gray-300 leading-relaxed space-y-2 whitespace-pre-wrap text-justify text-sm">
+                    <div className="text-gray-700 dark:text-gray-300 leading-relaxed space-y-1.5 sm:space-y-2 whitespace-pre-wrap text-justify text-xs sm:text-sm">
                       {point.description}
                     </div>
                   </div>
@@ -569,43 +580,43 @@ export default function NotesViewPage({ materialId, noteId }: Props) {
             </div>
 
             {/* Concepts Section */}
-            <div className="bg-white dark:bg-slate-700/70 rounded-2xl shadow-lg p-6 border border-gray-100 dark:border-slate-700">
-              <div className="flex items-center gap-3 mb-4">
-                <div className="bg-purple-100 dark:bg-purple-700/20 p-2 rounded-lg">
-                  <Brain className="w-5 h-5 text-purple-600 dark:text-purple-400" />
+            <div className="bg-white dark:bg-slate-700/70 rounded-lg sm:rounded-xl md:rounded-2xl shadow-sm sm:shadow-md md:shadow-lg p-3 sm:p-4 md:p-6 border border-gray-100 dark:border-slate-700">
+              <div className="flex items-center gap-2 sm:gap-3 mb-2 sm:mb-3 md:mb-4">
+                <div className="bg-purple-100 dark:bg-purple-700/20 p-1.5 sm:p-2 rounded-lg">
+                  <Brain className="w-4 h-4 sm:w-5 sm:h-5 text-purple-600 dark:text-purple-400" />
                 </div>
-                <h2 className="text-xl font-bold text-gray-900 dark:text-gray-300">
+                <h2 className="text-base sm:text-lg md:text-xl font-bold text-gray-900 dark:text-gray-300">
                   Important Concepts
                 </h2>
               </div>
-              <div className="grid gap-4">
+              <div className="grid gap-2 sm:gap-3 md:gap-4">
                 {note.concepts.map((concept, index) => (
                   <div
                     key={index}
-                    className="bg-linear-to-br from-purple-50 to-blue-50 dark:from-purple-900/20 dark:to-blue-900/20 rounded-xl p-5 border border-purple-100 dark:border-purple-700/20"
+                    className="bg-linear-to-br from-purple-50 to-blue-50 dark:from-purple-900/20 dark:to-blue-900/20 rounded-lg sm:rounded-xl p-3 sm:p-4 md:p-5 border border-purple-100 dark:border-purple-700/20"
                   >
-                    <h3 className="text-lg font-bold text-purple-900 dark:text-purple-400 mb-3">
+                    <h3 className="text-sm sm:text-base md:text-lg font-bold text-purple-900 dark:text-purple-400 mb-2 sm:mb-3 leading-tight">
                       {concept.concept}
                     </h3>
-                    <div className="text-gray-700 dark:text-gray-300 mb-4 leading-relaxed space-y-2 whitespace-pre-wrap text-justify text-sm">
+                    <div className="text-gray-700 dark:text-gray-300 mb-2 sm:mb-3 md:mb-4 leading-relaxed space-y-1.5 sm:space-y-2 whitespace-pre-wrap text-justify text-xs sm:text-sm">
                       {concept.explanation}
                     </div>
                     {concept.examples && concept.examples.length > 0 && (
-                      <div className="mt-3">
-                        <h4 className="text-xs font-semibold text-gray-900 dark:text-gray-300 mb-2 flex items-center">
-                          <Lightbulb className="w-3.5 h-3.5 mr-1.5 text-yellow-600" />
+                      <div className="mt-2 sm:mt-3">
+                        <h4 className="text-[10px] sm:text-xs font-semibold text-gray-900 dark:text-gray-300 mb-1.5 sm:mb-2 flex items-center">
+                          <Lightbulb className="w-3 h-3 sm:w-3.5 sm:h-3.5 mr-1 sm:mr-1.5 text-yellow-600" />
                           Examples:
                         </h4>
-                        <ul className="space-y-1.5">
+                        <ul className="space-y-1 sm:space-y-1.5">
                           {concept.examples.map((example, exIndex) => (
                             <li
                               key={exIndex}
-                              className="flex items-start gap-2 text-gray-700 dark:text-gray-300 text-sm"
+                              className="flex items-start gap-3 sm:gap-2 text-gray-700 dark:text-gray-300 text-xs sm:text-sm"
                             >
-                              <span className="text-purple-600 font-bold mt-0.5">
+                              <span className="text-purple-600 font-bold mt-0.5 shrink-0">
                                 •
                               </span>
-                              <span>{example}</span>
+                              <span className="leading-tight">{example}</span>
                             </li>
                           ))}
                         </ul>
@@ -617,110 +628,36 @@ export default function NotesViewPage({ materialId, noteId }: Props) {
             </div>
 
             {/* Study Tips Section */}
-            <div className="bg-linear-to-br from-yellow-50 to-orange-50 dark:from-yellow-900/20 dark:to-yellow-900/20 rounded-2xl shadow-lg p-6 border border-yellow-200 dark:border-yellow-700/20">
-              <div className="flex items-center gap-3 mb-4">
-                <div className="bg-yellow-100 dark:bg-yellow-700/20 p-2 rounded-lg">
-                  <Lightbulb className="w-5 h-5 text-yellow-600 dark:text-yellow-400" />
+            <div className="bg-linear-to-br from-yellow-50 to-orange-50 dark:from-yellow-900/20 dark:to-yellow-900/20 rounded-lg sm:rounded-xl md:rounded-2xl shadow-sm sm:shadow-md md:shadow-lg p-3 sm:p-4 md:p-6 border border-yellow-200 dark:border-yellow-700/20">
+              <div className="flex items-center gap-2 sm:gap-3 mb-2 sm:mb-3 md:mb-4">
+                <div className="bg-yellow-100 dark:bg-yellow-700/20 p-1.5 sm:p-2 rounded-lg">
+                  <Lightbulb className="w-4 h-4 sm:w-5 sm:h-5 text-yellow-600 dark:text-yellow-400" />
                 </div>
-                <h2 className="text-xl font-bold text-gray-900 dark:text-gray-300">
+                <h2 className="text-base sm:text-lg md:text-xl font-bold text-gray-900 dark:text-gray-300">
                   Study Tips & Recommendations
                 </h2>
               </div>
-              <div className="prose prose-lg max-w-none">
-                <div className="text-gray-700 dark:text-gray-300 leading-relaxed space-y-4 whitespace-pre-wrap text-justify">
+              <div className="prose prose-sm sm:prose-base md:prose-lg max-w-none">
+                <div className="text-gray-700 dark:text-gray-300 text-xs sm:text-sm md:text-base leading-relaxed space-y-2 sm:space-y-3 md:space-y-4 whitespace-pre-wrap text-justify">
                   {note.study_tips}
                 </div>
               </div>
             </div>
           </div>
 
-          {/* Right Column - Chat */}
-          <div className="bg-white dark:bg-slate-800/80 rounded-2xl shadow-lg border border-gray-200 dark:border-slate-700 flex flex-col h-full overflow-hidden">
-            {/* Chat Header */}
-            <div className="p-4 border-b border-gray-200 dark:border-slate-700 bg-linear-to-r from-purple-50 to-blue-50 dark:from-purple-900/20 dark:to-blue-900/20 rounded-t-2xl shrink-0">
-              <div className="flex items-center gap-3">
-                <div className="relative w-12 h-12 shrink-0 flex items-center justify-center">
-                  <Image
-                    src="/chatbot.svg"
-                    alt="AI Assistant"
-                    width={48}
-                    height={48}
-                    className="object-contain"
-                  />
-                </div>
-                <div>
-                  <h2 className="text-lg font-bold text-gray-900 dark:text-white">
-                    AI Assistant
-                  </h2>
-                  <p className="text-xs text-gray-600 dark:text-gray-400">
-                    Ask questions or request modifications to your notes
-                  </p>
-                </div>
-              </div>
-            </div>
-
-            {/* Chat Messages */}
-            <div className="flex-1 overflow-y-auto p-4 space-y-4 custom-scrollbar min-h-0">
-              {chatMessages.map((msg, index) => (
-                <div
-                  key={index}
-                  className={`flex ${
-                    msg.role === "user" ? "justify-end" : "justify-start"
-                  }`}
-                >
-                  <div
-                    className={`max-w-[80%] rounded-2xl px-4 py-3 ${
-                      msg.role === "user"
-                        ? "bg-linear-to-br from-blue-600 to-cyan-500 text-white"
-                        : "bg-gray-100 dark:bg-slate-700 text-gray-900 dark:text-gray-200"
-                    }`}
-                  >
-                    <p className="text-sm whitespace-pre-wrap leading-relaxed">
-                      {msg.content}
-                    </p>
-                  </div>
-                </div>
-              ))}
-              {sendingMessage && (
-                <div className="flex justify-start">
-                  <div className="bg-gray-100 dark:bg-slate-700 rounded-2xl px-4 py-3">
-                    <div className="flex items-center gap-2">
-                      <div className="animate-bounce w-2 h-2 bg-gray-400 dark:bg-gray-500 rounded-full"></div>
-                      <div className="animate-bounce w-2 h-2 bg-gray-400 dark:bg-gray-500 rounded-full delay-100"></div>
-                      <div className="animate-bounce w-2 h-2 bg-gray-400 dark:bg-gray-500 rounded-full delay-200"></div>
-                    </div>
-                  </div>
-                </div>
-              )}
-              <div ref={chatEndRef} />
-            </div>
-
-            {/* Chat Input */}
-            <div className="p-4 border-t border-gray-200 dark:border-slate-700 shrink-0">
-              <div className="flex gap-2">
-                <input
-                  type="text"
-                  value={inputMessage}
-                  onChange={(e) => setInputMessage(e.target.value)}
-                  onKeyDown={(e) => {
-                    if (e.key === "Enter" && !e.shiftKey) {
-                      e.preventDefault();
-                      handleSendMessage();
-                    }
-                  }}
-                  placeholder="Ask about the notes or request changes..."
-                  className="flex-1 px-4 py-3 border text-gray-700 dark:text-gray-200 border-gray-300 dark:border-slate-600 bg-white dark:bg-slate-700 rounded-xl focus:ring-1 focus:border-blue-500 dark:focus:border-blue-400 outline-none placeholder:text-gray-400 dark:placeholder:text-gray-500"
-                  disabled={sendingMessage}
-                />
-                <button
-                  onClick={handleSendMessage}
-                  disabled={sendingMessage || !inputMessage.trim()}
-                  className="bg-linear-to-br from-blue-600 to-cyan-500 hover:from-blue-700 hover:to-cyan-600 disabled:bg-gray-300 dark:disabled:bg-gray-600 disabled:cursor-not-allowed text-white p-3 rounded-xl transition-colors cursor-pointer"
-                >
-                  <ChevronRight className="w-6 h-6" />
-                </button>
-              </div>
-            </div>
+          {/* Right Column - Chat - Sliding Panel Component */}
+          <div className="lg:col-span-1">
+            <SlidingChatPanel
+              isOpen={isChatOpen}
+              onClose={() => setIsChatOpen(false)}
+              messages={chatMessages}
+              inputMessage={inputMessage}
+              onInputChange={setInputMessage}
+              onSendMessage={handleSendMessage}
+              isSending={sendingMessage}
+              title="AI Assistant"
+              subtitle="Ask questions or request modifications to your notes"
+            />
           </div>
         </div>
       </div>

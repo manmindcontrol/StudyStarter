@@ -81,18 +81,18 @@ export default function GenerateNotesButton({
           type="button"
           onClick={handleClick}
           disabled={loading}
-          className={`relative w-full bg-white hover:bg-purple-50 dark:bg-slate-800/80 dark:hover:bg-purple-900/20 border border-gray-200 dark:border-slate-700 rounded-xl p-6 transition-all group text-left shadow-sm disabled:opacity-50 disabled:cursor-not-allowed overflow-hidden cursor-pointer ${className}`}
+          className={`relative w-full bg-white hover:bg-purple-50 dark:bg-slate-800/80 dark:hover:bg-purple-900/20 border border-gray-200 dark:border-slate-700 rounded-lg sm:rounded-xl p-3 sm:p-4 md:p-6 transition-all group text-left shadow-sm disabled:opacity-50 disabled:cursor-not-allowed overflow-hidden cursor-pointer ${className}`}
         >
-          <div className="flex items-center justify-between mb-3">
-            <div className="bg-purple-100 dark:bg-purple-900 p-3 rounded-lg">
-              <StickyNote className="w-6 h-6 text-purple-600 dark:text-purple-400" />
+          <div className="flex items-center justify-between mb-2 sm:mb-3">
+            <div className="bg-purple-100 dark:bg-purple-900 p-2 sm:p-2.5 md:p-3 rounded-lg">
+              <StickyNote className="w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6 text-purple-600 dark:text-purple-400" />
             </div>
-            <ChevronRight className="w-5 h-5 text-gray-400 group-hover:text-purple-600 transition-colors" />
+            <ChevronRight className="w-4 h-4 sm:w-5 sm:h-5 text-gray-400 group-hover:text-purple-600 transition-colors" />
           </div>
-          <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-300 mb-1">
+          <h3 className="text-sm sm:text-base md:text-lg font-semibold text-gray-900 dark:text-gray-300 mb-0.5 sm:mb-1">
             Generate Study Notes
           </h3>
-          <p className="text-sm text-gray-600 dark:text-gray-400">
+          <p className="text-xs sm:text-sm text-gray-600 dark:text-gray-400 leading-snug">
             Create AI-powered study notes from your document
           </p>
         </button>

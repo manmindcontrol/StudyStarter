@@ -12,7 +12,8 @@
       "Bash(rm:*)",
       "Bash(npx supabase db push)",
       "Bash(dir:*)",
-      "Bash(findstr:*)"
+      "Bash(findstr:*)",
+      "Bash(grep:*)"
     ],
     "deny": [],
     "ask": []

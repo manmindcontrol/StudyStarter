@@ -6,20 +6,19 @@ import { getCurrentUser } from "@/lib/auth";
 import { supabase } from "@/lib/supabase";
 import {
   FileText,
-  Send,
   CheckCircle2,
   Circle,
   Loader2,
-  ChevronLeft,
   Download,
   FileDown,
   Save,
   Check,
-  ChevronRight,
   ArrowLeft,
+  ChevronRight,
 } from "lucide-react";
 import Image from "next/image";
 import type { User } from "@supabase/supabase-js";
+import SlidingChatPanel from "./SlidingChatPanel";
 import {
   Document,
   Packer,
@@ -102,8 +101,8 @@ export default function QuestionsViewPage({
   const [chatMessages, setChatMessages] = useState<ChatMessage[]>([]);
   const [chatInput, setChatInput] = useState("");
   const [chatLoading, setChatLoading] = useState(false);
+  const [isChatOpen, setIsChatOpen] = useState(false);
   const [showExportMenu, setShowExportMenu] = useState(false);
-  const chatEndRef = useRef<HTMLDivElement>(null);
   const exportMenuRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -190,10 +189,6 @@ export default function QuestionsViewPage({
 
     loadData();
   }, [materialId, questionRecordId, router, searchParams]);
-
-  useEffect(() => {
-    chatEndRef.current?.scrollIntoView({ behavior: "smooth" });
-  }, [chatMessages]);
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -320,8 +315,8 @@ export default function QuestionsViewPage({
     setOpenAnswerInputs(newInputs);
   };
 
-  const handleChatSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
+  const handleChatSubmit = async (e?: React.FormEvent) => {
+    if (e) e.preventDefault();
     if (!chatInput.trim() || chatLoading) return;
 
     const userMessage = chatInput.trim();
@@ -628,12 +623,12 @@ export default function QuestionsViewPage({
     <div className="min-h-screen bg-linear-to-br from-blue-50 via-gray-100 to-cyan-50 dark:bg-linear-to-br dark:from-slate-900 dark:via-slate-800 dark:to-slate-900">
       {/* Header */}
       <div className="bg-white dark:bg-slate-800/80 border-b border-gray-200 dark:border-slate-700 sticky top-0 z-10">
-        <div className="container-custom py-3 sm:py-4">
+        <div className="container-custom py-3 sm:py-4 md:py-5">
           <div className="flex items-center justify-between gap-2">
             <div className="flex items-center space-x-2 sm:space-x-4 flex-1 min-w-0">
               <button
                 onClick={() => router.push(`/materials/${materialId}`)}
-                className="p-2 text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white group rounded-lg transition-colors shrink-0"
+                className="p-2.5 sm:p-3 text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white group rounded-lg transition-colors shrink-0"
               >
                 <ArrowLeft className="w-5 h-5 group-hover:-translate-x-1 transition-transform" />
               </button>
@@ -647,30 +642,38 @@ export default function QuestionsViewPage({
               </div>
             </div>
             <div className="flex items-center space-x-2 shrink-0">
+              {/* Chat Toggle Button - Mobile Only */}
+              <button
+                onClick={() => setIsChatOpen(true)}
+                className="md:hidden px-4 py-2.5 bg-linear-to-br from-blue-600 to-purple-600 text-white rounded-lg transition-colors shrink-0 relative font-bold text-sm"
+              >
+                AI
+                {chatMessages.length > 0 && (
+                  <span className="absolute -top-1 -right-1 w-4 h-4 bg-red-500 rounded-full text-[10px] flex items-center justify-center font-bold">
+                    {chatMessages.length}
+                  </span>
+                )}
+              </button>
               {/* Save button - only visible for unsaved questions */}
               {isUnsaved ? (
                 <button
                   onClick={handleSaveQuestions}
                   disabled={saving}
-                  className="flex items-center space-x-1 sm:space-x-2 bg-linear-to-br from-green-600 to-emerald-500 hover:from-green-700 hover:to-emerald-600 text-white px-2 sm:px-4 py-2 rounded-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
+                  className="flex items-center justify-center space-x-2 bg-linear-to-br from-green-600 to-emerald-500 hover:from-green-700 hover:to-emerald-600 text-white px-3 sm:px-4 py-2.5 sm:py-3 rounded-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer min-h-[42px] sm:min-h-[44px]"
                 >
-                  <Save className="w-4 h-4" />
+                  <Save className="w-4 h-4 sm:w-4.5 sm:h-4.5" />
                   <span className="hidden sm:inline">
                     {saving ? "Saving..." : "Save Questions"}
-                  </span>
-                  <span className="inline sm:hidden text-xs">
-                    {saving ? "Saving..." : "Save"}
                   </span>
                 </button>
               ) : (
                 savedQuestionId && (
                   <button
                     disabled
-                    className="flex items-center space-x-1 sm:space-x-2 bg-green-100 text-green-500 px-2 sm:px-4 py-2 rounded-lg transition-all cursor-default"
+                    className="flex items-center justify-center space-x-2 bg-green-100 text-green-500 px-3 sm:px-4 py-2.5 sm:py-3 rounded-lg transition-all cursor-default min-h-[42px] sm:min-h-[44px]"
                   >
-                    <Check className="w-4 h-4" />
+                    <Check className="w-4 h-4 sm:w-4.5 sm:h-4.5" />
                     <span className="hidden sm:inline">Questions Saved</span>
-                    <span className="inline sm:hidden text-xs">Saved</span>
                   </button>
                 )
               )}
@@ -679,11 +682,10 @@ export default function QuestionsViewPage({
               <div className="relative" ref={exportMenuRef}>
                 <button
                   onClick={() => setShowExportMenu(!showExportMenu)}
-                  className="flex items-center space-x-1 sm:space-x-2 bg-linear-to-br from-blue-600 to-sky-500 hover:from-blue-700 hover:to-sky-600 text-white px-2 sm:px-4 py-2 rounded-lg transition-all cursor-pointer"
+                  className="inline-flex items-center justify-center text-white gap-2 bg-linear-to-br from-blue-600 to-cyan-500 hover:from-blue-700 hover:to-cyan-600 px-3 sm:px-4 py-2.5 sm:py-3 rounded-lg text-xs sm:text-sm font-semibold transition-colors cursor-pointer min-h-[42px] sm:min-h-[44px]"
                 >
-                  <Download className="w-4 h-4" />
+                  <Download className="w-4 h-4 sm:w-4.5 sm:h-4.5 text-white" />
                   <span className="hidden sm:inline">Download questions</span>
-                  <span className="inline sm:hidden text-xs">Download</span>
                 </button>
 
                 {showExportMenu && (
@@ -721,16 +723,16 @@ export default function QuestionsViewPage({
       </div>
 
       {/* Main content */}
-      <div className="container-custom py-6">
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+      <div className="container-custom py-3 sm:py-4 md:py-6 px-3 sm:px-4">
+        <div className="flex flex-col lg:grid lg:grid-cols-3 gap-3 sm:gap-4 md:gap-6">
           {/* Questions panel - 2 columns on large screens */}
-          <div className="lg:col-span-2 space-y-4">
-            <div className="p-6">
-              <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
+          <div className="lg:col-span-2 space-y-3 sm:space-y-4">
+            <div className="p-3 sm:p-4 md:p-6">
+              <h2 className="text-base sm:text-lg font-semibold text-gray-900 dark:text-white mb-3 sm:mb-4">
                 Generated Questions
               </h2>
 
-              <div className="space-y-4">
+              <div className="space-y-3 sm:space-y-4">
                 {questionRecord.questions.map((q, index) => {
                   const quizAnswer = quizAnswers.get(index);
                   const isAnswered = quizAnswer?.isChecked || false;
@@ -738,15 +740,15 @@ export default function QuestionsViewPage({
                   return (
                     <div
                       key={index}
-                      className="p-4 rounded-lg border border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-800/70"
+                      className="p-3 sm:p-4 rounded-lg border border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-800/70"
                     >
                       <div className="flex-1">
-                        <div className="flex items-center space-x-2 mb-3">
-                          <span className="font-semibold text-gray-900 dark:text-white text-lg">
+                        <div className="flex items-center space-x-1.5 sm:space-x-2 mb-2 sm:mb-3">
+                          <span className="font-semibold text-gray-900 dark:text-white text-base sm:text-lg">
                             {index + 1}.
                           </span>
                           <span
-                            className={`text-xs px-2 py-1 rounded-full ${
+                            className={`text-[10px] sm:text-xs px-1.5 sm:px-2 py-0.5 sm:py-1 rounded-full ${
                               q.type === "mcq"
                                 ? "bg-purple-100 text-purple-700 dark:bg-purple-900/30 dark:text-purple-400"
                                 : "bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400"
@@ -755,13 +757,13 @@ export default function QuestionsViewPage({
                             {q.type === "mcq" ? "Multiple Choice" : "Open"}
                           </span>
                         </div>
-                        <p className="text-gray-900 dark:text-gray-200 mb-4 font-medium text-base">
+                        <p className="text-gray-900 dark:text-gray-200 mb-3 sm:mb-4 font-medium text-sm sm:text-base leading-tight">
                           {q.question}
                         </p>
 
                         {/* MCQ Options */}
                         {q.type === "mcq" && q.options && (
-                          <div className="space-y-2 mb-3">
+                          <div className="space-y-1.5 sm:space-y-2 mb-2 sm:mb-3">
                             {q.options.map((option, optIdx) => {
                               const optionLetter = String.fromCharCode(
                                 97 + optIdx
@@ -788,16 +790,21 @@ export default function QuestionsViewPage({
                                 "border-gray-200 dark:border-slate-600 hover:border-blue-400 dark:hover:border-blue-500 hover:bg-blue-50 dark:hover:bg-blue-900/20";
                               if (showResult) {
                                 if (isSelected && isCorrectOption) {
-                                  buttonStyle = "border-green-500 dark:border-green-500 bg-green-50 dark:bg-green-900/30";
+                                  buttonStyle =
+                                    "border-green-500 dark:border-green-500 bg-green-50 dark:bg-green-900/30";
                                 } else if (isSelected && !isCorrectOption) {
-                                  buttonStyle = "border-red-500 dark:border-red-500 bg-red-50 dark:bg-red-900/30";
+                                  buttonStyle =
+                                    "border-red-500 dark:border-red-500 bg-red-50 dark:bg-red-900/30";
                                 } else if (isCorrectOption) {
-                                  buttonStyle = "border-green-500 dark:border-green-500 bg-green-50 dark:bg-green-900/30";
+                                  buttonStyle =
+                                    "border-green-500 dark:border-green-500 bg-green-50 dark:bg-green-900/30";
                                 } else {
-                                  buttonStyle = "border-gray-300 dark:border-slate-600 bg-gray-50 dark:bg-slate-700/50";
+                                  buttonStyle =
+                                    "border-gray-300 dark:border-slate-600 bg-gray-50 dark:bg-slate-700/50";
                                 }
                               } else if (isSelected) {
-                                buttonStyle = "border-blue-500 dark:border-blue-400 bg-blue-50 dark:bg-blue-900/30";
+                                buttonStyle =
+                                  "border-blue-500 dark:border-blue-400 bg-blue-50 dark:bg-blue-900/30";
                               }
 
                               return (
@@ -808,20 +815,20 @@ export default function QuestionsViewPage({
                                     handleMCQAnswer(index, option, q.answer)
                                   }
                                   disabled={isAnswered}
-                                  className={`w-full flex items-start text-gray-700 dark:text-gray-300 space-x-3 text-left p-3 rounded-lg border-1 transition-all ${buttonStyle} ${
+                                  className={`w-full flex items-start text-gray-700 dark:text-gray-300 space-x-2 sm:space-x-3 text-left p-2 sm:p-2.5 md:p-3 rounded-lg border-1 transition-all ${buttonStyle} ${
                                     !isAnswered
                                       ? "cursor-pointer"
                                       : "cursor-default"
                                   }`}
                                 >
-                                  <span className="font-bold text-base min-w-6">
+                                  <span className="font-bold text-sm sm:text-base min-w-[1.25rem] sm:min-w-6 leading-tight">
                                     {optionLetter})
                                   </span>
-                                  <span className="flex-1 text-gray-900 dark:text-gray-200">
+                                  <span className="flex-1 text-gray-900 dark:text-gray-200 text-xs sm:text-sm md:text-base leading-tight">
                                     {option}
                                   </span>
                                   {showResult && isCorrectOption && (
-                                    <CheckCircle2 className="w-5 h-5 text-green-600 dark:text-green-400 shrink-0" />
+                                    <CheckCircle2 className="w-4 h-4 sm:w-5 sm:h-5 text-green-600 dark:text-green-400 shrink-0" />
                                   )}
                                 </button>
                               );
@@ -831,15 +838,15 @@ export default function QuestionsViewPage({
 
                         {/* Open Question Input */}
                         {q.type === "open" && !isAnswered && (
-                          <div className="mb-3">
+                          <div className="mb-2 sm:mb-3">
                             <textarea
                               value={openAnswerInputs.get(index) || ""}
                               onChange={(e) =>
                                 updateOpenAnswerInput(index, e.target.value)
                               }
                               placeholder="Type your answer here..."
-                              className="w-full px-4 py-3 border border-gray-200 dark:border-slate-600 bg-white dark:bg-slate-700 rounded-lg focus:border-blue-500 dark:focus:border-blue-400 focus:outline-none text-gray-900 dark:text-gray-200 placeholder:text-gray-400 dark:placeholder:text-gray-500 transition-all resize-none"
-                              rows={4}
+                              className="w-full px-3 sm:px-4 py-2 sm:py-3 border border-gray-200 dark:border-slate-600 bg-white dark:bg-slate-700 rounded-lg focus:border-blue-500 dark:focus:border-blue-400 focus:outline-none text-xs sm:text-sm text-gray-900 dark:text-gray-200 placeholder:text-gray-400 dark:placeholder:text-gray-500 transition-all resize-none"
+                              rows={3}
                               disabled={checkingAnswer === index}
                             />
                             <button
@@ -848,16 +855,16 @@ export default function QuestionsViewPage({
                                 !openAnswerInputs.get(index)?.trim() ||
                                 checkingAnswer === index
                               }
-                              className="mt-2 bg-blue-600 hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600 text-white px-6 py-2 rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center space-x-2"
+                              className="mt-1.5 sm:mt-2 bg-blue-600 hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600 text-white px-4 sm:px-6 py-1.5 sm:py-2 text-xs sm:text-sm rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center space-x-1.5 sm:space-x-2"
                             >
                               {checkingAnswer === index ? (
                                 <>
-                                  <Loader2 className="w-4 h-4 animate-spin" />
+                                  <Loader2 className="w-3.5 h-3.5 sm:w-4 sm:h-4 animate-spin" />
                                   <span>Checking...</span>
                                 </>
                               ) : (
                                 <>
-                                  <ChevronRight className="w-4 h-4" />
+                                  <ChevronRight className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
                                   <span>Submit Answer</span>
                                 </>
                               )}
@@ -867,15 +874,15 @@ export default function QuestionsViewPage({
 
                         {/* Show user's answer for open questions */}
                         {q.type === "open" && isAnswered && quizAnswer && (
-                          <div className="mb-3 p-3 bg-blue-50 dark:bg-blue-900/30 border border-blue-200 dark:border-blue-700/30 rounded-lg">
-                            <div className="font-semibold text-blue-900 dark:text-blue-300 mb-1">
+                          <div className="mb-2 sm:mb-3 p-2 sm:p-3 bg-blue-50 dark:bg-blue-900/30 border border-blue-200 dark:border-blue-700/30 rounded-lg">
+                            <div className="font-semibold text-blue-900 dark:text-blue-300 mb-1 text-xs sm:text-sm">
                               Your answer:
                             </div>
-                            <div className="text-blue-800 dark:text-blue-200">
+                            <div className="text-blue-800 dark:text-blue-200 text-xs sm:text-sm leading-tight">
                               {quizAnswer.userAnswer}
                             </div>
                             {quizAnswer.feedback && (
-                              <div className="mt-2 text-sm text-blue-700 dark:text-blue-300 italic">
+                              <div className="mt-1.5 sm:mt-2 text-[10px] sm:text-xs text-blue-700 dark:text-blue-300 italic">
                                 {quizAnswer.feedback}
                               </div>
                             )}
@@ -884,14 +891,14 @@ export default function QuestionsViewPage({
 
                         {/* Show correct answer after user has answered */}
                         {isAnswered && q.answer && (
-                          <div className="mt-3 p-3 bg-green-50 dark:bg-green-900/30 border border-green-200 dark:border-green-700/30 rounded-lg">
-                            <div className="flex items-start space-x-2">
-                              <CheckCircle2 className="w-5 h-5 text-green-600 dark:text-green-400 mt-0.5 shrink-0" />
-                              <div className="flex-1">
-                                <span className="font-semibold text-green-700 dark:text-green-300">
+                          <div className="mt-2 sm:mt-3 p-2 sm:p-3 bg-green-50 dark:bg-green-900/30 border border-green-200 dark:border-green-700/30 rounded-lg">
+                            <div className="flex items-start space-x-1.5 sm:space-x-2">
+                              <CheckCircle2 className="w-4 h-4 sm:w-5 sm:h-5 text-green-600 dark:text-green-400 mt-0.5 shrink-0" />
+                              <div className="flex-1 min-w-0">
+                                <span className="font-semibold text-green-700 dark:text-green-300 text-xs sm:text-sm">
                                   Correct answer:
                                 </span>
-                                <p className="text-green-800 dark:text-green-200 mt-1">
+                                <p className="text-green-800 dark:text-green-200 mt-0.5 sm:mt-1 text-xs sm:text-sm leading-tight">
                                   {q.answer}
                                 </p>
                               </div>
@@ -902,24 +909,24 @@ export default function QuestionsViewPage({
                         {/* Show result feedback for MCQ */}
                         {q.type === "mcq" && isAnswered && quizAnswer && (
                           <div
-                            className={`mt-3 p-3 rounded-lg border ${
+                            className={`mt-2 sm:mt-3 p-2 sm:p-3 rounded-lg border ${
                               quizAnswer.isCorrect
                                 ? "bg-green-50 dark:bg-green-900/30 border-green-200 dark:border-green-700/30"
                                 : "bg-red-50 dark:bg-red-900/30 border-red-200 dark:border-red-700/30"
                             }`}
                           >
-                            <div className="flex items-center space-x-2">
+                            <div className="flex items-center space-x-1.5 sm:space-x-2">
                               {quizAnswer.isCorrect ? (
                                 <>
-                                  <CheckCircle2 className="w-5 h-5 text-green-600 dark:text-green-400" />
-                                  <span className="font-semibold text-green-700 dark:text-green-300">
+                                  <CheckCircle2 className="w-4 h-4 sm:w-5 sm:h-5 text-green-600 dark:text-green-400" />
+                                  <span className="font-semibold text-green-700 dark:text-green-300 text-xs sm:text-sm">
                                     Correct!
                                   </span>
                                 </>
                               ) : (
                                 <>
-                                  <Circle className="w-5 h-5 text-red-600 dark:text-red-400" />
-                                  <span className="font-semibold text-red-700 dark:text-red-300">
+                                  <Circle className="w-4 h-4 sm:w-5 sm:h-5 text-red-600 dark:text-red-400" />
+                                  <span className="font-semibold text-red-700 dark:text-red-300 text-xs sm:text-sm">
                                     Incorrect
                                   </span>
                                 </>
@@ -935,95 +942,19 @@ export default function QuestionsViewPage({
             </div>
           </div>
 
-          {/* Chat panel - 1 column on large screens */}
+          {/* Chat panel - Sliding Panel Component */}
           <div className="lg:col-span-1">
-            <div className="bg-white dark:bg-slate-800/80 rounded-2xl shadow-lg border border-gray-200 dark:border-slate-700 sticky top-24 flex flex-col h-[calc(100vh-8rem)] overflow-hidden">
-              {/* Chat Header */}
-              <div className="p-4 border-b border-gray-200 dark:border-slate-700 bg-linear-to-r from-purple-50 to-blue-50 dark:from-purple-900/20 dark:to-blue-900/20 rounded-t-2xl shrink-0">
-                <div className="flex items-center gap-3">
-                  <div className="relative w-12 h-12 shrink-0 flex items-center justify-center">
-                    <Image
-                      src="/chatbot.svg"
-                      alt="AI Assistant"
-                      width={48}
-                      height={48}
-                      className="object-contain"
-                    />
-                  </div>
-                  <div>
-                    <h2 className="text-lg font-bold text-gray-900 dark:text-white">
-                      AI Assistant
-                    </h2>
-                    <p className="text-xs text-gray-600 dark:text-gray-400">
-                      Ask questions or request modifications
-                    </p>
-                  </div>
-                </div>
-              </div>
-
-              {/* Chat Messages */}
-              <div className="flex-1 overflow-y-auto p-4 space-y-4 custom-scrollbar min-h-0">
-                {chatMessages.map((msg, idx) => (
-                  <div
-                    key={idx}
-                    className={`flex ${
-                      msg.role === "user" ? "justify-end" : "justify-start"
-                    }`}
-                  >
-                    <div
-                      className={`max-w-[80%] rounded-2xl px-4 py-3 ${
-                        msg.role === "user"
-                          ? "bg-linear-to-br from-blue-600 to-cyan-500 text-white"
-                          : "bg-gray-100 dark:bg-slate-700 text-gray-900 dark:text-gray-200"
-                      }`}
-                    >
-                      <p className="text-sm whitespace-pre-wrap leading-relaxed">
-                        {msg.content}
-                      </p>
-                    </div>
-                  </div>
-                ))}
-                {chatLoading && (
-                  <div className="flex justify-start">
-                    <div className="bg-gray-100 dark:bg-slate-700 rounded-2xl px-4 py-3">
-                      <div className="flex items-center gap-2">
-                        <div className="animate-bounce w-2 h-2 bg-gray-400 dark:bg-gray-500 rounded-full"></div>
-                        <div className="animate-bounce w-2 h-2 bg-gray-400 dark:bg-gray-500 rounded-full delay-100"></div>
-                        <div className="animate-bounce w-2 h-2 bg-gray-400 dark:bg-gray-500 rounded-full delay-200"></div>
-                      </div>
-                    </div>
-                  </div>
-                )}
-                <div ref={chatEndRef} />
-              </div>
-
-              {/* Chat Input */}
-              <div className="p-4 border-t border-gray-200 dark:border-slate-700 shrink-0">
-                <div className="flex gap-2">
-                  <input
-                    type="text"
-                    value={chatInput}
-                    onChange={(e) => setChatInput(e.target.value)}
-                    onKeyPress={(e) => {
-                      if (e.key === "Enter" && !e.shiftKey) {
-                        e.preventDefault();
-                        handleChatSubmit(e);
-                      }
-                    }}
-                    placeholder="Write a message..."
-                    className="flex-1 px-4 py-3 border text-gray-700 dark:text-gray-200 border-gray-300 dark:border-slate-600 bg-white dark:bg-slate-700 rounded-xl focus:ring-2 focus:ring-blue-600 dark:focus:ring-blue-500 focus:border-cyan-500 dark:focus:border-cyan-400 outline-none transition-all placeholder:text-gray-400 dark:placeholder:text-gray-500"
-                    disabled={chatLoading}
-                  />
-                  <button
-                    onClick={handleChatSubmit}
-                    disabled={chatLoading || !chatInput.trim()}
-                    className="bg-linear-to-br from-blue-600 to-cyan-500 hover:from-blue-700 hover:to-cyan-600 disabled:bg-gray-300 dark:disabled:bg-gray-600 disabled:cursor-not-allowed cursor-pointer text-white p-3 rounded-xl transition-colors"
-                  >
-                    <ChevronRight className="w-6 h-6" />
-                  </button>
-                </div>
-              </div>
-            </div>
+            <SlidingChatPanel
+              isOpen={isChatOpen}
+              onClose={() => setIsChatOpen(false)}
+              messages={chatMessages}
+              inputMessage={chatInput}
+              onInputChange={setChatInput}
+              onSendMessage={() => handleChatSubmit()}
+              isSending={chatLoading}
+              title="AI Assistant"
+              subtitle="Ask questions or request modifications"
+            />
           </div>
         </div>
       </div>

@@ -260,37 +260,41 @@ export default function MaterialViewPage({ materialId }: Props) {
       {/* Header */}
 
       {/* Content */}
-      <div className="container-custom py-8 ">
+      <div className="container-custom py-3 sm:py-4 md:py-6 lg:py-8 px-3 sm:px-4">
         <div className="max-w-7xl mx-auto">
           <button
             onClick={() => router.push("/dashboard")}
-            className="mb-4 flex items-center space-x-2 text-gray-600 hover:text-gray-900 dark:text-gray-300 dark:hover:text-gray-500 transition-colors group cursor-pointer"
+            className="mb-2 sm:mb-3 md:mb-4 flex items-center space-x-1.5 sm:space-x-2 text-gray-600 hover:text-gray-900 dark:text-gray-300 dark:hover:text-gray-500 transition-colors group cursor-pointer"
           >
-            <ArrowLeft className="w-5 h-5 group-hover:-translate-x-1 transition-transform" />
-            <span className="font-medium">Back to Dashboard</span>
+            <ArrowLeft className="w-4 h-4 sm:w-5 sm:h-5 group-hover:-translate-x-1 transition-transform" />
+            <span className="text-sm sm:text-base font-medium">
+              Back to Dashboard
+            </span>
           </button>
           {/* Document Info Card */}
-          <div className="bg-linear-to-r from-blue-600 to-cyan-500 dark:bg-linear-to-r dark:from-blue-700 dark:to-cyan-600 rounded-2xl p-3 mb-3 md:p-8 md:mb-8 shadow-sm">
-            <div className="flex items-start space-x-2 md:space-x-5">
-              <div className="bg-white/20 backdrop-blur-sm p-4 rounded-xl">
-                <FileText className="w-5 h-5 md:w-8 md:h-8 text-white" />
+          <div className="bg-linear-to-r from-blue-600 to-cyan-500 dark:bg-linear-to-r dark:from-blue-700 dark:to-cyan-600 rounded-xl sm:rounded-2xl p-3 sm:p-4 md:p-6 lg:p-8 mb-3 sm:mb-4 md:mb-6 lg:mb-8 shadow-sm">
+            <div className="flex items-start space-x-2 sm:space-x-3 md:space-x-5">
+              <div className="bg-white/20 backdrop-blur-sm p-2 sm:p-3 md:p-4 rounded-lg sm:rounded-xl shrink-0">
+                <FileText className="w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6 lg:w-8 lg:h-8 text-white" />
               </div>
-              <div className="flex-1">
-                <h2 className="text-lg md:text-3xl font-bold text-white mb-2">
+              <div className="flex-1 min-w-0">
+                <h2 className="text-base sm:text-lg md:text-xl lg:text-2xl xl:text-3xl font-bold text-white mb-1 sm:mb-1.5 md:mb-2 leading-tight wrap-break-word">
                   {material.title}
                 </h2>
-                <div className="flex items-center text-xs md:text-sm text-white/80">
-                  <Calendar className="w-4 h-4 mr-2" />
-                  <span>Uploaded {formatDate(material.created_at)}</span>
+                <div className="flex items-center text-[10px] sm:text-xs md:text-sm text-white/80">
+                  <Calendar className="w-3 h-3 sm:w-3.5 sm:h-3.5 md:w-4 md:h-4 mr-1 sm:mr-1.5 md:mr-2 shrink-0" />
+                  <span className="truncate">
+                    Uploaded {formatDate(material.created_at)}
+                  </span>
                 </div>
               </div>
             </div>
           </div>
 
           {/* Two Column Layout */}
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-3 sm:gap-4 md:gap-6">
             {/* Left Column - Actions */}
-            <div className="lg:col-span-2 space-y-4">
+            <div className="lg:col-span-2 space-y-2 sm:space-y-3 md:space-y-4">
               {/* Open Document */}
               <OpenDocumentButton
                 className="cursor-pointer"
@@ -311,11 +315,13 @@ export default function MaterialViewPage({ materialId }: Props) {
 
               {/* Saved Question Sets */}
               {questionSets.length > 0 && (
-                <div className="bg-white border dark:bg-slate-800/80   border-gray-200 dark:border-slate-700 rounded-xl p-6 shadow-sm ">
-                  <div className="flex items-center justify-between mb-4 ">
-                    <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-300 flex items-center">
-                      <FileQuestion className="w-5 h-5 mr-2 text-green-600 dark:text-green-400" />
-                      Saved Question Sets ({questionSets.length})
+                <div className="bg-white border dark:bg-slate-800/80 border-gray-200 dark:border-slate-700 rounded-lg sm:rounded-xl p-3 sm:p-4 md:p-6 shadow-sm">
+                  <div className="flex items-center justify-between mb-3 sm:mb-4 gap-2">
+                    <h3 className="text-sm sm:text-base md:text-lg font-semibold text-gray-900 dark:text-gray-300 flex items-center min-w-0">
+                      <FileQuestion className="w-4 h-4 sm:w-5 sm:h-5 mr-1.5 sm:mr-2 text-green-600 dark:text-green-400 shrink-0" />
+                      <span className="truncate">
+                        Saved Question Sets ({questionSets.length})
+                      </span>
                     </h3>
                     <button
                       onClick={() =>
@@ -326,36 +332,39 @@ export default function MaterialViewPage({ materialId }: Props) {
                           message: `Are you sure you want to delete all ${questionSets.length} question sets? This action cannot be undone.`,
                         })
                       }
-                      className="text-sm text-red-600 hover:text-red-700 dark:text-red-400 dark:hover:text-red-500 font-medium flex items-center gap-1 cursor-pointer"
+                      className="text-xs sm:text-sm text-red-600 hover:text-red-700 dark:text-red-400 dark:hover:text-red-500 font-medium flex items-center gap-0.5 sm:gap-1 cursor-pointer shrink-0"
                     >
-                      <Trash2 className="w-4 h-4" />
-                      Delete All
+                      <Trash2 className="w-3 h-3 sm:w-4 sm:h-4" />
+                      <span className="hidden xs:inline">Delete All</span>
                     </button>
                   </div>
-                  <div className="space-y-3">
+                  <div className="space-y-2 sm:space-y-3">
                     {questionSets.map((set) => (
-                      <div key={set.id} className="flex items-center gap-2">
+                      <div
+                        key={set.id}
+                        className="flex items-center gap-3 sm:gap-2"
+                      >
                         <button
                           onClick={() =>
                             router.push(
                               `/materials/${materialId}/questions/${set.id}`
                             )
                           }
-                          className="flex-1 text-left p-4 bg-green-50 hover:bg-green-100 dark:bg-green-900/20 dark:hover:bg-green-800/30 rounded-lg transition-colors border border-green-200 hover:border-green-300 dark:border-none"
+                          className="flex-1 text-left p-2.5 sm:p-3 md:p-4 bg-green-50 hover:bg-green-100 dark:bg-green-900/20 dark:hover:bg-green-800/30 rounded-lg transition-colors border border-green-200 hover:border-green-300 dark:border-none"
                         >
-                          <div className="flex items-center justify-between cursor-pointer ">
-                            <div>
-                              <p className="font-medium text-gray-900 dark:text-gray-300">
+                          <div className="flex items-center justify-between gap-2 cursor-pointer">
+                            <div className="flex-1 min-w-0">
+                              <p className="text-xs sm:text-sm md:text-base font-medium text-gray-900 dark:text-gray-300 truncate">
                                 {set.question_type.charAt(0).toUpperCase() +
                                   set.question_type.slice(1)}{" "}
                                 Questions
                               </p>
-                              <p className="text-sm text-gray-600 dark:text-gray-400">
+                              <p className="text-[10px] sm:text-xs md:text-sm text-gray-600 dark:text-gray-400 truncate">
                                 {set.questions.length} questions •{" "}
                                 {formatDate(set.created_at)}
                               </p>
                             </div>
-                            <FileQuestion className="w-5 h-5 text-green-600 dark:text-green-400" />
+                            <FileQuestion className="w-4 h-4 sm:w-5 sm:h-5 text-green-600 dark:text-green-400 shrink-0" />
                           </div>
                         </button>
                         <button
@@ -369,10 +378,10 @@ export default function MaterialViewPage({ materialId }: Props) {
                               message: `Are you sure you want to delete this ${set.question_type} question set with ${set.questions.length} questions?`,
                             });
                           }}
-                          className="p-3 bg-red-50 hover:bg-red-100 text-red-600 dark:text-red-400 dark:bg-slate-800 dark:hover:bg-slate-800 dark:hover:text-red-500 rounded-lg transition-colors shrink-0 cursor-pointer"
+                          className="p-2 sm:p-2.5 md:p-3 bg-red-50 hover:bg-red-100 text-red-600 dark:text-red-400 dark:bg-slate-800 dark:hover:bg-slate-800 dark:hover:text-red-500 rounded-lg transition-colors shrink-0 cursor-pointer"
                           title="Delete question set"
                         >
-                          <Trash2 className="w-4 h-4" />
+                          <Trash2 className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
                         </button>
                       </div>
                     ))}
@@ -382,11 +391,13 @@ export default function MaterialViewPage({ materialId }: Props) {
 
               {/* Saved Study Notes */}
               {noteSets.length > 0 && (
-                <div className="bg-white border border-gray-200 dark:border-slate-700 dark:bg-slate-800/80 rounded-xl p-6 shadow-sm ">
-                  <div className="flex items-center justify-between mb-4 ">
-                    <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-300 flex items-center">
-                      <StickyNote className="w-5 h-5 mr-2 text-purple-600 dark:text-purple-400" />
-                      Saved Study Notes ({noteSets.length})
+                <div className="bg-white border border-gray-200 dark:border-slate-700 dark:bg-slate-800/80 rounded-lg sm:rounded-xl p-3 sm:p-4 md:p-6 shadow-sm">
+                  <div className="flex items-center justify-between mb-3 sm:mb-4 gap-2">
+                    <h3 className="text-sm sm:text-base md:text-lg font-semibold text-gray-900 dark:text-gray-300 flex items-center min-w-0">
+                      <StickyNote className="w-4 h-4 sm:w-5 sm:h-5 mr-1.5 sm:mr-2 text-purple-600 dark:text-purple-400 shrink-0" />
+                      <span className="truncate">
+                        Saved Study Notes ({noteSets.length})
+                      </span>
                     </h3>
                     <button
                       onClick={() =>
@@ -397,36 +408,39 @@ export default function MaterialViewPage({ materialId }: Props) {
                           message: `Are you sure you want to delete all ${noteSets.length} study note sets? This action cannot be undone.`,
                         })
                       }
-                      className="text-sm text-red-600 hover:text-red-700 dark:text-red-400 dark:hover:text-red-500 font-medium flex items-center gap-1 cursor-pointer"
+                      className="text-xs sm:text-sm text-red-600 hover:text-red-700 dark:text-red-400 dark:hover:text-red-500 font-medium flex items-center gap-0.5 sm:gap-1 cursor-pointer shrink-0"
                     >
-                      <Trash2 className="w-4 h-4" />
-                      Delete All
+                      <Trash2 className="w-3 h-3 sm:w-4 sm:h-4" />
+                      <span className="hidden xs:inline">Delete All</span>
                     </button>
                   </div>
-                  <div className="space-y-3 ">
+                  <div className="space-y-2 sm:space-y-3">
                     {noteSets.map((note) => (
-                      <div key={note.id} className="flex items-center gap-2">
+                      <div
+                        key={note.id}
+                        className="flex items-center gap-3 sm:gap-2"
+                      >
                         <button
                           onClick={() =>
                             router.push(
                               `/materials/${materialId}/notes/${note.id}`
                             )
                           }
-                          className="flex-1 text-left p-4 bg-purple-50 hover:bg-purple-100 dark:bg-purple-900/20 dark:hover:bg-purple-800/30 rounded-lg transition-colors border border-purple-200 hover:border-purple-300 dark:border-none  "
+                          className="flex-1 text-left p-2.5 sm:p-3 md:p-4 bg-purple-50 hover:bg-purple-100 dark:bg-purple-900/20 dark:hover:bg-purple-800/30 rounded-lg transition-colors border border-purple-200 hover:border-purple-300 dark:border-none"
                         >
-                          <div className="flex items-center justify-between cursor-pointer">
-                            <div>
-                              <p className="font-medium text-gray-900 dark:text-gray-300 line-clamp-1">
+                          <div className="flex items-center justify-between gap-2 cursor-pointer">
+                            <div className="flex-1 min-w-0">
+                              <p className="text-xs sm:text-sm md:text-base font-medium text-gray-900 dark:text-gray-300 line-clamp-1">
                                 {note.summary.substring(0, 60)}
                                 {note.summary.length > 60 ? "..." : ""}
                               </p>
-                              <p className="text-sm text-gray-600 dark:text-gray-400">
+                              <p className="text-[10px] sm:text-xs md:text-sm text-gray-600 dark:text-gray-400 truncate">
                                 {note.key_points.length} key points •{" "}
                                 {note.concepts.length} concepts •{" "}
                                 {formatDate(note.created_at)}
                               </p>
                             </div>
-                            <StickyNote className="w-5 h-5 text-purple-600" />
+                            <StickyNote className="w-4 h-4 sm:w-5 sm:h-5 text-purple-600 dark:text-purple-400 shrink-0" />
                           </div>
                         </button>
                         <button
@@ -440,10 +454,10 @@ export default function MaterialViewPage({ materialId }: Props) {
                               message: `Are you sure you want to delete this study note set with ${note.key_points.length} key points and ${note.concepts.length} concepts?`,
                             });
                           }}
-                          className="p-3 bg-red-50 hover:bg-red-100 text-red-600 dark:text-red-400 dark:bg-slate-800 dark:hover:bg-slate-800 dark:hover:text-red-500 rounded-lg transition-colors shrink-0 cursor-pointer"
+                          className="p-2 sm:p-2.5 md:p-3 bg-red-50 hover:bg-red-100 text-red-600 dark:text-red-400 dark:bg-slate-800 dark:hover:bg-slate-800 dark:hover:text-red-500 rounded-lg transition-colors shrink-0 cursor-pointer"
                           title="Delete note set"
                         >
-                          <Trash2 className="w-4 h-4" />
+                          <Trash2 className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
                         </button>
                       </div>
                     ))}
@@ -460,24 +474,24 @@ export default function MaterialViewPage({ materialId }: Props) {
             </div>
 
             {/* Right Column - Statistics */}
-            <div className="space-y-4">
-              <div className="bg-white border border-gray-200 dark:bg-slate-800/80  dark:border-slate-700 rounded-xl p-6 shadow-sm">
-                <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-300 mb-4">
+            <div className="space-y-3 sm:space-y-4">
+              <div className="bg-white border border-gray-200 dark:bg-slate-800/80 dark:border-slate-700 rounded-lg sm:rounded-xl p-3 sm:p-4 md:p-6 shadow-sm">
+                <h3 className="text-base sm:text-lg font-semibold text-gray-900 dark:text-gray-300 mb-3 sm:mb-4">
                   Statistics
                 </h3>
 
-                <div className="space-y-4">
+                <div className="space-y-3 sm:space-y-4">
                   {/* Questions Generated */}
-                  <div className="flex items-center justify-between p-3 bg-green-50 dark:bg-green-900/20 rounded-lg">
-                    <div className="flex items-center space-x-3">
-                      <div className="bg-green-100 dark:bg-green-900 p-2 rounded-lg">
-                        <FileQuestion className="w-5 h-5 text-green-600 dark:text-green-400" />
+                  <div className="flex items-center justify-between p-2.5 sm:p-3 bg-green-50 dark:bg-green-900/20 rounded-lg">
+                    <div className="flex items-center space-x-2 sm:space-x-3">
+                      <div className="bg-green-100 dark:bg-green-900 p-1.5 sm:p-2 rounded-lg">
+                        <FileQuestion className="w-4 h-4 sm:w-5 sm:h-5 text-green-600 dark:text-green-400" />
                       </div>
                       <div>
-                        <p className="text-sm text-gray-600 dark:text-gray-400">
+                        <p className="text-xs sm:text-sm text-gray-600 dark:text-gray-400">
                           Question Sets
                         </p>
-                        <p className="text-2xl font-bold text-gray-900 dark:text-gray-300">
+                        <p className="text-xl sm:text-2xl font-bold text-gray-900 dark:text-gray-300">
                           {stats.questionsCount}
                         </p>
                       </div>
@@ -485,16 +499,16 @@ export default function MaterialViewPage({ materialId }: Props) {
                   </div>
 
                   {/* Notes Generated */}
-                  <div className="flex items-center justify-between p-3 bg-purple-50 dark:bg-purple-900/20 rounded-lg">
-                    <div className="flex items-center space-x-3">
-                      <div className="bg-purple-100 dark:bg-purple-900 p-2 rounded-lg">
-                        <StickyNote className="w-5 h-5 text-purple-600 dark:text-purple-400" />
+                  <div className="flex items-center justify-between p-2.5 sm:p-3 bg-purple-50 dark:bg-purple-900/20 rounded-lg">
+                    <div className="flex items-center space-x-2 sm:space-x-3">
+                      <div className="bg-purple-100 dark:bg-purple-900 p-1.5 sm:p-2 rounded-lg">
+                        <StickyNote className="w-4 h-4 sm:w-5 sm:h-5 text-purple-600 dark:text-purple-400" />
                       </div>
                       <div>
-                        <p className="text-sm text-gray-600 dark:text-gray-400">
+                        <p className="text-xs sm:text-sm text-gray-600 dark:text-gray-400">
                           Study Notes
                         </p>
-                        <p className="text-2xl font-bold text-gray-900 dark:text-gray-300">
+                        <p className="text-xl sm:text-2xl font-bold text-gray-900 dark:text-gray-300">
                           {stats.notesCount}
                         </p>
                       </div>
@@ -504,20 +518,24 @@ export default function MaterialViewPage({ materialId }: Props) {
               </div>
 
               {/* File Info */}
-              <div className="bg-white border border-gray-200 dark:bg-slate-800/80 dark:border-slate-700 rounded-xl p-6 shadow-sm">
-                <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-300 mb-4">
+              <div className="bg-white border border-gray-200 dark:bg-slate-800/80 dark:border-slate-700 rounded-lg sm:rounded-xl p-3 sm:p-4 md:p-6 shadow-sm">
+                <h3 className="text-base sm:text-lg font-semibold text-gray-900 dark:text-gray-300 mb-3 sm:mb-4">
                   File Info
                 </h3>
-                <div className="space-y-3">
+                <div className="space-y-2.5 sm:space-y-3">
                   <div>
-                    <p className="text-xs text-gray-500 mb-1">File Type</p>
-                    <p className="text-sm font-medium text-gray-900 dark:text-gray-300">
+                    <p className="text-[10px] sm:text-xs text-gray-500 mb-0.5 sm:mb-1">
+                      File Type
+                    </p>
+                    <p className="text-xs sm:text-sm font-medium text-gray-900 dark:text-gray-300">
                       {material.file_type || "Unknown"}
                     </p>
                   </div>
                   <div>
-                    <p className="text-xs text-gray-500 mb-1">Uploaded</p>
-                    <p className="text-sm font-medium text-gray-900 dark:text-gray-300">
+                    <p className="text-[10px] sm:text-xs text-gray-500 mb-0.5 sm:mb-1">
+                      Uploaded
+                    </p>
+                    <p className="text-xs sm:text-sm font-medium text-gray-900 dark:text-gray-300">
                       {formatDate(material.created_at)}
                     </p>
                   </div>

@@ -302,7 +302,7 @@ export default function GenerateQuestionsModal({
         </div>
 
         {/* Footer */}
-        <div className="sticky bottom-0 bg-gray-50 dark:bg-slate-800/80 p-6 rounded-b-2xl border-t border-gray-200 dark:border-slate-700/70">
+        <div className="sticky bottom-0 bg-gray-50 dark:bg-slate-800 p-6 rounded-b-2xl border-t border-gray-200 dark:border-slate-700/70">
           <div className="flex items-center space-x-3">
             <button
               onClick={onClose}

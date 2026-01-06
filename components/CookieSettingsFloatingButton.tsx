@@ -6,18 +6,19 @@ import CookiePreferences from "./CookiePreferences";
 
 export default function CookieSettingsFloatingButton() {
   const [showPreferences, setShowPreferences] = useState(false);
-  const [hasConsent, setHasConsent] = useState(false);
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
+    // This effect only runs on client, avoiding hydration mismatch
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setMounted(true);
-    // Check if user has given consent
-    const consent = localStorage.getItem("cookieConsent");
-    setHasConsent(!!consent);
   }, []);
 
-  // Don't show button if user hasn't interacted with cookies yet
-  if (!mounted || !hasConsent) return null;
+  // Check consent only after component is mounted (client-side only)
+  if (!mounted) return null;
+
+  const hasConsent = typeof window !== 'undefined' && localStorage.getItem("cookieConsent");
+  if (!hasConsent) return null;
 
   return (
     <>

@@ -5,7 +5,7 @@ import { motion } from "framer-motion";
 
 export default function LandingPage() {
   return (
-    <section className="relative bg-linear-to-br from-blue-50 via-white to-cyan-50 py-24 overflow-hidden">
+    <section className="relative bg-linear-to-b from-blue-50 via-blue to-cyan-50 py-24 overflow-hidden">
       {/* Dekoratívne pozadie */}
       <div className="absolute inset-0 overflow-hidden">
         <div className="absolute -top-40 -right-40 w-96 h-96 bg-blue-400/20 rounded-full blur-3xl"></div>

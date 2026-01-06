@@ -19,7 +19,7 @@ export default function Footer() {
                 <BookOpen className="w-6 h-6" />
               </div>
               <h3 className="font-bold text-xl bg-linear-to-r from-white to-blue-100 bg-clip-text text-transparent">
-                Study Assistant
+                Study Starter
               </h3>
             </div>
             <p className="text-gray-300 text-sm leading-relaxed">
@@ -203,7 +203,7 @@ export default function Footer() {
         <div className="border-t border-gray-700/30 pt-8">
           <div className="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
             <p className="text-gray-400 text-sm text-center md:text-left">
-              © {currentYear} Study Assistant. All rights reserved.
+              © {currentYear} Study Starter. All rights reserved.
             </p>
             <div className="flex items-center space-x-2">
               <span className="text-gray-500 text-xs">Made with</span>

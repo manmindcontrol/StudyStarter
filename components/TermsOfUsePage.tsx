@@ -80,8 +80,8 @@ export default function TermsOfUsePage() {
             <p className="text-gray-700 leading-relaxed mb-4">
               These Terms of Use constitute a legally binding agreement made
               between you, whether personally or on behalf of an entity ("you")
-              and Study Assistant ("Company", "we", "us", or "our"), concerning
-              your access to and use of the Study Assistant website and
+              and Study Starter ("Company", "we", "us", or "our"), concerning
+              your access to and use of the Study Starter website and
               application (collectively, the "Application").
             </p>
             <p className="text-gray-700 leading-relaxed mb-4">
@@ -234,7 +234,7 @@ export default function TermsOfUsePage() {
                 <strong>Email:</strong> legal@studyassistant.com
               </p>
               <p className="text-gray-700 mt-2">
-                <strong>Address:</strong> Study Assistant Inc., 123 Education
+                <strong>Address:</strong> Study Starter Inc., 123 Education
                 Street, Learning City, LC 12345
               </p>
             </div>

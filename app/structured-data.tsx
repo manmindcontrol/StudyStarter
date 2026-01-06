@@ -2,9 +2,9 @@ export default function StructuredData() {
   const organizationSchema = {
     "@context": "https://schema.org",
     "@type": "Organization",
-    name: "Study Assistant",
+    name: "Study Starter",
     description:
-      "AI-powered study assistant for students helping with lecture transcription, study materials, and test preparation.",
+      "AI-powered Study Starter for students helping with lecture transcription, study materials, and test preparation.",
     url: "https://studyassistant.app",
     logo: "https://studyassistant.app/logo.png",
     sameAs: [
@@ -23,10 +23,10 @@ export default function StructuredData() {
   const websiteSchema = {
     "@context": "https://schema.org",
     "@type": "WebSite",
-    name: "Study Assistant",
+    name: "Study Starter",
     url: "https://studyassistant.app",
     description:
-      "Free AI-powered study assistant for students. Automatic lecture transcription, study material processing, and test question generation.",
+      "Free AI-powered Study Starter for students. Automatic lecture transcription, study material processing, and test question generation.",
     potentialAction: {
       "@type": "SearchAction",
       target: "https://studyassistant.app/search?q={search_term_string}",
@@ -37,7 +37,7 @@ export default function StructuredData() {
   const softwareApplicationSchema = {
     "@context": "https://schema.org",
     "@type": "SoftwareApplication",
-    name: "Study Assistant",
+    name: "Study Starter",
     applicationCategory: "EducationalApplication",
     operatingSystem: "Web, iOS, Android",
     offers: {
@@ -53,7 +53,7 @@ export default function StructuredData() {
       worstRating: "1",
     },
     description:
-      "AI-powered study assistant that helps students with automatic lecture transcription, intelligent study material processing, and test question generation.",
+      "AI-powered Study Starter that helps students with automatic lecture transcription, intelligent study material processing, and test question generation.",
     featureList: [
       "Automatic lecture recording and transcription",
       "AI-powered study material processing",
@@ -69,10 +69,10 @@ export default function StructuredData() {
     mainEntity: [
       {
         "@type": "Question",
-        name: "What is Study Assistant?",
+        name: "What is Study Starter?",
         acceptedAnswer: {
           "@type": "Answer",
-          text: "Study Assistant is a free AI-powered tool that helps students study more effectively through automatic lecture transcription, intelligent study material processing, and test question generation.",
+          text: "Study Starter is a free AI-powered tool that helps students study more effectively through automatic lecture transcription, intelligent study material processing, and test question generation.",
         },
       },
       {
@@ -85,18 +85,18 @@ export default function StructuredData() {
       },
       {
         "@type": "Question",
-        name: "Is Study Assistant free to use?",
+        name: "Is Study Starter free to use?",
         acceptedAnswer: {
           "@type": "Answer",
-          text: "Yes, Study Assistant is completely free to use. You can create an account and start using all features immediately without a credit card.",
+          text: "Yes, Study Starter is completely free to use. You can create an account and start using all features immediately without a credit card.",
         },
       },
       {
         "@type": "Question",
-        name: "What file formats does Study Assistant support?",
+        name: "What file formats does Study Starter support?",
         acceptedAnswer: {
           "@type": "Answer",
-          text: "Study Assistant supports PDF and Word documents for study material processing. You can upload these files and our AI will analyze them to create study guides and test questions.",
+          text: "Study Starter supports PDF and Word documents for study material processing. You can upload these files and our AI will analyze them to create study guides and test questions.",
         },
       },
     ],

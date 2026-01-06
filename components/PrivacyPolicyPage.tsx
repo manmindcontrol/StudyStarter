@@ -76,7 +76,7 @@ export default function PrivacyPolicyPage() {
               <h2 className="text-2xl font-bold text-gray-900">Introduction</h2>
             </div>
             <p className="text-gray-700 leading-relaxed">
-              Welcome to Study Assistant. We are committed to protecting your
+              Welcome to Study Starter. We are committed to protecting your
               personal information and your right to privacy. This Privacy
               Policy explains how we collect, use, disclose, and safeguard your
               information when you use our web application and services. Please
@@ -615,7 +615,7 @@ export default function PrivacyPolicyPage() {
                 <strong>Email:</strong> privacy@studyassistant.com
               </p>
               <p className="text-gray-700 mt-2">
-                <strong>Address:</strong> Study Assistant Inc., 123 Education
+                <strong>Address:</strong> Study Starter Inc., 123 Education
                 Street, Learning City, LC 12345
               </p>
             </div>

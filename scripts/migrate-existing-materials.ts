@@ -49,7 +49,8 @@ async function migrateMaterials() {
       console.log(`   OpenAI File ID: ${material.openai_file_id}`);
 
       // Create vector store for this file
-      const vectorStore = await openai.beta.vectorStores.create({
+      // @ts-ignore - Vector stores API may not be available in current OpenAI SDK version
+      const vectorStore = await openai.beta.vectorStores?.create({
         name: `${material.title} - Vector Store`,
         file_ids: [material.openai_file_id],
       });

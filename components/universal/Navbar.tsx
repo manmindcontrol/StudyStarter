@@ -11,6 +11,7 @@ import {
   LogOut,
   Home,
   LayoutDashboard,
+  FileText,
 } from "lucide-react";
 import { getCurrentUser, signOut } from "@/lib/auth";
 import type { User } from "@supabase/supabase-js";
@@ -55,7 +56,7 @@ export default function Navbar() {
                 <BookOpen className="w-7 h-7" />
               </div>
               <span className="text-xl font-bold bg-linear-to-r from-gray-900 to-gray-700 dark:from-white dark:to-gray-200 bg-clip-text text-transparent hidden sm:block">
-                Study Assistant
+                StudyStarter.io
               </span>
               <span className="text-xl font-bold bg-linear-to-r from-gray-900 to-gray-700 dark:from-white dark:to-gray-200 bg-clip-text text-transparent sm:hidden">
                 SA
@@ -79,6 +80,14 @@ export default function Navbar() {
                 >
                   <LayoutDashboard className="w-5 h-5" />
                   <span>Dashboard</span>
+                  <span className="absolute bottom-0 left-1/2 -translate-x-1/2 w-0 h-0.5 bg-linear-to-r from-blue-600 to-cyan-500 group-hover:w-3/4 transition-all duration-300"></span>
+                </Link>
+                <Link
+                  href="/pdf-converter"
+                  className="flex items-center space-x-2 text-gray-700 dark:text-gray-200 hover:text-blue-600 dark:hover:text-blue-400 transition-all duration-200 font-medium px-4 py-2 rounded-lg hover:bg-blue-50 dark:hover:bg-slate-800 relative group"
+                >
+                  <FileText className="w-5 h-5" />
+                  <span>PDF Converter</span>
                   <span className="absolute bottom-0 left-1/2 -translate-x-1/2 w-0 h-0.5 bg-linear-to-r from-blue-600 to-cyan-500 group-hover:w-3/4 transition-all duration-300"></span>
                 </Link>
               </div>
@@ -156,6 +165,14 @@ export default function Navbar() {
                     >
                       <LayoutDashboard className="w-5 h-5" />
                       <span>Dashboard</span>
+                    </Link>
+                    <Link
+                      href="/pdf-converter"
+                      className="flex items-center space-x-2 text-gray-700 dark:text-gray-200 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/30 transition-all duration-200 font-medium px-4 py-3 rounded-lg mx-2"
+                      onClick={() => setMobileMenuOpen(false)}
+                    >
+                      <FileText className="w-5 h-5" />
+                      <span>PDF Converter</span>
                     </Link>
                   </>
                 )}

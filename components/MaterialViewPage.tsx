@@ -418,7 +418,7 @@ export default function MaterialViewPage({ materialId }: Props) {
                     {noteSets.map((note) => (
                       <div
                         key={note.id}
-                        className="flex items-center gap-3 sm:gap-2"
+                        className="flex items-center gap-2 sm:gap-2"
                       >
                         <button
                           onClick={() =>
@@ -426,7 +426,7 @@ export default function MaterialViewPage({ materialId }: Props) {
                               `/materials/${materialId}/notes/${note.id}`
                             )
                           }
-                          className="flex-1 text-left p-2.5 sm:p-3 md:p-4 bg-purple-50 hover:bg-purple-100 dark:bg-purple-900/20 dark:hover:bg-purple-800/30 rounded-lg transition-colors border border-purple-200 hover:border-purple-300 dark:border-none"
+                          className="flex-1 min-w-0 text-left p-2.5 sm:p-3 md:p-4 bg-purple-50 hover:bg-purple-100 dark:bg-purple-900/20 dark:hover:bg-purple-800/30 rounded-lg transition-colors border border-purple-200 hover:border-purple-300 dark:border-none"
                         >
                           <div className="flex items-center justify-between gap-2 cursor-pointer">
                             <div className="flex-1 min-w-0">

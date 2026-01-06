@@ -13,7 +13,9 @@
       "Bash(npx supabase db push)",
       "Bash(dir:*)",
       "Bash(findstr:*)",
-      "Bash(grep:*)"
+      "Bash(grep:*)",
+      "Bash(npm uninstall:*)",
+      "Bash(if exist \"c:\\\\MojeProjekty\\\\js-app\\\\scripts\\\\migrate-existing-materials.ts\" move \"c:\\\\MojeProjekty\\\\js-app\\\\scripts\\\\migrate-existing-materials.ts\" \"c:\\\\MojeProjekty\\\\js-app\\\\scripts\\\\migrate-existing-materials.ts.bak\")"
     ],
     "deny": [],
     "ask": []

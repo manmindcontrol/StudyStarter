@@ -15,13 +15,13 @@ const inter = Inter({
 
 export const metadata: Metadata = {
   title: {
-    default: "Study Assistant - AI-Powered Study Helper for Students",
-    template: "%s | Study Assistant",
+    default: "Study Starter - AI-Powered Study Helper for Students",
+    template: "%s | Study Starter",
   },
   description:
-    "Free AI-powered study assistant for students. Automatic lecture transcription, intelligent study material processing, and test question generation. Study smarter, not harder with AI technology.",
+    "Free AI-powered Study Starter for students. Automatic lecture transcription, intelligent study material processing, and test question generation. Study smarter, not harder with AI technology.",
   keywords: [
-    "AI study assistant",
+    "AI Study Starter",
     "study helper",
     "lecture transcription",
     "AI for students",
@@ -40,10 +40,10 @@ export const metadata: Metadata = {
     "learning assistant",
     "academic help",
   ],
-  authors: [{ name: "Study Assistant Team" }],
-  creator: "Study Assistant",
-  publisher: "Study Assistant",
-  applicationName: "Study Assistant",
+  authors: [{ name: "Study Starter Team" }],
+  creator: "Study Starter",
+  publisher: "Study Starter",
+  applicationName: "Study Starter",
   referrer: "origin-when-cross-origin",
   robots: {
     index: true,
@@ -60,24 +60,24 @@ export const metadata: Metadata = {
     type: "website",
     locale: "en_US",
     url: "https://studyassistant.app",
-    title: "Study Assistant - AI-Powered Study Helper for Students",
+    title: "Study Starter - AI-Powered Study Helper for Students",
     description:
-      "Free AI-powered study assistant. Automatic lecture transcription, study material processing, and test generation. Study smarter with AI.",
-    siteName: "Study Assistant",
+      "Free AI-powered Study Starter. Automatic lecture transcription, study material processing, and test generation. Study smarter with AI.",
+    siteName: "Study Starter",
     images: [
       {
         url: "/og-image.png",
         width: 1200,
         height: 630,
-        alt: "Study Assistant - AI Study Helper",
+        alt: "Study Starter - AI Study Helper",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Study Assistant - AI Study Helper",
+    title: "Study Starter - AI Study Helper",
     description:
-      "Free AI-powered study assistant for students. Automatic lecture transcription and test generation.",
+      "Free AI-powered Study Starter for students. Automatic lecture transcription and test generation.",
     images: ["/twitter-image.png"],
     creator: "@studyassistant",
   },

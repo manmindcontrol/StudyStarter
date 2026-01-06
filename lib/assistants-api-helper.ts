@@ -55,7 +55,9 @@ export async function runAssistantWithFileSearch({
     // 4. Poll for completion
     while (run.status === "queued" || run.status === "in_progress") {
       await new Promise((resolve) => setTimeout(resolve, 1000));
-      run = await openai.beta.threads.runs.retrieve(thread.id, run.id);
+      run = await openai.beta.threads.runs.retrieve(run.id, {
+        thread_id: thread.id
+      });
     }
 
     // 5. Check for errors
@@ -84,7 +86,7 @@ export async function runAssistantWithFileSearch({
     return textContent.text.value;
   } finally {
     // Cleanup: Delete the assistant
-    await openai.beta.assistants.del(assistant.id);
+    await openai.beta.assistants.delete(assistant.id);
   }
 }
 
@@ -142,7 +144,7 @@ export async function runAssistantWithFileSearchStreaming({
   return {
     stream,
     cleanup: async () => {
-      await openai.beta.assistants.del(assistant.id);
+      await openai.beta.assistants.delete(assistant.id);
     },
   };
 }

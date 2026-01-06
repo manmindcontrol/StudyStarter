@@ -229,7 +229,7 @@ export default function DashboardPage() {
               Hello, {displayName}! 👋
             </h1>
             <p className="text-xs sm:text-sm md:text-base text-gray-600 dark:text-gray-300">
-              Welcome back to Study Assistant
+              Welcome back to Study Starter
             </p>
           </div>
 
@@ -385,7 +385,9 @@ export default function DashboardPage() {
                                 </p>
                                 <div className="flex items-center mt-0.5 sm:mt-1 text-[10px] sm:text-xs md:text-sm text-gray-500 dark:text-gray-400">
                                   <Clock className="w-3 h-3 sm:w-4 sm:h-4 mr-1 sm:mr-1.5 shrink-0" />
-                                  <span className="truncate">{formatDate(material.created_at)}</span>
+                                  <span className="truncate">
+                                    {formatDate(material.created_at)}
+                                  </span>
                                 </div>
                               </div>
                             </div>
@@ -453,7 +455,9 @@ export default function DashboardPage() {
                                 </p>
                                 <div className="flex items-center mt-0.5 sm:mt-1 text-[10px] sm:text-xs md:text-sm text-gray-500 dark:text-gray-400">
                                   <Clock className="w-3 h-3 sm:w-4 sm:h-4 mr-1 sm:mr-1.5 shrink-0" />
-                                  <span className="truncate">{formatDate(lecture.created_at)}</span>
+                                  <span className="truncate">
+                                    {formatDate(lecture.created_at)}
+                                  </span>
                                 </div>
                               </div>
                             </div>

@@ -169,7 +169,7 @@ export default function CookiePolicyPage() {
             </div>
             <p className="text-gray-700 leading-relaxed mb-4">
               This Cookie Policy explains what cookies are and how we use them
-              on the Study Assistant application (the Application). You should
+              on the Study Starter application (the Application). You should
               read this policy to understand what type of cookies we use, the
               information we collect using cookies, how that information is
               used, and how to control cookie preferences.
@@ -180,8 +180,8 @@ export default function CookiePolicyPage() {
               use an application. Cookies are widely used by website and
               application owners to make their platforms work more efficiently
               and to provide reporting information. Cookies set by the
-              website/application owner (in this case, Study Assistant) are
-              called first-party cookies. Cookies set by parties other than the
+              website/application owner (in this case, Study Starter) are called
+              first-party cookies. Cookies set by parties other than the
               website/application owner are called third-party cookies.
             </p>
             <p className="text-gray-700 leading-relaxed">
@@ -706,7 +706,7 @@ export default function CookiePolicyPage() {
                 <strong>Email:</strong> cookies@studyassistant.com
               </p>
               <p className="text-gray-700 mt-2">
-                <strong>Address:</strong> Study Assistant Inc., 123 Education
+                <strong>Address:</strong> Study Starter Inc., 123 Education
                 Street, Learning City, LC 12345
               </p>
             </div>

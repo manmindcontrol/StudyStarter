@@ -1,7 +1,7 @@
 {
-  "name": "Study Assistant - AI Study Helper",
-  "short_name": "Study Assistant",
-  "description": "Free AI-powered study assistant for students. Automatic lecture transcription, study material processing, and test question generation.",
+  "name": "Study Starter - AI Study Helper",
+  "short_name": "Study Starter",
+  "description": "Free AI-powered Study Starter for students. Automatic lecture transcription, study material processing, and test question generation.",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#ffffff",
@@ -27,7 +27,7 @@
       "src": "/screenshot-1.png",
       "sizes": "1280x720",
       "type": "image/png",
-      "label": "Study Assistant Dashboard"
+      "label": "Study Starter Dashboard"
     },
     {
       "src": "/screenshot-2.png",

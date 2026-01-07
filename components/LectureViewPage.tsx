@@ -17,6 +17,7 @@ import GenerateQuestionsButton from "@/components/buttons/GenerateQuestionsButto
 import GenerateNotesButton from "@/components/buttons/GenerateNotesButton";
 import DeleteButton from "@/components/buttons/DeleteButton";
 import OpenLectureButton from "@/components/buttons/OpenLectureButton";
+import { useTranslation } from "@/hooks/useTranslation";
 
 type Lecture = {
   id: string;
@@ -32,6 +33,7 @@ type Props = {
 
 export default function LectureViewPage({ lectureId }: Props) {
   const router = useRouter();
+  const { t } = useTranslation();
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
   const [lecture, setLecture] = useState<Lecture | null>(null);
@@ -102,13 +104,13 @@ export default function LectureViewPage({ lectureId }: Props) {
       <div className="min-h-screen flex items-center justify-center bg-linear-to-br from-purple-50 via-gray-100 to-pink-50 dark:from-slate-900 dark:via-slate-800 dark:to-slate-900">
         <div className="text-center">
           <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">
-            Lecture not found
+            {t("lectureView.lectureNotFound")}
           </h2>
           <button
             onClick={() => router.push("/dashboard")}
             className="text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white"
           >
-            Back to dashboard
+            {t("lectureView.backToDashboard")}
           </button>
         </div>
       </div>
@@ -127,7 +129,7 @@ export default function LectureViewPage({ lectureId }: Props) {
             className="mb-4 flex items-center space-x-2 text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-200 transition-colors group"
           >
             <ArrowLeft className="w-5 h-5 group-hover:-translate-x-1 transition-transform" />
-            <span className="font-medium">Back to Dashboard</span>
+            <span className="font-medium">{t("lectureView.backToDashboard")}</span>
           </button>
           {/* Lecture Info Card */}
           <div className="bg-linear-to-br from-emerald-600 to-green-400 rounded-2xl p-3 mb-3 md:p-8 md:mb-8 shadow-sm">
@@ -142,11 +144,11 @@ export default function LectureViewPage({ lectureId }: Props) {
                 <div className="flex items-center text-sm text-gray-100 space-x-6">
                   <div className="flex items-center">
                     <Calendar className="w-4 h-4 mr-2" />
-                    <span>Recorded {formatDate(lecture.created_at)}</span>
+                    <span>{t("lectureView.recorded")} {formatDate(lecture.created_at)}</span>
                   </div>
                   <div className="flex items-center">
                     <Clock className="w-4 h-4 mr-2" />
-                    <span>Duration: {formatDuration(lecture.duration)}</span>
+                    <span>{t("lectureView.duration")}: {formatDuration(lecture.duration)}</span>
                   </div>
                 </div>
               </div>
@@ -185,7 +187,7 @@ export default function LectureViewPage({ lectureId }: Props) {
             <div className="space-y-4">
               <div className="bg-white border dark:bg-slate-800/80 border-gray-200 dark:border-gray-700 rounded-xl p-6 shadow-sm">
                 <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-200 mb-4">
-                  Statistics
+                  {t("lectureView.statistics")}
                 </h3>
 
                 <div className="space-y-4">
@@ -197,7 +199,7 @@ export default function LectureViewPage({ lectureId }: Props) {
                       </div>
                       <div>
                         <p className="text-sm text-gray-600 dark:text-gray-400">
-                          Tests Created
+                          {t("lectureView.testsCreated")}
                         </p>
                         <p className="text-2xl font-bold text-gray-900 dark:text-gray-200">
                           0
@@ -214,7 +216,7 @@ export default function LectureViewPage({ lectureId }: Props) {
                       </div>
                       <div>
                         <p className="text-sm text-gray-600 dark:text-gray-400">
-                          Questions
+                          {t("lectureView.questions")}
                         </p>
                         <p className="text-2xl font-bold text-gray-900 dark:text-gray-200">
                           0
@@ -231,7 +233,7 @@ export default function LectureViewPage({ lectureId }: Props) {
                       </div>
                       <div>
                         <p className="text-sm text-gray-600 dark:text-gray-400">
-                          Notes
+                          {t("lectureView.notes")}
                         </p>
                         <p className="text-2xl font-bold text-gray-900 dark:text-gray-200">
                           0
@@ -248,7 +250,7 @@ export default function LectureViewPage({ lectureId }: Props) {
                       </div>
                       <div>
                         <p className="text-sm text-gray-600 dark:text-gray-400">
-                          Duration
+                          {t("lectureView.duration")}
                         </p>
                         <p className="text-2xl font-bold text-gray-900 dark:text-gray-200">
                           {formatDuration(lecture.duration)}
@@ -262,20 +264,20 @@ export default function LectureViewPage({ lectureId }: Props) {
               {/* Lecture Info */}
               <div className="bg-white border dark:bg-slate-800/80 border-gray-200 dark:border-gray-700 rounded-xl p-6 shadow-sm">
                 <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-200 mb-4">
-                  Lecture Info
+                  {t("lectureView.lectureInfo")}
                 </h3>
                 <div className="space-y-3">
                   <div>
                     <p className="text-xs text-gray-500 dark:text-gray-400 mb-1">
-                      Words
+                      {t("lectureView.words")}
                     </p>
                     <p className="text-sm font-medium text-gray-900 dark:text-gray-200">
-                      {lecture.transcript.split(" ").length} words
+                      {t("lectureView.wordsCount").replace("{count}", lecture.transcript.split(" ").length.toString())}
                     </p>
                   </div>
                   <div>
                     <p className="text-xs text-gray-500 dark:text-gray-400 mb-1">
-                      Recorded
+                      {t("lectureView.recorded")}
                     </p>
                     <p className="text-sm font-medium text-gray-900 dark:text-gray-200">
                       {formatDate(lecture.created_at)}

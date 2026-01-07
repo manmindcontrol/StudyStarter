@@ -16,6 +16,7 @@ import {
 } from "lucide-react";
 import type { User as SupabaseUser } from "@supabase/supabase-js";
 import { useTheme } from "@/contexts/ThemeContext";
+import { useTranslation } from "@/hooks/useTranslation";
 
 type UserProfile = {
   id: string;
@@ -27,6 +28,7 @@ type UserProfile = {
 };
 
 export default function ProfilePage() {
+  const { t } = useTranslation();
   const router = useRouter();
   const [user, setUser] = useState<SupabaseUser | null | undefined>(undefined);
   const [profile, setProfile] = useState<UserProfile | null>(null);
@@ -86,7 +88,7 @@ export default function ProfilePage() {
 
       if (error) throw error;
 
-      setSuccessMessage("Profile updated successfully!");
+      setSuccessMessage(t("profile.successProfileUpdated"));
 
       // Refresh profile data
       const { data: updatedProfile } = await supabase
@@ -102,7 +104,7 @@ export default function ProfilePage() {
       setErrorMessage(
         error instanceof Error
           ? error.message
-          : "An error occurred while updating profile"
+          : t("profile.errorUpdatingProfile")
       );
     } finally {
       setSaving(false);
@@ -120,25 +122,25 @@ export default function ProfilePage() {
 
     // Validate passwords
     if (!currentPassword) {
-      setCurrentPasswordError("Please enter your current password");
+      setCurrentPasswordError(t("profile.errorCurrentPassword"));
       setSaving(false);
       return;
     }
 
     if (newPassword !== confirmPassword) {
-      setErrorMessage("New passwords do not match");
+      setErrorMessage(t("profile.errorPasswordMismatch"));
       setSaving(false);
       return;
     }
 
     if (newPassword.length < 6) {
-      setErrorMessage("New password must be at least 6 characters");
+      setErrorMessage(t("profile.errorPasswordLength"));
       setSaving(false);
       return;
     }
 
     if (currentPassword === newPassword) {
-      setErrorMessage("New password must be different from current password");
+      setErrorMessage(t("profile.errorPasswordSame"));
       setSaving(false);
       return;
     }
@@ -150,7 +152,7 @@ export default function ProfilePage() {
       } = await supabase.auth.getSession();
 
       if (!session) {
-        setErrorMessage("Session expired. Please log in again.");
+        setErrorMessage(t("profile.errorSessionExpired"));
         setSaving(false);
         return;
       }
@@ -184,7 +186,7 @@ export default function ProfilePage() {
         return;
       }
 
-      setSuccessMessage("Password changed successfully!");
+      setSuccessMessage(t("profile.successPasswordChanged"));
       setCurrentPassword("");
       setNewPassword("");
       setConfirmPassword("");
@@ -197,7 +199,7 @@ export default function ProfilePage() {
       setErrorMessage(
         error instanceof Error
           ? error.message
-          : "An error occurred while changing password"
+          : t("profile.errorChangingPassword")
       );
     } finally {
       setSaving(false);
@@ -212,18 +214,16 @@ export default function ProfilePage() {
     );
   }
 
-  const userPlan = "Free Plan"; // Placeholder - you can add payment plan logic later
-
   return (
     <div className="min-h-screen bg-linear-to-br from-blue-50 via-gray-100 to-cyan-50 dark:bg-linear-to-br dark:from-slate-900 dark:via-slate-800 dark:to-slate-900 overflow-hidden py-8">
       <div className="container-custom max-w-4xl">
         {/* Header */}
         <div className="mb-8">
           <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">
-            My Profile
+            {t("profile.title")}
           </h1>
           <p className="text-gray-600 dark:text-gray-300">
-            Manage your personal information and settings
+            {t("profile.subtitle")}
           </p>
         </div>
         {/* Messages */}
@@ -233,7 +233,7 @@ export default function ProfilePage() {
             <div>
               <p className="font-semibold">{successMessage}</p>
               <p className="text-sm text-green-700 mt-0.5">
-                You can now use your new password to sign in.
+                {t("profile.successPasswordChangedHint")}
               </p>
             </div>
           </div>
@@ -267,14 +267,14 @@ export default function ProfilePage() {
             <div className="bg-linear-to-br from-blue-600 to-cyan-600 rounded-xl shadow-sm p-6 text-white">
               <div className="flex items-center space-x-3 mb-4">
                 <CreditCard className="w-6 h-6" />
-                <h3 className="font-semibold text-lg">Your Plan</h3>
+                <h3 className="font-semibold text-lg">{t("profile.yourPlan")}</h3>
               </div>
-              <p className="text-xl font-bold mb-2">{userPlan}</p>
+              <p className="text-xl font-bold mb-2">{t("profile.freePlan")}</p>
               <p className="text-blue-100 text-sm mb-4">
-                Unlimited access to basic features
+                {t("profile.unlimitedAccess")}
               </p>
               <button className="w-full bg-white  text-blue-600  hover:bg-blue-50 dark:bg-slate-800 dark:text-gray-300 dark:hover:bg-slate-700 font-semibold py-2 px-4 rounded-lg transition-colors cursor-pointer">
-                Upgrade Plan
+                {t("profile.upgradePlan")}
               </button>
             </div>
           </div>
@@ -286,14 +286,14 @@ export default function ProfilePage() {
               <div className="flex items-center space-x-3 mb-6">
                 <User className="w-6 h-6 text-blue-600 dark:text-blue-400" />
                 <h2 className="text-xl font-semibold text-gray-900 dark:text-white">
-                  Personal Information
+                  {t("profile.personalInfo")}
                 </h2>
               </div>
 
               <form onSubmit={handleUpdateProfile} className="space-y-4">
                 <div>
                   <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                    Email
+                    {t("profile.email")}
                   </label>
                   <div className="relative">
                     <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400 dark:text-gray-500" />
@@ -305,36 +305,36 @@ export default function ProfilePage() {
                     />
                   </div>
                   <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
-                    Email cannot be changed
+                    {t("profile.emailCannotChange")}
                   </p>
                 </div>
 
                 <div>
                   <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                    Full Name
+                    {t("profile.fullName")}
                   </label>
                   <input
                     type="text"
                     value={fullName}
                     onChange={(e) => setFullName(e.target.value)}
-                    placeholder="Enter your full name"
+                    placeholder={t("profile.fullNamePlaceholder")}
                     className="w-full px-4 py-2 border text-gray-900 dark:text-white border-gray-300 dark:border-slate-600 bg-white dark:bg-slate-700/40 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                   />
                 </div>
 
                 <div>
                   <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                    Display Name (how you want to be addressed)
+                    {t("profile.displayName")}
                   </label>
                   <input
                     type="text"
                     value={displayName}
                     onChange={(e) => setDisplayName(e.target.value)}
-                    placeholder="e.g. John, Sarah..."
+                    placeholder={t("profile.displayNamePlaceholder")}
                     className="w-full px-4 py-2 border text-gray-900 dark:text-white border-gray-300 dark:border-slate-600 bg-white dark:bg-slate-700/40 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                   />
                   <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
-                    This name will be used in the dashboard greetings
+                    {t("profile.displayNameHint")}
                   </p>
                 </div>
 
@@ -343,10 +343,10 @@ export default function ProfilePage() {
                   <div className="flex items-center justify-between">
                     <div className="flex-1">
                       <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                        Dark Mode
+                        {t("profile.darkMode")}
                       </label>
                       <p className="text-xs text-gray-500 dark:text-gray-400">
-                        Switch between light and dark theme for the dashboard
+                        {t("profile.darkModeHint")}
                       </p>
                     </div>
                     <button
@@ -376,7 +376,7 @@ export default function ProfilePage() {
                   disabled={saving}
                   className="w-full bg-linear-to-r from-blue-600 to-cyan-600 hover:from-blue-700 hover:to-cyan-700 text-white font-semibold py-3 px-6 rounded-lg transition-all duration-300 shadow-lg shadow-blue-500/30 hover:shadow-xl hover:shadow-blue-500/40 disabled:opacity-50 disabled:cursor-not-allowed"
                 >
-                  {saving ? "Saving..." : "Save Changes"}
+                  {saving ? t("profile.saving") : t("profile.saveChanges")}
                 </button>
               </form>
             </div>
@@ -386,14 +386,14 @@ export default function ProfilePage() {
               <div className="flex items-center space-x-3 mb-6">
                 <Lock className="w-6 h-6 text-blue-600 dark:text-blue-400" />
                 <h2 className="text-xl font-semibold text-gray-900 dark:text-white">
-                  Change Password
+                  {t("profile.changePassword")}
                 </h2>
               </div>
 
               <form onSubmit={handleChangePassword} className="space-y-4">
                 <div>
                   <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                    Current Password
+                    {t("profile.currentPassword")}
                   </label>
                   <input
                     type="password"
@@ -402,7 +402,7 @@ export default function ProfilePage() {
                       setCurrentPassword(e.target.value);
                       setCurrentPasswordError(""); // Clear error on change
                     }}
-                    placeholder="Enter current password"
+                    placeholder={t("profile.currentPasswordPlaceholder")}
                     className={`w-full px-4 py-2 border text-gray-900 dark:text-white rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent ${
                       currentPasswordError
                         ? "border-red-300 bg-red-50 dark:border-red-700 dark:bg-red-900/30"
@@ -417,20 +417,20 @@ export default function ProfilePage() {
                     </p>
                   ) : (
                     <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
-                      Required to verify your identity
+                      {t("profile.currentPasswordHint")}
                     </p>
                   )}
                 </div>
 
                 <div>
                   <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                    New Password
+                    {t("profile.newPassword")}
                   </label>
                   <input
                     type="password"
                     value={newPassword}
                     onChange={(e) => setNewPassword(e.target.value)}
-                    placeholder="Enter new password (min. 6 characters)"
+                    placeholder={t("profile.newPasswordPlaceholder")}
                     className="w-full px-4 py-2 border border-gray-300 dark:border-slate-600 text-gray-900 dark:text-white bg-white dark:bg-slate-700/40 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                     required
                   />
@@ -438,13 +438,13 @@ export default function ProfilePage() {
 
                 <div>
                   <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                    Confirm New Password
+                    {t("profile.confirmNewPassword")}
                   </label>
                   <input
                     type="password"
                     value={confirmPassword}
                     onChange={(e) => setConfirmPassword(e.target.value)}
-                    placeholder="Enter new password again"
+                    placeholder={t("profile.confirmNewPasswordPlaceholder")}
                     className="w-full px-4 py-2 border border-gray-300 dark:border-slate-600 text-gray-900 dark:text-white bg-white dark:bg-slate-700/40 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                     required
                   />
@@ -460,7 +460,7 @@ export default function ProfilePage() {
                   }
                   className="w-full bg-linear-to-r from-blue-600 to-cyan-600 hover:from-blue-700 hover:to-cyan-700 text-white font-semibold py-3 px-6 rounded-lg transition-all duration-300 shadow-lg shadow-blue-500/30 hover:shadow-xl hover:shadow-blue-500/40 disabled:opacity-50 disabled:cursor-not-allowed"
                 >
-                  {saving ? "Changing password..." : "Change Password"}
+                  {saving ? t("profile.changingPassword") : t("profile.changePasswordButton")}
                 </button>
               </form>
             </div>

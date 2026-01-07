@@ -1,25 +1,25 @@
 "use client";
 import { motion } from "framer-motion";
+import { useTranslation } from "@/hooks/useTranslation";
 
 export default function HowItWorks() {
+  const { t } = useTranslation();
+
   const steps = [
     {
       number: "1",
-      title: "Sign up",
-      description:
-        "Create a free account and start using all the app's features right away.",
+      title: t("howItWorks.step1Title"),
+      description: t("howItWorks.step1Description"),
     },
     {
       number: "2",
-      title: "Upload materials or record a lecture",
-      description:
-        "Add your study materials (PDF, Word) or start recording a lecture in real-time.",
+      title: t("howItWorks.step2Title"),
+      description: t("howItWorks.step2Description"),
     },
     {
       number: "3",
-      title: "Let AI do the work",
-      description:
-        "AI processes your materials, creates study guides, test questions, and helps you prepare efficiently.",
+      title: t("howItWorks.step3Title"),
+      description: t("howItWorks.step3Description"),
     },
   ];
 
@@ -43,7 +43,7 @@ export default function HowItWorks() {
             className="inline-block bg-linear-to-r from-blue-100 to-cyan-100 px-4 py-2 rounded-full mb-6 border border-blue-200/50"
           >
             <span className="text-sm font-semibold text-blue-700">
-              Simple process
+              {t("howItWorks.badge")}
             </span>
           </motion.div>
           <motion.h2
@@ -53,7 +53,7 @@ export default function HowItWorks() {
             transition={{ duration: 0.6, delay: 0.1 }}
             className="text-4xl md:text-5xl font-bold text-gray-900 mb-6"
           >
-            How does it work?
+            {t("howItWorks.title")}
           </motion.h2>
           <motion.p
             initial={{ opacity: 0, y: 20 }}
@@ -62,7 +62,7 @@ export default function HowItWorks() {
             transition={{ duration: 0.6, delay: 0.2 }}
             className="text-lg md:text-xl text-gray-600"
           >
-            Three simple steps to more effective studying
+            {t("howItWorks.subtitle")}
           </motion.p>
         </div>
 

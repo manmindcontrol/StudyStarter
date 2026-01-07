@@ -4,8 +4,10 @@ import Link from "next/link";
 import { BookOpen, Mic, FileText, Brain } from "lucide-react";
 import { motion } from "framer-motion";
 import Image from "next/image";
+import { useTranslation } from "@/hooks/useTranslation";
 
 export default function LandingPage() {
+  const { t } = useTranslation();
   return (
     <section className="relative bg-linear-to-b from-blue-50 via-blue-50 to-cyan-50 py-24 overflow-hidden ">
       {/* Dekoratívne pozadie */}
@@ -16,8 +18,8 @@ export default function LandingPage() {
       </div>
 
       {/* Monster - absolútne pozadie na všetkých zariadeniach */}
-      <div className="absolute inset-0 flex items-end justify-center pointer-events-none overflow-hidden pb-0 lg:pb-16">
-        <div className="w-[420px] sm:w-[420px] md:w-[520px] lg:w-[480px] xl:w-[580px] opacity-50 lg:opacity-100 lg:translate-x-52 translate-y-0 lg:translate-y-50">
+      <div className="absolute inset-0 flex items-end justify-center pointer-events-none overflow-hidden ">
+        <div className="w-[420px] sm:w-[420px] md:w-[480px] lg:w-[580px] xl:w-[580px] opacity-50 lg:opacity-100 lg:translate-x-60 translate-y-0 lg:translate-y-34">
           <Image
             src="/monster.svg"
             alt="AI Learning Monster"
@@ -43,7 +45,7 @@ export default function LandingPage() {
             >
               <span className="w-2 h-2 bg-blue-600 rounded-full animate-pulse" />
               <span className="text-sm font-semibold text-blue-700">
-                New AI-powered platform for students
+                {t("landing.badge")}
               </span>
             </motion.div>
 
@@ -55,10 +57,10 @@ export default function LandingPage() {
               className="text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold mb-6 leading-tight"
             >
               <span className="bg-linear-to-t from-gray-500 to-slate-900 bg-clip-text text-transparent">
-                Study more effectively with{" "}
+                {t("landing.title")}{" "}
               </span>
               <span className="bg-linear-to-r from-blue-600 via-cyan-500 to-blue-600 bg-clip-text text-transparent animate-linear">
-                AI
+                {t("landing.titleAI")}
               </span>
             </motion.h1>
 
@@ -69,8 +71,7 @@ export default function LandingPage() {
               transition={{ duration: 0.6, delay: 0.2 }}
               className="text-lg md:text-xl text-gray-600 mb-10 leading-relaxed"
             >
-              Automatic lecture transcription, intelligent study material
-              processing, and test question generation. All in one place.
+              {t("landing.description")}
             </motion.p>
 
             {/* CTA buttons */}
@@ -89,7 +90,7 @@ export default function LandingPage() {
                   className="group btn-primary text-lg bg-linear-to-r from-blue-600 to-cyan-600 px-8 py-4 rounded-xl text-white hover:from-blue-700 hover:to-cyan-700 transition-all duration-300 shadow-xl shadow-blue-500/30 hover:shadow-2xl hover:shadow-blue-500/40 font-semibold inline-block"
                 >
                   <span className="flex items-center justify-center space-x-2">
-                    <span>Start for free</span>
+                    <span>{t("landing.startFree")}</span>
                     <span className="group-hover:translate-x-1 transition-transform duration-200">
                       →
                     </span>
@@ -105,7 +106,7 @@ export default function LandingPage() {
                   href="#funkcie"
                   className="btn-secondary text-lg bg-white border-2 border-gray-100 px-8 py-4 rounded-xl hover:bg-gray-50 hover:border-blue-300 transition-all duration-300 shadow-lg hover:shadow-xl font-semibold text-gray-700 hover:text-blue-600 inline-block"
                 >
-                  Learn more
+                  {t("landing.learnMore")}
                 </Link>
               </motion.div>
             </motion.div>
@@ -124,9 +125,7 @@ export default function LandingPage() {
                   <Mic className="w-7 h-7 text-blue-600" />
                 </div>
                 <p className="text-xs font-medium text-gray-600 leading-snug">
-                  Lecture
-                  <br />
-                  recording
+                  {t("landing.lectureRecording")}
                 </p>
               </div>
 
@@ -135,9 +134,7 @@ export default function LandingPage() {
                   <FileText className="w-7 h-7 text-green-600" />
                 </div>
                 <p className="text-xs font-medium text-gray-600 leading-snug">
-                  Material
-                  <br />
-                  analysis
+                  {t("landing.materialAnalysis")}
                 </p>
               </div>
 
@@ -146,9 +143,7 @@ export default function LandingPage() {
                   <Brain className="w-7 h-7 text-purple-600" />
                 </div>
                 <p className="text-xs font-medium text-gray-600 leading-snug">
-                  AI-generated
-                  <br />
-                  notes
+                  {t("landing.aiNotes")}
                 </p>
               </div>
 
@@ -157,9 +152,7 @@ export default function LandingPage() {
                   <BookOpen className="w-7 h-7 text-orange-600" />
                 </div>
                 <p className="text-xs font-medium text-gray-600 leading-snug">
-                  Test
-                  <br />
-                  questions
+                  {t("landing.testQuestions")}
                 </p>
               </div>
             </div>
@@ -169,38 +162,38 @@ export default function LandingPage() {
         {/* MOBILE: Features panel pod textom */}
         <div className="lg:hidden relative">
           {/* Features panel pod textom - relatívne z-index */}
-          <div className="relative z-10 mt-10 flex items-center justify-center">
-            <div className="bg-white/30 backdrop-blur-md border border-white/60 shadow-xl rounded-3xl p-4 flex items-center gap-4">
-              <div className="flex flex-col items-center gap-1">
-                <div className="w-12 h-12 rounded-2xl bg-blue-100 flex items-center justify-center shadow-sm">
+          <div className="relative z-10 mt-10 flex items-center justify-center px-4">
+            <div className="bg-white/30 backdrop-blur-md border border-white/60 shadow-xl rounded-3xl p-3 sm:p-4 flex items-center gap-2 sm:gap-4 max-w-full">
+              <div className="flex flex-col items-center gap-1 min-w-0 flex-1">
+                <div className="w-11 h-11 sm:w-12 sm:h-12 rounded-2xl bg-blue-100 flex items-center justify-center shadow-sm">
                   <Mic className="w-5 h-5 text-blue-600" />
                 </div>
-                <p className="text-[10px] font-medium text-gray-600 text-center leading-tight">
-                  Lecture
+                <p className="text-[9px] sm:text-[10px] font-medium text-gray-600 text-center leading-tight">
+                  {t("landing.lectureRecording").split(" ")[0]}
                 </p>
               </div>
-              <div className="flex flex-col items-center gap-1">
-                <div className="w-12 h-12 rounded-2xl bg-green-100 flex items-center justify-center shadow-sm">
+              <div className="flex flex-col items-center gap-1 min-w-0 flex-1">
+                <div className="w-11 h-11 sm:w-12 sm:h-12 rounded-2xl bg-green-100 flex items-center justify-center shadow-sm">
                   <FileText className="w-5 h-5 text-green-600" />
                 </div>
-                <p className="text-[10px] font-medium text-gray-600 text-center leading-tight">
-                  Material
+                <p className="text-[9px] sm:text-[10px] font-medium text-gray-600 text-center leading-tight">
+                  {t("landing.materialAnalysis").split(" ")[0]}
                 </p>
               </div>
-              <div className="flex flex-col items-center gap-1">
-                <div className="w-12 h-12 rounded-2xl bg-purple-100 flex items-center justify-center shadow-sm">
+              <div className="flex flex-col items-center gap-1 min-w-0 flex-1">
+                <div className="w-11 h-11 sm:w-12 sm:h-12 rounded-2xl bg-purple-100 flex items-center justify-center shadow-sm">
                   <Brain className="w-5 h-5 text-purple-600" />
                 </div>
-                <p className="text-[10px] font-medium text-gray-600 text-center leading-tight">
-                  AI notes
+                <p className="text-[9px] sm:text-[10px] font-medium text-gray-600 text-center leading-tight">
+                  {t("lectureView.notes").split(" ").slice(0, 2).join(" ")}
                 </p>
               </div>
-              <div className="flex flex-col items-center gap-1">
-                <div className="w-12 h-12 rounded-2xl bg-orange-100 flex items-center justify-center shadow-sm">
+              <div className="flex flex-col items-center gap-1 min-w-0 flex-1">
+                <div className="w-11 h-11 sm:w-12 sm:h-12 rounded-2xl bg-orange-100 flex items-center justify-center shadow-sm">
                   <BookOpen className="w-5 h-5 text-orange-600" />
                 </div>
-                <p className="text-[10px] font-medium text-gray-600 text-center leading-tight">
-                  Tests
+                <p className="text-[9px] sm:text-[10px] font-medium text-gray-600 text-center leading-tight">
+                  {t("landing.testQuestions").split(" ")[0]}
                 </p>
               </div>
             </div>

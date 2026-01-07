@@ -4,6 +4,7 @@ import { useEffect, useState, useRef } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { getCurrentUser } from "@/lib/auth";
 import { supabase } from "@/lib/supabase";
+import { useTranslation } from "@/hooks/useTranslation";
 import {
   FileText,
   CheckCircle2,
@@ -69,6 +70,7 @@ export default function QuestionsViewPage({
 }: Props) {
   const router = useRouter();
   const searchParams = useSearchParams();
+  const { t } = useTranslation();
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
   const [material, setMaterial] = useState<Material | null>(null);
@@ -606,13 +608,13 @@ export default function QuestionsViewPage({
       <div className="min-h-screen flex items-center justify-center bg-linear-to-br from-blue-50 via-gray-100 to-cyan-50 dark:bg-linear-to-br dark:from-slate-900 dark:via-slate-800 dark:to-slate-900">
         <div className="text-center">
           <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">
-            Questions not found
+            {t("questionsView.questionsNotFound")}
           </h2>
           <button
             onClick={() => router.push("/materials")}
             className="text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white"
           >
-            Back to materials
+            {t("questionsView.backToMaterials")}
           </button>
         </div>
       </div>
@@ -637,7 +639,7 @@ export default function QuestionsViewPage({
                   {material.title}
                 </h1>
                 <p className="text-xs sm:text-sm text-gray-600 dark:text-gray-400">
-                  {questionRecord.questions.length} questions
+                  {questionRecord.questions.length} {t("questionsView.questions")}
                 </p>
               </div>
             </div>
@@ -647,7 +649,7 @@ export default function QuestionsViewPage({
                 onClick={() => setIsChatOpen(true)}
                 className="md:hidden px-4 py-2.5 bg-linear-to-br from-blue-600 to-purple-600 text-white rounded-lg transition-colors shrink-0 relative font-bold text-sm"
               >
-                AI
+                {t("questionsView.ai")}
                 {chatMessages.length > 0 && (
                   <span className="absolute -top-1 -right-1 w-4 h-4 bg-red-500 rounded-full text-[10px] flex items-center justify-center font-bold">
                     {chatMessages.length}
@@ -663,7 +665,7 @@ export default function QuestionsViewPage({
                 >
                   <Save className="w-4 h-4 sm:w-4.5 sm:h-4.5" />
                   <span className="hidden sm:inline">
-                    {saving ? "Saving..." : "Save Questions"}
+                    {saving ? t("questionsView.saving") : t("questionsView.saveQuestions")}
                   </span>
                 </button>
               ) : (
@@ -673,7 +675,7 @@ export default function QuestionsViewPage({
                     className="flex items-center justify-center space-x-2 bg-green-100 text-green-500 px-3 sm:px-4 py-2.5 sm:py-3 rounded-lg transition-all cursor-default min-h-[42px] sm:min-h-[44px]"
                   >
                     <Check className="w-4 h-4 sm:w-4.5 sm:h-4.5" />
-                    <span className="hidden sm:inline">Questions Saved</span>
+                    <span className="hidden sm:inline">{t("questionsView.questionsSaved")}</span>
                   </button>
                 )
               )}
@@ -685,7 +687,7 @@ export default function QuestionsViewPage({
                   className="inline-flex items-center justify-center text-white gap-2 bg-linear-to-br from-blue-600 to-cyan-500 hover:from-blue-700 hover:to-cyan-600 px-3 sm:px-4 py-2.5 sm:py-3 rounded-lg text-xs sm:text-sm font-semibold transition-colors cursor-pointer min-h-[42px] sm:min-h-[44px]"
                 >
                   <Download className="w-4 h-4 sm:w-4.5 sm:h-4.5 text-white" />
-                  <span className="hidden sm:inline">Download questions</span>
+                  <span className="hidden sm:inline">{t("questionsView.downloadQuestions")}</span>
                 </button>
 
                 {showExportMenu && (
@@ -699,7 +701,7 @@ export default function QuestionsViewPage({
                     >
                       <FileDown className="w-4 h-4 text-blue-600 dark:text-blue-400" />
                       <span className="text-sm sm:text-base text-gray-700 dark:text-gray-300">
-                        Word (.docx)
+                        {t("questionsView.wordDocx")}
                       </span>
                     </button>
                     <button
@@ -711,7 +713,7 @@ export default function QuestionsViewPage({
                     >
                       <FileText className="w-4 h-4 text-gray-600 dark:text-gray-400" />
                       <span className="text-sm sm:text-base text-gray-700 dark:text-gray-300">
-                        Text (.txt)
+                        {t("questionsView.textTxt")}
                       </span>
                     </button>
                   </div>
@@ -729,7 +731,7 @@ export default function QuestionsViewPage({
           <div className="lg:col-span-2 space-y-3 sm:space-y-4">
             <div className="p-3 sm:p-4 md:p-6">
               <h2 className="text-base sm:text-lg font-semibold text-gray-900 dark:text-white mb-3 sm:mb-4">
-                Generated Questions
+                {t("questionsView.generatedQuestions")}
               </h2>
 
               <div className="space-y-3 sm:space-y-4">
@@ -754,7 +756,7 @@ export default function QuestionsViewPage({
                                 : "bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400"
                             }`}
                           >
-                            {q.type === "mcq" ? "Multiple Choice" : "Open"}
+                            {q.type === "mcq" ? t("questionsView.multipleChoice") : t("questionsView.open")}
                           </span>
                         </div>
                         <p className="text-gray-900 dark:text-gray-200 mb-3 sm:mb-4 font-medium text-sm sm:text-base leading-tight">
@@ -844,7 +846,7 @@ export default function QuestionsViewPage({
                               onChange={(e) =>
                                 updateOpenAnswerInput(index, e.target.value)
                               }
-                              placeholder="Type your answer here..."
+                              placeholder={t("questionsView.typeYourAnswer")}
                               className="w-full px-3 sm:px-4 py-2 sm:py-3 border border-gray-200 dark:border-slate-600 bg-white dark:bg-slate-700 rounded-lg focus:border-blue-500 dark:focus:border-blue-400 focus:outline-none text-xs sm:text-sm text-gray-900 dark:text-gray-200 placeholder:text-gray-400 dark:placeholder:text-gray-500 transition-all resize-none"
                               rows={3}
                               disabled={checkingAnswer === index}
@@ -860,12 +862,12 @@ export default function QuestionsViewPage({
                               {checkingAnswer === index ? (
                                 <>
                                   <Loader2 className="w-3.5 h-3.5 sm:w-4 sm:h-4 animate-spin" />
-                                  <span>Checking...</span>
+                                  <span>{t("questionsView.checking")}</span>
                                 </>
                               ) : (
                                 <>
                                   <ChevronRight className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
-                                  <span>Submit Answer</span>
+                                  <span>{t("questionsView.submitAnswer")}</span>
                                 </>
                               )}
                             </button>
@@ -876,7 +878,7 @@ export default function QuestionsViewPage({
                         {q.type === "open" && isAnswered && quizAnswer && (
                           <div className="mb-2 sm:mb-3 p-2 sm:p-3 bg-blue-50 dark:bg-blue-900/30 border border-blue-200 dark:border-blue-700/30 rounded-lg">
                             <div className="font-semibold text-blue-900 dark:text-blue-300 mb-1 text-xs sm:text-sm">
-                              Your answer:
+                              {t("questionsView.yourAnswer")}:
                             </div>
                             <div className="text-blue-800 dark:text-blue-200 text-xs sm:text-sm leading-tight">
                               {quizAnswer.userAnswer}
@@ -896,7 +898,7 @@ export default function QuestionsViewPage({
                               <CheckCircle2 className="w-4 h-4 sm:w-5 sm:h-5 text-green-600 dark:text-green-400 mt-0.5 shrink-0" />
                               <div className="flex-1 min-w-0">
                                 <span className="font-semibold text-green-700 dark:text-green-300 text-xs sm:text-sm">
-                                  Correct answer:
+                                  {t("questionsView.correctAnswer")}:
                                 </span>
                                 <p className="text-green-800 dark:text-green-200 mt-0.5 sm:mt-1 text-xs sm:text-sm leading-tight">
                                   {q.answer}
@@ -920,14 +922,14 @@ export default function QuestionsViewPage({
                                 <>
                                   <CheckCircle2 className="w-4 h-4 sm:w-5 sm:h-5 text-green-600 dark:text-green-400" />
                                   <span className="font-semibold text-green-700 dark:text-green-300 text-xs sm:text-sm">
-                                    Correct!
+                                    {t("questionsView.correct")}
                                   </span>
                                 </>
                               ) : (
                                 <>
                                   <Circle className="w-4 h-4 sm:w-5 sm:h-5 text-red-600 dark:text-red-400" />
                                   <span className="font-semibold text-red-700 dark:text-red-300 text-xs sm:text-sm">
-                                    Incorrect
+                                    {t("questionsView.incorrect")}
                                   </span>
                                 </>
                               )}
@@ -952,8 +954,8 @@ export default function QuestionsViewPage({
               onInputChange={setChatInput}
               onSendMessage={() => handleChatSubmit()}
               isSending={chatLoading}
-              title="AI Assistant"
-              subtitle="Ask questions or request modifications"
+              title={t("questionsView.aiAssistant")}
+              subtitle={t("questionsView.aiAssistantSubtitle")}
             />
           </div>
         </div>

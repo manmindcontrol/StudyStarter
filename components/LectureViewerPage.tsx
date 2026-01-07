@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { getCurrentUser } from "@/lib/auth";
 import { supabase } from "@/lib/supabase";
 import { ChevronLeft, Clock, Calendar } from "lucide-react";
+import { useTranslation } from "@/hooks/useTranslation";
 
 type Lecture = {
   id: string;
@@ -20,6 +21,7 @@ type Props = {
 
 export default function LectureViewerPage({ lectureId }: Props) {
   const router = useRouter();
+  const { t } = useTranslation();
   const [lecture, setLecture] = useState<Lecture | null>(null);
   const [loading, setLoading] = useState(true);
 
@@ -87,13 +89,13 @@ export default function LectureViewerPage({ lectureId }: Props) {
       <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-linear-to-br dark:from-slate-900 dark:via-slate-800 dark:to-slate-900">
         <div className="text-center">
           <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">
-            Lecture not found
+            {t("lectureViewer.lectureNotFound")}
           </h2>
           <button
             onClick={() => router.push("/dashboard")}
             className="text-purple-600 dark:text-purple-400 hover:text-purple-700 dark:hover:text-purple-300"
           >
-            Back to dashboard
+            {t("lectureViewer.backToDashboard")}
           </button>
         </div>
       </div>
@@ -136,7 +138,7 @@ export default function LectureViewerPage({ lectureId }: Props) {
         <div className="max-w-4xl mx-auto">
           <div className="bg-white dark:bg-slate-800/80 rounded-xl shadow-sm border border-gray-200 dark:border-slate-700 p-8">
             <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">
-              Transcript
+              {t("lectureViewer.transcript")}
             </h2>
             <div className="prose prose-gray dark:prose-invert max-w-none">
               <p className="text-gray-700 dark:text-gray-300 leading-relaxed whitespace-pre-wrap">

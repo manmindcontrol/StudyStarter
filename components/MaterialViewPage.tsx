@@ -19,6 +19,7 @@ import DeleteButton from "@/components/buttons/DeleteButton";
 import OpenDocumentButton from "@/components/buttons/OpenDocumentButton";
 import ConfirmDeleteModal from "@/components/modals/ConfirmDeleteModal";
 import { useTheme } from "@/contexts/ThemeContext";
+import { useTranslation } from "@/hooks/useTranslation";
 
 type Material = {
   id: string;
@@ -71,6 +72,7 @@ type Props = {
 
 export default function MaterialViewPage({ materialId }: Props) {
   const router = useRouter();
+  const { t } = useTranslation();
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
   const [material, setMaterial] = useState<Material | null>(null);
@@ -242,13 +244,13 @@ export default function MaterialViewPage({ materialId }: Props) {
       <div className="min-h-screen flex items-center justify-center bg-linear-to-br from-blue-50 via-gray-100 to-cyan-50 dark:bg-linear-to-br dark:from-slate-900 dark:via-slate-800 dark:to-slate-900">
         <div className="text-center">
           <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">
-            Material not found
+            {t("materialView.materialNotFound")}
           </h2>
           <button
             onClick={() => router.push("/materials")}
             className="text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white"
           >
-            Back to materials
+            {t("materialView.backToMaterials")}
           </button>
         </div>
       </div>
@@ -268,7 +270,7 @@ export default function MaterialViewPage({ materialId }: Props) {
           >
             <ArrowLeft className="w-4 h-4 sm:w-5 sm:h-5 group-hover:-translate-x-1 transition-transform" />
             <span className="text-sm sm:text-base font-medium">
-              Back to Dashboard
+              {t("materialView.backToDashboard")}
             </span>
           </button>
           {/* Document Info Card */}
@@ -284,7 +286,7 @@ export default function MaterialViewPage({ materialId }: Props) {
                 <div className="flex items-center text-[10px] sm:text-xs md:text-sm text-white/80">
                   <Calendar className="w-3 h-3 sm:w-3.5 sm:h-3.5 md:w-4 md:h-4 mr-1 sm:mr-1.5 md:mr-2 shrink-0" />
                   <span className="truncate">
-                    Uploaded {formatDate(material.created_at)}
+                    {t("materialView.uploaded")} {formatDate(material.created_at)}
                   </span>
                 </div>
               </div>
@@ -320,7 +322,7 @@ export default function MaterialViewPage({ materialId }: Props) {
                     <h3 className="text-sm sm:text-base md:text-lg font-semibold text-gray-900 dark:text-gray-300 flex items-center min-w-0">
                       <FileQuestion className="w-4 h-4 sm:w-5 sm:h-5 mr-1.5 sm:mr-2 text-green-600 dark:text-green-400 shrink-0" />
                       <span className="truncate">
-                        Saved Question Sets ({questionSets.length})
+                        {t("materialView.savedQuestionSets")} ({questionSets.length})
                       </span>
                     </h3>
                     <button
@@ -328,14 +330,14 @@ export default function MaterialViewPage({ materialId }: Props) {
                         setDeleteModal({
                           isOpen: true,
                           type: "all-questions",
-                          title: "Delete All Question Sets?",
-                          message: `Are you sure you want to delete all ${questionSets.length} question sets? This action cannot be undone.`,
+                          title: t("materialView.deleteAllQuestionSets"),
+                          message: t("materialView.deleteAllQuestionSetsMessage").replace("{count}", questionSets.length.toString()),
                         })
                       }
                       className="text-xs sm:text-sm text-red-600 hover:text-red-700 dark:text-red-400 dark:hover:text-red-500 font-medium flex items-center gap-0.5 sm:gap-1 cursor-pointer shrink-0"
                     >
                       <Trash2 className="w-3 h-3 sm:w-4 sm:h-4" />
-                      <span className="hidden xs:inline">Delete All</span>
+                      <span className="hidden xs:inline">{t("materialView.deleteAll")}</span>
                     </button>
                   </div>
                   <div className="space-y-2 sm:space-y-3">
@@ -357,10 +359,10 @@ export default function MaterialViewPage({ materialId }: Props) {
                               <p className="text-xs sm:text-sm md:text-base font-medium text-gray-900 dark:text-gray-300 truncate">
                                 {set.question_type.charAt(0).toUpperCase() +
                                   set.question_type.slice(1)}{" "}
-                                Questions
+                                {t("materialView.questions")}
                               </p>
                               <p className="text-[10px] sm:text-xs md:text-sm text-gray-600 dark:text-gray-400 truncate">
-                                {set.questions.length} questions •{" "}
+                                {set.questions.length} {t("materialView.questions").toLowerCase()} •{" "}
                                 {formatDate(set.created_at)}
                               </p>
                             </div>
@@ -374,12 +376,14 @@ export default function MaterialViewPage({ materialId }: Props) {
                               isOpen: true,
                               type: "question",
                               id: set.id,
-                              title: "Delete Question Set?",
-                              message: `Are you sure you want to delete this ${set.question_type} question set with ${set.questions.length} questions?`,
+                              title: t("materialView.deleteQuestionSet"),
+                              message: t("materialView.deleteQuestionSetMessage")
+                                .replace("{type}", set.question_type)
+                                .replace("{count}", set.questions.length.toString()),
                             });
                           }}
                           className="p-2 sm:p-2.5 md:p-3 bg-red-50 hover:bg-red-100 text-red-600 dark:text-red-400 dark:bg-slate-800 dark:hover:bg-slate-800 dark:hover:text-red-500 rounded-lg transition-colors shrink-0 cursor-pointer"
-                          title="Delete question set"
+                          title={t("materialView.deleteQuestionSetTitle")}
                         >
                           <Trash2 className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
                         </button>
@@ -396,7 +400,7 @@ export default function MaterialViewPage({ materialId }: Props) {
                     <h3 className="text-sm sm:text-base md:text-lg font-semibold text-gray-900 dark:text-gray-300 flex items-center min-w-0">
                       <StickyNote className="w-4 h-4 sm:w-5 sm:h-5 mr-1.5 sm:mr-2 text-purple-600 dark:text-purple-400 shrink-0" />
                       <span className="truncate">
-                        Saved Study Notes ({noteSets.length})
+                        {t("materialView.savedStudyNotes")} ({noteSets.length})
                       </span>
                     </h3>
                     <button
@@ -404,14 +408,14 @@ export default function MaterialViewPage({ materialId }: Props) {
                         setDeleteModal({
                           isOpen: true,
                           type: "all-notes",
-                          title: "Delete All Study Notes?",
-                          message: `Are you sure you want to delete all ${noteSets.length} study note sets? This action cannot be undone.`,
+                          title: t("materialView.deleteAllStudyNotes"),
+                          message: t("materialView.deleteAllStudyNotesMessage").replace("{count}", noteSets.length.toString()),
                         })
                       }
                       className="text-xs sm:text-sm text-red-600 hover:text-red-700 dark:text-red-400 dark:hover:text-red-500 font-medium flex items-center gap-0.5 sm:gap-1 cursor-pointer shrink-0"
                     >
                       <Trash2 className="w-3 h-3 sm:w-4 sm:h-4" />
-                      <span className="hidden xs:inline">Delete All</span>
+                      <span className="hidden xs:inline">{t("materialView.deleteAll")}</span>
                     </button>
                   </div>
                   <div className="space-y-2 sm:space-y-3">
@@ -435,8 +439,8 @@ export default function MaterialViewPage({ materialId }: Props) {
                                 {note.summary.length > 60 ? "..." : ""}
                               </p>
                               <p className="text-[10px] sm:text-xs md:text-sm text-gray-600 dark:text-gray-400 truncate">
-                                {note.key_points.length} key points •{" "}
-                                {note.concepts.length} concepts •{" "}
+                                {note.key_points.length} {t("materialView.keyPoints")} •{" "}
+                                {note.concepts.length} {t("materialView.concepts")} •{" "}
                                 {formatDate(note.created_at)}
                               </p>
                             </div>
@@ -450,12 +454,14 @@ export default function MaterialViewPage({ materialId }: Props) {
                               isOpen: true,
                               type: "note",
                               id: note.id,
-                              title: "Delete Study Notes?",
-                              message: `Are you sure you want to delete this study note set with ${note.key_points.length} key points and ${note.concepts.length} concepts?`,
+                              title: t("materialView.deleteStudyNotes"),
+                              message: t("materialView.deleteStudyNotesMessage")
+                                .replace("{keyPoints}", note.key_points.length.toString())
+                                .replace("{concepts}", note.concepts.length.toString()),
                             });
                           }}
                           className="p-2 sm:p-2.5 md:p-3 bg-red-50 hover:bg-red-100 text-red-600 dark:text-red-400 dark:bg-slate-800 dark:hover:bg-slate-800 dark:hover:text-red-500 rounded-lg transition-colors shrink-0 cursor-pointer"
-                          title="Delete note set"
+                          title={t("materialView.deleteNoteSetTitle")}
                         >
                           <Trash2 className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
                         </button>
@@ -477,7 +483,7 @@ export default function MaterialViewPage({ materialId }: Props) {
             <div className="space-y-3 sm:space-y-4">
               <div className="bg-white border border-gray-200 dark:bg-slate-800/80 dark:border-slate-700 rounded-lg sm:rounded-xl p-3 sm:p-4 md:p-6 shadow-sm">
                 <h3 className="text-base sm:text-lg font-semibold text-gray-900 dark:text-gray-300 mb-3 sm:mb-4">
-                  Statistics
+                  {t("materialView.statistics")}
                 </h3>
 
                 <div className="space-y-3 sm:space-y-4">
@@ -489,7 +495,7 @@ export default function MaterialViewPage({ materialId }: Props) {
                       </div>
                       <div>
                         <p className="text-xs sm:text-sm text-gray-600 dark:text-gray-400">
-                          Question Sets
+                          {t("materialView.questionSets")}
                         </p>
                         <p className="text-xl sm:text-2xl font-bold text-gray-900 dark:text-gray-300">
                           {stats.questionsCount}
@@ -506,7 +512,7 @@ export default function MaterialViewPage({ materialId }: Props) {
                       </div>
                       <div>
                         <p className="text-xs sm:text-sm text-gray-600 dark:text-gray-400">
-                          Study Notes
+                          {t("materialView.studyNotes")}
                         </p>
                         <p className="text-xl sm:text-2xl font-bold text-gray-900 dark:text-gray-300">
                           {stats.notesCount}
@@ -520,20 +526,20 @@ export default function MaterialViewPage({ materialId }: Props) {
               {/* File Info */}
               <div className="bg-white border border-gray-200 dark:bg-slate-800/80 dark:border-slate-700 rounded-lg sm:rounded-xl p-3 sm:p-4 md:p-6 shadow-sm">
                 <h3 className="text-base sm:text-lg font-semibold text-gray-900 dark:text-gray-300 mb-3 sm:mb-4">
-                  File Info
+                  {t("materialView.fileInfo")}
                 </h3>
                 <div className="space-y-2.5 sm:space-y-3">
                   <div>
                     <p className="text-[10px] sm:text-xs text-gray-500 mb-0.5 sm:mb-1">
-                      File Type
+                      {t("materialView.fileType")}
                     </p>
                     <p className="text-xs sm:text-sm font-medium text-gray-900 dark:text-gray-300">
-                      {material.file_type || "Unknown"}
+                      {material.file_type || t("materialView.unknown")}
                     </p>
                   </div>
                   <div>
                     <p className="text-[10px] sm:text-xs text-gray-500 mb-0.5 sm:mb-1">
-                      Uploaded
+                      {t("materialView.uploaded")}
                     </p>
                     <p className="text-xs sm:text-sm font-medium text-gray-900 dark:text-gray-300">
                       {formatDate(material.created_at)}

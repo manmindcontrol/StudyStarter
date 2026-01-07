@@ -7,8 +7,10 @@ import { motion } from "framer-motion";
 import { signIn } from "@/lib/auth";
 import { BookOpen, Mail, Lock, AlertCircle } from "lucide-react";
 import { signInWithGoogle } from "@/lib/auth";
+import { useTranslation } from "@/hooks/useTranslation";
 
 export default function LoginPage() {
+  const { t } = useTranslation();
   const router = useRouter();
   const [formData, setFormData] = useState({
     email: "",
@@ -28,15 +30,15 @@ export default function LoginPage() {
 
   const validateForm = () => {
     if (!formData.email.trim()) {
-      setError("Please enter email");
+      setError(t("login.errorEmail"));
       return false;
     }
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
-      setError("Invalid email format");
+      setError(t("login.errorInvalidEmail"));
       return false;
     }
     if (!formData.password) {
-      setError("Please enter password");
+      setError(t("login.errorPassword"));
       return false;
     }
     return true;
@@ -57,7 +59,7 @@ export default function LoginPage() {
     );
 
     if (error) {
-      setError("Incorrect email or password");
+      setError(t("login.errorIncorrectCredentials"));
       setLoading(false);
       return;
     }
@@ -84,7 +86,7 @@ export default function LoginPage() {
     const { error } = await signInWithGoogle();
 
     if (error) {
-      setError("Error signing in with Google");
+      setError(t("login.errorGoogleSignIn"));
       setLoading(false);
     }
     // Google redirects to callback, so nothing else needed here
@@ -163,8 +165,8 @@ export default function LoginPage() {
               <BookOpen className="w-8 h-8" />
             </motion.div>
           </Link>
-          <h1 className="text-4xl font-bold text-white mb-2">Welcome back!</h1>
-          <p className="text-blue-200">Log in to your account</p>
+          <h1 className="text-4xl font-bold text-white mb-2">{t("login.title")}</h1>
+          <p className="text-blue-200">{t("login.subtitle")}</p>
         </motion.div>
 
         {/* Formulár */}
@@ -193,7 +195,7 @@ export default function LoginPage() {
                 htmlFor="email"
                 className="block text-sm font-medium text-blue-100 mb-2"
               >
-                Email
+                {t("login.email")}
               </label>
               <div className="relative">
                 <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-blue-300" />
@@ -205,7 +207,7 @@ export default function LoginPage() {
                   value={formData.email}
                   onChange={handleChange}
                   className="w-full pl-10 pr-4 py-3 bg-white/10 border border-white/20 rounded-lg focus:ring-2 focus:ring-blue-400 focus:border-transparent transition-all text-white placeholder-blue-300/50 backdrop-blur-sm"
-                  placeholder="your@email.com"
+                  placeholder={t("login.emailPlaceholder")}
                   disabled={loading}
                   autoComplete="email"
                 />
@@ -219,13 +221,13 @@ export default function LoginPage() {
                   htmlFor="password"
                   className="block text-sm font-medium text-blue-100"
                 >
-                  Password
+                  {t("login.password")}
                 </label>
                 <Link
                   href="/reset-password"
                   className="text-xs text-blue-300 hover:text-blue-200 transition-colors"
                 >
-                  Forgot password?
+                  {t("login.forgotPassword")}
                 </Link>
               </div>
               <div className="relative">
@@ -238,7 +240,7 @@ export default function LoginPage() {
                   value={formData.password}
                   onChange={handleChange}
                   className="w-full pl-10 pr-4 py-3 bg-white/10 border border-white/20 rounded-lg focus:ring-1 focus:ring-blue-400 focus:border-transparent transition-all text-white placeholder-blue-300/50 backdrop-blur-sm"
-                  placeholder="••••••••"
+                  placeholder={t("login.passwordPlaceholder")}
                   disabled={loading}
                   autoComplete="current-password"
                 />
@@ -260,7 +262,7 @@ export default function LoginPage() {
                 htmlFor="rememberMe"
                 className="ml-2 block text-sm text-blue-200"
               >
-                Remember me
+                {t("login.rememberMe")}
               </label>
             </div>
 
@@ -290,7 +292,7 @@ export default function LoginPage() {
                     d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"
                   />
                 </svg>
-                <span>Continue with Google</span>
+                <span>{t("login.continueWithGoogle")}</span>
               </button>
             </div>
 
@@ -298,7 +300,7 @@ export default function LoginPage() {
             <div className="relative my-6">
               <div className="relative flex justify-center text-sm">
                 <span className="px-4  bg-white/10 border border-white/20 rounded-lg text-blue-300">
-                  or with email
+                  {t("login.orWithEmail")}
                 </span>
               </div>
             </div>
@@ -332,10 +334,10 @@ export default function LoginPage() {
                       d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
                     ></path>
                   </svg>
-                  Logging in...
+                  {t("login.loggingIn")}
                 </>
               ) : (
-                "Log in"
+                t("login.loginButton")
               )}
             </motion.button>
           </form>
@@ -345,12 +347,12 @@ export default function LoginPage() {
           {/* Registration link */}
           <div className="text-center mt-6">
             <p className="text-sm text-blue-200">
-              Don&apos;t have an account?{" "}
+              {t("login.noAccount")}{" "}
               <Link
                 href="/register"
                 className="text-blue-300 hover:text-white font-semibold transition-colors"
               >
-                Sign up
+                {t("login.signUp")}
               </Link>
             </p>
           </div>
@@ -370,7 +372,7 @@ export default function LoginPage() {
             <span className="group-hover:-translate-x-1 transition-transform duration-200">
               ←
             </span>
-            <span>Back to home</span>
+            <span>{t("login.backToHome")}</span>
           </Link>
         </motion.div>
       </div>

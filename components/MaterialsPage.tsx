@@ -18,6 +18,7 @@ import {
 import type { User } from "@supabase/supabase-js";
 import GenerateQuestionsButton from "@/components/buttons/GenerateQuestionsButton";
 import GenerateNotesButton from "@/components/buttons/GenerateNotesButton";
+import { useTranslation } from "@/hooks/useTranslation";
 
 type Material = {
   id: string;
@@ -30,6 +31,7 @@ type Material = {
 
 export default function MaterialsPage() {
   const router = useRouter();
+  const { t } = useTranslation();
   const [user, setUser] = useState<User | null>(null);
   const [materials, setMaterials] = useState<Material[]>([]);
   const [loading, setLoading] = useState(true);
@@ -103,7 +105,7 @@ export default function MaterialsPage() {
   };
 
   const handleDelete = async (materialId: string) => {
-    if (!confirm("Are you sure you want to delete this material?")) return;
+    if (!confirm(t("materials.deleteMaterialConfirm"))) return;
 
     const { error } = await supabase
       .from("materials")
@@ -112,7 +114,7 @@ export default function MaterialsPage() {
 
     if (error) {
       console.error("Error deleting:", error);
-      alert("Error deleting material");
+      alert(t("materials.errorDeletingMaterial"));
       return;
     }
 
@@ -155,7 +157,7 @@ export default function MaterialsPage() {
           className="mb-4 flex items-center space-x-2 text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-200 transition-colors group cursor-pointer"
         >
           <ArrowLeft className="w-5 h-5 group-hover:-translate-x-1 transition-transform" />
-          <span className="font-medium">Back to Dashboard</span>
+          <span className="font-medium">{t("materials.backToDashboard")}</span>
         </button>
         {/* Header */}
         <div className="flex items-center space-x-2 md:space-x-5 bg-linear-to-br from-blue-600 to-cyan-500 dark:bg-linear-to-br dark:from-blue-700 dark:to-cyan-700 p-6 rounded-2xl shadow-md mb-8">
@@ -164,11 +166,10 @@ export default function MaterialsPage() {
           </div>
           <div>
             <h1 className="text-lg md:text-3xl font-bold text-white mb-1">
-              Upload study materials
+              {t("materials.title")}
             </h1>
             <p className="text-gray-100 text-sm md:text-lg">
-              Upload PDF or Word documents and process them with AI to generate
-              interactive questions
+              {t("materials.description")}
             </p>
           </div>
         </div>
@@ -180,7 +181,7 @@ export default function MaterialsPage() {
             <div className="mt-4 flex items-center justify-center">
               <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-blue-600 dark:border-blue-400 mr-3"></div>
               <p className="text-sm text-gray-600 dark:text-gray-400 font-medium">
-                Uploading file, please wait...
+                {t("materials.uploadingFile")}
               </p>
             </div>
           )}
@@ -193,7 +194,7 @@ export default function MaterialsPage() {
               <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
               <input
                 type="text"
-                placeholder="Search materials by title or filename..."
+                placeholder={t("materials.searchPlaceholder")}
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 className="w-full pl-12 pr-4 py-4 border-2 dark:bg-slate-800/80 text-gray-900 dark:text-gray-300 border-gray-100 dark:border-gray-700 rounded-xl  shadow-sm bg-white"
@@ -206,7 +207,7 @@ export default function MaterialsPage() {
         <div>
           <div className="flex items-center justify-between mb-6">
             <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-200">
-              My Materials
+              {t("materials.myMaterials")}
               <span className="ml-3 inline-flex items-center justify-center px-3 py-1 text-sm font-medium text-blue-600 bg-blue-100 dark:bg-blue-900/20 dark:text-blue-400 rounded-full">
                 {filteredMaterials.length}
               </span>
@@ -219,12 +220,12 @@ export default function MaterialsPage() {
                 <FileText className="w-12 h-12 text-blue-600 dark:text-blue-400" />
               </div>
               <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-3">
-                {searchQuery ? "No results found" : "No materials yet"}
+                {searchQuery ? t("materials.noResultsFound") : t("materials.noMaterialsYet")}
               </h3>
               <p className="text-gray-600 dark:text-gray-400 mb-8 max-w-md mx-auto">
                 {searchQuery
-                  ? "Try searching with different keywords"
-                  : "Upload your first study material and start your AI-assisted learning journey"}
+                  ? t("materials.tryDifferentKeywords")
+                  : t("materials.uploadFirstMaterial")}
               </p>
               {!searchQuery && (
                 <button
@@ -233,7 +234,7 @@ export default function MaterialsPage() {
                   }
                   className="btn-primary px-8 py-3 text-base"
                 >
-                  Upload Your First Material
+                  {t("materials.uploadYourFirst")}
                 </button>
               )}
             </div>
@@ -278,12 +279,12 @@ export default function MaterialsPage() {
                           className="flex-1 bg-blue-600 hover:bg-blue-500 dark:bg-slate-700 dark:hover:bg-slate-600 text-white dark:text-gray-300 text-xs sm:text-sm font-bold py-2.5 sm:py-3 px-3 sm:px-4 rounded-xl transition-all shadow-md hover:shadow-lg flex items-center justify-center"
                         >
                           <Eye className="w-3.5 h-3.5 sm:w-4 sm:h-4 mr-1.5 sm:mr-2" />
-                          Open Material
+                          {t("materials.openMaterial")}
                         </Link>
                         <button
                           onClick={() => handleDelete(material.id)}
                           className="bg-red-50 hover:bg-red-100 text-red-600 dark:text-red-400 dark:hover:text-red-500 dark:bg-slate-700 dark:hover:bg-slate-700 p-2.5 sm:p-3 rounded-xl transition-all cursor-pointer "
-                          title="Delete"
+                          title={t("materials.delete")}
                         >
                           <Trash2 className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
                         </button>

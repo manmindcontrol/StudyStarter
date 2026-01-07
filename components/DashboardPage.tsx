@@ -22,6 +22,7 @@ import {
 import type { User } from "@supabase/supabase-js";
 import { useAutoLogout } from "@/hooks/useAutoLogout";
 import { useTheme } from "@/contexts/ThemeContext";
+import { useTranslation } from "@/hooks/useTranslation";
 
 type UserProfile = {
   id: string;
@@ -72,6 +73,7 @@ export default function DashboardPage() {
   const [materialsOpen, setMaterialsOpen] = useState(false);
   const [recordingsOpen, setRecordingsOpen] = useState(false);
   const { isDarkMode, toggleDarkMode } = useTheme();
+  const { t } = useTranslation();
 
   useEffect(() => {
     let isMounted = true;
@@ -175,7 +177,7 @@ export default function DashboardPage() {
     e.preventDefault();
     e.stopPropagation();
 
-    if (!confirm("Are you sure you want to delete this material?")) return;
+    if (!confirm(t("dashboard.deleteMaterial"))) return;
 
     const { error } = await supabase
       .from("materials")
@@ -184,7 +186,7 @@ export default function DashboardPage() {
 
     if (error) {
       console.error("Error deleting material:", error);
-      alert("Error deleting material");
+      alert(t("dashboard.errorDeleting"));
       return;
     }
 
@@ -198,7 +200,7 @@ export default function DashboardPage() {
     e.preventDefault();
     e.stopPropagation();
 
-    if (!confirm("Are you sure you want to delete this recording?")) return;
+    if (!confirm(t("dashboard.deleteRecording"))) return;
 
     const { error } = await supabase
       .from("lectures")
@@ -207,7 +209,7 @@ export default function DashboardPage() {
 
     if (error) {
       console.error("Error deleting lecture:", error);
-      alert("Error deleting recording");
+      alert(t("dashboard.errorDeleting"));
       return;
     }
 
@@ -226,10 +228,10 @@ export default function DashboardPage() {
           {/* Header */}
           <div className="mb-4 sm:mb-6 md:mb-8">
             <h1 className="text-lg sm:text-xl md:text-2xl lg:text-3xl font-bold text-slate-800 dark:text-white mb-1 sm:mb-2 leading-tight">
-              Hello, {displayName}! 👋
+              {t("dashboard.greeting")}, {displayName}! 👋
             </h1>
             <p className="text-xs sm:text-sm md:text-base text-gray-600 dark:text-gray-300">
-              Welcome back to Study Starter
+              {t("dashboard.welcome")}
             </p>
           </div>
 
@@ -245,10 +247,10 @@ export default function DashboardPage() {
                   <Upload className="w-5 h-5 sm:w-6 sm:h-6 md:w-8 md:h-8 text-white" />
                 </div>
                 <h3 className="text-base sm:text-xl md:text-2xl font-bold text-white mb-1.5 sm:mb-2 md:mb-3 leading-tight">
-                  Upload Materials
+                  {t("dashboard.uploadMaterials")}
                 </h3>
                 <p className="text-blue-100 text-xs sm:text-sm leading-relaxed">
-                  Upload PDF or Word documents for AI-powered study assistance
+                  {t("dashboard.uploadMaterialsDesc")}
                 </p>
               </div>
               <div className="absolute bottom-0 right-0 opacity-10">
@@ -266,10 +268,10 @@ export default function DashboardPage() {
                   <Mic className="w-5 h-5 sm:w-6 sm:h-6 md:w-8 md:h-8 text-white" />
                 </div>
                 <h3 className="text-base sm:text-xl md:text-2xl font-bold text-white mb-1.5 sm:mb-2 md:mb-3 leading-tight">
-                  Record Lecture
+                  {t("dashboard.recordLecture")}
                 </h3>
                 <p className="text-green-100 text-xs sm:text-sm leading-relaxed">
-                  Record audio with real-time transcription
+                  {t("dashboard.recordLectureDesc")}
                 </p>
               </div>
               <div className="absolute bottom-0 right-0 opacity-10">
@@ -289,7 +291,7 @@ export default function DashboardPage() {
                 {stats.materialsCount}
               </h3>
               <p className="text-gray-600 dark:text-gray-300 text-[10px] sm:text-xs md:text-sm leading-tight">
-                Uploaded Materials
+                {t("dashboard.uploadedMaterials")}
               </p>
             </div>
 
@@ -302,7 +304,7 @@ export default function DashboardPage() {
                 {stats.lecturesCount}
               </h3>
               <p className="text-gray-600 dark:text-gray-300 text-[10px] sm:text-xs md:text-sm leading-tight">
-                Uploaded Lecture
+                {t("dashboard.uploadedLecture")}
               </p>
             </div>
 
@@ -315,7 +317,7 @@ export default function DashboardPage() {
                 {stats.testsCount}
               </h3>
               <p className="text-gray-600 dark:text-gray-300 text-[10px] sm:text-xs md:text-sm leading-tight">
-                Generated Tests
+                {t("dashboard.generatedTests")}
               </p>
             </div>
 
@@ -328,7 +330,7 @@ export default function DashboardPage() {
                 {stats.notesCount}
               </h3>
               <p className="text-gray-600 dark:text-gray-300 text-[10px] sm:text-xs md:text-sm leading-tight">
-                Generated Notes
+                {t("dashboard.generatedNotes")}
               </p>
             </div>
           </div>
@@ -336,7 +338,7 @@ export default function DashboardPage() {
           {/* Library Section */}
           <div className="bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm border border-white/40 dark:border-slate-700/40 rounded-lg sm:rounded-xl shadow-sm p-3 sm:p-4 md:p-6 lg:p-8">
             <h2 className="text-base sm:text-lg md:text-xl lg:text-2xl font-semibold text-slate-800 dark:text-white mb-3 sm:mb-4 md:mb-6 lg:mb-8">
-              Library
+              {t("dashboard.library")}
             </h2>
 
             {/* Uploaded Materials Dropdown */}
@@ -348,7 +350,7 @@ export default function DashboardPage() {
                 <div className="flex items-center space-x-2 sm:space-x-3 md:space-x-4 min-w-0">
                   <FileText className="w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6 text-blue-600 dark:text-blue-400 shrink-0" />
                   <span className="text-sm sm:text-base md:text-lg font-semibold text-gray-900 dark:text-white truncate">
-                    Uploaded Materials
+                    {t("dashboard.uploadedMaterials")}
                   </span>
                 </div>
                 <div className="flex items-center space-x-2 sm:space-x-3 shrink-0">
@@ -367,7 +369,7 @@ export default function DashboardPage() {
                 <div className="mt-2 sm:mt-3 ml-2 sm:ml-4 md:ml-6 space-y-1.5 sm:space-y-2">
                   {materials.length === 0 ? (
                     <div className="p-4 sm:p-6 text-center text-xs sm:text-sm text-gray-500 dark:text-gray-400">
-                      No materials uploaded yet
+                      {t("dashboard.noMaterials")}
                     </div>
                   ) : (
                     materials.map((material) => (
@@ -418,7 +420,7 @@ export default function DashboardPage() {
                 <div className="flex items-center space-x-2 sm:space-x-3 md:space-x-4 min-w-0">
                   <Mic className="w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6 text-green-600 dark:text-green-400 shrink-0" />
                   <span className="text-sm sm:text-base md:text-lg font-semibold text-gray-900 dark:text-white truncate">
-                    Recordings
+                    {t("dashboard.recordings")}
                   </span>
                 </div>
                 <div className="flex items-center space-x-2 sm:space-x-3 shrink-0">
@@ -437,7 +439,7 @@ export default function DashboardPage() {
                 <div className="mt-2 sm:mt-3 ml-2 sm:ml-4 md:ml-6 space-y-1.5 sm:space-y-2">
                   {lectures.length === 0 ? (
                     <div className="p-4 sm:p-6 text-center text-xs sm:text-sm text-gray-500 dark:text-gray-400">
-                      No recordings uploaded yet
+                      {t("dashboard.noRecordings")}
                     </div>
                   ) : (
                     lectures.map((lecture) => (
@@ -506,7 +508,7 @@ export default function DashboardPage() {
                   isDarkMode ? "text-white" : "text-gray-700"
                 }`}
               >
-                {isDarkMode ? "Dark Mode" : "Light Mode"}
+                {isDarkMode ? t("dashboard.darkMode") : t("dashboard.lightMode")}
               </span>
             </button>
           </div>

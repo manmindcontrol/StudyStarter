@@ -1,8 +1,10 @@
 "use client";
 import Link from "next/link";
 import { motion } from "framer-motion";
+import { useTranslation } from "@/hooks/useTranslation";
 
 export default function CTA() {
+  const { t } = useTranslation();
   return (
     <section className="relative py-24 bg-linear-to-br from-slate-900 via-blue-900 to-slate-900 overflow-hidden">
       {/* Dekoratívne pozadie */}
@@ -98,7 +100,7 @@ export default function CTA() {
           >
             <span className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></span>
             <span className="text-sm font-semibold text-white">
-              Start today - it&apos;s free!
+              {t("cta.badge")}
             </span>
           </motion.div>
 
@@ -109,9 +111,9 @@ export default function CTA() {
             transition={{ duration: 0.6, delay: 0.1 }}
             className="text-4xl md:text-6xl font-bold text-white mb-8 leading-tight"
           >
-            Ready to study{" "}
+            {t("cta.title")}{" "}
             <span className="bg-linear-to-r from-blue-400 to-cyan-400 bg-clip-text text-transparent">
-              more effectively?
+              {t("cta.titleHighlight")}
             </span>
           </motion.h2>
 
@@ -122,8 +124,7 @@ export default function CTA() {
             transition={{ duration: 0.6, delay: 0.2 }}
             className="text-xl md:text-2xl text-blue-100 mb-12 leading-relaxed"
           >
-            Join hundreds of students who are already using AI to improve their
-            studies
+            {t("cta.subtitle")}
           </motion.p>
 
           <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
@@ -131,7 +132,7 @@ export default function CTA() {
               href="/register"
               className="group inline-flex items-center space-x-2 bg-white text-blue-600 font-bold py-4 px-10 rounded-xl hover:bg-gray-50 transition-all duration-300 text-lg shadow-2xl hover:shadow-white/20 hover:scale-105"
             >
-              <span>Start for free</span>
+              <span>{t("cta.startFree")}</span>
               <span className="group-hover:translate-x-1 transition-transform duration-200">
                 →
               </span>
@@ -165,19 +166,19 @@ export default function CTA() {
               <div className="text-3xl md:text-4xl font-bold text-white mb-2">
                 500+
               </div>
-              <div className="text-sm text-blue-200">Active students</div>
+              <div className="text-sm text-blue-200">{t("cta.stat1")}</div>
             </div>
             <div className="text-center border-x border-white/20">
               <div className="text-3xl md:text-4xl font-bold text-white mb-2">
                 10k+
               </div>
-              <div className="text-sm text-blue-200">Processed lectures</div>
+              <div className="text-sm text-blue-200">{t("cta.stat2")}</div>
             </div>
             <div className="text-center">
               <div className="text-3xl md:text-4xl font-bold text-white mb-2">
                 4.9/5
               </div>
-              <div className="text-sm text-blue-200">User rating</div>
+              <div className="text-sm text-blue-200">{t("cta.stat3")}</div>
             </div>
           </motion.div>
 
@@ -190,7 +191,7 @@ export default function CTA() {
               transition={{ duration: 0.6, delay: 0.4 }}
               className="text-2xl font-bold text-white text-center mb-12"
             >
-              What our students say
+              {t("cta.testimonialsTitle")}
             </motion.h3>
             <div className="grid md:grid-cols-3 gap-8">
               {/* Review 1 */}
@@ -217,17 +218,15 @@ export default function CTA() {
                   </div>
                 </div>
                 <p className="text-blue-100 mb-6 leading-relaxed grow">
-                  This tool completely changed the way I study. I no longer have
-                  to spend hours transcribing lectures, everything is saved
-                  automatically.
+                  {t("cta.review1Text")}
                 </p>
                 <div className="flex items-center justify-center space-x-3 mt-auto">
                   <div className="w-10 h-10 bg-linear-to-br from-blue-400 to-cyan-400 rounded-full flex items-center justify-center text-white font-bold">
                     M
                   </div>
                   <div>
-                    <div className="text-white font-semibold">Martin K.</div>
-                    <div className="text-blue-300 text-sm">Medical student</div>
+                    <div className="text-white font-semibold">{t("cta.review1Name")}</div>
+                    <div className="text-blue-300 text-sm">{t("cta.review1Role")}</div>
                   </div>
                 </div>
               </motion.div>
@@ -256,16 +255,15 @@ export default function CTA() {
                   </div>
                 </div>
                 <p className="text-blue-100 mb-6 leading-relaxed grow">
-                  Generating test questions is great for exam preparation. I
-                  finally know what to focus on and what I should know.
+                  {t("cta.review2Text")}
                 </p>
                 <div className="flex items-center justify-center space-x-3 mt-auto">
                   <div className="w-10 h-10 bg-linear-to-br from-purple-400 to-pink-400 rounded-full flex items-center justify-center text-white font-bold">
                     L
                   </div>
                   <div>
-                    <div className="text-white font-semibold">Lucia T.</div>
-                    <div className="text-blue-300 text-sm">Law student</div>
+                    <div className="text-white font-semibold">{t("cta.review2Name")}</div>
+                    <div className="text-blue-300 text-sm">{t("cta.review2Role")}</div>
                   </div>
                 </div>
               </motion.div>
@@ -294,17 +292,16 @@ export default function CTA() {
                   </div>
                 </div>
                 <p className="text-blue-100 mb-6 leading-relaxed grow">
-                  Simple and intuitive interface. I upload a PDF and in a few
-                  minutes I have study materials ready. Brilliant!
+                  {t("cta.review3Text")}
                 </p>
                 <div className="flex items-center justify-center space-x-3 mt-auto">
                   <div className="w-10 h-10 bg-linear-to-br from-green-400 to-emerald-400 rounded-full flex items-center justify-center text-white font-bold">
                     P
                   </div>
                   <div>
-                    <div className="text-white font-semibold">Peter S.</div>
+                    <div className="text-white font-semibold">{t("cta.review3Name")}</div>
                     <div className="text-blue-300 text-sm">
-                      Computer science student
+                      {t("cta.review3Role")}
                     </div>
                   </div>
                 </div>

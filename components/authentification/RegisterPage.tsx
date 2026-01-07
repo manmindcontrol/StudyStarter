@@ -14,8 +14,10 @@ import {
   CheckCircle,
 } from "lucide-react";
 import { signInWithGoogle } from "@/lib/auth";
+import { useTranslation } from "@/hooks/useTranslation";
 
 export default function RegisterPage() {
+  const { t } = useTranslation();
   const router = useRouter();
   const [formData, setFormData] = useState({
     fullName: "",
@@ -37,23 +39,23 @@ export default function RegisterPage() {
 
   const validateForm = () => {
     if (!formData.fullName.trim()) {
-      setError("Please enter your name");
+      setError(t("register.errorName"));
       return false;
     }
     if (!formData.email.trim()) {
-      setError("Please enter email");
+      setError(t("register.errorEmail"));
       return false;
     }
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
-      setError("Invalid email format");
+      setError(t("register.errorInvalidEmail"));
       return false;
     }
     if (formData.password.length < 6) {
-      setError("Password must be at least 6 characters");
+      setError(t("register.errorPasswordLength"));
       return false;
     }
     if (formData.password !== formData.confirmPassword) {
-      setError("Passwords do not match");
+      setError(t("register.errorPasswordMismatch"));
       return false;
     }
     return true;
@@ -96,7 +98,7 @@ export default function RegisterPage() {
     const { error } = await signInWithGoogle();
 
     if (error) {
-      setError("Error signing in with Google");
+      setError(t("register.errorGoogleSignIn"));
       setLoading(false);
     }
     // Google will redirect to callback, so nothing else needed here
@@ -191,9 +193,9 @@ export default function RegisterPage() {
             </motion.div>
           </Link>
           <h1 className="text-4xl font-bold text-white mb-2">
-            Create your account
+            {t("register.title")}
           </h1>
-          <p className="text-blue-200">Start studying more effectively today</p>
+          <p className="text-blue-200">{t("register.subtitle")}</p>
         </motion.div>
 
         {/* Form */}
@@ -213,10 +215,10 @@ export default function RegisterPage() {
               <CheckCircle className="w-5 h-5 text-green-300 mt-0.5 shrink-0" />
               <div>
                 <h3 className="font-semibold text-green-100">
-                  Successfully registered!
+                  {t("register.successTitle")}
                 </h3>
                 <p className="text-sm text-green-200">
-                  Redirecting to dashboard...
+                  {t("register.successMessage")}
                 </p>
               </div>
             </motion.div>
@@ -241,7 +243,7 @@ export default function RegisterPage() {
                 htmlFor="fullName"
                 className="block text-sm font-medium text-blue-100 mb-2"
               >
-                Full name
+                {t("register.fullName")}
               </label>
               <div className="relative">
                 <User className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-blue-300" />
@@ -253,7 +255,7 @@ export default function RegisterPage() {
                   value={formData.fullName}
                   onChange={handleChange}
                   className="w-full pl-10 pr-4 py-3 bg-white/10 border border-white/20 rounded-lg focus:ring-2 focus:ring-purple-400 focus:border-transparent transition-all text-white placeholder-blue-300/50 backdrop-blur-sm"
-                  placeholder="John Doe"
+                  placeholder={t("register.fullNamePlaceholder")}
                   disabled={loading || success}
                 />
               </div>
@@ -265,7 +267,7 @@ export default function RegisterPage() {
                 htmlFor="email"
                 className="block text-sm font-medium text-blue-100 mb-2"
               >
-                Email
+                {t("register.email")}
               </label>
               <div className="relative">
                 <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-blue-300" />
@@ -277,7 +279,7 @@ export default function RegisterPage() {
                   value={formData.email}
                   onChange={handleChange}
                   className="w-full pl-10 pr-4 py-3 bg-white/10 border border-white/20 rounded-lg focus:ring-2 focus:ring-purple-400 focus:border-transparent transition-all text-white placeholder-blue-300/50 backdrop-blur-sm"
-                  placeholder="your@email.com"
+                  placeholder={t("register.emailPlaceholder")}
                   disabled={loading || success}
                 />
               </div>
@@ -289,7 +291,7 @@ export default function RegisterPage() {
                 htmlFor="password"
                 className="block text-sm font-medium text-blue-100 mb-2"
               >
-                Password
+                {t("register.password")}
               </label>
               <div className="relative">
                 <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-blue-300" />
@@ -301,12 +303,12 @@ export default function RegisterPage() {
                   value={formData.password}
                   onChange={handleChange}
                   className="w-full pl-10 pr-4 py-3 bg-white/10 border border-white/20 rounded-lg focus:ring-2 focus:ring-purple-400 focus:border-transparent transition-all text-white placeholder-blue-300/50 backdrop-blur-sm"
-                  placeholder="••••••••"
+                  placeholder={t("register.passwordPlaceholder")}
                   disabled={loading || success}
                 />
               </div>
               <p className="text-xs text-blue-300/70 mt-1">
-                Minimum 6 characters
+                {t("register.passwordMinChars")}
               </p>
             </div>
 
@@ -316,7 +318,7 @@ export default function RegisterPage() {
                 htmlFor="confirmPassword"
                 className="block text-sm font-medium text-blue-100 mb-2"
               >
-                Confirm password
+                {t("register.confirmPassword")}
               </label>
               <div className="relative">
                 <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-blue-300" />
@@ -328,7 +330,7 @@ export default function RegisterPage() {
                   value={formData.confirmPassword}
                   onChange={handleChange}
                   className="w-full pl-10 pr-4 py-3 bg-white/10 border border-white/20 rounded-lg focus:ring-2 focus:ring-purple-400 focus:border-transparent transition-all text-white placeholder-blue-300/50 backdrop-blur-sm"
-                  placeholder="••••••••"
+                  placeholder={t("register.passwordPlaceholder")}
                   disabled={loading || success}
                 />
               </div>
@@ -360,7 +362,7 @@ export default function RegisterPage() {
                     d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"
                   />
                 </svg>
-                <span>Continue with Google</span>
+                <span>{t("register.continueWithGoogle")}</span>
               </button>
             </div>
 
@@ -368,7 +370,7 @@ export default function RegisterPage() {
             <div className="relative my-6">
               <div className="relative flex justify-center text-sm">
                 <span className="px-4  bg-white/10 border border-white/20 rounded-lg text-blue-300">
-                  or with email
+                  {t("register.orWithEmail")}
                 </span>
               </div>
             </div>
@@ -403,12 +405,12 @@ export default function RegisterPage() {
                       d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
                     ></path>
                   </svg>
-                  Creating account...
+                  {t("register.creatingAccount")}
                 </>
               ) : success ? (
-                "Successfully created ✓"
+                t("register.successCreated")
               ) : (
-                "Create account"
+                t("register.createAccountButton")
               )}
             </motion.button>
           </form>
@@ -416,12 +418,12 @@ export default function RegisterPage() {
           {/* Link to login */}
           <div className="mt-6 text-center">
             <p className="text-sm text-blue-200">
-              Already have an account?{" "}
+              {t("register.alreadyHaveAccount")}{" "}
               <Link
                 href="/login"
                 className="text-blue-300 hover:text-white font-semibold transition-colors"
               >
-                Log in
+                {t("register.logIn")}
               </Link>
             </p>
           </div>
@@ -441,7 +443,7 @@ export default function RegisterPage() {
             <span className="group-hover:-translate-x-1 transition-transform duration-200">
               ←
             </span>
-            <span>Back to home</span>
+            <span>{t("register.backToHome")}</span>
           </Link>
         </motion.div>
       </div>

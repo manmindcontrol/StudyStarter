@@ -5,6 +5,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { getCurrentUser } from "@/lib/auth";
 import { supabase } from "@/lib/supabase";
+import { useTranslation } from "@/hooks/useTranslation";
 import {
   Document,
   Packer,
@@ -69,6 +70,7 @@ type Props = {
 export default function NotesViewPage({ materialId, noteId }: Props) {
   const router = useRouter();
   const searchParams = useSearchParams();
+  const { t } = useTranslation();
 
   const [note, setNote] = useState<StudyNote | null>(null);
   const [material, setMaterial] = useState<Material | null>(null);
@@ -127,8 +129,7 @@ export default function NotesViewPage({ materialId, noteId }: Props) {
         setChatMessages([
           {
             role: "assistant",
-            content:
-              "Hello! I'm here to help you with your study notes. You can ask me questions about the material, request clarifications, or ask me to expand on specific concepts. How can I help you?",
+            content: t("notesView.aiAssistantSubtitle"),
           },
         ]);
       } catch (error) {
@@ -189,7 +190,7 @@ export default function NotesViewPage({ materialId, noteId }: Props) {
         ...prev,
         {
           role: "assistant",
-          content: "Sorry, I encountered an error. Please try again.",
+          content: t("notesView.aiAssistantSubtitle"),
         },
       ]);
     } finally {
@@ -431,13 +432,13 @@ export default function NotesViewPage({ materialId, noteId }: Props) {
       <div className="min-h-screen flex items-center justify-center bg-linear-to-br from-purple-50 via-white to-blue-50 dark:bg-linear-to-br dark:from-slate-900 dark:via-slate-800 dark:to-slate-900">
         <div className="text-center">
           <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">
-            Notes not found
+            {t("notesView.notesNotFound")}
           </h2>
           <Link
             href={`/materials/${materialId}`}
             className="text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white"
           >
-            Back to material
+            {t("notesView.backToMaterial")}
           </Link>
         </div>
       </div>
@@ -463,7 +464,7 @@ export default function NotesViewPage({ materialId, noteId }: Props) {
                 </div>
                 <div className="min-w-0">
                   <h1 className="text-sm sm:text-base md:text-lg font-bold text-gray-900 dark:text-gray-300 truncate">
-                    Study Notes
+                    {t("notesView.studyNotes")}
                   </h1>
                   <p className="text-xs sm:text-sm text-gray-600 dark:text-gray-400 truncate">
                     {material.title}
@@ -477,7 +478,7 @@ export default function NotesViewPage({ materialId, noteId }: Props) {
                 onClick={() => setIsChatOpen(true)}
                 className="md:hidden px-4 py-2.5 bg-linear-to-br from-blue-600 to-purple-600 text-white rounded-lg transition-colors shrink-0 relative font-bold text-sm"
               >
-                AI
+                {t("notesView.ai")}
                 {chatMessages.length > 0 && (
                   <span className="absolute -top-1 -right-1 w-4 h-4 bg-red-500 rounded-full text-[10px] flex items-center justify-center font-bold">
                     {chatMessages.length}
@@ -489,7 +490,7 @@ export default function NotesViewPage({ materialId, noteId }: Props) {
                 className="inline-flex items-center justify-center text-white gap-2 bg-linear-to-br from-blue-600 to-cyan-500 hover:from-blue-700 hover:to-cyan-600 px-3 sm:px-4 py-2.5 sm:py-3 rounded-lg text-xs sm:text-sm font-semibold transition-colors cursor-pointer min-h-[42px] sm:min-h-[44px]"
               >
                 <Download className="w-4 h-4 sm:w-4.5 sm:h-4.5 text-white" />
-                <span className="hidden sm:inline">Download Notes</span>
+                <span className="hidden sm:inline">{t("notesView.downloadNotes")}</span>
               </button>
               {isUnsaved ? (
                 <button
@@ -499,7 +500,7 @@ export default function NotesViewPage({ materialId, noteId }: Props) {
                 >
                   <Save className="w-4 h-4 sm:w-4.5 sm:h-4.5" />
                   <span className="hidden sm:inline">
-                    {saving ? "Saving..." : "Save Notes"}
+                    {saving ? t("notesView.saving") : t("notesView.saveNotes")}
                   </span>
                 </button>
               ) : (
@@ -509,7 +510,7 @@ export default function NotesViewPage({ materialId, noteId }: Props) {
                     className="inline-flex items-center justify-center gap-2 bg-green-100 text-green-500 px-3 sm:px-4 py-2.5 sm:py-3 rounded-lg text-xs sm:text-sm font-semibold cursor-default min-h-[42px] sm:min-h-[44px]"
                   >
                     <Check className="w-4 h-4 sm:w-4.5 sm:h-4.5" />
-                    <span className="hidden sm:inline">Notes Saved</span>
+                    <span className="hidden sm:inline">{t("notesView.notesSaved")}</span>
                   </button>
                 )
               )}
@@ -530,7 +531,7 @@ export default function NotesViewPage({ materialId, noteId }: Props) {
                   <BookOpen className="w-4 h-4 sm:w-5 sm:h-5 text-blue-600 dark:text-blue-400" />
                 </div>
                 <h2 className="text-base sm:text-lg md:text-xl font-bold text-gray-900 dark:text-gray-300">
-                  Summary
+                  {t("notesView.summary")}
                 </h2>
               </div>
               <div className="prose prose-sm sm:prose-base md:prose-lg max-w-none">
@@ -547,7 +548,7 @@ export default function NotesViewPage({ materialId, noteId }: Props) {
                   <Star className="w-4 h-4 sm:w-5 sm:h-5 text-green-600 dark:text-green-400" />
                 </div>
                 <h2 className="text-base sm:text-lg md:text-xl font-bold text-gray-900 dark:text-gray-300">
-                  Key Points
+                  {t("notesView.keyPoints")}
                 </h2>
               </div>
               <div className="space-y-2 sm:space-y-3 md:space-y-4">
@@ -586,7 +587,7 @@ export default function NotesViewPage({ materialId, noteId }: Props) {
                   <Brain className="w-4 h-4 sm:w-5 sm:h-5 text-purple-600 dark:text-purple-400" />
                 </div>
                 <h2 className="text-base sm:text-lg md:text-xl font-bold text-gray-900 dark:text-gray-300">
-                  Important Concepts
+                  {t("notesView.importantConcepts")}
                 </h2>
               </div>
               <div className="grid gap-2 sm:gap-3 md:gap-4">
@@ -605,7 +606,7 @@ export default function NotesViewPage({ materialId, noteId }: Props) {
                       <div className="mt-2 sm:mt-3">
                         <h4 className="text-[10px] sm:text-xs font-semibold text-gray-900 dark:text-gray-300 mb-1.5 sm:mb-2 flex items-center">
                           <Lightbulb className="w-3 h-3 sm:w-3.5 sm:h-3.5 mr-1 sm:mr-1.5 text-yellow-600" />
-                          Examples:
+                          {t("notesView.examples")}:
                         </h4>
                         <ul className="space-y-1 sm:space-y-1.5">
                           {concept.examples.map((example, exIndex) => (
@@ -634,7 +635,7 @@ export default function NotesViewPage({ materialId, noteId }: Props) {
                   <Lightbulb className="w-4 h-4 sm:w-5 sm:h-5 text-yellow-600 dark:text-yellow-400" />
                 </div>
                 <h2 className="text-base sm:text-lg md:text-xl font-bold text-gray-900 dark:text-gray-300">
-                  Study Tips & Recommendations
+                  {t("notesView.studyTipsRecommendations")}
                 </h2>
               </div>
               <div className="prose prose-sm sm:prose-base md:prose-lg max-w-none">
@@ -655,8 +656,8 @@ export default function NotesViewPage({ materialId, noteId }: Props) {
               onInputChange={setInputMessage}
               onSendMessage={handleSendMessage}
               isSending={sendingMessage}
-              title="AI Assistant"
-              subtitle="Ask questions or request modifications to your notes"
+              title={t("notesView.aiAssistant")}
+              subtitle={t("notesView.aiAssistantSubtitle")}
             />
           </div>
         </div>

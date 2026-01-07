@@ -1,28 +1,28 @@
 "use client";
 import { Mic, FileText, Brain } from "lucide-react";
 import { motion } from "framer-motion";
+import { useTranslation } from "@/hooks/useTranslation";
 
 export default function Features() {
+  const { t } = useTranslation();
+
   const features = [
     {
       icon: Mic,
-      title: "Automatic lecture recording",
-      description:
-        "Record your lecture in real-time using a microphone. AI automatically transcribes speech to text and creates a clear transcript with editing options.",
+      title: t("features.feature1Title"),
+      description: t("features.feature1Description"),
       color: "green",
     },
     {
       icon: FileText,
-      title: "Study materials processing",
-      description:
-        "Upload PDF or Word documents. AI analyzes them and prepares study materials precisely according to your exam questions from the provided materials.",
+      title: t("features.feature2Title"),
+      description: t("features.feature2Description"),
       color: "blue",
     },
     {
       icon: Brain,
-      title: "Test and question generation",
-      description:
-        "Based on your materials, AI creates test questions for review. Perfect for exam preparation and knowledge verification.",
+      title: t("features.feature3Title"),
+      description: t("features.feature3Description"),
       color: "purple",
     },
   ];
@@ -134,7 +134,7 @@ export default function Features() {
             className="inline-block bg-white/20 backdrop-blur-sm px-4 py-2 rounded-full mb-6 border border-white/30"
           >
             <span className="text-sm font-semibold text-white">
-              Why choose our assistant?
+              {t("features.badge")}
             </span>
           </motion.div>
           <motion.h2
@@ -144,7 +144,7 @@ export default function Features() {
             transition={{ duration: 0.6, delay: 0.1 }}
             className="text-4xl md:text-5xl font-bold text-white mb-6 leading-tight"
           >
-            Features that make studying easier
+            {t("features.title")}
           </motion.h2>
           <motion.p
             initial={{ opacity: 0, y: 20 }}
@@ -153,8 +153,7 @@ export default function Features() {
             transition={{ duration: 0.6, delay: 0.2 }}
             className="text-lg md:text-xl text-gray-300"
           >
-            Harness the power of artificial intelligence for more effective
-            learning and exam preparation
+            {t("features.subtitle")}
           </motion.p>
         </div>
 

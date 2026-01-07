@@ -18,6 +18,7 @@ import { saveAs } from "file-saver";
 import { Document, Paragraph, TextRun, Packer } from "docx";
 import jsPDF from "jspdf";
 import LoadingSpinner from "./LoadingSpinner";
+import { useTranslation } from "@/hooks/useTranslation";
 
 // Web Speech API type definitions
 interface ISpeechRecognition extends EventTarget {
@@ -74,6 +75,7 @@ type RecordLectureProps = {
 
 export default function RecordLecture({ user }: RecordLectureProps) {
   const router = useRouter();
+  const { t } = useTranslation();
   const [isRecording, setIsRecording] = useState(false);
   const [recordingTime, setRecordingTime] = useState(0);
   const [transcript, setTranscript] = useState("");
@@ -192,7 +194,7 @@ export default function RecordLecture({ user }: RecordLectureProps) {
       }, 1000);
     } catch (error) {
       console.error("Error starting recording:", error);
-      alert("Failed to start recording. Please check microphone permissions.");
+      alert(t("recordLecture.failedToStart"));
     }
   };
 
@@ -333,7 +335,7 @@ export default function RecordLecture({ user }: RecordLectureProps) {
 
       // Validate transcript is not empty before saving
       if (!fullText || fullText.trim().length === 0) {
-        alert("Cannot save empty transcript");
+        alert(t("recordLecture.cannotSaveEmpty"));
         return;
       }
 
@@ -346,11 +348,11 @@ export default function RecordLecture({ user }: RecordLectureProps) {
 
       if (error) throw error;
 
-      alert("Lecture saved successfully!");
+      alert(t("recordLecture.lectureSaved"));
       router.push("/dashboard");
     } catch (error) {
       console.error("Error saving lecture:", error);
-      alert("Failed to save lecture.");
+      alert(t("recordLecture.failedToSave"));
     } finally {
       setDownloadingFormat(null);
     }
@@ -362,7 +364,7 @@ export default function RecordLecture({ user }: RecordLectureProps) {
       const currentText = finalTranscript + transcript;
 
       if (currentText.trim().length === 0) {
-        alert("No transcript to format");
+        alert(t("recordLecture.noTranscriptToFormat"));
         return;
       }
 
@@ -381,11 +383,11 @@ export default function RecordLecture({ user }: RecordLectureProps) {
           setTranscript("");
         }
       } else {
-        alert("Failed to format transcript");
+        alert(t("recordLecture.failedToFormat"));
       }
     } catch (error) {
       console.error("Error reformatting transcript:", error);
-      alert("Failed to format transcript");
+      alert(t("recordLecture.failedToFormat"));
     } finally {
       setIsProcessing(false);
     }
@@ -394,7 +396,7 @@ export default function RecordLecture({ user }: RecordLectureProps) {
   const discardRecording = () => {
     if (
       confirm(
-        "Are you sure you want to discard this recording? This action cannot be undone."
+        t("recordLecture.discardConfirm")
       )
     ) {
       setRecordingTime(0);
@@ -419,7 +421,7 @@ export default function RecordLecture({ user }: RecordLectureProps) {
             className="mb-4 flex items-center space-x-2 text-gray-600 hover:text-gray-900 dark:text-gray-300 dark:hover:text-gray-400 transition-colors group cursor-pointer"
           >
             <ArrowLeft className="w-5 h-5 group-hover:-translate-x-1 transition-transform" />
-            <span className="font-medium">Back to Dashboard</span>
+            <span className="font-medium">{t("recordLecture.backToDashboard")}</span>
           </button>
           <div className="flex items-center space-x-2 md:space-x-5 bg-linear-to-br from-emerald-600 to-green-400 p-6 rounded-2xl shadow-md">
             <div className="bg-green-100  p-4 rounded-2xl shadow-lg">
@@ -427,10 +429,10 @@ export default function RecordLecture({ user }: RecordLectureProps) {
             </div>
             <div>
               <h1 className="text-lg md:text-3xl font-bold text-white mb-1">
-                Record Lecture
+                {t("recordLecture.title")}
               </h1>
               <p className="text-gray-100 text-l md:text-lg">
-                Capture audio with AI-powered real-time transcription
+                {t("recordLecture.description")}
               </p>
             </div>
           </div>
@@ -443,12 +445,12 @@ export default function RecordLecture({ user }: RecordLectureProps) {
             <div className="flex items-center justify-between mb-8">
               <h2 className="text-2xl font-bold text-slate-800 dark:text-gray-200 flex items-center">
                 <div className="w-2 h-8 bg-linear-to-b from-green-500 to-green-600 rounded-full mr-3"></div>
-                Recording Studio
+                {t("recordLecture.recordingStudio")}
               </h2>
               {isRecording && (
                 <div className="flex items-center space-x-2 bg-red-50 px-3 py-1.5 rounded-full">
                   <div className="w-2 h-2 bg-red-600 rounded-full animate-pulse"></div>
-                  <span className="text-red-600 text-sm font-medium">LIVE</span>
+                  <span className="text-red-600 text-sm font-medium">{t("recordLecture.live")}</span>
                 </div>
               )}
             </div>
@@ -459,7 +461,7 @@ export default function RecordLecture({ user }: RecordLectureProps) {
                 {formatTime(recordingTime)}
               </div>
               <p className="text-gray-600 font-medium">
-                {isRecording ? "Recording in progress..." : "Ready to record"}
+                {isRecording ? t("recordLecture.recordingInProgress") : t("recordLecture.readyToRecord")}
               </p>
             </div>
 
@@ -478,7 +480,7 @@ export default function RecordLecture({ user }: RecordLectureProps) {
                     />
                   </button>
                   <span className="text-slate-800 dark:text-gray-300 text-lg font-semibold">
-                    Start Recording
+                    {t("recordLecture.startRecording")}
                   </span>
                 </div>
               ) : (
@@ -494,7 +496,7 @@ export default function RecordLecture({ user }: RecordLectureProps) {
                     />
                   </button>
                   <span className="text-slate-800 dark:text-gray-300 text-lg font-semibold">
-                    Stop Recording
+                    {t("recordLecture.stopRecording")}
                   </span>
                 </div>
               )}
@@ -509,14 +511,14 @@ export default function RecordLecture({ user }: RecordLectureProps) {
                   className="flex items-center space-x-2 px-6 py-3 bg-blue-50 hover:bg-blue-100 text-blue-600 dark:text-blue-300 dark:bg-blue-300/20 dark:hover:bg-blue-600/20 font-medium rounded-lg transition-colors border border-blue-200 dark:border-blue-900/20 disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
                 >
                   <FileText className="w-4 h-4" />
-                  <span>Reformat Text</span>
+                  <span>{t("recordLecture.reformatText")}</span>
                 </button>
                 <button
                   onClick={discardRecording}
                   className="flex items-center space-x-2 px-6 py-3 bg-red-50 hover:bg-red-100 text-red-600 dark:bg-red-900/20 dark:text-red-400 dark:hover:bg-red-600/20 font-medium rounded-lg transition-colors border border-red-200 dark:border-red-900/20 cursor-pointer"
                 >
                   <Trash2 className="w-4 h-4" />
-                  <span>Discard Recording</span>
+                  <span>{t("recordLecture.discardRecording")}</span>
                 </button>
               </div>
             )}
@@ -530,10 +532,10 @@ export default function RecordLecture({ user }: RecordLectureProps) {
                 </div>
                 <div>
                   <span className="text-red-800 font-bold text-lg block">
-                    Recording Active
+                    {t("recordLecture.recordingActive")}
                   </span>
                   <span className="text-red-600 text-sm">
-                    Speak clearly into your microphone
+                    {t("recordLecture.speakClearly")}
                   </span>
                 </div>
               </div>
@@ -544,10 +546,10 @@ export default function RecordLecture({ user }: RecordLectureProps) {
                 <div className="animate-spin rounded-full h-6 w-6 border-3 border-blue-600 border-t-transparent"></div>
                 <div>
                   <span className="text-blue-800 font-bold text-lg block">
-                    Processing
+                    {t("recordLecture.processing")}
                   </span>
                   <span className="text-blue-600 text-sm">
-                    Adding punctuation and formatting text...
+                    {t("recordLecture.addingPunctuation")}
                   </span>
                 </div>
               </div>
@@ -559,12 +561,12 @@ export default function RecordLecture({ user }: RecordLectureProps) {
             <div className="flex items-center justify-between mb-8">
               <h2 className="text-2xl font-bold text-slate-800 dark:text-gray-200 flex items-center">
                 <div className="w-2 h-8 bg-linear-to-b from-blue-500 to-cyan-500 rounded-full mr-3"></div>
-                Live Transcription
+                {t("recordLecture.liveTranscription")}
               </h2>
               {hasTranscript && (
                 <div className="bg-green-50 px-3 py-1.5 rounded-full">
                   <span className="text-green-600 text-sm font-medium">
-                    {finalTranscript.split(" ").length} words
+                    {finalTranscript.split(" ").length} {t("recordLecture.words")}
                   </span>
                 </div>
               )}
@@ -587,10 +589,10 @@ export default function RecordLecture({ user }: RecordLectureProps) {
                       <FileText className="w-16 h-16 opacity-50" />
                     </div>
                     <p className="text-lg font-medium mb-2">
-                      Waiting for audio...
+                      {t("recordLecture.waitingForAudio")}
                     </p>
                     <p className="text-sm">
-                      Your transcription will appear here in real-time
+                      {t("recordLecture.transcriptionAppears")}
                     </p>
                   </div>
                 </div>
@@ -605,7 +607,7 @@ export default function RecordLecture({ user }: RecordLectureProps) {
             <div className="flex items-center mb-8">
               <div className="w-2 h-8 bg-linear-to-b from-purple-500 to-pink-600 rounded-full mr-3"></div>
               <h2 className="text-2xl font-bold text-slate-800 dark:text-gray-200">
-                Export Your Transcript
+                {t("recordLecture.exportTranscript")}
               </h2>
             </div>
 
@@ -622,7 +624,7 @@ export default function RecordLecture({ user }: RecordLectureProps) {
                 )}
                 <div className="text-left">
                   <div className="font-bold">TXT</div>
-                  <div className="text-xs opacity-90">Plain Text</div>
+                  <div className="text-xs opacity-90">{t("recordLecture.plainText")}</div>
                 </div>
               </button>
 
@@ -638,7 +640,7 @@ export default function RecordLecture({ user }: RecordLectureProps) {
                 )}
                 <div className="text-left">
                   <div className="font-bold">DOCX</div>
-                  <div className="text-xs opacity-90">Word Doc</div>
+                  <div className="text-xs opacity-90">{t("recordLecture.wordDoc")}</div>
                 </div>
               </button>
 
@@ -654,7 +656,7 @@ export default function RecordLecture({ user }: RecordLectureProps) {
                 )}
                 <div className="text-left">
                   <div className="font-bold">PDF</div>
-                  <div className="text-xs opacity-90">Document</div>
+                  <div className="text-xs opacity-90">{t("recordLecture.document")}</div>
                 </div>
               </button>
 
@@ -670,7 +672,7 @@ export default function RecordLecture({ user }: RecordLectureProps) {
                 )}
                 <div className="text-left">
                   <div className="font-bold">Save</div>
-                  <div className="text-xs opacity-90">To Library</div>
+                  <div className="text-xs opacity-90">{t("recordLecture.saveToLibrary")}</div>
                 </div>
               </button>
             </div>

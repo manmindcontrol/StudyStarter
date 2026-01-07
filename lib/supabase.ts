@@ -27,6 +27,8 @@ export type Database = {
           email: string | null
           full_name: string | null
           display_name: string | null
+          dark_mode: boolean | null
+          preferred_language: string | null
           created_at: string
         }
       }

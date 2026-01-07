@@ -1,24 +1,24 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import Link from "next/link";
 import { Cookie, X, Check, Settings } from "lucide-react";
 import CookiePreferences from "./CookiePreferences";
 
 export default function CookieConsent() {
-  const [showBanner, setShowBanner] = useState(false);
+  const [showBanner, setShowBanner] = useState(() => {
+    // Initialize state based on localStorage
+    if (typeof window !== 'undefined') {
+      const consent = localStorage.getItem("cookieConsent");
+      return !consent;
+    }
+    return false;
+  });
   const [isClosing, setIsClosing] = useState(false);
-  const [mounted, setMounted] = useState(false);
   const [showPreferences, setShowPreferences] = useState(false);
 
-  useEffect(() => {
-    setMounted(true);
-    // Check if user has already given consent
-    const consent = localStorage.getItem("cookieConsent");
-    if (!consent) {
-      setShowBanner(true);
-    }
-  }, []);
+  // Don't render on server
+  const mounted = typeof window !== 'undefined';
 
   const handleAccept = () => {
     localStorage.setItem("cookieConsent", "accepted");

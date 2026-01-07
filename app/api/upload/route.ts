@@ -3,7 +3,7 @@ import mammoth from "mammoth";
 import { Buffer } from "buffer";
 import OpenAI from "openai";
 import { toFile } from "openai/uploads";
-// @ts-ignore - pdf-parse doesn't have proper types
+// @ts-expect-error - pdf-parse doesn't have proper types
 import pdfParse from "pdf-parse/lib/pdf-parse.js";
 import { createServiceRoleClient, sanitizeFilename } from "@/lib/utils";
 

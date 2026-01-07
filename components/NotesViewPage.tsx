@@ -487,16 +487,18 @@ export default function NotesViewPage({ materialId, noteId }: Props) {
               </button>
               <button
                 onClick={handleDownloadNotes}
-                className="inline-flex items-center justify-center text-white gap-2 bg-linear-to-br from-blue-600 to-cyan-500 hover:from-blue-700 hover:to-cyan-600 px-3 sm:px-4 py-2.5 sm:py-3 rounded-lg text-xs sm:text-sm font-semibold transition-colors cursor-pointer min-h-[42px] sm:min-h-[44px]"
+                className="inline-flex items-center justify-center text-white gap-2 bg-linear-to-br from-blue-600 to-cyan-500 hover:from-blue-700 hover:to-cyan-600 px-3 sm:px-4 py-2.5 sm:py-3 rounded-lg text-xs sm:text-sm font-semibold transition-colors cursor-pointer min-h-[42px] sm:min-h-11"
               >
                 <Download className="w-4 h-4 sm:w-4.5 sm:h-4.5 text-white" />
-                <span className="hidden sm:inline">{t("notesView.downloadNotes")}</span>
+                <span className="hidden sm:inline">
+                  {t("notesView.downloadNotes")}
+                </span>
               </button>
               {isUnsaved ? (
                 <button
                   onClick={handleSaveNotes}
                   disabled={saving}
-                  className="inline-flex items-center justify-center gap-2 bg-linear-to-br from-green-600 to-emerald-500 hover:from-green-700 hover:to-emerald-600 text-white px-3 sm:px-4 py-2.5 sm:py-3 rounded-lg text-xs sm:text-sm font-semibold transition-colors disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer min-h-[42px] sm:min-h-[44px]"
+                  className="inline-flex items-center justify-center gap-2 bg-linear-to-br from-green-600 to-emerald-500 hover:from-green-700 hover:to-emerald-600 text-white px-3 sm:px-4 py-2.5 sm:py-3 rounded-lg text-xs sm:text-sm font-semibold transition-colors disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer min-h-[42px] sm:min-h-11"
                 >
                   <Save className="w-4 h-4 sm:w-4.5 sm:h-4.5" />
                   <span className="hidden sm:inline">
@@ -507,10 +509,12 @@ export default function NotesViewPage({ materialId, noteId }: Props) {
                 savedNoteId && (
                   <button
                     disabled
-                    className="inline-flex items-center justify-center gap-2 bg-green-100 text-green-500 px-3 sm:px-4 py-2.5 sm:py-3 rounded-lg text-xs sm:text-sm font-semibold cursor-default min-h-[42px] sm:min-h-[44px]"
+                    className="inline-flex items-center justify-center gap-2 bg-green-100 text-green-500 px-3 sm:px-4 py-2.5 sm:py-3 rounded-lg text-xs sm:text-sm font-semibold cursor-default min-h-[42px] sm:min-h-11"
                   >
                     <Check className="w-4 h-4 sm:w-4.5 sm:h-4.5" />
-                    <span className="hidden sm:inline">{t("notesView.notesSaved")}</span>
+                    <span className="hidden sm:inline">
+                      {t("notesView.notesSaved")}
+                    </span>
                   </button>
                 )
               )}

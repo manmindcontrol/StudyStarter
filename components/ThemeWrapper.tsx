@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { ThemeProvider, useTheme } from "@/contexts/ThemeContext";
+import { LanguageProvider } from "@/contexts/LanguageContext";
 import { getCurrentUser } from "@/lib/auth";
 import type { User } from "@supabase/supabase-js";
 
@@ -37,8 +38,10 @@ export default function ThemeWrapper({
   }, []);
 
   return (
-    <ThemeProvider user={user}>
-      <ThemeApplier>{children}</ThemeApplier>
-    </ThemeProvider>
+    <LanguageProvider user={user}>
+      <ThemeProvider user={user}>
+        <ThemeApplier>{children}</ThemeApplier>
+      </ThemeProvider>
+    </LanguageProvider>
   );
 }

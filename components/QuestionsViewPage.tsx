@@ -639,7 +639,8 @@ export default function QuestionsViewPage({
                   {material.title}
                 </h1>
                 <p className="text-xs sm:text-sm text-gray-600 dark:text-gray-400">
-                  {questionRecord.questions.length} {t("questionsView.questions")}
+                  {questionRecord.questions.length}{" "}
+                  {t("questionsView.questions")}
                 </p>
               </div>
             </div>
@@ -665,7 +666,9 @@ export default function QuestionsViewPage({
                 >
                   <Save className="w-4 h-4 sm:w-4.5 sm:h-4.5" />
                   <span className="hidden sm:inline">
-                    {saving ? t("questionsView.saving") : t("questionsView.saveQuestions")}
+                    {saving
+                      ? t("questionsView.saving")
+                      : t("questionsView.saveQuestions")}
                   </span>
                 </button>
               ) : (
@@ -675,7 +678,9 @@ export default function QuestionsViewPage({
                     className="flex items-center justify-center space-x-2 bg-green-100 text-green-500 px-3 sm:px-4 py-2.5 sm:py-3 rounded-lg transition-all cursor-default min-h-[42px] sm:min-h-[44px]"
                   >
                     <Check className="w-4 h-4 sm:w-4.5 sm:h-4.5" />
-                    <span className="hidden sm:inline">{t("questionsView.questionsSaved")}</span>
+                    <span className="hidden sm:inline">
+                      {t("questionsView.questionsSaved")}
+                    </span>
                   </button>
                 )
               )}
@@ -687,7 +692,9 @@ export default function QuestionsViewPage({
                   className="inline-flex items-center justify-center text-white gap-2 bg-linear-to-br from-blue-600 to-cyan-500 hover:from-blue-700 hover:to-cyan-600 px-3 sm:px-4 py-2.5 sm:py-3 rounded-lg text-xs sm:text-sm font-semibold transition-colors cursor-pointer min-h-[42px] sm:min-h-[44px]"
                 >
                   <Download className="w-4 h-4 sm:w-4.5 sm:h-4.5 text-white" />
-                  <span className="hidden sm:inline">{t("questionsView.downloadQuestions")}</span>
+                  <span className="hidden sm:inline">
+                    {t("questionsView.downloadQuestions")}
+                  </span>
                 </button>
 
                 {showExportMenu && (
@@ -756,7 +763,9 @@ export default function QuestionsViewPage({
                                 : "bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400"
                             }`}
                           >
-                            {q.type === "mcq" ? t("questionsView.multipleChoice") : t("questionsView.open")}
+                            {q.type === "mcq"
+                              ? t("questionsView.multipleChoice")
+                              : t("questionsView.open")}
                           </span>
                         </div>
                         <p className="text-gray-900 dark:text-gray-200 mb-3 sm:mb-4 font-medium text-sm sm:text-base leading-tight">

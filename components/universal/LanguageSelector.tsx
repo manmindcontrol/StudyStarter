@@ -2,9 +2,10 @@
 
 import { useState, useRef, useEffect } from "react";
 import { Globe, Check } from "lucide-react";
+import { useLanguage, type Locale } from "@/contexts/LanguageContext";
 
 type Language = {
-  code: "en" | "sk";
+  code: Locale;
   name: string;
   flag: string;
 };
@@ -15,9 +16,11 @@ const languages: Language[] = [
 ];
 
 export default function LanguageSelector() {
+  const { locale, setLocale } = useLanguage();
   const [isOpen, setIsOpen] = useState(false);
-  const [selectedLanguage, setSelectedLanguage] = useState<Language>(languages[0]);
   const dropdownRef = useRef<HTMLDivElement>(null);
+
+  const selectedLanguage = languages.find((l) => l.code === locale) || languages[0];
 
   // Close dropdown when clicking outside
   useEffect(() => {
@@ -39,26 +42,8 @@ export default function LanguageSelector() {
     };
   }, [isOpen]);
 
-  // Load saved language from localStorage on mount
-  useEffect(() => {
-    const savedLanguage = localStorage.getItem("preferredLanguage");
-    if (savedLanguage) {
-      const lang = languages.find((l) => l.code === savedLanguage);
-      if (lang) {
-        setSelectedLanguage(lang);
-      }
-    }
-  }, []);
-
-  const handleLanguageChange = (language: Language) => {
-    setSelectedLanguage(language);
-    localStorage.setItem("preferredLanguage", language.code);
-
-    // Dispatch custom event to notify all components about language change
-    window.dispatchEvent(
-      new CustomEvent("languageChange", { detail: { locale: language.code } })
-    );
-
+  const handleLanguageChange = async (language: Language) => {
+    await setLocale(language.code);
     setIsOpen(false);
   };
 

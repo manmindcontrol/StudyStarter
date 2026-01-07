@@ -16,7 +16,7 @@ export default function NotFound() {
           {/* Monster SVG */}
           <div className="relative z-10 flex justify-center py-2">
             <Image
-              src="/monster.svg"
+              src="/confused.svg"
               alt="404 Monster"
               width={400}
               height={400}

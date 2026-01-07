@@ -1,7 +1,8 @@
-'use client';
+"use client";
 
-import { useEffect } from 'react';
-import Image from 'next/image';
+import { useEffect } from "react";
+import Image from "next/image";
+import { Link } from "lucide-react";
 
 export default function GlobalError({
   error,
@@ -17,7 +18,7 @@ export default function GlobalError({
   return (
     <html lang="en">
       <body>
-        <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 via-blue-100 to-blue-200 px-4">
+        <div className="min-h-screen flex items-center justify-center bg-linear-to-br from-blue-50 via-blue-100 to-blue-200 px-4">
           <div className="text-center">
             {/* Large 500 in background */}
             <div className="relative">
@@ -30,7 +31,7 @@ export default function GlobalError({
               {/* Monster SVG */}
               <div className="relative z-10 flex justify-center py-12">
                 <Image
-                  src="/monster.svg"
+                  src="/confused.svg"
                   alt="Error Monster"
                   width={400}
                   height={400}
@@ -56,12 +57,12 @@ export default function GlobalError({
               >
                 Try Again
               </button>
-              <a
+              <Link
                 href="/"
                 className="px-8 py-3 bg-white hover:bg-gray-50 text-blue-600 rounded-lg font-semibold transition-colors duration-200 shadow-lg"
               >
                 Go Home
-              </a>
+              </Link>
             </div>
           </div>
         </div>

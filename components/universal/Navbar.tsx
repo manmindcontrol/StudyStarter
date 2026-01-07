@@ -1,12 +1,12 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import {
   Menu,
   X,
-  BookOpen,
   User as UserIcon,
   LogOut,
   Home,
@@ -16,12 +16,15 @@ import {
 import { getCurrentUser, signOut } from "@/lib/auth";
 import type { User } from "@supabase/supabase-js";
 import { useTheme } from "@/contexts/ThemeContext";
+import LanguageSelector from "./LanguageSelector";
+import { useTranslation } from "@/hooks/useTranslation";
 
 export default function Navbar() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [user, setUser] = useState<User | null | undefined>(undefined);
   const { isDarkMode } = useTheme();
   const router = useRouter();
+  const { t } = useTranslation();
 
   useEffect(() => {
     const checkUser = async () => {
@@ -52,9 +55,14 @@ export default function Navbar() {
               href="/"
               className="flex items-center space-x-3 hover:scale-105 transition-transform duration-200"
             >
-              <div className="bg-linear-to-br from-blue-600  to-cyan-500 text-white w-12 h-12 rounded-xl flex items-center justify-center font-bold text-xl shadow-lg shadow-blue-500/30 hover:shadow-xl hover:shadow-blue-500/40 transition-shadow duration-300">
-                <BookOpen className="w-7 h-7" />
-              </div>
+              <Image
+                src="/logo.png"
+                alt="StudyStarter Logo"
+                width={30}
+                height={30}
+                className="w-10 h-10"
+              />
+
               <span className="text-xl font-bold bg-linear-to-r from-gray-900 to-gray-700 dark:from-white dark:to-gray-200 bg-clip-text text-transparent hidden sm:block">
                 StudyStarter.io
               </span>
@@ -71,7 +79,7 @@ export default function Navbar() {
                   className="flex items-center space-x-2 text-gray-700 dark:text-gray-200 hover:text-blue-600 dark:hover:text-blue-400 transition-all duration-200 font-medium px-4 py-2 rounded-lg hover:bg-blue-50 dark:hover:bg-slate-800 relative group"
                 >
                   <Home className="w-5 h-5" />
-                  <span>Home</span>
+                  <span>{t("nav.home")}</span>
                   <span className="absolute bottom-0 left-1/2 -translate-x-1/2 w-0 h-0.5 bg-linear-to-r from-blue-600 to-cyan-500 group-hover:w-3/4 transition-all duration-300"></span>
                 </Link>
                 <Link
@@ -79,7 +87,7 @@ export default function Navbar() {
                   className="flex items-center space-x-2 text-gray-700 dark:text-gray-200 hover:text-blue-600 dark:hover:text-blue-400 transition-all duration-200 font-medium px-4 py-2 rounded-lg hover:bg-blue-50 dark:hover:bg-slate-800 relative group"
                 >
                   <LayoutDashboard className="w-5 h-5" />
-                  <span>Dashboard</span>
+                  <span>{t("nav.dashboard")}</span>
                   <span className="absolute bottom-0 left-1/2 -translate-x-1/2 w-0 h-0.5 bg-linear-to-r from-blue-600 to-cyan-500 group-hover:w-3/4 transition-all duration-300"></span>
                 </Link>
                 <Link
@@ -87,7 +95,7 @@ export default function Navbar() {
                   className="flex items-center space-x-2 text-gray-700 dark:text-gray-200 hover:text-blue-600 dark:hover:text-blue-400 transition-all duration-200 font-medium px-4 py-2 rounded-lg hover:bg-blue-50 dark:hover:bg-slate-800 relative group"
                 >
                   <FileText className="w-5 h-5" />
-                  <span>PDF Converter</span>
+                  <span>{t("nav.pdfConverter")}</span>
                   <span className="absolute bottom-0 left-1/2 -translate-x-1/2 w-0 h-0.5 bg-linear-to-r from-blue-600 to-cyan-500 group-hover:w-3/4 transition-all duration-300"></span>
                 </Link>
               </div>
@@ -95,6 +103,7 @@ export default function Navbar() {
 
             {/* Desktop login */}
             <div className="hidden md:flex items-center space-x-3">
+              <LanguageSelector />
               {user ? (
                 <>
                   <Link
@@ -102,14 +111,14 @@ export default function Navbar() {
                     className="flex items-center space-x-2 text-gray-700 dark:text-gray-200 hover:text-blue-600 dark:hover:text-blue-400 transition-all duration-200 font-medium px-5 py-2 rounded-lg hover:bg-gray-50 dark:hover:bg-slate-800"
                   >
                     <UserIcon className="w-5 h-5" />
-                    <span>Profile</span>
+                    <span>{t("nav.profile")}</span>
                   </Link>
                   <button
                     onClick={handleSignOut}
                     className="flex items-center space-x-2 text-gray-700 dark:text-gray-200 hover:text-red-600 dark:hover:text-red-400 transition-all duration-200 font-medium px-5 py-2 rounded-lg hover:bg-red-50 dark:hover:bg-red-900/30"
                   >
                     <LogOut className="w-5 h-5" />
-                    <span>Sign out</span>
+                    <span>{t("nav.signOut")}</span>
                   </button>
                 </>
               ) : (
@@ -118,13 +127,13 @@ export default function Navbar() {
                     href="/login"
                     className="text-gray-700 dark:text-gray-200 hover:text-blue-600 dark:hover:text-blue-400 transition-all duration-200 font-medium px-5 py-2 rounded-lg hover:bg-gray-50 dark:hover:bg-slate-800"
                   >
-                    Sign in
+                    {t("nav.signIn")}
                   </Link>
                   <Link
                     href="/register"
                     className="bg-linear-to-r from-blue-600 to-cyan-500 hover:from-blue-700 hover:to-cyan-600 text-white font-semibold py-2.5 px-7 rounded-xl transition-all duration-300 shadow-lg shadow-blue-500/30 hover:shadow-xl hover:shadow-blue-500/40 hover:scale-105"
                   >
-                    Register
+                    {t("nav.register")}
                   </Link>
                 </>
               )}
@@ -156,7 +165,7 @@ export default function Navbar() {
                       onClick={() => setMobileMenuOpen(false)}
                     >
                       <Home className="w-5 h-5" />
-                      <span>Home</span>
+                      <span>{t("nav.home")}</span>
                     </Link>
                     <Link
                       href="/dashboard"
@@ -164,7 +173,7 @@ export default function Navbar() {
                       onClick={() => setMobileMenuOpen(false)}
                     >
                       <LayoutDashboard className="w-5 h-5" />
-                      <span>Dashboard</span>
+                      <span>{t("nav.dashboard")}</span>
                     </Link>
                     <Link
                       href="/pdf-converter"
@@ -172,7 +181,7 @@ export default function Navbar() {
                       onClick={() => setMobileMenuOpen(false)}
                     >
                       <FileText className="w-5 h-5" />
-                      <span>PDF Converter</span>
+                      <span>{t("nav.pdfConverter")}</span>
                     </Link>
                   </>
                 )}
@@ -184,6 +193,9 @@ export default function Navbar() {
                       : ""
                   }`}
                 >
+                  <div className="flex justify-center mb-3">
+                    <LanguageSelector />
+                  </div>
                   {user ? (
                     <>
                       <Link
@@ -192,7 +204,7 @@ export default function Navbar() {
                         onClick={() => setMobileMenuOpen(false)}
                       >
                         <UserIcon className="w-5 h-5" />
-                        <span>Profile</span>
+                        <span>{t("nav.profile")}</span>
                       </Link>
                       <button
                         onClick={() => {
@@ -202,7 +214,7 @@ export default function Navbar() {
                         className="w-full flex items-center justify-center space-x-2 text-gray-700 dark:text-gray-200 hover:text-red-600 dark:hover:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/30 transition-all duration-200 font-medium py-3 rounded-lg"
                       >
                         <LogOut className="w-5 h-5" />
-                        <span>Sign out</span>
+                        <span>{t("nav.signOut")}</span>
                       </button>
                     </>
                   ) : (
@@ -212,14 +224,14 @@ export default function Navbar() {
                         className="block text-center text-gray-700 dark:text-gray-200 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-gray-50 dark:hover:bg-slate-800 transition-all duration-200 font-medium py-3 rounded-lg"
                         onClick={() => setMobileMenuOpen(false)}
                       >
-                        Sign in
+                        {t("nav.signIn")}
                       </Link>
                       <Link
                         href="/register"
                         className="block text-center bg-linear-to-r from-blue-600 to-cyan-500 hover:from-blue-700 hover:to-cyan-600 text-white font-semibold py-3 px-6 rounded-xl transition-all duration-300 shadow-lg shadow-blue-500/30"
                         onClick={() => setMobileMenuOpen(false)}
                       >
-                        Register
+                        {t("nav.register")}
                       </Link>
                     </>
                   )}

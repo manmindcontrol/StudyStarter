@@ -1,0 +1,31 @@
+{
+  "nav": {
+    "home": "Home",
+    "dashboard": "Dashboard",
+    "pdfConverter": "PDF Converter",
+    "profile": "Profile",
+    "signOut": "Sign out",
+    "signIn": "Sign in",
+    "register": "Register"
+  },
+  "landing": {
+    "badge": "New AI platform for students",
+    "title": "Study smarter with",
+    "titleAI": "AI",
+    "description": "Automatic lecture transcription, intelligent study material processing, and test question generation. All in one place.",
+    "startFree": "Start for free",
+    "learnMore": "Learn more",
+    "lectureRecording": "Lecture recording",
+    "materialAnalysis": "Material analysis",
+    "aiNotes": "AI notes",
+    "testQuestions": "Test questions"
+  },
+  "errors": {
+    "404Title": "OOPS Page not found",
+    "404Description": "The page you are looking for does not exist.",
+    "500Title": "OOPS Something went wrong",
+    "500Description": "Please refresh the page.",
+    "goHome": "Go back home",
+    "tryAgain": "Try again"
+  }
+}

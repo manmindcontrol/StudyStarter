@@ -1,0 +1,31 @@
+{
+  "nav": {
+    "home": "Domov",
+    "dashboard": "Dashboard",
+    "pdfConverter": "PDF Konvertor",
+    "profile": "Profil",
+    "signOut": "Odhlásiť sa",
+    "signIn": "Prihlásiť sa",
+    "register": "Registrovať"
+  },
+  "landing": {
+    "badge": "Nová AI platforma pre študentov",
+    "title": "Študuj efektívnejšie s",
+    "titleAI": "AI",
+    "description": "Automatický prepis prednášok, inteligentné spracovanie študijných materiálov a generovanie testových otázok. Všetko na jednom mieste.",
+    "startFree": "Začať zadarmo",
+    "learnMore": "Dozvedieť sa viac",
+    "lectureRecording": "Nahrávanie prednášok",
+    "materialAnalysis": "Analýza materiálov",
+    "aiNotes": "AI poznámky",
+    "testQuestions": "Testové otázky"
+  },
+  "errors": {
+    "404Title": "OOPS Stránka nenájdená",
+    "404Description": "Stránka, ktorú hľadáte, neexistuje.",
+    "500Title": "OOPS Niečo sa pokazilo",
+    "500Description": "Obnovte stránku.",
+    "goHome": "Späť na domovskú stránku",
+    "tryAgain": "Skúsiť znova"
+  }
+}

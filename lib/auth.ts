@@ -123,7 +123,6 @@ export async function getCurrentUser() {
     if (profileError) {
       // Ak profil neexistuje, vytvor ho
       if (profileError.code === 'PGRST116') {
-        console.log('Profil neexistuje, vytváram...')
         const { data: newProfile } = await supabase
           .from('user_profiles')
           .insert({
@@ -133,7 +132,7 @@ export async function getCurrentUser() {
           })
           .select()
           .single()
-        
+
         return { user, profile: newProfile, error: null }
       }
       

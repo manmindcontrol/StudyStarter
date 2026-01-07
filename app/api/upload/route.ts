@@ -1,34 +1,21 @@
 import { NextRequest, NextResponse } from "next/server";
-import { createClient } from "@supabase/supabase-js";
 import mammoth from "mammoth";
 import { Buffer } from "buffer";
 import OpenAI from "openai";
 import { toFile } from "openai/uploads";
 // @ts-ignore - pdf-parse doesn't have proper types
 import pdfParse from "pdf-parse/lib/pdf-parse.js";
+import { createServiceRoleClient, sanitizeFilename } from "@/lib/utils";
 
 export const runtime = "nodejs";
 
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
-const serviceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
 const openaiApiKey = process.env.OPENAI_API_KEY;
 
-if (!supabaseUrl || !serviceRoleKey || !openaiApiKey) {
-  throw new Error(
-    `Missing required environment variables: ${
-      !supabaseUrl ? "NEXT_PUBLIC_SUPABASE_URL " : ""
-    }${!serviceRoleKey ? "SUPABASE_SERVICE_ROLE_KEY " : ""}${
-      !openaiApiKey ? "OPENAI_API_KEY" : ""
-    }`
-  );
+if (!openaiApiKey) {
+  throw new Error("Missing required environment variable: OPENAI_API_KEY");
 }
 
-const supabase = createClient(supabaseUrl, serviceRoleKey, {
-  auth: {
-    persistSession: false,
-    autoRefreshToken: false,
-  },
-});
+const supabase = createServiceRoleClient();
 
 const openai = new OpenAI({
   apiKey: openaiApiKey,
@@ -36,14 +23,34 @@ const openai = new OpenAI({
 
 export async function POST(request: NextRequest) {
   try {
+    // Get user from session instead of accepting from client
+    const authHeader = request.headers.get("authorization");
+    if (!authHeader) {
+      return NextResponse.json(
+        { error: "Unauthorized - No authorization header" },
+        { status: 401 }
+      );
+    }
+
+    const token = authHeader.replace("Bearer ", "");
+    const { data: { user }, error: authError } = await supabase.auth.getUser(token);
+
+    if (authError || !user) {
+      return NextResponse.json(
+        { error: "Unauthorized - Invalid token" },
+        { status: 401 }
+      );
+    }
+
+    const userId = user.id;
+
     const formData = await request.formData();
     const file = formData.get("file") as File | null;
-    const userId = formData.get("userId") as string | null;
     const title = formData.get("title") as string | null;
 
-    if (!file || !userId) {
+    if (!file) {
       return NextResponse.json(
-        { error: "Missing file or userId" },
+        { error: "Missing file" },
         { status: 400 }
       );
     }
@@ -53,17 +60,6 @@ export async function POST(request: NextRequest) {
 
     let extractedText = "";
     const fileType = file.name.split(".").pop()?.toLowerCase() ?? null;
-
-    // 🔧 Sanitize filename - remove diacritics, special chars, and spaces
-    const sanitizeFilename = (filename: string): string => {
-      return filename
-        .normalize("NFD") // Decompose accented characters
-        .replace(/[\u0300-\u036f]/g, "") // Remove diacritics
-        .replace(/[^\w\s.-]/g, "") // Remove special characters except dots, hyphens, underscores
-        .replace(/\s+/g, "_") // Replace spaces with underscores
-        .replace(/_{2,}/g, "_") // Replace multiple underscores with single
-        .toLowerCase();
-    };
 
     const sanitizedFileName = sanitizeFilename(file.name);
 

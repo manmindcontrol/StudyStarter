@@ -33,6 +33,7 @@ export function useAutoLogout() {
     router.refresh();
   }, [router]);
 
+  // Debounced version to prevent excessive timer resets
   const resetInactivityTimer = useCallback(() => {
     // Vymaž existujúci timer
     if (inactivityTimerRef.current) {
@@ -44,6 +45,17 @@ export function useAutoLogout() {
       handleLogout();
     }, INACTIVITY_TIMEOUT);
   }, [handleLogout]);
+
+  // Throttled version - only reset timer every 5 seconds max
+  const throttledResetTimer = useRef<NodeJS.Timeout | null>(null);
+  const debouncedReset = useCallback(() => {
+    if (!throttledResetTimer.current) {
+      resetInactivityTimer();
+      throttledResetTimer.current = setTimeout(() => {
+        throttledResetTimer.current = null;
+      }, 5000); // Reset at most once every 5 seconds
+    }
+  }, [resetInactivityTimer]);
 
   const handleVisibilityChange = useCallback(() => {
     if (document.hidden) {
@@ -85,19 +97,17 @@ export function useAutoLogout() {
 
     // Ak nie je "remember me" aktívne, aktivuj auto-logout
     if (rememberMe !== "true") {
-      // Události pre sledovanie aktivity používateľa
+      // Události pre sledovanie aktivity používateľa - použijeme throttled version
       const events = [
         "mousedown",
-        "mousemove",
         "keypress",
         "scroll",
         "touchstart",
-        "click",
       ];
 
-      // Pridaj event listenery
+      // Pridaj event listenery s throttled funkciou
       events.forEach((event) => {
-        document.addEventListener(event, resetInactivityTimer);
+        document.addEventListener(event, debouncedReset);
       });
 
       // Pridaj listener pre visibility change
@@ -109,7 +119,7 @@ export function useAutoLogout() {
       // Cleanup funkcia
       return () => {
         events.forEach((event) => {
-          document.removeEventListener(event, resetInactivityTimer);
+          document.removeEventListener(event, debouncedReset);
         });
         document.removeEventListener("visibilitychange", handleVisibilityChange);
 
@@ -119,7 +129,10 @@ export function useAutoLogout() {
         if (visibilityTimerRef.current) {
           clearTimeout(visibilityTimerRef.current);
         }
+        if (throttledResetTimer.current) {
+          clearTimeout(throttledResetTimer.current);
+        }
       };
     }
-  }, [resetInactivityTimer, handleVisibilityChange]);
+  }, [debouncedReset, handleVisibilityChange]);
 }

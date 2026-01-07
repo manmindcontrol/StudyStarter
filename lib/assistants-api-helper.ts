@@ -33,7 +33,7 @@ export async function runAssistantWithFileSearch({
       },
     },
     temperature,
-    response_format: responseFormat as any,
+    response_format: responseFormat as { type: "json_object" | "text" } | undefined,
   });
 
   try {

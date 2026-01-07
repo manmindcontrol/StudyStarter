@@ -331,6 +331,12 @@ export default function RecordLecture({ user }: RecordLectureProps) {
     try {
       const fullText = finalTranscript + transcript;
 
+      // Validate transcript is not empty before saving
+      if (!fullText || fullText.trim().length === 0) {
+        alert("Cannot save empty transcript");
+        return;
+      }
+
       const { error } = await supabase.from("lectures").insert({
         user_id: user.id,
         title: `Lecture ${new Date().toLocaleDateString()}`,

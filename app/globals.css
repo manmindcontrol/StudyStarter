@@ -116,3 +116,18 @@ body {
 .scrollbar-hide::-webkit-scrollbar {
   display: none; /* Chrome, Safari and Opera */
 }
+
+/* 3D Tilt Monster efekty */
+.tilt-container {
+  transform-style: preserve-3d;
+  transition: all 0.3s ease-out;
+}
+
+.tilt-container > div {
+  transform: translateZ(20px);
+}
+
+/* Custom delay animácie */
+.delay-700 {
+  animation-delay: 700ms;
+}

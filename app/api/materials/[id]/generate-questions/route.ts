@@ -74,8 +74,17 @@ export async function POST(
       formatInstruction = `Generate a MIX of both multiple-choice (MCQ) and open-ended questions. Aim for roughly 50/50 split.`;
     }
 
+    const getLanguageName = (lang: string) => {
+      switch (lang) {
+        case 'en': return 'English';
+        case 'sk': return 'Slovak (Slovenčina)';
+        case 'de': return 'German (Deutsch)';
+        default: return lang;
+      }
+    };
+
     const languageInstruction = targetLanguage
-      ? `CRITICAL: You MUST generate ALL questions, options, and answers in ${targetLanguage === 'en' ? 'English' : targetLanguage === 'sk' ? 'Slovak (Slovenčina)' : targetLanguage}. Do not mix languages. Every single word in the output must be in ${targetLanguage === 'en' ? 'English' : targetLanguage === 'sk' ? 'Slovak' : targetLanguage}.`
+      ? `CRITICAL: You MUST generate ALL questions, options, and answers in ${getLanguageName(targetLanguage)}. Do not mix languages. Every single word in the output must be in ${getLanguageName(targetLanguage)}.`
       : `Use the dominant language of the document for all questions and answers.`;
 
     const systemPrompt = `

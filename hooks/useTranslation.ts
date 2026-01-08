@@ -3,10 +3,12 @@
 import { useLanguage } from "@/contexts/LanguageContext";
 import enTranslations from "@/locales/en.json";
 import skTranslations from "@/locales/sk.json";
+import deTranslations from "@/locales/de.json";
 
 const translations = {
   en: enTranslations,
   sk: skTranslations,
+  de: deTranslations,
 };
 
 export function useTranslation() {

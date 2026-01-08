@@ -71,8 +71,17 @@ export async function POST(
     }
 
     // 2️⃣ Build prompts
+    const getLanguageName = (lang: string) => {
+      switch (lang) {
+        case 'en': return 'English';
+        case 'sk': return 'Slovak (Slovenčina)';
+        case 'de': return 'German (Deutsch)';
+        default: return lang;
+      }
+    };
+
     const languageInstruction = targetLanguage
-      ? `CRITICAL: You MUST write ALL notes, summaries, key points, concepts, examples, and study tips in ${targetLanguage === 'en' ? 'English' : targetLanguage === 'sk' ? 'Slovak (Slovenčina)' : targetLanguage}. Do not mix languages. Every single word in the output must be in ${targetLanguage === 'en' ? 'English' : targetLanguage === 'sk' ? 'Slovak' : targetLanguage}.`
+      ? `CRITICAL: You MUST write ALL notes, summaries, key points, concepts, examples, and study tips in ${getLanguageName(targetLanguage)}. Do not mix languages. Every single word in the output must be in ${getLanguageName(targetLanguage)}.`
       : `Use the dominant language of the document for all notes and explanations.`;
 
     const systemPrompt = `

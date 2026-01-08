@@ -19,6 +19,9 @@ type ChatMessage = {
 
 export async function POST(request: NextRequest) {
   try {
+    const { searchParams } = new URL(request.url);
+    const targetLanguage = searchParams.get("lang"); // Get user's preferred language
+
     const body = await request.json();
     const { messages, questions, materialTitle } = body as {
       messages: ChatMessage[];
@@ -32,6 +35,19 @@ export async function POST(request: NextRequest) {
         { status: 400 }
       );
     }
+
+    const getLanguageName = (lang: string) => {
+      switch (lang) {
+        case 'en': return 'English';
+        case 'sk': return 'Slovak (Slovenčina)';
+        case 'de': return 'German (Deutsch)';
+        default: return lang;
+      }
+    };
+
+    const languageInstruction = targetLanguage
+      ? `CRITICAL: You MUST respond in ${getLanguageName(targetLanguage)}. All explanations, examples, and answers must be in ${getLanguageName(targetLanguage)}. Do not mix languages.`
+      : `ALWAYS respond in English, regardless of what language the user asks in. This helps maintain consistency across the platform.`;
 
     // Build context for OpenAI
     const systemPrompt = `You are a friendly AI study buddy helping students with exam questions from "${materialTitle}".
@@ -59,7 +75,7 @@ Help students master THESE SPECIFIC QUESTIONS from their uploaded document. This
 *If user says "only answer" or "just answer", skip to just the direct answer.*
 
 ## LANGUAGE
-**ALWAYS respond in English**, regardless of what language the user asks in. This helps maintain consistency across the platform.
+${languageInstruction}
 
 ## GROUNDING RULES (CRITICAL - STAY IN THE QUESTION BANK!)
 ✓ **ONLY source**: The question bank above - NO external info

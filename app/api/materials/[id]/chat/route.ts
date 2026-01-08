@@ -33,8 +33,17 @@ export async function POST(
       );
     }
 
+    const getLanguageName = (lang: string) => {
+      switch (lang) {
+        case 'en': return 'English';
+        case 'sk': return 'Slovak (Slovenčina)';
+        case 'de': return 'German (Deutsch)';
+        default: return lang;
+      }
+    };
+
     const languageInstruction = targetLanguage
-      ? `CRITICAL: You MUST respond in ${targetLanguage === 'en' ? 'English' : targetLanguage === 'sk' ? 'Slovak (Slovenčina)' : targetLanguage}. All explanations, examples, and answers must be in ${targetLanguage === 'en' ? 'English' : targetLanguage === 'sk' ? 'Slovak' : targetLanguage}. Do not mix languages.`
+      ? `CRITICAL: You MUST respond in ${getLanguageName(targetLanguage)}. All explanations, examples, and answers must be in ${getLanguageName(targetLanguage)}. Do not mix languages.`
       : `Respond in the same language as the user's question.`;
 
     // Build system prompt with document context

@@ -4,7 +4,7 @@ import { createContext, useContext, useState, useEffect, ReactNode } from "react
 import { supabase } from "@/lib/supabase";
 import type { User } from "@supabase/supabase-js";
 
-export type Locale = "en" | "sk";
+export type Locale = "en" | "sk" | "de";
 
 type LanguageContextType = {
   locale: Locale;
@@ -38,14 +38,14 @@ export function LanguageProvider({
           console.error('[LanguageContext] Error loading language from database:', error);
         }
 
-        if (data?.preferred_language && (data.preferred_language === 'en' || data.preferred_language === 'sk')) {
+        if (data?.preferred_language && (data.preferred_language === 'en' || data.preferred_language === 'sk' || data.preferred_language === 'de')) {
           setLocaleState(data.preferred_language as Locale);
           localStorage.setItem('preferredLanguage', data.preferred_language);
         }
       } else {
         // For guests, load from localStorage
         const stored = localStorage.getItem('preferredLanguage') as Locale;
-        if (stored && (stored === 'en' || stored === 'sk')) {
+        if (stored && (stored === 'en' || stored === 'sk' || stored === 'de')) {
           setLocaleState(stored);
         }
       }

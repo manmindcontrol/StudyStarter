@@ -75,8 +75,8 @@ export async function POST(
     }
 
     const languageInstruction = targetLanguage
-      ? `Use ${targetLanguage} for all questions and answers.`
-      : `If no specific language is requested, use the dominant language of the document.`;
+      ? `CRITICAL: You MUST generate ALL questions, options, and answers in ${targetLanguage === 'en' ? 'English' : targetLanguage === 'sk' ? 'Slovak (Slovenčina)' : targetLanguage}. Do not mix languages. Every single word in the output must be in ${targetLanguage === 'en' ? 'English' : targetLanguage === 'sk' ? 'Slovak' : targetLanguage}.`
+      : `Use the dominant language of the document for all questions and answers.`;
 
     const systemPrompt = `
 You are an assistant that generates high-quality study questions from academic documents.

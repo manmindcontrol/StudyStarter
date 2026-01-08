@@ -47,25 +47,27 @@ export default function SlidingChatPanel({
 
   return (
     <>
-      {/* AI Chat Panel - Sliding on Mobile, Fixed on Desktop */}
+      {/* Overlay for mobile - Behind the panel */}
+      {isOpen && (
+        <div
+          className="md:hidden fixed inset-0 bg-black/50 z-40 backdrop-blur-sm"
+          onClick={onClose}
+        />
+      )}
+
+      {/* AI Chat Panel - Sliding on Mobile, Sticky on Desktop */}
       <div
         className={`
-          fixed md:relative inset-y-0 right-0 z-50
-          w-full md:w-[400px] lg:w-[450px]
+          fixed md:sticky md:top-4 inset-0 md:inset-auto z-50 md:z-auto
+          w-full md:w-full lg:w-full
+          md:h-[calc(100vh-2rem)]
           transform transition-transform duration-300 ease-in-out
           ${isOpen ? "translate-x-0" : "translate-x-full md:translate-x-0"}
           flex flex-col bg-gray-50 dark:bg-slate-800
-          md:border-l border-gray-200 dark:border-slate-700
-          shadow-2xl md:shadow-none
+          md:border md:border-gray-200 md:dark:border-slate-700 md:rounded-xl
+          shadow-2xl md:shadow-lg
         `}
       >
-        {/* Overlay for mobile */}
-        {isOpen && (
-          <div
-            className="md:hidden fixed inset-0 bg-slate-800 -z-10"
-            onClick={onClose}
-          />
-        )}
 
         <div className="h-full flex flex-col overflow-hidden">
           {/* Chat Header */}

@@ -31,6 +31,9 @@ export async function POST(
 ) {
   try {
     const { id: materialId } = await context.params;
+    const { searchParams } = new URL(request.url);
+    const targetLanguage = searchParams.get("lang"); // Get user's preferred language
+
     const body = await request.json();
     const { message, materialContent, currentNotes } = body as {
       message: string;
@@ -44,6 +47,10 @@ export async function POST(
         { status: 400 }
       );
     }
+
+    const languageInstruction = targetLanguage
+      ? `CRITICAL: You MUST respond in ${targetLanguage === 'en' ? 'English' : targetLanguage === 'sk' ? 'Slovak (Slovenčina)' : targetLanguage}. All explanations, examples, and answers must be in ${targetLanguage === 'en' ? 'English' : targetLanguage === 'sk' ? 'Slovak' : targetLanguage}. Do not mix languages.`
+      : `Respond in the same language as the user's question.`;
 
     // Build context for AI
     const systemPrompt = `You are a friendly AI study buddy helping students master their study notes created from their uploaded document.
@@ -71,7 +78,7 @@ Help students understand and expand on THESE STUDY NOTES from their document. Fo
 *If user says "only answer" or "just answer", skip to just the direct answer.*
 
 ## LANGUAGE
-**ALWAYS respond in English**, regardless of what language the user asks in. This helps maintain consistency across the platform.
+${languageInstruction}
 
 ## GROUNDING RULES (NOTES FIRST!)
 ✓ **Primary source**: Study notes provided - start here ALWAYS

@@ -648,7 +648,7 @@ export default function QuestionsViewPage({
               {/* Chat Toggle Button - Mobile Only */}
               <button
                 onClick={() => setIsChatOpen(true)}
-                className="md:hidden px-4 py-2.5 bg-linear-to-br from-blue-600 to-purple-600 text-white rounded-lg transition-colors shrink-0 relative font-bold text-sm"
+                className="md:hidden px-3 sm:px-4 py-2.5 sm:py-3 bg-linear-to-br from-blue-600 to-purple-600 text-white rounded-lg text-xs sm:text-sm font-semibold transition-colors shrink-0 relative"
               >
                 {t("questionsView.ai")}
                 {chatMessages.length > 0 && (
@@ -662,9 +662,9 @@ export default function QuestionsViewPage({
                 <button
                   onClick={handleSaveQuestions}
                   disabled={saving}
-                  className="flex items-center justify-center space-x-2 bg-linear-to-br from-green-600 to-emerald-500 hover:from-green-700 hover:to-emerald-600 text-white px-3 sm:px-4 py-2.5 sm:py-3 rounded-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer min-h-[42px] sm:min-h-[44px]"
+                  className="inline-flex items-center justify-center gap-2 bg-linear-to-br from-green-600 to-emerald-500 hover:from-green-700 hover:to-emerald-600 text-white px-3 sm:px-4 py-2.5 sm:py-3 rounded-lg text-xs sm:text-sm font-semibold transition-all disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
                 >
-                  <Save className="w-4 h-4 sm:w-4.5 sm:h-4.5" />
+                  <Save className="w-4 h-4 sm:w-4.5 sm:h-4.5 shrink-0" />
                   <span className="hidden sm:inline">
                     {saving
                       ? t("questionsView.saving")
@@ -675,9 +675,9 @@ export default function QuestionsViewPage({
                 savedQuestionId && (
                   <button
                     disabled
-                    className="flex items-center justify-center space-x-2 bg-green-100 text-green-500 px-3 sm:px-4 py-2.5 sm:py-3 rounded-lg transition-all cursor-default min-h-[42px] sm:min-h-[44px]"
+                    className="inline-flex items-center justify-center gap-2 bg-green-100 text-green-500 px-3 sm:px-4 py-2.5 sm:py-3 rounded-lg text-xs sm:text-sm font-semibold cursor-default"
                   >
-                    <Check className="w-4 h-4 sm:w-4.5 sm:h-4.5" />
+                    <Check className="w-4 h-4 sm:w-4.5 sm:h-4.5 shrink-0" />
                     <span className="hidden sm:inline">
                       {t("questionsView.questionsSaved")}
                     </span>
@@ -689,7 +689,7 @@ export default function QuestionsViewPage({
               <div className="relative" ref={exportMenuRef}>
                 <button
                   onClick={() => setShowExportMenu(!showExportMenu)}
-                  className="inline-flex items-center justify-center text-white gap-2 bg-linear-to-br from-blue-600 to-cyan-500 hover:from-blue-700 hover:to-cyan-600 px-3 sm:px-4 py-2.5 sm:py-3 rounded-lg text-xs sm:text-sm font-semibold transition-colors cursor-pointer min-h-[42px] sm:min-h-[44px]"
+                  className="inline-flex items-center justify-center text-white gap-2 bg-linear-to-br from-blue-600 to-cyan-500 hover:from-blue-700 hover:to-cyan-600 px-3 sm:px-4 py-2.5 sm:py-3 rounded-lg text-xs sm:text-sm font-semibold transition-colors cursor-pointer "
                 >
                   <Download className="w-4 h-4 sm:w-4.5 sm:h-4.5 text-white" />
                   <span className="hidden sm:inline">
@@ -736,11 +736,7 @@ export default function QuestionsViewPage({
         <div className="flex flex-col lg:grid lg:grid-cols-3 gap-3 sm:gap-4 md:gap-6">
           {/* Questions panel - 2 columns on large screens */}
           <div className="lg:col-span-2 space-y-3 sm:space-y-4">
-            <div className="p-3 sm:p-4 md:p-6">
-              <h2 className="text-base sm:text-lg font-semibold text-gray-900 dark:text-white mb-3 sm:mb-4">
-                {t("questionsView.generatedQuestions")}
-              </h2>
-
+            <div className="">
               <div className="space-y-3 sm:space-y-4">
                 {questionRecord.questions.map((q, index) => {
                   const quizAnswer = quizAnswers.get(index);
@@ -826,16 +822,16 @@ export default function QuestionsViewPage({
                                     handleMCQAnswer(index, option, q.answer)
                                   }
                                   disabled={isAnswered}
-                                  className={`w-full flex items-start text-gray-700 dark:text-gray-300 space-x-2 sm:space-x-3 text-left p-2 sm:p-2.5 md:p-3 rounded-lg border-1 transition-all ${buttonStyle} ${
+                                  className={`w-full flex items-start text-gray-700 dark:text-gray-400 space-x-2 sm:space-x-3 text-left p-2 sm:p-2.5 md:p-3 rounded-lg border-1 transition-all ${buttonStyle} ${
                                     !isAnswered
                                       ? "cursor-pointer"
                                       : "cursor-default"
                                   }`}
                                 >
-                                  <span className="font-bold text-sm sm:text-base min-w-[1.25rem] sm:min-w-6 leading-tight">
-                                    {optionLetter})
+                                  <span className="font-bold text-sm sm:text-base min-w-5 sm:min-w-6 leading-tight">
+                                    {optionLetter}
                                   </span>
-                                  <span className="flex-1 text-gray-900 dark:text-gray-200 text-xs sm:text-sm md:text-base leading-tight">
+                                  <span className="flex-1 text-gray-900 dark:text-gray-300 text-xs sm:text-sm md:text-base leading-tight">
                                     {option}
                                   </span>
                                   {showResult && isCorrectOption && (
@@ -954,7 +950,7 @@ export default function QuestionsViewPage({
           </div>
 
           {/* Chat panel - Sliding Panel Component */}
-          <div className="lg:col-span-1">
+          <div className="lg:col-span-1 ">
             <SlidingChatPanel
               isOpen={isChatOpen}
               onClose={() => setIsChatOpen(false)}

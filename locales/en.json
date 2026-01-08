@@ -318,5 +318,73 @@
     "incorrect": "Incorrect",
     "aiAssistant": "AI Assistant",
     "aiAssistantSubtitle": "Ask questions or request modifications"
+  },
+  "buttons": {
+    "openDocument": "Open Document",
+    "openDocumentDesc": "View and read your uploaded document",
+    "openTranscript": "Open Transcript",
+    "openTranscriptDesc": "View and read your lecture transcript",
+    "generateStudyNotes": "Generate Study Notes",
+    "generateStudyNotesDesc": "Create AI-powered study notes from your document",
+    "generateExamQuestions": "Generate Exam Questions",
+    "generateExamQuestionsDesc": "Create practice questions and tests from your material",
+    "deleteMaterial": "Delete Material",
+    "deleteMaterialDesc": "Permanently remove this document from your library",
+    "deleteLecture": "Delete Lecture",
+    "deleteLectureDesc": "Permanently remove this recording from your library",
+    "deleting": "Deleting..."
+  },
+  "modals": {
+    "error": {
+      "title": "Something went wrong",
+      "defaultMessage": "An unexpected error occurred. Please try again.",
+      "close": "Close"
+    },
+    "confirmDelete": {
+      "cancel": "Cancel",
+      "delete": "Delete",
+      "deleting": "Deleting..."
+    },
+    "generatingQuestions": {
+      "title": "Generating Questions",
+      "progress": "Progress",
+      "analyzing": "Analyzing document content...",
+      "identifying": "Identifying key topics...",
+      "crafting": "Crafting quiz questions...",
+      "creatingOptions": "Creating answer options...",
+      "verifying": "Verifying question quality...",
+      "explanations": "Generating explanations...",
+      "finalizing": "Finalizing question set...",
+      "infoText": "This may take a few moments. We are creating high-quality exam questions for you."
+    },
+    "generatingNotes": {
+      "title": "Generating Study Notes",
+      "progress": "Progress",
+      "analyzing": "Analyzing document structure...",
+      "identifying": "Identifying key concepts...",
+      "extracting": "Extracting important information...",
+      "organizing": "Organizing study materials...",
+      "creating": "Creating comprehensive explanations...",
+      "generating": "Generating examples and connections...",
+      "finalizing": "Finalizing study notes...",
+      "infoText": "This may take a few moments. We are creating comprehensive study materials for you."
+    },
+    "generateQuestions": {
+      "title": "Generate Questions",
+      "numberOfQuestions": "Number of questions",
+      "questionsLabel": "questions",
+      "questionType": "Question type",
+      "mcqTitle": "A) Quiz Questions (Multiple Choice)",
+      "mcqDesc": "Questions with 4 options (A, B, C, D), only one correct answer",
+      "openTitle": "B) Open-Ended Questions",
+      "openDesc": "Questions requiring detailed written answers",
+      "mixedTitle": "C) Mixed (Both Types)",
+      "mixedDesc": "Combination of quiz and open-ended questions",
+      "noteTitle": "Note:",
+      "noteText": "The correct answer will always be displayed below each question for learning purposes.",
+      "cancel": "Cancel",
+      "generate": "Generate Questions",
+      "generating": "Generating..."
+    }
   }
 }

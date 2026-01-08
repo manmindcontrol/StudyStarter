@@ -8,12 +8,10 @@ import {
   FileText,
   ChevronLeft,
   Loader2,
-  ChevronRight,
-  MessageCircle,
-  X,
 } from "lucide-react";
 import type { User as SupabaseUser } from "@supabase/supabase-js";
-import Image from "next/image";
+import { useTranslation } from "@/hooks/useTranslation";
+import SlidingChatPanel from "./SlidingChatPanel";
 
 type Material = {
   id: string;
@@ -33,6 +31,7 @@ type Props = {
 
 export default function DocumentViewer({ materialId }: Props) {
   const router = useRouter();
+  const { locale } = useTranslation();
   const [user, setUser] = useState<SupabaseUser | null>(null);
   const [loading, setLoading] = useState(true);
   const [material, setMaterial] = useState<Material | null>(null);
@@ -40,7 +39,6 @@ export default function DocumentViewer({ materialId }: Props) {
   const [inputMessage, setInputMessage] = useState("");
   const [isSending, setIsSending] = useState(false);
   const [isChatOpen, setIsChatOpen] = useState(false);
-  const messagesEndRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const loadData = async () => {
@@ -71,10 +69,6 @@ export default function DocumentViewer({ materialId }: Props) {
     loadData();
   }, [materialId, router]);
 
-  useEffect(() => {
-    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
-  }, [messages]);
-
   const handleSendMessage = async () => {
     if (!inputMessage.trim() || isSending || !material) return;
 
@@ -88,7 +82,12 @@ export default function DocumentViewer({ materialId }: Props) {
     setIsSending(true);
 
     try {
-      const response = await fetch(`/api/materials/${material.id}/chat`, {
+      const params = new URLSearchParams();
+      if (locale) {
+        params.set("lang", locale);
+      }
+
+      const response = await fetch(`/api/materials/${material.id}/chat?${params.toString()}`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -123,13 +122,6 @@ export default function DocumentViewer({ materialId }: Props) {
     }
   };
 
-  const handleKeyPress = (e: React.KeyboardEvent) => {
-    if (e.key === "Enter" && !e.shiftKey) {
-      e.preventDefault();
-      handleSendMessage();
-    }
-  };
-
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-linear-to-br dark:from-slate-900 dark:via-slate-800 dark:to-slate-900">
@@ -157,9 +149,9 @@ export default function DocumentViewer({ materialId }: Props) {
   }
 
   return (
-    <div className="h-screen flex flex-col bg-gray-50 dark:bg-linear-to-br dark:from-slate-900 dark:via-slate-800 dark:to-slate-900 relative">
+    <div className="min-h-screen bg-gray-50 dark:bg-linear-to-br dark:from-slate-900 dark:via-slate-800 dark:to-slate-900">
       {/* Header */}
-      <div className="bg-white dark:bg-slate-800 border-b border-gray-200 dark:border-slate-700">
+      <div className="bg-white dark:bg-slate-800 border-b border-gray-200 dark:border-slate-700 sticky top-0 z-10">
         <div className="container-custom py-2 sm:py-3 md:py-4 px-3 sm:px-4">
           <div className="flex items-center justify-between space-x-2 sm:space-x-3 md:space-x-4">
             <div className="flex items-center space-x-2 sm:space-x-3 md:space-x-4 min-w-0 flex-1">
@@ -186,7 +178,7 @@ export default function DocumentViewer({ materialId }: Props) {
             {/* Chat Toggle Button - Mobile Only */}
             <button
               onClick={() => setIsChatOpen(true)}
-              className="md:hidden px-4 py-2.5 bg-linear-to-br from-blue-600 to-purple-600 text-white rounded-lg transition-colors shrink-0 relative font-bold text-sm"
+              className="md:hidden px-3 sm:px-4 py-2.5 sm:py-3 bg-linear-to-br from-blue-600 to-purple-600 text-white rounded-lg text-xs sm:text-sm font-semibold transition-colors shrink-0 relative"
             >
               AI
               {messages.length > 0 && (
@@ -200,207 +192,45 @@ export default function DocumentViewer({ materialId }: Props) {
       </div>
 
       {/* Main Content */}
-      <div className="flex-1 flex overflow-hidden relative">
-        {/* Document Content - Full Width on Mobile, Split on Desktop */}
-        <div className="flex-1 overflow-y-auto bg-white dark:bg-slate-800/80 md:border-r md:border-gray-200 md:dark:border-slate-700">
-          <div className="p-4 sm:p-6 md:p-8">
-            <div className="max-w-4xl mx-auto">
-              <h2 className="text-xl sm:text-2xl font-bold text-gray-900 dark:text-gray-300 mb-4 sm:mb-6">
-                Document Content
-              </h2>
-              {material.content ? (
-                <div className="prose prose-sm sm:prose-base max-w-none">
-                  <div className="text-gray-700 dark:text-gray-300 whitespace-pre-wrap leading-relaxed text-sm sm:text-base">
-                    {material.content}
-                  </div>
+      <div className="container-custom py-3 sm:py-4 md:py-6 px-3 sm:px-4">
+        <div className="flex flex-col lg:grid lg:grid-cols-3 gap-3 sm:gap-4 md:gap-6">
+          {/* Document Content - 2 columns on large screens */}
+          <div className="lg:col-span-2 bg-white dark:bg-slate-800/80 rounded-lg sm:rounded-xl p-4 sm:p-6 md:p-8 shadow-sm border border-gray-200 dark:border-slate-700">
+            <h2 className="text-xl sm:text-2xl font-bold text-gray-900 dark:text-gray-300 mb-4 sm:mb-6">
+              Document Content
+            </h2>
+            {material.content ? (
+              <div className="prose prose-sm sm:prose-base max-w-none">
+                <div className="text-gray-700 dark:text-gray-300 whitespace-pre-wrap leading-relaxed text-sm sm:text-base">
+                  {material.content}
                 </div>
-              ) : (
-                <div className="text-center py-12">
-                  <FileText className="w-16 h-16 text-gray-300 dark:text-gray-600 mx-auto mb-4" />
-                  <p className="text-gray-600 dark:text-gray-400">
-                    Document content is not available.
-                  </p>
-                </div>
-              )}
-            </div>
+              </div>
+            ) : (
+              <div className="text-center py-12">
+                <FileText className="w-16 h-16 text-gray-300 dark:text-gray-600 mx-auto mb-4" />
+                <p className="text-gray-600 dark:text-gray-400">
+                  Document content is not available.
+                </p>
+              </div>
+            )}
           </div>
-        </div>
 
-        {/* AI Chat Panel - Sliding on Mobile, Fixed on Desktop */}
-        <div
-          className={`
-            fixed md:relative inset-y-0 right-0 z-50
-            w-full md:w-[400px] lg:w-[450px]
-            transform transition-transform duration-300 ease-in-out
-            ${
-              isChatOpen ? "translate-x-0" : "translate-x-full md:translate-x-0"
-            }
-            flex flex-col bg-gray-50 dark:bg-slate-800
-            md:border-l border-gray-200 dark:border-slate-700
-            shadow-2xl md:shadow-none
-          `}
-        >
-          {/* Overlay for mobile */}
-          {isChatOpen && (
-            <div
-              className="md:hidden fixed inset-0 bg-black/50 -z-10"
-              onClick={() => setIsChatOpen(false)}
+          {/* Chat Panel - 1 column on large screens */}
+          <div className="lg:col-span-1">
+            <SlidingChatPanel
+              isOpen={isChatOpen}
+              onClose={() => setIsChatOpen(false)}
+              messages={messages}
+              inputMessage={inputMessage}
+              onInputChange={setInputMessage}
+              onSendMessage={handleSendMessage}
+              isSending={isSending}
+              title="AI Assistant"
+              subtitle="Ask questions about the document"
             />
-          )}
-
-          <div className="h-full flex flex-col overflow-hidden">
-            {/* Chat Header */}
-            <div className="p-3 sm:p-4 border-b border-gray-200 dark:border-slate-700 bg-linear-to-r from-purple-50 to-blue-50 dark:from-purple-900/20 dark:to-blue-900/20 shrink-0">
-              <div className="flex items-center justify-between gap-3">
-                <div className="flex items-center gap-3">
-                  <div className="relative w-10 h-10 sm:w-12 sm:h-12 shrink-0 flex items-center justify-center">
-                    <Image
-                      src="/chatbot.svg"
-                      alt="AI Assistant"
-                      width={48}
-                      height={48}
-                      className="object-contain"
-                    />
-                  </div>
-                  <div>
-                    <h2 className="text-base sm:text-lg font-bold text-gray-900 dark:text-gray-300">
-                      AI Assistant
-                    </h2>
-                    <p className="text-xs text-gray-600 dark:text-gray-400">
-                      Ask questions about the document
-                    </p>
-                  </div>
-                </div>
-                {/* Close button - Mobile only */}
-                <button
-                  onClick={() => setIsChatOpen(false)}
-                  className="md:hidden p-2 hover:bg-gray-200 dark:hover:bg-slate-700 rounded-lg transition-colors"
-                >
-                  <X className="w-5 h-5 text-gray-600 dark:text-gray-300" />
-                </button>
-              </div>
-            </div>
-
-            {/* Chat Messages */}
-            <div className="flex-1 overflow-y-auto p-3 sm:p-4 space-y-3 sm:space-y-4 custom-scrollbar min-h-0">
-              {messages.length === 0 ? (
-                <div className="h-full flex items-center justify-center py-6 sm:py-8">
-                  <div className="text-center max-w-md px-4">
-                    <div className="relative w-16 h-16 sm:w-20 sm:h-20 mx-auto mb-4 flex items-center justify-center">
-                      <Image
-                        src="/chatbot.svg"
-                        alt="AI Assistant"
-                        width={80}
-                        height={80}
-                        className="opacity-60 object-contain"
-                      />
-                    </div>
-                    <h3 className="text-base sm:text-lg font-semibold text-gray-900 dark:text-gray-300 mb-2">
-                      Start a conversation
-                    </h3>
-                    <p className="text-sm sm:text-base text-gray-600 dark:text-gray-400">
-                      Ask me anything about the document. I can help you
-                      understand, summarize, or explain specific parts.
-                    </p>
-                  </div>
-                </div>
-              ) : (
-                <>
-                  {messages.map((message, index) => (
-                    <div
-                      key={index}
-                      className={`flex ${
-                        message.role === "user"
-                          ? "justify-end"
-                          : "justify-start"
-                      }`}
-                    >
-                      <div
-                        className={`max-w-[85%] sm:max-w-[80%] rounded-2xl px-3 py-2 sm:px-4 sm:py-3 ${
-                          message.role === "user"
-                            ? "bg-linear-to-br from-blue-600 to-cyan-500 dark:bg-linear-to-br dark:from-blue-700 dark:to-cyan-700 text-white"
-                            : "bg-gray-100 text-gray-900 dark:bg-gray-800/80 dark:text-gray-300"
-                        }`}
-                      >
-                        <p className="text-xs sm:text-sm whitespace-pre-wrap leading-relaxed">
-                          {message.content}
-                        </p>
-                      </div>
-                    </div>
-                  ))}
-                  {isSending && (
-                    <div className="flex justify-start">
-                      <div className="bg-gray-100 dark:bg-gray-800 rounded-2xl px-4 py-3">
-                        <div className="flex items-center gap-2">
-                          <div className="animate-bounce w-2 h-2 bg-gray-400 rounded-full"></div>
-                          <div className="animate-bounce w-2 h-2 bg-gray-400 rounded-full delay-100"></div>
-                          <div className="animate-bounce w-2 h-2 bg-gray-400 rounded-full delay-200"></div>
-                        </div>
-                      </div>
-                    </div>
-                  )}
-                  <div ref={messagesEndRef} />
-                </>
-              )}
-            </div>
-
-            {/* Chat Input */}
-            <div className="p-3 sm:p-4 border-t border-gray-200 dark:border-slate-600 shrink-0 bg-white dark:bg-slate-800">
-              <div className="flex gap-2">
-                <input
-                  type="text"
-                  value={inputMessage}
-                  onChange={(e) => setInputMessage(e.target.value)}
-                  onKeyPress={(e) => {
-                    if (e.key === "Enter" && !e.shiftKey) {
-                      e.preventDefault();
-                      handleSendMessage();
-                    }
-                  }}
-                  placeholder="Write a message..."
-                  className="flex-1 px-3 py-2 sm:px-4 sm:py-3 text-sm sm:text-base border text-gray-700 dark:text-gray-200 border-gray-300 dark:border-slate-600 bg-white dark:bg-slate-700 rounded-xl focus:ring-2 focus:ring-blue-600 dark:focus:ring-blue-500 focus:border-cyan-500 dark:focus:border-cyan-400 outline-none transition-all placeholder:text-gray-400 dark:placeholder:text-gray-500"
-                  disabled={isSending}
-                />
-                <button
-                  onClick={handleSendMessage}
-                  disabled={isSending || !inputMessage.trim()}
-                  className="bg-linear-to-br from-blue-600 to-cyan-500 hover:from-blue-700 hover:to-cyan-600 dark:bg-linear-to-br dark:from-blue-700 dark:to-cyan-700 disabled:bg-gray-300 disabled:cursor-not-allowed text-white p-2 sm:p-3 rounded-xl transition-colors cursor-pointer"
-                >
-                  <ChevronRight className="w-5 h-5 sm:w-6 sm:h-6" />
-                </button>
-              </div>
-            </div>
           </div>
         </div>
       </div>
-
-      <style jsx global>{`
-        .custom-scrollbar::-webkit-scrollbar {
-          width: 8px;
-        }
-        .custom-scrollbar::-webkit-scrollbar-track {
-          background: #e0f2fe;
-          border-radius: 10px;
-        }
-        .dark .custom-scrollbar::-webkit-scrollbar-track {
-          background: #1e293b;
-          border-radius: 10px;
-        }
-        .custom-scrollbar::-webkit-scrollbar-thumb {
-          background: linear-gradient(180deg, #2563eb 0%, #06b6d4 100%);
-          border-radius: 10px;
-        }
-        .dark .custom-scrollbar::-webkit-scrollbar-thumb {
-          background: linear-gradient(180deg, #3b82f6 0%, #22d3ee 100%);
-          border-radius: 10px;
-        }
-        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-          background: linear-gradient(180deg, #1d4ed8 0%, #0891b2 100%);
-        }
-        .dark .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-          background: linear-gradient(180deg, #2563eb 0%, #06b6d4 100%);
-        }
-      `}</style>
     </div>
   );
 }

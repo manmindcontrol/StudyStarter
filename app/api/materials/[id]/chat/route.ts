@@ -16,6 +16,9 @@ export async function POST(
 ) {
   try {
     const { id: materialId } = await params;
+    const { searchParams } = new URL(request.url);
+    const targetLanguage = searchParams.get("lang"); // Get user's preferred language
+
     const body = await request.json();
     const { message, context, messages = [] } = body as {
       message: string;
@@ -29,6 +32,10 @@ export async function POST(
         { status: 400 }
       );
     }
+
+    const languageInstruction = targetLanguage
+      ? `CRITICAL: You MUST respond in ${targetLanguage === 'en' ? 'English' : targetLanguage === 'sk' ? 'Slovak (Slovenčina)' : targetLanguage}. All explanations, examples, and answers must be in ${targetLanguage === 'en' ? 'English' : targetLanguage === 'sk' ? 'Slovak' : targetLanguage}. Do not mix languages.`
+      : `Respond in the same language as the user's question.`;
 
     // Build system prompt with document context
     const systemPrompt = `You are a friendly AI study buddy helping students understand their uploaded document. Your ONLY job is explaining THIS material!
@@ -56,7 +63,7 @@ Help students understand THIS SPECIFIC DOCUMENT they uploaded. Stay focused on e
 *If user says "only answer" or "just answer", skip to just the direct answer.*
 
 ## LANGUAGE
-**ALWAYS respond in English**, regardless of what language the user asks in. This helps maintain consistency across the platform.
+${languageInstruction}
 
 ## GROUNDING RULES (CRITICAL - STAY IN THE DOCUMENT!)
 ✓ **ONLY source**: The document content above - NO external info

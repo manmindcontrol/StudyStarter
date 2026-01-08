@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { Trash2, ChevronRight } from "lucide-react";
 import { supabase } from "@/lib/supabase";
 import LoadingSpinner from "../LoadingSpinner";
+import { useTranslation } from "@/hooks/useTranslation";
 
 type DeleteButtonProps = {
   materialId?: string;
@@ -26,6 +27,7 @@ export default function DeleteButton({
   className = "",
 }: DeleteButtonProps) {
   const router = useRouter();
+  const { t } = useTranslation();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -75,7 +77,7 @@ export default function DeleteButton({
         {loading && (
           <div className="absolute inset-0 bg-red-50/80 backdrop-blur-sm flex items-center justify-center z-10">
             <div className="bg-white rounded-xl p-4 shadow-lg">
-              <LoadingSpinner size="md" text="Deleting..." />
+              <LoadingSpinner size="md" text={t("buttons.deleting")} />
             </div>
           </div>
         )}
@@ -86,11 +88,10 @@ export default function DeleteButton({
           <ChevronRight className="w-4 h-4 sm:w-5 sm:h-5 text-gray-400 group-hover:text-red-600 transition-colors" />
         </div>
         <h3 className="text-sm sm:text-base md:text-lg font-semibold text-gray-900 dark:text-gray-300 mb-0.5 sm:mb-1">
-          Delete {itemType === "lecture" ? "Lecture" : "Material"}
+          {itemType === "lecture" ? t("buttons.deleteLecture") : t("buttons.deleteMaterial")}
         </h3>
         <p className="text-xs sm:text-sm text-gray-600 dark:text-gray-400 leading-snug">
-          Permanently remove this{" "}
-          {itemType === "lecture" ? "recording" : "document"} from your library
+          {itemType === "lecture" ? t("buttons.deleteLectureDesc") : t("buttons.deleteMaterialDesc")}
         </p>
       </button>
 

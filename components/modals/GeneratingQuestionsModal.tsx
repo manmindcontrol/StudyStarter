@@ -2,54 +2,56 @@
 
 import { useEffect, useState } from "react";
 import { FileQuestion, Brain, Sparkles, CheckCircle2, Loader2, HelpCircle } from "lucide-react";
+import { useTranslation } from "@/hooks/useTranslation";
 
 type GeneratingQuestionsModalProps = {
   isOpen: boolean;
 };
 
-const loadingTexts = [
-  {
-    icon: FileQuestion,
-    text: "Analyzing document content...",
-    color: "text-green-600",
-  },
-  {
-    icon: Brain,
-    text: "Identifying key topics...",
-    color: "text-green-700",
-  },
-  {
-    icon: Sparkles,
-    text: "Crafting quiz questions...",
-    color: "text-green-600",
-  },
-  {
-    icon: HelpCircle,
-    text: "Creating answer options...",
-    color: "text-green-700",
-  },
-  {
-    icon: CheckCircle2,
-    text: "Verifying question quality...",
-    color: "text-green-600",
-  },
-  {
-    icon: Brain,
-    text: "Generating explanations...",
-    color: "text-green-700",
-  },
-  {
-    icon: FileQuestion,
-    text: "Finalizing question set...",
-    color: "text-green-600",
-  },
-];
-
 export default function GeneratingQuestionsModal({
   isOpen,
 }: GeneratingQuestionsModalProps) {
+  const { t } = useTranslation();
   const [currentTextIndex, setCurrentTextIndex] = useState(0);
   const [progress, setProgress] = useState(0);
+
+  const loadingTexts = [
+    {
+      icon: FileQuestion,
+      text: t("modals.generatingQuestions.analyzing"),
+      color: "text-green-600",
+    },
+    {
+      icon: Brain,
+      text: t("modals.generatingQuestions.identifying"),
+      color: "text-green-700",
+    },
+    {
+      icon: Sparkles,
+      text: t("modals.generatingQuestions.crafting"),
+      color: "text-green-600",
+    },
+    {
+      icon: HelpCircle,
+      text: t("modals.generatingQuestions.creatingOptions"),
+      color: "text-green-700",
+    },
+    {
+      icon: CheckCircle2,
+      text: t("modals.generatingQuestions.verifying"),
+      color: "text-green-600",
+    },
+    {
+      icon: Brain,
+      text: t("modals.generatingQuestions.explanations"),
+      color: "text-green-700",
+    },
+    {
+      icon: FileQuestion,
+      text: t("modals.generatingQuestions.finalizing"),
+      color: "text-green-600",
+    },
+  ];
 
   useEffect(() => {
     if (!isOpen) return;
@@ -114,7 +116,7 @@ export default function GeneratingQuestionsModal({
 
           {/* Title */}
           <h2 className="text-2xl font-bold text-center text-gray-900 dark:text-white mb-2">
-            Generating Questions
+            {t("modals.generatingQuestions.title")}
           </h2>
 
           {/* Dynamic status text */}
@@ -129,7 +131,7 @@ export default function GeneratingQuestionsModal({
           {/* Progress bar */}
           <div className="mb-6">
             <div className="flex justify-between text-xs text-gray-600 dark:text-gray-400 mb-2">
-              <span>Progress</span>
+              <span>{t("modals.generatingQuestions.progress")}</span>
               <span>{Math.round(progress)}%</span>
             </div>
             <div className="w-full bg-gray-200 dark:bg-slate-700 rounded-full h-2 overflow-hidden">
@@ -158,8 +160,7 @@ export default function GeneratingQuestionsModal({
 
           {/* Info text */}
           <p className="text-center text-sm text-gray-600 dark:text-gray-400">
-            This may take a few moments. We are creating high-quality exam
-            questions for you.
+            {t("modals.generatingQuestions.infoText")}
           </p>
         </div>
       </div>

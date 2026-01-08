@@ -298,7 +298,7 @@
   "questionsView": {
     "questionsNotFound": "Otázky nenájdené",
     "backToMaterials": "Späť na materiály",
-    "questions": "otázky",
+    "questions": "otázok",
     "ai": "AI",
     "saveQuestions": "Uložiť otázky",
     "saving": "Ukladám...",
@@ -318,5 +318,73 @@
     "incorrect": "Nesprávne",
     "aiAssistant": "AI Asistent",
     "aiAssistantSubtitle": "Opýtajte sa na otázky alebo požiadajte o úpravy"
+  },
+  "buttons": {
+    "openDocument": "Otvoriť dokument",
+    "openDocumentDesc": "Zobraziť a čítať nahratý dokument",
+    "openTranscript": "Otvoriť prepis",
+    "openTranscriptDesc": "Zobraziť a čítať prepis prednášky",
+    "generateStudyNotes": "Generovať študijné poznámky",
+    "generateStudyNotesDesc": "Vytvoriť AI poznámky z dokumentu",
+    "generateExamQuestions": "Vytvoriť testové otázky",
+    "generateExamQuestionsDesc": "Vytvoriť cvičné otázky a testy z materiálu",
+    "deleteMaterial": "Vymazať materiál",
+    "deleteMaterialDesc": "Natrvalo odstrániť tento dokument z knižnice",
+    "deleteLecture": "Vymazať prednášku",
+    "deleteLectureDesc": "Natrvalo odstrániť túto nahrávku z knižnice",
+    "deleting": "Vymazujem..."
+  },
+  "modals": {
+    "error": {
+      "title": "Niečo sa pokazilo",
+      "defaultMessage": "Nastala neočakávaná chyba. Prosím skúste znovu.",
+      "close": "Zavrieť"
+    },
+    "confirmDelete": {
+      "cancel": "Zrušiť",
+      "delete": "Vymazať",
+      "deleting": "Vymazujem..."
+    },
+    "generatingQuestions": {
+      "title": "Generovanie otázok",
+      "progress": "Priebeh",
+      "analyzing": "Analyzujem obsah dokumentu...",
+      "identifying": "Identifikujem kľúčové témy...",
+      "crafting": "Vytváram testové otázky...",
+      "creatingOptions": "Vytváram možnosti odpovedí...",
+      "verifying": "Overujem kvalitu otázok...",
+      "explanations": "Generujem vysvetlenia...",
+      "finalizing": "Dokončujem sadu otázok...",
+      "infoText": "Môže to chvíľu trvať. Vytvárame pre vás kvalitné testové otázky."
+    },
+    "generatingNotes": {
+      "title": "Generovanie študijných poznámok",
+      "progress": "Priebeh",
+      "analyzing": "Analyzujem štruktúru dokumentu...",
+      "identifying": "Identifikujem kľúčové koncepty...",
+      "extracting": "Extrahujem dôležité informácie...",
+      "organizing": "Organizujem študijné materiály...",
+      "creating": "Vytváram komplexné vysvetlenia...",
+      "generating": "Generujem príklady a spojenia...",
+      "finalizing": "Dokončujem študijné poznámky...",
+      "infoText": "Môže to chvíľu trvať. Vytvárame pre vás komplexné študijné poznámky."
+    },
+    "generateQuestions": {
+      "title": "Generovať otázky",
+      "numberOfQuestions": "Počet otázok",
+      "questionsLabel": "otázky",
+      "questionType": "Typ otázok",
+      "mcqTitle": "A) Testové otázky (Výber z možností)",
+      "mcqDesc": "Otázky so 4 možnosťami (A, B, C, D), len jedna správna odpoveď",
+      "openTitle": "B) Otvorené otázky",
+      "openDesc": "Otázky vyžadujúce podrobné písomné odpovede",
+      "mixedTitle": "C) Zmiešané (Oba typy)",
+      "mixedDesc": "Kombinácia testových a otvorených otázok",
+      "noteTitle": "Poznámka:",
+      "noteText": "Správna odpoveď bude vždy zobrazená pod každou otázkou na účely učenia.",
+      "cancel": "Zrušiť",
+      "generate": "Generovať otázky",
+      "generating": "Generujem..."
+    }
   }
 }

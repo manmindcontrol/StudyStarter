@@ -70,7 +70,7 @@ type Props = {
 export default function NotesViewPage({ materialId, noteId }: Props) {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const { t } = useTranslation();
+  const { t, locale } = useTranslation();
 
   const [note, setNote] = useState<StudyNote | null>(null);
   const [material, setMaterial] = useState<Material | null>(null);
@@ -157,21 +157,29 @@ export default function NotesViewPage({ materialId, noteId }: Props) {
 
     try {
       // Call chat API
-      const response = await fetch(`/api/materials/${materialId}/notes/chat`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          message: userMessage,
-          noteId: noteId,
-          materialContent: material.content?.substring(0, 10000),
-          currentNotes: {
-            summary: note.summary,
-            key_points: note.key_points,
-            concepts: note.concepts,
-            study_tips: note.study_tips,
-          },
-        }),
-      });
+      const params = new URLSearchParams();
+      if (locale) {
+        params.set("lang", locale);
+      }
+
+      const response = await fetch(
+        `/api/materials/${materialId}/notes/chat?${params.toString()}`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            message: userMessage,
+            noteId: noteId,
+            materialContent: material.content?.substring(0, 10000),
+            currentNotes: {
+              summary: note.summary,
+              key_points: note.key_points,
+              concepts: note.concepts,
+              study_tips: note.study_tips,
+            },
+          }),
+        }
+      );
 
       const data = await response.json();
 
@@ -476,7 +484,7 @@ export default function NotesViewPage({ materialId, noteId }: Props) {
               {/* Chat Toggle Button - Mobile Only */}
               <button
                 onClick={() => setIsChatOpen(true)}
-                className="md:hidden px-4 py-2.5 bg-linear-to-br from-blue-600 to-purple-600 text-white rounded-lg transition-colors shrink-0 relative font-bold text-sm"
+                className="md:hidden px-3 sm:px-4 py-2.5 sm:py-3 bg-linear-to-br from-blue-600 to-purple-600 text-white rounded-lg text-xs sm:text-sm font-semibold transition-colors shrink-0 relative"
               >
                 {t("notesView.ai")}
                 {chatMessages.length > 0 && (
@@ -487,7 +495,7 @@ export default function NotesViewPage({ materialId, noteId }: Props) {
               </button>
               <button
                 onClick={handleDownloadNotes}
-                className="inline-flex items-center justify-center text-white gap-2 bg-linear-to-br from-blue-600 to-cyan-500 hover:from-blue-700 hover:to-cyan-600 px-3 sm:px-4 py-2.5 sm:py-3 rounded-lg text-xs sm:text-sm font-semibold transition-colors cursor-pointer min-h-[42px] sm:min-h-11"
+                className="inline-flex items-center justify-center text-white gap-2 bg-linear-to-br from-blue-600 to-cyan-500 hover:from-blue-700 hover:to-cyan-600 px-3 sm:px-4 py-2.5 sm:py-3 rounded-lg text-xs sm:text-sm font-semibold transition-colors cursor-pointer "
               >
                 <Download className="w-4 h-4 sm:w-4.5 sm:h-4.5 text-white" />
                 <span className="hidden sm:inline">
@@ -527,7 +535,7 @@ export default function NotesViewPage({ materialId, noteId }: Props) {
       <div className="container-custom py-3 sm:py-4 md:py-6 px-3 sm:px-4">
         <div className="flex flex-col lg:grid lg:grid-cols-2 gap-3 sm:gap-4 md:gap-6">
           {/* Left Column - Notes Content */}
-          <div className="overflow-y-auto lg:pr-4 space-y-3 sm:space-y-4 md:space-y-6 custom-scrollbar lg:h-[calc(100vh-12rem)]">
+          <div className="overflow-y-auto lg:pr-4 space-y-3 sm:space-y-4 md:space-y-6 custom-scrollbar ">
             {/* Summary Section */}
             <div className="bg-white dark:bg-slate-700/70 rounded-lg sm:rounded-xl md:rounded-2xl shadow-sm sm:shadow-md md:shadow-lg p-3 sm:p-4 md:p-6 border border-gray-100 dark:border-slate-700">
               <div className="flex items-center gap-2 sm:gap-3 mb-2 sm:mb-3 md:mb-4">

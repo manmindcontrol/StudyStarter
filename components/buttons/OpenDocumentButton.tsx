@@ -2,6 +2,7 @@
 
 import { useRouter } from "next/navigation";
 import { Eye, ChevronRight } from "lucide-react";
+import { useTranslation } from "@/hooks/useTranslation";
 
 type OpenDocumentButtonProps = {
   materialId: string;
@@ -13,6 +14,7 @@ export default function OpenDocumentButton({
   className = "",
 }: OpenDocumentButtonProps) {
   const router = useRouter();
+  const { t } = useTranslation();
 
   const handleOpen = () => {
     router.push(`/materials/${materialId}/view`);
@@ -31,10 +33,10 @@ export default function OpenDocumentButton({
         <ChevronRight className="w-4 h-4 sm:w-5 sm:h-5 text-gray-400 group-hover:text-blue-600 transition-colors" />
       </div>
       <h3 className="text-sm sm:text-base md:text-lg font-semibold text-gray-900 dark:text-gray-300 mb-0.5 sm:mb-1">
-        Open Document
+        {t("buttons.openDocument")}
       </h3>
       <p className="text-xs sm:text-sm text-gray-600 dark:text-gray-400 leading-snug">
-        View and read your uploaded document
+        {t("buttons.openDocumentDesc")}
       </p>
     </button>
   );

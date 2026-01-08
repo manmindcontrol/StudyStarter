@@ -2,54 +2,56 @@
 
 import { useEffect, useState } from "react";
 import { FileText, Brain, Sparkles, BookOpen, Loader2 } from "lucide-react";
+import { useTranslation } from "@/hooks/useTranslation";
 
 type GeneratingNotesModalProps = {
   isOpen: boolean;
 };
 
-const loadingTexts = [
-  {
-    icon: FileText,
-    text: "Analyzing document structure...",
-    color: "text-blue-600",
-  },
-  {
-    icon: Brain,
-    text: "Identifying key concepts...",
-    color: "text-blue-700",
-  },
-  {
-    icon: Sparkles,
-    text: "Extracting important information...",
-    color: "text-blue-600",
-  },
-  {
-    icon: BookOpen,
-    text: "Organizing study materials...",
-    color: "text-blue-700",
-  },
-  {
-    icon: Brain,
-    text: "Creating comprehensive explanations...",
-    color: "text-blue-600",
-  },
-  {
-    icon: Sparkles,
-    text: "Generating examples and connections...",
-    color: "text-blue-700",
-  },
-  {
-    icon: FileText,
-    text: "Finalizing study notes...",
-    color: "text-blue-600",
-  },
-];
-
 export default function GeneratingNotesModal({
   isOpen,
 }: GeneratingNotesModalProps) {
+  const { t } = useTranslation();
   const [currentTextIndex, setCurrentTextIndex] = useState(0);
   const [progress, setProgress] = useState(0);
+
+  const loadingTexts = [
+    {
+      icon: FileText,
+      text: t("modals.generatingNotes.analyzing"),
+      color: "text-blue-600",
+    },
+    {
+      icon: Brain,
+      text: t("modals.generatingNotes.identifying"),
+      color: "text-blue-700",
+    },
+    {
+      icon: Sparkles,
+      text: t("modals.generatingNotes.extracting"),
+      color: "text-blue-600",
+    },
+    {
+      icon: BookOpen,
+      text: t("modals.generatingNotes.organizing"),
+      color: "text-blue-700",
+    },
+    {
+      icon: Brain,
+      text: t("modals.generatingNotes.creating"),
+      color: "text-blue-600",
+    },
+    {
+      icon: Sparkles,
+      text: t("modals.generatingNotes.generating"),
+      color: "text-blue-700",
+    },
+    {
+      icon: FileText,
+      text: t("modals.generatingNotes.finalizing"),
+      color: "text-blue-600",
+    },
+  ];
 
   useEffect(() => {
     if (!isOpen) return;
@@ -114,7 +116,7 @@ export default function GeneratingNotesModal({
 
           {/* Title */}
           <h2 className="text-2xl font-bold text-center text-gray-900 dark:text-white mb-2">
-            Generating Study Notes
+            {t("modals.generatingNotes.title")}
           </h2>
 
           {/* Dynamic status text */}
@@ -129,7 +131,7 @@ export default function GeneratingNotesModal({
           {/* Progress bar */}
           <div className="mb-6">
             <div className="flex justify-between text-xs text-gray-600 dark:text-gray-400 mb-2">
-              <span>Progress</span>
+              <span>{t("modals.generatingNotes.progress")}</span>
               <span>{Math.round(progress)}%</span>
             </div>
             <div className="w-full bg-gray-200 dark:bg-slate-700 rounded-full h-2 overflow-hidden">
@@ -158,8 +160,7 @@ export default function GeneratingNotesModal({
 
           {/* Info text */}
           <p className="text-center text-sm text-gray-600 dark:text-gray-400">
-            This may take a few moments. We are creating comprehensive study
-            materials for you.
+            {t("modals.generatingNotes.infoText")}
           </p>
         </div>
       </div>

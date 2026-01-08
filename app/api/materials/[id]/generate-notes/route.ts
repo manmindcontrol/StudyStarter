@@ -72,7 +72,7 @@ export async function POST(
 
     // 2️⃣ Build prompts
     const languageInstruction = targetLanguage
-      ? `Use ${targetLanguage} for all notes, summaries, and explanations.`
+      ? `CRITICAL: You MUST write ALL notes, summaries, key points, concepts, examples, and study tips in ${targetLanguage === 'en' ? 'English' : targetLanguage === 'sk' ? 'Slovak (Slovenčina)' : targetLanguage}. Do not mix languages. Every single word in the output must be in ${targetLanguage === 'en' ? 'English' : targetLanguage === 'sk' ? 'Slovak' : targetLanguage}.`
       : `Use the dominant language of the document for all notes and explanations.`;
 
     const systemPrompt = `

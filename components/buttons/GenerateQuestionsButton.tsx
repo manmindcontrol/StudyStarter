@@ -6,6 +6,7 @@ import { FileQuestion, ChevronRight } from "lucide-react";
 import GenerateQuestionsModal from "../modals/GenerateQuestionsModal";
 import GeneratingQuestionsModal from "../modals/GeneratingQuestionsModal";
 import ErrorModal from "../modals/ErrorModal";
+import { useTranslation } from "@/hooks/useTranslation";
 
 type QuestionType = "exam" | "test" | "summary";
 type QuestionFormat = "mcq" | "open" | "mixed";
@@ -35,6 +36,7 @@ export default function GenerateQuestionsButton({
   onGenerated,
 }: GenerateQuestionsButtonProps) {
   const router = useRouter();
+  const { t } = useTranslation();
   const [error, setError] = useState<string | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isGenerating, setIsGenerating] = useState(false);
@@ -117,10 +119,10 @@ export default function GenerateQuestionsButton({
             <ChevronRight className="w-4 h-4 sm:w-5 sm:h-5 text-gray-400 group-hover:text-green-600 transition-colors" />
           </div>
           <h3 className="text-sm sm:text-base md:text-lg font-semibold text-gray-900 dark:text-gray-300 mb-0.5 sm:mb-1">
-            Generate Exam Questions
+            {t("buttons.generateExamQuestions")}
           </h3>
           <p className="text-xs sm:text-sm text-gray-600 dark:text-gray-400 leading-snug">
-            Create practice questions and tests from your material
+            {t("buttons.generateExamQuestionsDesc")}
           </p>
         </button>
 

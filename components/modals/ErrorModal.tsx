@@ -1,6 +1,7 @@
 "use client";
 
 import { X, AlertTriangle } from "lucide-react";
+import { useTranslation } from "@/hooks/useTranslation";
 
 type ErrorModalProps = {
   isOpen: boolean;
@@ -12,9 +13,11 @@ type ErrorModalProps = {
 export default function ErrorModal({
   isOpen,
   onClose,
-  title = "Something went wrong",
-  message = "An unexpected error occurred. Please try again.",
+  title,
+  message,
 }: ErrorModalProps) {
+  const { t } = useTranslation();
+
   if (!isOpen) return null;
 
   return (
@@ -27,7 +30,7 @@ export default function ErrorModal({
               <div className="bg-white/20 p-2 rounded-lg">
                 <AlertTriangle className="w-6 h-6 text-white" />
               </div>
-              <h2 className="text-2xl font-bold text-white">{title}</h2>
+              <h2 className="text-2xl font-bold text-white">{title || t("modals.error.title")}</h2>
             </div>
             <button
               onClick={onClose}
@@ -40,7 +43,7 @@ export default function ErrorModal({
 
         {/* Content */}
         <div className="p-6">
-          <p className="text-gray-700 dark:text-gray-300 leading-relaxed">{message}</p>
+          <p className="text-gray-700 dark:text-gray-300 leading-relaxed">{message || t("modals.error.defaultMessage")}</p>
         </div>
 
         {/* Footer */}
@@ -49,7 +52,7 @@ export default function ErrorModal({
             onClick={onClose}
             className="w-full bg-linear-to-r from-red-600 to-rose-500 hover:from-red-700 hover:to-rose-600 text-white font-semibold py-3 px-4 rounded-xl transition-all shadow-lg"
           >
-            Close
+            {t("modals.error.close")}
           </button>
         </div>
       </div>

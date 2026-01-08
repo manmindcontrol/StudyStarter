@@ -8,6 +8,7 @@ import {
   CheckCircle,
   Shuffle,
 } from "lucide-react";
+import { useTranslation } from "@/hooks/useTranslation";
 
 type QuestionFormat = "mcq" | "open" | "mixed";
 
@@ -24,6 +25,7 @@ export default function GenerateQuestionsModal({
   onGenerate,
   loading = false,
 }: GenerateQuestionsModalProps) {
+  const { t } = useTranslation();
   const [questionCount, setQuestionCount] = useState<number>(10);
   const [questionFormat, setQuestionFormat] = useState<QuestionFormat>("mixed");
 
@@ -44,7 +46,7 @@ export default function GenerateQuestionsModal({
                 <FileQuestion className="w-6 h-6 text-white" />
               </div>
               <h2 className="text-2xl font-bold text-white">
-                Generate Questions
+                {t("modals.generateQuestions.title")}
               </h2>
             </div>
             <button
@@ -62,7 +64,7 @@ export default function GenerateQuestionsModal({
           {/* Question Count */}
           <div>
             <label className="block text-sm font-semibold text-gray-900 dark:text-gray-300 mb-3">
-              Number of questions
+              {t("modals.generateQuestions.numberOfQuestions")}
             </label>
             <div className="space-y-3">
               <div className="relative">
@@ -131,7 +133,7 @@ export default function GenerateQuestionsModal({
               </div>
               <div className="flex items-center justify-between">
                 <span className="text-sm text-gray-600 dark:text-gray-400">
-                  5 questions
+                  5 {t("modals.generateQuestions.questionsLabel")}
                 </span>
                 <div className="bg-green-100 dark:bg-green-900/50 px-4 py-2 rounded-lg">
                   <span className="text-2xl font-bold text-green-700 dark:text-green-400">
@@ -139,7 +141,7 @@ export default function GenerateQuestionsModal({
                   </span>
                 </div>
                 <span className="text-sm text-gray-600 dark:text-gray-400">
-                  30 questions
+                  30 {t("modals.generateQuestions.questionsLabel")}
                 </span>
               </div>
             </div>
@@ -148,7 +150,7 @@ export default function GenerateQuestionsModal({
           {/* Question Format */}
           <div>
             <label className="block text-sm font-semibold text-gray-900 dark:text-gray-300 mb-3">
-              Question type
+              {t("modals.generateQuestions.questionType")}
             </label>
             <div className="space-y-3">
               {/* MCQ Option */}
@@ -185,12 +187,11 @@ export default function GenerateQuestionsModal({
                     <div className="flex items-center space-x-2 mb-1">
                       <HelpCircle className="w-5 h-5 text-blue-600 dark:text-blue-400" />
                       <h3 className="font-semibold text-gray-900 dark:text-gray-300">
-                        A) Quiz Questions (Multiple Choice)
+                        {t("modals.generateQuestions.mcqTitle")}
                       </h3>
                     </div>
                     <p className="text-sm text-gray-600 dark:text-gray-400">
-                      Questions with 4 options (A, B, C, D), only one correct
-                      answer
+                      {t("modals.generateQuestions.mcqDesc")}
                     </p>
                   </div>
                 </div>
@@ -230,11 +231,11 @@ export default function GenerateQuestionsModal({
                     <div className="flex items-center space-x-2 mb-1">
                       <FileQuestion className="w-5 h-5 text-purple-600 dark:text-purple-400" />
                       <h3 className="font-semibold text-gray-900 dark:text-gray-300">
-                        B) Open-Ended Questions
+                        {t("modals.generateQuestions.openTitle")}
                       </h3>
                     </div>
                     <p className="text-sm text-gray-600 dark:text-gray-400">
-                      Questions requiring detailed written answers
+                      {t("modals.generateQuestions.openDesc")}
                     </p>
                   </div>
                 </div>
@@ -274,11 +275,11 @@ export default function GenerateQuestionsModal({
                     <div className="flex items-center space-x-2 mb-1">
                       <Shuffle className="w-5 h-5 text-green-600 dark:text-green-400" />
                       <h3 className="font-semibold text-gray-900 dark:text-gray-300">
-                        C) Mixed (Both Types)
+                        {t("modals.generateQuestions.mixedTitle")}
                       </h3>
                     </div>
                     <p className="text-sm text-gray-600 dark:text-gray-400">
-                      Combination of quiz and open-ended questions
+                      {t("modals.generateQuestions.mixedDesc")}
                     </p>
                   </div>
                 </div>
@@ -291,10 +292,9 @@ export default function GenerateQuestionsModal({
             <div className="flex items-start space-x-3">
               <HelpCircle className="w-5 h-5 text-blue-600 dark:text-blue-400 mt-0.5 shrink-0" />
               <div className="text-sm text-blue-900 dark:text-blue-200">
-                <p className="font-semibold mb-1">Note:</p>
+                <p className="font-semibold mb-1">{t("modals.generateQuestions.noteTitle")}</p>
                 <p>
-                  The correct answer will always be displayed below each
-                  question for learning purposes.
+                  {t("modals.generateQuestions.noteText")}
                 </p>
               </div>
             </div>
@@ -309,7 +309,7 @@ export default function GenerateQuestionsModal({
               disabled={loading}
               className="flex-1 bg-white dark:bg-slate-700/70 border border-gray-300 dark:border-slate-700 text-gray-700 dark:text-gray-300 font-semibold py-3 px-4 rounded-xl hover:bg-gray-50 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              Cancel
+              {t("modals.generateQuestions.cancel")}
             </button>
             <button
               onClick={handleGenerate}
@@ -338,10 +338,10 @@ export default function GenerateQuestionsModal({
                       d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
                     ></path>
                   </svg>
-                  Generating...
+                  {t("modals.generateQuestions.generating")}
                 </>
               ) : (
-                "Generate Questions"
+                t("modals.generateQuestions.generate")
               )}
             </button>
           </div>

@@ -33,7 +33,7 @@ type Props = {
 
 export default function LectureViewPage({ lectureId }: Props) {
   const router = useRouter();
-  const { t } = useTranslation();
+  const { t, locale } = useTranslation();
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
   const [lecture, setLecture] = useState<Lecture | null>(null);
@@ -166,6 +166,7 @@ export default function LectureViewPage({ lectureId }: Props) {
               <GenerateNotesButton
                 lectureId={lectureId}
                 contentType="lecture"
+                lang={locale}
               />
 
               {/* Generate Exam Questions */}
@@ -173,6 +174,7 @@ export default function LectureViewPage({ lectureId }: Props) {
                 lectureId={lectureId}
                 questionType="exam"
                 contentType="lecture"
+                lang={locale}
               />
 
               {/* Delete Lecture */}

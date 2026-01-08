@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { StickyNote, ChevronRight } from "lucide-react";
 import GeneratingNotesModal from "../modals/GeneratingNotesModal";
+import { useTranslation } from "@/hooks/useTranslation";
 
 type GenerateNotesButtonProps = {
   materialId?: string;
@@ -21,6 +22,7 @@ export default function GenerateNotesButton({
   className = "",
 }: GenerateNotesButtonProps) {
   const router = useRouter();
+  const { t } = useTranslation();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -90,10 +92,10 @@ export default function GenerateNotesButton({
             <ChevronRight className="w-4 h-4 sm:w-5 sm:h-5 text-gray-400 group-hover:text-purple-600 transition-colors" />
           </div>
           <h3 className="text-sm sm:text-base md:text-lg font-semibold text-gray-900 dark:text-gray-300 mb-0.5 sm:mb-1">
-            Generate Study Notes
+            {t("buttons.generateStudyNotes")}
           </h3>
           <p className="text-xs sm:text-sm text-gray-600 dark:text-gray-400 leading-snug">
-            Create AI-powered study notes from your document
+            {t("buttons.generateStudyNotesDesc")}
           </p>
         </button>
 

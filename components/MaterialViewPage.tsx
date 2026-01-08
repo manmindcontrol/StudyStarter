@@ -72,7 +72,7 @@ type Props = {
 
 export default function MaterialViewPage({ materialId }: Props) {
   const router = useRouter();
-  const { t } = useTranslation();
+  const { t, locale } = useTranslation();
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
   const [material, setMaterial] = useState<Material | null>(null);
@@ -307,12 +307,14 @@ export default function MaterialViewPage({ materialId }: Props) {
               <GenerateNotesButton
                 className="cursor-pointer"
                 materialId={materialId}
+                lang={locale}
               />
 
               {/* Generate Exam Questions */}
               <GenerateQuestionsButton
                 materialId={materialId}
                 questionType="exam"
+                lang={locale}
               />
 
               {/* Saved Question Sets */}

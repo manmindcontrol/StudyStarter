@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { Cookie } from "lucide-react";
-import CookiePreferences from "../CookiePreferences";
+import CookiePreferences from "../legal/CookiePreferences";
 
 export default function CookieSettingsButton() {
   const [showPreferences, setShowPreferences] = useState(false);

@@ -1,4 +1,4 @@
-import PrivacyPolicyPage from "@/components/PrivacyPolicyPage";
+import PrivacyPolicyPage from "@/components/legal/PrivacyPolicyPage";
 
 export const metadata = {
   title: "Privacy Policy | Study Starter",

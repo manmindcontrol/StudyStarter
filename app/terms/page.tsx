@@ -1,4 +1,4 @@
-import TermsOfUsePage from "@/components/TermsOfUsePage";
+import TermsOfUsePage from "@/components/legal/TermsOfUsePage";
 
 export const metadata = {
   title: "Terms of Use | Study Starter",

@@ -3,8 +3,8 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/components/universal/Navbar";
 import Footer from "@/components/universal/Footer";
-import CookieConsent from "@/components/CookieConsent";
-import CookieSettingsFloatingButton from "@/components/CookieSettingsFloatingButton";
+import CookieConsent from "@/components/legal/CookieConsent";
+import CookieSettingsFloatingButton from "@/components/legal/CookieSettingsFloatingButton";
 import StructuredData from "./structured-data";
 import ThemeWrapper from "@/components/ThemeWrapper";
 

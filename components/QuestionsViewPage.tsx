@@ -17,7 +17,6 @@ import {
   ArrowLeft,
   ChevronRight,
 } from "lucide-react";
-import Image from "next/image";
 import type { User } from "@supabase/supabase-js";
 import SlidingChatPanel from "./SlidingChatPanel";
 import {
@@ -822,7 +821,7 @@ export default function QuestionsViewPage({
                                     handleMCQAnswer(index, option, q.answer)
                                   }
                                   disabled={isAnswered}
-                                  className={`w-full flex items-start text-gray-700 dark:text-gray-400 space-x-2 sm:space-x-3 text-left p-2 sm:p-2.5 md:p-3 rounded-lg border-1 transition-all ${buttonStyle} ${
+                                  className={`w-full flex items-start text-gray-700 dark:text-gray-400 space-x-2 sm:space-x-3 text-left p-2 sm:p-2.5 md:p-3 rounded-lg border transition-all ${buttonStyle} ${
                                     !isAnswered
                                       ? "cursor-pointer"
                                       : "cursor-default"

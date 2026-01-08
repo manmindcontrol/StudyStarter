@@ -1,4 +1,4 @@
-import CookiePolicyPage from "@/components/CookiePolicyPage";
+import CookiePolicyPage from "@/components/legal/CookiePolicyPage";
 
 export const metadata = {
   title: "Cookie Policy | Study Starter",

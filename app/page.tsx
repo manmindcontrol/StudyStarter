@@ -1,7 +1,7 @@
-import CTA from "@/components/CTA";
-import Features from "@/components/Features";
-import HowItWorks from "@/components/HowItWorks";
-import LandingPage from "@/components/LandingPage";
+import CTA from "@/components/homepage/CTA";
+import Features from "@/components/homepage/Features";
+import HowItWorks from "@/components/homepage/HowItWorks";
+import LandingPage from "@/components/homepage/LandingPage";
 
 export default function Home() {
   return (

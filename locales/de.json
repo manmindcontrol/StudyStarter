@@ -16,9 +16,13 @@
     "startFree": "Kostenlos starten",
     "learnMore": "Mehr erfahren",
     "lectureRecording": "Vorlesungsaufnahme",
+    "lectureRecordingShort": "Vorlesung",
     "materialAnalysis": "Materialanalyse",
+    "materialAnalysisShort": "Material",
     "aiNotes": "AI-Notizen",
-    "testQuestions": "Testfragen"
+    "aiNotesShort": "Notizen",
+    "testQuestions": "Testfragen",
+    "testQuestionsShort": "Tests"
   },
   "features": {
     "badge": "Warum unseren Assistenten wählen?",

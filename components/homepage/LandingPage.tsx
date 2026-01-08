@@ -169,7 +169,7 @@ export default function LandingPage() {
                   <Mic className="w-5 h-5 text-blue-600" />
                 </div>
                 <p className="text-[9px] sm:text-[10px] font-medium text-gray-600 text-center leading-tight">
-                  {t("landing.lectureRecording").split(" ")[0]}
+                  {t("landing.lectureRecordingShort")}
                 </p>
               </div>
               <div className="flex flex-col items-center gap-1 min-w-0 flex-1">
@@ -177,7 +177,7 @@ export default function LandingPage() {
                   <FileText className="w-5 h-5 text-green-600" />
                 </div>
                 <p className="text-[9px] sm:text-[10px] font-medium text-gray-600 text-center leading-tight">
-                  {t("landing.materialAnalysis").split(" ")[0]}
+                  {t("landing.materialAnalysisShort")}
                 </p>
               </div>
               <div className="flex flex-col items-center gap-1 min-w-0 flex-1">
@@ -185,7 +185,7 @@ export default function LandingPage() {
                   <Brain className="w-5 h-5 text-purple-600" />
                 </div>
                 <p className="text-[9px] sm:text-[10px] font-medium text-gray-600 text-center leading-tight">
-                  {t("lectureView.notes").split(" ").slice(0, 2).join(" ")}
+                  {t("landing.aiNotesShort")}
                 </p>
               </div>
               <div className="flex flex-col items-center gap-1 min-w-0 flex-1">
@@ -193,7 +193,7 @@ export default function LandingPage() {
                   <BookOpen className="w-5 h-5 text-orange-600" />
                 </div>
                 <p className="text-[9px] sm:text-[10px] font-medium text-gray-600 text-center leading-tight">
-                  {t("landing.testQuestions").split(" ")[0]}
+                  {t("landing.testQuestionsShort")}
                 </p>
               </div>
             </div>

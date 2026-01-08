@@ -16,9 +16,13 @@
     "startFree": "Začať zadarmo",
     "learnMore": "Dozvedieť sa viac",
     "lectureRecording": "Nahrávanie prednášok",
+    "lectureRecordingShort": "Prednášky",
     "materialAnalysis": "Analýza materiálov",
+    "materialAnalysisShort": "Materiály",
     "aiNotes": "AI poznámky",
-    "testQuestions": "Testové otázky"
+    "aiNotesShort": "Poznámky",
+    "testQuestions": "Testové otázky",
+    "testQuestionsShort": "Testy"
   },
   "features": {
     "badge": "Prečo si vybrať nášho asistenta?",

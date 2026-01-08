@@ -84,7 +84,7 @@ export default function Navbar() {
               className="w-10 h-10"
             />
 
-            <span className="text-xl font-bold text-gray-800 dark:text-white hidden sm:block">
+            <span className="text-xl text-gray-800 dark:text-white hidden sm:block">
               StudyStarter.io
             </span>
             <span className="text-xl font-bold text-gray-800 dark:text-white sm:hidden"></span>

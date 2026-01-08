@@ -16,9 +16,13 @@
     "startFree": "Start for free",
     "learnMore": "Learn more",
     "lectureRecording": "Lecture recording",
+    "lectureRecordingShort": "Lectures",
     "materialAnalysis": "Material analysis",
+    "materialAnalysisShort": "Materials",
     "aiNotes": "AI-generated notes",
-    "testQuestions": "Test questions"
+    "aiNotesShort": "Notes",
+    "testQuestions": "Test questions",
+    "testQuestionsShort": "Tests"
   },
   "features": {
     "badge": "Why choose our assistant?",

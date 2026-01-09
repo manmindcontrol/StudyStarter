@@ -99,7 +99,7 @@
   "materials": {
     "backToDashboard": "Back to Dashboard",
     "title": "Upload study materials",
-    "description": "Upload PDF or Word documents and process them with AI to generate interactive questions",
+    "description": "Upload PDF, Word documents or URL links and process them with AI to generate interactive questions or notes",
     "uploadingFile": "Uploading file, please wait...",
     "searchPlaceholder": "Search materials by title or filename...",
     "myMaterials": "My Materials",

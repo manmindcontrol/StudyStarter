@@ -99,7 +99,7 @@
   "materials": {
     "backToDashboard": "Zurück zum Dashboard",
     "title": "Lernmaterialien hochladen",
-    "description": "Laden Sie PDF- oder Word-Dokumente hoch und verarbeiten Sie diese mit AI zur Generierung interaktiver Fragen",
+    "description": "Laden Sie PDF-, Word-Dokumente oder URL-Links hoch und verarbeiten Sie diese mit AI, um interaktive Fragen oder Notizen zu generieren",
     "uploadingFile": "Datei wird hochgeladen, bitte warten...",
     "searchPlaceholder": "Materialien nach Titel oder Dateiname durchsuchen...",
     "myMaterials": "Meine Materialien",

@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createClient } from "@supabase/supabase-js";
 import OpenAI from "openai";
+import { retryWithAdaptiveContent } from "@/lib/openai-retry";
 
 export const runtime = "nodejs";
 
@@ -193,25 +194,32 @@ DO:
 - Analyze how much attention the document gives to each subconcept and reflect that in your explanation length
 `;
 
-    // 3️⃣ Call OpenAI with increased content limit for comprehensive notes
-    const contentToAnalyze = material.content.substring(0, 150000); // Significantly increased limit for long documents
-
-    const aiResponse = await openai.chat.completions.create({
-      model: "gpt-4o-mini", // Using powerful model for comprehensive notes
-      messages: [
-        {
-          role: "system",
-          content: systemPrompt,
-        },
-        {
-          role: "user",
-          content: `${userPrompt}\n\nDocument content:\n${contentToAnalyze}`,
-        },
-      ],
-      response_format: { type: "json_object" },
-      temperature: 0.7, // Slightly higher for more natural, flowing text
-      max_tokens: 16000, // Increased token limit for comprehensive notes
-    });
+    // 3️⃣ Call OpenAI with retry logic and adaptive content sizing
+    const aiResponse = await retryWithAdaptiveContent(
+      async (contentToAnalyze) => {
+        return await openai.chat.completions.create({
+          model: "gpt-4o-mini", // Using powerful model for comprehensive notes
+          messages: [
+            {
+              role: "system",
+              content: systemPrompt,
+            },
+            {
+              role: "user",
+              content: `${userPrompt}\n\nDocument content:\n${contentToAnalyze}`,
+            },
+          ],
+          response_format: { type: "json_object" },
+          temperature: 0.7, // Slightly higher for more natural, flowing text
+          max_tokens: 16000, // Increased token limit for comprehensive notes
+        });
+      },
+      material.content,
+      {
+        maxRetries: 3,
+        contentLimits: [150000, 100000, 50000],
+      }
+    );
 
     // 4️⃣ Extract text safely
     const jsonText = aiResponse.choices[0]?.message?.content;

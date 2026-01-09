@@ -104,6 +104,78 @@ export default function MaterialsPage() {
     }
   };
 
+  const handleUrlUpload = async (url: string, title: string) => {
+    if (!user) return;
+
+    setUploading(true);
+
+    try {
+      const { data: { session } } = await supabase.auth.getSession();
+
+      if (!session) {
+        throw new Error("No active session");
+      }
+
+      const response = await fetch("/api/upload-url", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${session.access_token}`,
+        },
+        body: JSON.stringify({ url, title }),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || "URL upload error");
+      }
+
+      // Reload materials
+      await loadMaterials();
+    } catch (error) {
+      console.error("URL upload error:", error);
+      throw error;
+    } finally {
+      setUploading(false);
+    }
+  };
+
+  const handleTextUpload = async (text: string, title: string) => {
+    if (!user) return;
+
+    setUploading(true);
+
+    try {
+      const { data: { session } } = await supabase.auth.getSession();
+
+      if (!session) {
+        throw new Error("No active session");
+      }
+
+      const response = await fetch("/api/upload-text", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${session.access_token}`,
+        },
+        body: JSON.stringify({ text, title }),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || "Text upload error");
+      }
+
+      // Reload materials
+      await loadMaterials();
+    } catch (error) {
+      console.error("Text upload error:", error);
+      throw error;
+    } finally {
+      setUploading(false);
+    }
+  };
+
   const handleDelete = async (materialId: string) => {
     if (!confirm(t("materials.deleteMaterialConfirm"))) return;
 
@@ -176,7 +248,11 @@ export default function MaterialsPage() {
 
         {/* Upload section - highlighted card */}
         <div className="mb-10 bg-white rounded-2xl shadow-lg p-8 border border-gray-100 dark:bg-slate-800/80 dark:border-gray-700">
-          <FileUpload onUpload={handleUpload} />
+          <FileUpload
+            onUpload={handleUpload}
+            onUrlUpload={handleUrlUpload}
+            onTextUpload={handleTextUpload}
+          />
           {uploading && (
             <div className="mt-4 flex items-center justify-center">
               <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-blue-600 dark:border-blue-400 mr-3"></div>

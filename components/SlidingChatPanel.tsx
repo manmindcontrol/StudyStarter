@@ -38,6 +38,18 @@ export default function SlidingChatPanel({
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
 
+  // Prevent body scroll when chat is open on mobile
+  useEffect(() => {
+    if (isOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, [isOpen]);
+
   const handleKeyPress = (e: React.KeyboardEvent) => {
     if (e.key === "Enter" && !e.shiftKey) {
       e.preventDefault();
@@ -58,20 +70,22 @@ export default function SlidingChatPanel({
       {/* AI Chat Panel - Sliding on Mobile, Sticky on Desktop */}
       <div
         className={`
-          fixed md:sticky md:top-4 inset-0 md:inset-auto z-50 md:z-auto
-          w-full md:w-full lg:w-full
-          md:h-[calc(100vh-2rem)]
+          fixed md:sticky md:top-4 z-50 md:z-auto
+          inset-0 md:inset-auto
+          w-screen h-screen md:w-full md:h-[calc(100vh-2rem)]
+          max-w-full max-h-full
           transform transition-transform duration-300 ease-in-out
           ${isOpen ? "translate-x-0" : "translate-x-full md:translate-x-0"}
           flex flex-col bg-gray-50 dark:bg-slate-800
           md:border md:border-gray-200 md:dark:border-slate-700 md:rounded-xl
           shadow-2xl md:shadow-lg
+          overflow-hidden
         `}
       >
 
-        <div className="h-full flex flex-col overflow-hidden">
+        <div className="h-full w-full flex flex-col overflow-hidden">
           {/* Chat Header */}
-          <div className="p-3 sm:p-4 border-b border-gray-200 dark:border-slate-700 bg-linear-to-r from-purple-50 to-blue-50 dark:from-purple-900/20 dark:to-blue-900/20 shrink-0">
+          <div className="p-3 sm:p-4 md:p-4 border-b border-gray-200 dark:border-slate-700 bg-linear-to-r from-purple-50 to-blue-50 dark:from-purple-900/20 dark:to-blue-900/20 shrink-0">
             <div className="flex items-center justify-between gap-3">
               <div className="flex items-center gap-3 min-w-0">
                 <div className="relative w-10 h-10 sm:w-12 sm:h-12 shrink-0 flex items-center justify-center">
@@ -92,12 +106,13 @@ export default function SlidingChatPanel({
                   </p>
                 </div>
               </div>
-              {/* Close button - Mobile only */}
+              {/* Close button - Mobile and Small Screens only */}
               <button
                 onClick={onClose}
-                className="md:hidden p-2 hover:bg-gray-200 dark:hover:bg-slate-700 rounded-lg transition-colors shrink-0"
+                className="md:hidden p-2.5 hover:bg-gray-200 dark:hover:bg-slate-700 rounded-lg transition-all shrink-0"
+                aria-label="Close chat"
               >
-                <X className="w-5 h-5 text-gray-600 dark:text-gray-300" />
+                <X className="w-5 h-5 sm:w-6 sm:h-6 text-gray-600 dark:text-gray-300" />
               </button>
             </div>
           </div>

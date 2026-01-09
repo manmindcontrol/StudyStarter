@@ -99,7 +99,7 @@
   "materials": {
     "backToDashboard": "Späť na Dashboard",
     "title": "Nahrať študijné materiály",
-    "description": "Nahrajte PDF alebo Word dokumenty a spracujte ich pomocou AI na generovanie interaktívnych otázok",
+    "description": "Nahrajte PDF, Word dokumenty alebo URL link a spracujte ich pomocou AI na generovanie interaktívnych otázok alebo poznámok",
     "uploadingFile": "Nahrávam súbor, prosím čakajte...",
     "searchPlaceholder": "Hľadať materiály podľa názvu alebo súboru...",
     "myMaterials": "Moje materiály",

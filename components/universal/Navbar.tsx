@@ -91,16 +91,24 @@ export default function Navbar() {
           </Link>
 
           {/* Desktop navigation */}
-          {user && (
-            <div className="hidden md:flex items-center space-x-1">
-              <Link
-                href="/"
-                className="flex items-center space-x-2 text-gray-700 dark:text-gray-200 hover:text-blue-600 dark:hover:text-blue-400 transition-all duration-200 font-medium px-4 py-2 rounded-lg hover:bg-blue-50 dark:hover:bg-slate-800 relative group"
-              >
-                <Home className="w-5 h-5" />
-                <span>{t("nav.home")}</span>
-                <span className="absolute bottom-0 left-1/2 -translate-x-1/2 w-0 h-0.5 bg-linear-to-r from-blue-400 to-cyan-300 group-hover:w-3/4 transition-all duration-300"></span>
-              </Link>
+          <div className="hidden md:flex items-center space-x-1">
+            <Link
+              href="/"
+              className="flex items-center space-x-2 text-gray-700 dark:text-gray-200 hover:text-blue-600 dark:hover:text-blue-400 transition-all duration-200 font-medium px-4 py-2 rounded-lg hover:bg-blue-50 dark:hover:bg-slate-800 relative group"
+            >
+              <Home className="w-5 h-5" />
+              <span>{t("nav.home")}</span>
+              <span className="absolute bottom-0 left-1/2 -translate-x-1/2 w-0 h-0.5 bg-linear-to-r from-blue-400 to-cyan-300 group-hover:w-3/4 transition-all duration-300"></span>
+            </Link>
+            <Link
+              href="/pdf-converter"
+              className="flex items-center space-x-2 text-gray-700 dark:text-gray-200 hover:text-blue-600 dark:hover:text-blue-400 transition-all duration-200 font-medium px-4 py-2 rounded-lg hover:bg-blue-50 dark:hover:bg-slate-800 relative group"
+            >
+              <FileText className="w-5 h-5" />
+              <span>{t("nav.pdfConverter")}</span>
+              <span className="absolute bottom-0 left-1/2 -translate-x-1/2 w-0 h-0.5 bg-linear-to-r from-blue-400 to-cyan-300 group-hover:w-3/4 transition-all duration-300"></span>
+            </Link>
+            {user && (
               <Link
                 href="/dashboard"
                 className="flex items-center space-x-2 text-gray-700 dark:text-gray-200 hover:text-blue-600 dark:hover:text-blue-400 transition-all duration-200 font-medium px-4 py-2 rounded-lg hover:bg-blue-50 dark:hover:bg-slate-800 relative group"
@@ -109,16 +117,8 @@ export default function Navbar() {
                 <span>{t("nav.dashboard")}</span>
                 <span className="absolute bottom-0 left-1/2 -translate-x-1/2 w-0 h-0.5 bg-linear-to-r from-blue-400 to-cyan-300 group-hover:w-3/4 transition-all duration-300"></span>
               </Link>
-              <Link
-                href="/pdf-converter"
-                className="flex items-center space-x-2 text-gray-700 dark:text-gray-200 hover:text-blue-600 dark:hover:text-blue-400 transition-all duration-200 font-medium px-4 py-2 rounded-lg hover:bg-blue-50 dark:hover:bg-slate-800 relative group"
-              >
-                <FileText className="w-5 h-5" />
-                <span>{t("nav.pdfConverter")}</span>
-                <span className="absolute bottom-0 left-1/2 -translate-x-1/2 w-0 h-0.5 bg-linear-to-r from-blue-400 to-cyan-300 group-hover:w-3/4 transition-all duration-300"></span>
-              </Link>
-            </div>
-          )}
+            )}
+          </div>
 
           {/* Desktop login */}
           <div className="hidden md:flex items-center gap-2">
@@ -197,33 +197,31 @@ export default function Navbar() {
         {mobileMenuOpen && (
           <div className="md:hidden py-4 border-t border-gray-200 dark:border-slate-700 bg-gray-50 dark:bg-slate-800">
             <div className="flex flex-col space-y-2">
+              <Link
+                href="/"
+                className="flex items-center space-x-2 text-gray-700 dark:text-gray-200 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-blue-50 dark:hover:bg-slate-700 transition-all duration-200 font-medium px-4 py-3 rounded-lg mx-2"
+                onClick={() => setMobileMenuOpen(false)}
+              >
+                <Home className="w-5 h-5" />
+                <span>{t("nav.home")}</span>
+              </Link>
+              <Link
+                href="/pdf-converter"
+                className="flex items-center space-x-2 text-gray-700 dark:text-gray-200 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-blue-50 dark:hover:bg-slate-700 transition-all duration-200 font-medium px-4 py-3 rounded-lg mx-2"
+                onClick={() => setMobileMenuOpen(false)}
+              >
+                <FileText className="w-5 h-5" />
+                <span>{t("nav.pdfConverter")}</span>
+              </Link>
               {user && (
-                <>
-                  <Link
-                    href="/"
-                    className="flex items-center space-x-2 text-gray-700 dark:text-gray-200 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-blue-50 dark:hover:bg-slate-700 transition-all duration-200 font-medium px-4 py-3 rounded-lg mx-2"
-                    onClick={() => setMobileMenuOpen(false)}
-                  >
-                    <Home className="w-5 h-5" />
-                    <span>{t("nav.home")}</span>
-                  </Link>
-                  <Link
-                    href="/dashboard"
-                    className="flex items-center space-x-2 text-gray-700 dark:text-gray-200 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-blue-50 dark:hover:bg-slate-700 transition-all duration-200 font-medium px-4 py-3 rounded-lg mx-2"
-                    onClick={() => setMobileMenuOpen(false)}
-                  >
-                    <LayoutDashboard className="w-5 h-5" />
-                    <span>{t("nav.dashboard")}</span>
-                  </Link>
-                  <Link
-                    href="/pdf-converter"
-                    className="flex items-center space-x-2 text-gray-700 dark:text-gray-200 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-blue-50 dark:hover:bg-slate-700 transition-all duration-200 font-medium px-4 py-3 rounded-lg mx-2"
-                    onClick={() => setMobileMenuOpen(false)}
-                  >
-                    <FileText className="w-5 h-5" />
-                    <span>{t("nav.pdfConverter")}</span>
-                  </Link>
-                </>
+                <Link
+                  href="/dashboard"
+                  className="flex items-center space-x-2 text-gray-700 dark:text-gray-200 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-blue-50 dark:hover:bg-slate-700 transition-all duration-200 font-medium px-4 py-3 rounded-lg mx-2"
+                  onClick={() => setMobileMenuOpen(false)}
+                >
+                  <LayoutDashboard className="w-5 h-5" />
+                  <span>{t("nav.dashboard")}</span>
+                </Link>
               )}
 
               <div

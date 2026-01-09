@@ -1,34 +1,14 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { useRouter } from "next/navigation";
-import { getCurrentUser } from "@/lib/auth";
+import { useState } from "react";
 import { FileText, Upload, Download, Loader2, FileCheck } from "lucide-react";
-import type { User } from "@supabase/supabase-js";
-import { useAutoLogout } from "@/hooks/useAutoLogout";
 
 export default function PdfConverterPage() {
-  const router = useRouter();
-  useAutoLogout();
-
-  const [user, setUser] = useState<User | null | undefined>(undefined);
   const [file, setFile] = useState<File | null>(null);
   const [converting, setConverting] = useState(false);
   const [error, setError] = useState<string>("");
   const [success, setSuccess] = useState(false);
   const [dragActive, setDragActive] = useState(false);
-
-  useEffect(() => {
-    const checkUser = async () => {
-      const { user } = await getCurrentUser();
-      if (!user) {
-        router.push("/login");
-        return;
-      }
-      setUser(user);
-    };
-    checkUser();
-  }, [router]);
 
   const handleDrag = (e: React.DragEvent) => {
     e.preventDefault();
@@ -113,14 +93,6 @@ export default function PdfConverterPage() {
       setConverting(false);
     }
   };
-
-  if (user === undefined) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-linear-to-br from-blue-50 via-white to-cyan-50 dark:from-slate-900 dark:via-slate-800 dark:to-slate-900">
-        <Loader2 className="w-8 h-8 animate-spin text-blue-600" />
-      </div>
-    );
-  }
 
   return (
     <div className="min-h-screen bg-linear-to-br from-blue-50 via-white to-cyan-50 dark:from-slate-900 dark:via-slate-800 dark:to-slate-900">

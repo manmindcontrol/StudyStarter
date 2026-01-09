@@ -119,11 +119,10 @@ export default function RootLayout({
           dangerouslySetInnerHTML={{
             __html: `
               (function() {
+                // By default, start in light mode
+                // Dark mode will be applied after user authentication if needed
                 try {
-                  var darkMode = localStorage.getItem('darkMode');
-                  if (darkMode === 'true') {
-                    document.documentElement.classList.add('dark');
-                  }
+                  document.documentElement.classList.remove('dark');
                 } catch (e) {}
               })();
             `,

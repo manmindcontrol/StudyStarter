@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createClient } from "@supabase/supabase-js";
 import OpenAI from "openai";
+import { retryOpenAICall } from "@/lib/openai-retry";
 
 export const runtime = "nodejs";
 
@@ -176,16 +177,18 @@ Additional rules:
         `Generate EXACTLY ${firstBatch} questions from this section of the document`
       );
 
-      const firstResponse = await openai.chat.completions.create({
-        model: "gpt-4o-mini",
-        messages: [
-          { role: "system", content: systemPrompt },
-          { role: "user", content: `${firstPrompt}\n\nDocument content:\n${firstHalfContent}` },
-        ],
-        response_format: { type: "json_object" },
-        temperature: 0.7,
-        max_tokens: 10000,
-      });
+      const firstResponse = await retryOpenAICall(() =>
+        openai.chat.completions.create({
+          model: "gpt-4o-mini",
+          messages: [
+            { role: "system", content: systemPrompt },
+            { role: "user", content: `${firstPrompt}\n\nDocument content:\n${firstHalfContent}` },
+          ],
+          response_format: { type: "json_object" },
+          temperature: 0.7,
+          max_tokens: 10000,
+        })
+      );
 
       const firstJson = firstResponse.choices[0]?.message?.content;
       if (firstJson) {
@@ -199,16 +202,18 @@ Additional rules:
         `Generate EXACTLY ${secondBatch} questions from this section of the document. Make sure these are DIFFERENT from any previous questions.`
       );
 
-      const secondResponse = await openai.chat.completions.create({
-        model: "gpt-4o-mini",
-        messages: [
-          { role: "system", content: systemPrompt },
-          { role: "user", content: `${secondPrompt}\n\nDocument content:\n${secondHalfContent}` },
-        ],
-        response_format: { type: "json_object" },
-        temperature: 0.7,
-        max_tokens: 10000,
-      });
+      const secondResponse = await retryOpenAICall(() =>
+        openai.chat.completions.create({
+          model: "gpt-4o-mini",
+          messages: [
+            { role: "system", content: systemPrompt },
+            { role: "user", content: `${secondPrompt}\n\nDocument content:\n${secondHalfContent}` },
+          ],
+          response_format: { type: "json_object" },
+          temperature: 0.7,
+          max_tokens: 10000,
+        })
+      );
 
       const secondJson = secondResponse.choices[0]?.message?.content;
       if (secondJson) {
@@ -224,16 +229,18 @@ Additional rules:
           `Generate EXACTLY ${missing} additional questions from the document. Make sure these are DIFFERENT from any previous questions.`
         );
 
-        const fillResponse = await openai.chat.completions.create({
-          model: "gpt-4o-mini",
-          messages: [
-            { role: "system", content: systemPrompt },
-            { role: "user", content: `${fillPrompt}\n\nDocument content:\n${contentToAnalyze.substring(0, contentLimit)}` },
-          ],
-          response_format: { type: "json_object" },
-          temperature: 0.8, // Slightly higher temperature for variety
-          max_tokens: 4000,
-        });
+        const fillResponse = await retryOpenAICall(() =>
+          openai.chat.completions.create({
+            model: "gpt-4o-mini",
+            messages: [
+              { role: "system", content: systemPrompt },
+              { role: "user", content: `${fillPrompt}\n\nDocument content:\n${contentToAnalyze.substring(0, contentLimit)}` },
+            ],
+            response_format: { type: "json_object" },
+            temperature: 0.8, // Slightly higher temperature for variety
+            max_tokens: 4000,
+          })
+        );
 
         const fillJson = fillResponse.choices[0]?.message?.content;
         if (fillJson) {
@@ -245,16 +252,18 @@ Additional rules:
       }
     } else {
       // Single batch for 15 or fewer questions
-      const aiResponse = await openai.chat.completions.create({
-        model: "gpt-4o-mini",
-        messages: [
-          { role: "system", content: systemPrompt },
-          { role: "user", content: `${userPrompt}\n\nDocument content:\n${contentToAnalyze.substring(0, contentLimit)}` },
-        ],
-        response_format: { type: "json_object" },
-        temperature: 0.7,
-        max_tokens: 10000,
-      });
+      const aiResponse = await retryOpenAICall(() =>
+        openai.chat.completions.create({
+          model: "gpt-4o-mini",
+          messages: [
+            { role: "system", content: systemPrompt },
+            { role: "user", content: `${userPrompt}\n\nDocument content:\n${contentToAnalyze.substring(0, contentLimit)}` },
+          ],
+          response_format: { type: "json_object" },
+          temperature: 0.7,
+          max_tokens: 10000,
+        })
+      );
 
       const jsonText = aiResponse.choices[0]?.message?.content;
       if (!jsonText) {
@@ -275,16 +284,18 @@ Additional rules:
           `Generate EXACTLY ${missing} additional questions from the document. Make sure these are DIFFERENT from any previous questions.`
         );
 
-        const fillResponse = await openai.chat.completions.create({
-          model: "gpt-4o-mini",
-          messages: [
-            { role: "system", content: systemPrompt },
-            { role: "user", content: `${fillPrompt}\n\nDocument content:\n${contentToAnalyze.substring(0, contentLimit)}` },
-          ],
-          response_format: { type: "json_object" },
-          temperature: 0.8, // Slightly higher temperature for variety
-          max_tokens: 4000,
-        });
+        const fillResponse = await retryOpenAICall(() =>
+          openai.chat.completions.create({
+            model: "gpt-4o-mini",
+            messages: [
+              { role: "system", content: systemPrompt },
+              { role: "user", content: `${fillPrompt}\n\nDocument content:\n${contentToAnalyze.substring(0, contentLimit)}` },
+            ],
+            response_format: { type: "json_object" },
+            temperature: 0.8, // Slightly higher temperature for variety
+            max_tokens: 4000,
+          })
+        );
 
         const fillJson = fillResponse.choices[0]?.message?.content;
         if (fillJson) {

@@ -1,7 +1,8 @@
 "use client";
 
-import { useState } from "react";
-import { FileText, Upload, Download, Loader2, FileCheck } from "lucide-react";
+import { useState, useEffect } from "react";
+import { FileText, Upload, Download, Loader2, FileCheck, Shield } from "lucide-react";
+import { getCurrentUser } from "@/lib/auth";
 
 export default function PdfConverterPage() {
   const [file, setFile] = useState<File | null>(null);
@@ -9,6 +10,25 @@ export default function PdfConverterPage() {
   const [error, setError] = useState<string>("");
   const [success, setSuccess] = useState(false);
   const [dragActive, setDragActive] = useState(false);
+  const [hasBypass, setHasBypass] = useState(false);
+  const [checkingBypass, setCheckingBypass] = useState(true);
+
+  // Skontroluj, či používateľ má bypass oprávnenie
+  useEffect(() => {
+    const checkBypassStatus = async () => {
+      try {
+        const response = await fetch('/api/check-pdf-bypass');
+        const data = await response.json();
+        setHasBypass(data.hasBypass);
+      } catch (err) {
+        console.error('Failed to check bypass status:', err);
+      } finally {
+        setCheckingBypass(false);
+      }
+    };
+
+    checkBypassStatus();
+  }, []);
 
   const handleDrag = (e: React.DragEvent) => {
     e.preventDefault();
@@ -110,6 +130,23 @@ export default function PdfConverterPage() {
               Convert your PDF files to editable DOCX documents
             </p>
           </div>
+
+          {/* Bypass Status Banner */}
+          {!checkingBypass && hasBypass && (
+            <div className="mb-6 p-4 bg-green-50 dark:bg-green-900/20 rounded-xl border border-green-200 dark:border-green-800">
+              <div className="flex items-center space-x-3">
+                <Shield className="w-6 h-6 text-green-600 dark:text-green-400" />
+                <div>
+                  <p className="font-semibold text-green-800 dark:text-green-300">
+                    Test Account Active
+                  </p>
+                  <p className="text-sm text-green-700 dark:text-green-400">
+                    You can convert PDFs for free without Stripe payment
+                  </p>
+                </div>
+              </div>
+            </div>
+          )}
 
           {/* Main Card */}
           <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-xl shadow-blue-500/5 dark:shadow-slate-900/20 p-8 border border-gray-200/50 dark:border-slate-700/50">

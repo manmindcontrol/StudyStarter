@@ -45,6 +45,7 @@ export default function ProfilePage() {
 
   // Message states
   const [successMessage, setSuccessMessage] = useState("");
+  const [successHint, setSuccessHint] = useState(""); // Optional hint for success message
   const [errorMessage, setErrorMessage] = useState("");
   const [currentPasswordError, setCurrentPasswordError] = useState("");
 
@@ -76,6 +77,7 @@ export default function ProfilePage() {
     setSaving(true);
     setErrorMessage("");
     setSuccessMessage("");
+    setSuccessHint("");
 
     try {
       const { error } = await supabase
@@ -89,6 +91,13 @@ export default function ProfilePage() {
       if (error) throw error;
 
       setSuccessMessage(t("profile.successProfileUpdated"));
+      setSuccessHint(""); // No hint for profile updates
+
+      // Auto-hide success message after 3 seconds
+      setTimeout(() => {
+        setSuccessMessage("");
+        setSuccessHint("");
+      }, 3000);
 
       // Refresh profile data
       const { data: updatedProfile } = await supabase
@@ -118,6 +127,7 @@ export default function ProfilePage() {
     setSaving(true);
     setErrorMessage("");
     setSuccessMessage("");
+    setSuccessHint("");
     setCurrentPasswordError("");
 
     // Validate passwords
@@ -187,6 +197,7 @@ export default function ProfilePage() {
       }
 
       setSuccessMessage(t("profile.successPasswordChanged"));
+      setSuccessHint(t("profile.successPasswordChangedHint")); // Only show hint for password changes
       setCurrentPassword("");
       setNewPassword("");
       setConfirmPassword("");
@@ -194,6 +205,7 @@ export default function ProfilePage() {
       // Auto-hide success message after 5 seconds
       setTimeout(() => {
         setSuccessMessage("");
+        setSuccessHint("");
       }, 5000);
     } catch (error) {
       setErrorMessage(
@@ -228,13 +240,15 @@ export default function ProfilePage() {
         </div>
         {/* Messages */}
         {successMessage && (
-          <div className="mb-6 bg-green-50 border-2 border-green-300 text-green-800 px-6 py-4 rounded-xl flex items-center space-x-3 shadow-lg shadow-green-500/20 animate-fade-in">
+          <div className="mb-6 bg-green-50 dark:bg-green-900/20 border-2 border-green-300 dark:border-green-700 text-green-800 dark:text-green-300 px-6 py-4 rounded-xl flex items-center space-x-3 shadow-lg shadow-green-500/20 animate-fade-in">
             <CheckCircle className="w-6 h-6 shrink-0" />
             <div>
               <p className="font-semibold">{successMessage}</p>
-              <p className="text-sm text-green-700 mt-0.5">
-                {t("profile.successPasswordChangedHint")}
-              </p>
+              {successHint && (
+                <p className="text-sm text-green-700 dark:text-green-400 mt-0.5">
+                  {successHint}
+                </p>
+              )}
             </div>
           </div>
         )}
@@ -351,7 +365,15 @@ export default function ProfilePage() {
                     </div>
                     <button
                       type="button"
-                      onClick={toggleDarkMode}
+                      onClick={async () => {
+                        await toggleDarkMode();
+                        setSuccessMessage(t("profile.successDarkModeChanged"));
+                        setSuccessHint("");
+                        // Auto-hide success message after 2 seconds
+                        setTimeout(() => {
+                          setSuccessMessage("");
+                        }, 2000);
+                      }}
                       className={`relative inline-flex h-8 w-14 items-center rounded-full transition-colors duration-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 ${
                         isDarkMode ? "bg-blue-600" : "bg-gray-300"
                       }`}

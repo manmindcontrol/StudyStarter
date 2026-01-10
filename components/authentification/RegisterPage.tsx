@@ -12,6 +12,7 @@ import {
   User,
   AlertCircle,
   CheckCircle,
+  X,
 } from "lucide-react";
 import { signInWithGoogle } from "@/lib/auth";
 import { useTranslation } from "@/hooks/useTranslation";
@@ -83,10 +84,8 @@ export default function RegisterPage() {
 
     if (user) {
       setSuccess(true);
-      // Wait a moment and redirect
-      setTimeout(() => {
-        router.push("/dashboard");
-      }, 1500);
+      // Nezatvoriť modal - používateľ musí potvrdiť email
+      // Modal sa zobrazí s informáciou o confirmation emaile
     }
 
     setLoading(false);
@@ -447,6 +446,77 @@ export default function RegisterPage() {
           </Link>
         </motion.div>
       </div>
+
+      {/* Email Confirmation Modal */}
+      {success && (
+        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+          <motion.div
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            className="bg-white dark:bg-slate-800 rounded-2xl shadow-2xl max-w-md w-full p-6 sm:p-8 relative"
+          >
+            {/* Close button */}
+            <button
+              onClick={() => {
+                setSuccess(false);
+                router.push("/login");
+              }}
+              className="absolute top-4 right-4 text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 transition-colors"
+            >
+              <X className="w-6 h-6" />
+            </button>
+
+            {/* Success icon */}
+            <div className="flex justify-center mb-4">
+              <div className="bg-green-100 dark:bg-green-900/30 rounded-full p-3">
+                <CheckCircle className="w-12 h-12 text-green-600 dark:text-green-400" />
+              </div>
+            </div>
+
+            {/* Title */}
+            <h2 className="text-2xl font-bold text-center text-gray-900 dark:text-white mb-2">
+              {t("register.emailSent")}
+            </h2>
+
+            {/* Message */}
+            <p className="text-center text-gray-600 dark:text-gray-300 mb-4">
+              {t("register.emailSentMessage")}
+            </p>
+            <p className="text-center text-sm text-gray-500 dark:text-gray-400 mb-6">
+              <strong className="text-gray-700 dark:text-gray-200">{formData.email}</strong>
+            </p>
+
+            {/* Instructions */}
+            <div className="bg-blue-50 dark:bg-blue-900/20 rounded-lg p-4 mb-6">
+              <p className="text-sm text-gray-700 dark:text-gray-300">
+                {t("register.checkInbox")}
+              </p>
+              <p className="text-sm text-gray-600 dark:text-gray-400 mt-2">
+                {t("register.spamFolder")}
+              </p>
+            </div>
+
+            {/* Action buttons */}
+            <div className="flex flex-col space-y-3">
+              <button
+                onClick={() => {
+                  setSuccess(false);
+                  router.push("/login");
+                }}
+                className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-4 rounded-lg transition-all"
+              >
+                {t("register.goToLogin")}
+              </button>
+              <Link
+                href="/"
+                className="w-full text-center text-gray-600 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-200 py-2 transition-colors"
+              >
+                {t("register.backToHome")}
+              </Link>
+            </div>
+          </motion.div>
+        </div>
+      )}
     </div>
   );
 }

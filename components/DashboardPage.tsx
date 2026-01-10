@@ -260,7 +260,7 @@ export default function DashboardPage() {
 
             {/* Record Lecture */}
             <Link
-              href="/record-lecture"
+              href="/upload-lecture"
               className="bg-linear-to-br from-green-400 to-green-500 hover:from-green-500 hover:to-green-600 dark:bg-linear-to-br dark:from-green-500 dark:to-green-600 dark:hover:from-green-400 dark:hover:to-green-500 rounded-lg sm:rounded-xl md:rounded-2xl shadow-lg sm:shadow-xl p-4 sm:p-6 md:p-8 hover:shadow-xl sm:hover:shadow-2xl transition-all group relative overflow-hidden"
             >
               <div className="relative z-10">

@@ -20,7 +20,9 @@
       "Bash(npm run dev:*)",
       "Bash(if exist \"c:\\\\MojeProjekty\\\\js-app\\\\app\\\\test-error\" rmdir /s /q \"c:\\\\MojeProjekty\\\\js-app\\\\app\\\\test-error\")",
       "Bash(taskkill:*)",
-      "Bash(npx kill-port:*)"
+      "Bash(npx kill-port:*)",
+      "Bash(move \"c:\\\\MojeProjekty\\\\js-app\\\\lib\\\\pdf-bypass.ts\" \"c:\\\\MojeProjekty\\\\js-app\\\\lib\\\\bypass.ts\")",
+      "Bash(ren \"c:\\\\MojeProjekty\\\\js-app\\\\lib\\\\pdf-bypass.ts\" \"bypass.ts\")"
     ],
     "deny": [],
     "ask": []

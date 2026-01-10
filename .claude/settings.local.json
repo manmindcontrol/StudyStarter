@@ -30,7 +30,9 @@
       "Bash(fi)",
       "Bash(if [ -f .env.local ])",
       "Bash(then grep \"SUPABASE_SERVICE_ROLE_KEY\" .env.local)",
-      "Bash(else echo \".env.local file not found\")"
+      "Bash(else echo \".env.local file not found\")",
+      "Bash(npx depcheck:*)",
+      "Bash(powershell -command:*)"
     ],
     "deny": [],
     "ask": []

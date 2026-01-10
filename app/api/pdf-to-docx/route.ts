@@ -14,12 +14,30 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Check if file is PDF
-    if (file.type !== 'application/pdf') {
+    // Validate file properties
+    if (!file.name || typeof file.name !== 'string') {
       return NextResponse.json(
-        { error: 'File must be a PDF' },
+        { error: 'Invalid file: missing or invalid file name' },
         { status: 400 }
       );
+    }
+
+    console.log('Received file:', file.name, 'Type:', file.type, 'Size:', file.size);
+
+    // Check if file is PDF - check both MIME type and file extension
+    const isPdfMimeType = file.type === 'application/pdf';
+    const isPdfExtension = file.name.toLowerCase().endsWith('.pdf');
+
+    if (!isPdfMimeType && !isPdfExtension) {
+      return NextResponse.json(
+        { error: `File must be a PDF. Received type: ${file.type}, name: ${file.name}` },
+        { status: 400 }
+      );
+    }
+
+    // Warn if MIME type is missing but extension is correct
+    if (!isPdfMimeType && isPdfExtension) {
+      console.warn('PDF file has incorrect MIME type:', file.type, 'but extension is .pdf');
     }
 
     // Convert file to buffer
@@ -27,8 +45,17 @@ export async function POST(request: NextRequest) {
     const buffer = Buffer.from(bytes);
 
     // Extract text from PDF
-    const pdfData = await pdf(buffer);
-    const textContent = pdfData.text;
+    let pdfData;
+    let textContent;
+
+    try {
+      pdfData = await pdf(buffer);
+      textContent = pdfData.text;
+      console.log('PDF parsed successfully. Text length:', textContent.length);
+    } catch (pdfError) {
+      console.error('PDF parsing error:', pdfError);
+      throw new Error(`Failed to parse PDF: ${pdfError instanceof Error ? pdfError.message : 'Unknown error'}`);
+    }
 
     // Process text to preserve original structure
     // Keep each line as is to maintain document structure

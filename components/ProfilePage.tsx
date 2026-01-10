@@ -57,6 +57,22 @@ export default function ProfilePage() {
   const [otherReason, setOtherReason] = useState("");
   const [deleting, setDeleting] = useState(false);
 
+  // Usage and subscription states
+  type UsageData = {
+    tierId: string;
+    tierName: string;
+    usage: {
+      pdf_conversions: { used: number; limit: number | null; unlimited: boolean };
+      materials: { used: number; limit: number | null; unlimited: boolean };
+      notes_generations: { used: number; limit: number | null; unlimited: boolean };
+      questions_generations: { used: number; limit: number | null; unlimited: boolean };
+    };
+    periodStart: string;
+    periodEnd: string;
+  };
+  const [usageData, setUsageData] = useState<UsageData | null>(null);
+  const [loadingUsage, setLoadingUsage] = useState(true);
+
   useEffect(() => {
     const loadUserData = async () => {
       const { user, profile } = await getCurrentUser();
@@ -73,10 +89,55 @@ export default function ProfilePage() {
         profile?.display_name || profile?.full_name?.split(" ")[0] || ""
       );
       setLoading(false);
+
+      // Load usage data
+      loadUsageData();
     };
 
     loadUserData();
   }, [router]);
+
+  const loadUsageData = async () => {
+    try {
+      const response = await fetch("/api/usage");
+      if (response.ok) {
+        const data = await response.json();
+        setUsageData(data);
+      }
+    } catch (error) {
+      console.error("Error loading usage data:", error);
+    } finally {
+      setLoadingUsage(false);
+    }
+  };
+
+  const handleUpgrade = () => {
+    router.push("/pricing");
+  };
+
+  const handleManageBilling = async () => {
+    try {
+      const response = await fetch("/api/stripe/billing-portal", {
+        method: "POST",
+      });
+      const data = await response.json();
+
+      if (!response.ok) {
+        // Show error message to user
+        alert(data.error || "Unable to open billing portal. Please make sure you have an active subscription.");
+        return;
+      }
+
+      if (data.url) {
+        window.location.href = data.url;
+      } else {
+        alert("Failed to create billing portal session. Please try again.");
+      }
+    } catch (error) {
+      console.error("Error opening billing portal:", error);
+      alert("An error occurred while opening the billing portal. Please try again.");
+    }
+  };
 
   const handleUpdateProfile = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -344,13 +405,145 @@ export default function ProfilePage() {
                   {t("profile.yourPlan")}
                 </h3>
               </div>
-              <p className="text-xl font-bold mb-2">{t("profile.freePlan")}</p>
-              <p className="text-blue-100 text-sm mb-4">
-                {t("profile.unlimitedAccess")}
-              </p>
-              <button className="w-full bg-white  text-blue-600  hover:bg-blue-50 dark:bg-slate-800 dark:text-gray-300 dark:hover:bg-slate-700 font-semibold py-2 px-4 rounded-lg transition-colors cursor-pointer">
-                {t("profile.upgradePlan")}
-              </button>
+
+              {loadingUsage ? (
+                <div className="text-center py-4">
+                  <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-white mx-auto"></div>
+                </div>
+              ) : (
+                <>
+                  <p className="text-2xl font-bold mb-2 capitalize">
+                    {usageData?.tierName || "Free"} Plan
+                  </p>
+                  <p className="text-blue-100 text-sm mb-4">
+                    {usageData?.tierId === "free" && "Limited access - Upgrade for more features"}
+                    {usageData?.tierId === "basic" && "€4.99/month - Great for regular use"}
+                    {usageData?.tierId === "premium" && "€9.99/month - Unlimited everything"}
+                  </p>
+
+                  {/* Usage Stats */}
+                  {usageData && (
+                    <div className="bg-white/10 rounded-lg p-4 mb-4 space-y-3">
+                      <div className="text-xs font-semibold text-blue-100 mb-2">
+                        Monthly Usage
+                      </div>
+
+                      {/* PDF Conversions */}
+                      <div>
+                        <div className="flex justify-between text-sm mb-1">
+                          <span>PDF Conversions</span>
+                          <span className="font-semibold">
+                            {usageData.usage.pdf_conversions.unlimited
+                              ? "Unlimited"
+                              : `${usageData.usage.pdf_conversions.used}/${usageData.usage.pdf_conversions.limit}`}
+                          </span>
+                        </div>
+                        {!usageData.usage.pdf_conversions.unlimited && (
+                          <div className="w-full bg-white/20 rounded-full h-2">
+                            <div
+                              className="bg-white rounded-full h-2 transition-all duration-300"
+                              style={{
+                                width: `${Math.min(
+                                  (usageData.usage.pdf_conversions.used /
+                                    (usageData.usage.pdf_conversions.limit || 1)) *
+                                    100,
+                                  100
+                                )}%`,
+                              }}
+                            ></div>
+                          </div>
+                        )}
+                      </div>
+
+                      {/* Materials */}
+                      <div>
+                        <div className="flex justify-between text-sm mb-1">
+                          <span>Materials</span>
+                          <span className="font-semibold">
+                            {usageData.usage.materials.unlimited
+                              ? "Unlimited"
+                              : `${usageData.usage.materials.used}/${usageData.usage.materials.limit}`}
+                          </span>
+                        </div>
+                        {!usageData.usage.materials.unlimited && (
+                          <div className="w-full bg-white/20 rounded-full h-2">
+                            <div
+                              className="bg-white rounded-full h-2 transition-all duration-300"
+                              style={{
+                                width: `${Math.min(
+                                  (usageData.usage.materials.used /
+                                    (usageData.usage.materials.limit || 1)) *
+                                    100,
+                                  100
+                                )}%`,
+                              }}
+                            ></div>
+                          </div>
+                        )}
+                      </div>
+
+                      {/* AI Features */}
+                      <div>
+                        <div className="flex justify-between text-sm mb-1">
+                          <span>AI Generations</span>
+                          <span className="font-semibold">
+                            {usageData.usage.notes_generations.unlimited
+                              ? "Unlimited"
+                              : `${
+                                  usageData.usage.notes_generations.used +
+                                  usageData.usage.questions_generations.used
+                                }/${
+                                  (usageData.usage.notes_generations.limit || 0) +
+                                  (usageData.usage.questions_generations.limit || 0)
+                                }`}
+                          </span>
+                        </div>
+                        {!usageData.usage.notes_generations.unlimited && (
+                          <div className="w-full bg-white/20 rounded-full h-2">
+                            <div
+                              className="bg-white rounded-full h-2 transition-all duration-300"
+                              style={{
+                                width: `${Math.min(
+                                  ((usageData.usage.notes_generations.used +
+                                    usageData.usage.questions_generations.used) /
+                                    ((usageData.usage.notes_generations.limit || 0) +
+                                      (usageData.usage.questions_generations.limit || 0) || 1)) *
+                                    100,
+                                  100
+                                )}%`,
+                              }}
+                            ></div>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Action Buttons */}
+                  {usageData?.tierId === "free" ? (
+                    <button
+                      onClick={handleUpgrade}
+                      className="w-full bg-white text-blue-600 hover:bg-blue-50 font-semibold py-2 px-4 rounded-lg transition-colors cursor-pointer"
+                    >
+                      {t("profile.upgradePlan")}
+                    </button>
+                  ) : usageData?.hasStripeSubscription ? (
+                    <button
+                      onClick={handleManageBilling}
+                      className="w-full bg-white/10 hover:bg-white/20 text-white font-semibold py-2 px-4 rounded-lg transition-colors cursor-pointer border border-white/30"
+                    >
+                      Manage Subscription
+                    </button>
+                  ) : (
+                    <button
+                      onClick={handleUpgrade}
+                      className="w-full bg-white/10 hover:bg-white/20 text-white font-semibold py-2 px-4 rounded-lg transition-colors cursor-pointer border border-white/30"
+                    >
+                      Activate Subscription
+                    </button>
+                  )}
+                </>
+              )}
             </div>
           </div>
 

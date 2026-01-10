@@ -1,0 +1,245 @@
+// Usage tracking a limit checking funkcie
+import { createClient } from '@supabase/supabase-js';
+
+// Vytvor Supabase klienta s service role
+const supabaseAdmin = createClient(
+  process.env.NEXT_PUBLIC_SUPABASE_URL!,
+  process.env.SUPABASE_SERVICE_ROLE_KEY!,
+  {
+    auth: {
+      autoRefreshToken: false,
+      persistSession: false,
+    },
+  }
+);
+
+export type UsageType = 'pdf_conversions' | 'materials' | 'notes_generations' | 'questions_generations';
+
+/**
+ * Získa aktuálny usage pre používateľa v tomto mesiaci
+ */
+export async function getCurrentUsage(userId: string) {
+  const periodStart = new Date();
+  periodStart.setDate(1); // Prvý deň mesiaca
+  periodStart.setHours(0, 0, 0, 0);
+
+  const periodEnd = new Date(periodStart);
+  periodEnd.setMonth(periodEnd.getMonth() + 1); // Prvý deň budúceho mesiaca
+
+  // Skús získať existujúci usage záznam
+  let { data: usage, error } = await supabaseAdmin
+    .from('usage_tracking')
+    .select('*')
+    .eq('user_id', userId)
+    .eq('period_start', periodStart.toISOString())
+    .single();
+
+  if (error && error.code !== 'PGRST116') {
+    // PGRST116 = no rows returned
+    console.error('Error fetching usage:', error);
+    throw error;
+  }
+
+  // Ak neexistuje, vytvor nový záznam
+  if (!usage) {
+    const { data: newUsage, error: insertError } = await supabaseAdmin
+      .from('usage_tracking')
+      .insert({
+        user_id: userId,
+        period_start: periodStart.toISOString(),
+        period_end: periodEnd.toISOString(),
+        pdf_conversions_used: 0,
+        materials_uploaded: 0,
+        notes_generations_used: 0,
+        questions_generations_used: 0,
+      })
+      .select()
+      .single();
+
+    if (insertError) {
+      console.error('Error creating usage record:', insertError);
+      throw insertError;
+    }
+
+    usage = newUsage;
+  }
+
+  return usage;
+}
+
+/**
+ * Získa tier a limity pre používateľa
+ */
+export async function getUserTierAndLimits(userId: string) {
+  const { data, error } = await supabaseAdmin
+    .from('user_subscriptions')
+    .select(`
+      tier_id,
+      stripe_customer_id,
+      stripe_subscription_id,
+      subscription_tiers (
+        id,
+        name,
+        pdf_conversions_limit,
+        materials_limit,
+        notes_generations_limit,
+        questions_generations_limit
+      )
+    `)
+    .eq('user_id', userId)
+    .single();
+
+  if (error) {
+    console.error('Error fetching user tier:', error);
+    throw error;
+  }
+
+  return {
+    tierId: data.tier_id,
+    stripeCustomerId: data.stripe_customer_id,
+    stripeSubscriptionId: data.stripe_subscription_id,
+    limits: data.subscription_tiers as any,
+  };
+}
+
+/**
+ * Skontroluje či používateľ môže použiť danú funkciu
+ * @returns { allowed: boolean, reason?: string }
+ */
+export async function checkUsageLimit(
+  userId: string,
+  usageType: UsageType
+): Promise<{ allowed: boolean; reason?: string; current?: number; limit?: number | null }> {
+  try {
+    // Získaj tier a limity
+    const { limits } = await getUserTierAndLimits(userId);
+
+    // Mapovanie usageType na limit field
+    const limitField = `${usageType}_limit` as keyof typeof limits;
+    const limit = limits[limitField];
+
+    // Ak je limit NULL, znamená to unlimited
+    if (limit === null) {
+      return { allowed: true };
+    }
+
+    // Ak je limit 0, funkcia nie je dostupná v tomto tieri
+    if (limit === 0) {
+      return {
+        allowed: false,
+        reason: `This feature is not available in your current plan. Please upgrade to use this feature.`,
+        current: 0,
+        limit: 0,
+      };
+    }
+
+    // Získaj aktuálne použitie
+    const usage = await getCurrentUsage(userId);
+    const usedField = `${usageType}_used` as keyof typeof usage;
+    const used = usage[usedField] as number;
+
+    // Skontroluj či neprekročil limit
+    if (used >= limit) {
+      return {
+        allowed: false,
+        reason: `You have reached your monthly limit of ${limit} for this feature. Please upgrade your plan or wait until next month.`,
+        current: used,
+        limit: limit,
+      };
+    }
+
+    return {
+      allowed: true,
+      current: used,
+      limit: limit,
+    };
+  } catch (error) {
+    console.error('Error checking usage limit:', error);
+    // V prípade chyby povoľ operáciu (fail-open)
+    return { allowed: true };
+  }
+}
+
+/**
+ * Inkrementuje usage counter pre danú funkciu
+ */
+export async function incrementUsage(
+  userId: string,
+  usageType: UsageType
+): Promise<void> {
+  try {
+    const usage = await getCurrentUsage(userId);
+    const usedField = `${usageType}_used`;
+
+    const { error } = await supabaseAdmin
+      .from('usage_tracking')
+      .update({
+        [usedField]: (usage[usedField as keyof typeof usage] as number) + 1,
+      })
+      .eq('id', usage.id);
+
+    if (error) {
+      console.error('Error incrementing usage:', error);
+      throw error;
+    }
+  } catch (error) {
+    console.error('Error in incrementUsage:', error);
+    // Nehádzaj error aby sme nezastavili workflow používateľa
+  }
+}
+
+/**
+ * Získa usage summary pre používateľa (pre zobrazenie v UI)
+ */
+export async function getUsageSummary(userId: string) {
+  try {
+    const [usage, tierInfo] = await Promise.all([
+      getCurrentUsage(userId),
+      getUserTierAndLimits(userId),
+    ]);
+
+    const limits = tierInfo.limits;
+
+    return {
+      tierId: tierInfo.tierId,
+      tierName: limits.name,
+      hasStripeSubscription: !!(tierInfo.stripeCustomerId && tierInfo.stripeSubscriptionId),
+      usage: {
+        pdf_conversions: {
+          used: usage.pdf_conversions_used,
+          limit: limits.pdf_conversions_limit,
+          unlimited: limits.pdf_conversions_limit === null,
+        },
+        materials: {
+          used: usage.materials_uploaded,
+          limit: limits.materials_limit,
+          unlimited: limits.materials_limit === null,
+        },
+        notes_generations: {
+          used: usage.notes_generations_used,
+          limit: limits.notes_generations_limit,
+          unlimited: limits.notes_generations_limit === null,
+        },
+        questions_generations: {
+          used: usage.questions_generations_used,
+          limit: limits.questions_generations_limit,
+          unlimited: limits.questions_generations_limit === null,
+        },
+      },
+      periodStart: usage.period_start,
+      periodEnd: usage.period_end,
+    };
+  } catch (error) {
+    console.error('Error getting usage summary:', error);
+    throw error;
+  }
+}
+
+/**
+ * Helper funkcia na získanie percent usage
+ */
+export function getUsagePercentage(used: number, limit: number | null): number {
+  if (limit === null) return 0; // Unlimited
+  if (limit === 0) return 100; // Not available
+  return Math.min((used / limit) * 100, 100);
+}

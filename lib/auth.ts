@@ -57,10 +57,8 @@ export async function signUp(email: string, password: string, fullName: string) 
 // Prihlásenie existujúceho používateľa
 export async function signIn(email: string, password: string, rememberMe: boolean = false) {
   try {
-    // Vytvor klienta s vhodným storage podľa "remember me" voľby
-    const client = createSupabaseClient(rememberMe)
-
-    const { data, error } = await client.auth.signInWithPassword({
+    // Použij hlavný supabase client
+    const { data, error } = await supabase.auth.signInWithPassword({
       email,
       password,
     })

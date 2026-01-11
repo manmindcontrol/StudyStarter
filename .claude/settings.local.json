@@ -20,7 +20,9 @@
       "Bash(npm run dev:*)",
       "Bash(if exist \"c:\\\\MojeProjekty\\\\js-app\\\\app\\\\test-error\" rmdir /s /q \"c:\\\\MojeProjekty\\\\js-app\\\\app\\\\test-error\")",
       "Bash(taskkill:*)",
-      "Bash(npx kill-port:*)"
+      "Bash(npx kill-port:*)",
+      "Bash(git log:*)",
+      "Bash(git add:*)"
     ],
     "deny": [],
     "ask": []

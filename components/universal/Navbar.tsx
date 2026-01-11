@@ -15,6 +15,7 @@ import {
   ChevronDown,
 } from "lucide-react";
 import { getCurrentUser, signOut } from "@/lib/auth";
+import { supabase } from "@/lib/supabase";
 import type { User } from "@supabase/supabase-js";
 import LanguageSelector from "./LanguageSelector";
 import { useTranslation } from "@/hooks/useTranslation";
@@ -33,6 +34,19 @@ export default function Navbar() {
       setUser(user);
     };
     checkUser();
+
+    // Listen for auth state changes
+    const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event, session) => {
+      if (event === 'SIGNED_IN' && session?.user) {
+        setUser(session.user);
+      } else if (event === 'SIGNED_OUT') {
+        setUser(null);
+      }
+    });
+
+    return () => {
+      subscription.unsubscribe();
+    };
   }, []);
 
   // Close dropdown when clicking outside

@@ -8,13 +8,16 @@ interface SubscriptionModalProps {
   onClose: () => void;
 }
 
-export default function SubscriptionModal({ isOpen, onClose }: SubscriptionModalProps) {
+export default function SubscriptionModal({
+  isOpen,
+  onClose,
+}: SubscriptionModalProps) {
   const [loading, setLoading] = useState(false);
 
   if (!isOpen) return null;
 
   const handleSelectPlan = async (tierId: string) => {
-    if (tierId === 'free') {
+    if (tierId === "free") {
       // User chose to stay on free plan
       onClose();
       return;
@@ -64,7 +67,7 @@ export default function SubscriptionModal({ isOpen, onClose }: SubscriptionModal
 
         {/* Header */}
         <div className="text-center mb-8">
-          <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-blue-600 to-cyan-500 rounded-full mb-4">
+          <div className="inline-flex items-center justify-center w-16 h-16 bg-linear-to-br from-blue-600 to-cyan-500 rounded-full mb-4">
             <Sparkles className="w-8 h-8 text-white" />
           </div>
           <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">
@@ -80,34 +83,46 @@ export default function SubscriptionModal({ isOpen, onClose }: SubscriptionModal
           {/* Free Plan */}
           <div className="border-2 border-gray-200 dark:border-slate-700 rounded-xl p-6 hover:border-blue-300 dark:hover:border-blue-600 transition-all">
             <div className="text-center mb-4">
-              <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-2">Free</h3>
+              <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-2">
+                Free
+              </h3>
               <div className="text-3xl font-bold text-gray-900 dark:text-white">
                 €0
-                <span className="text-sm font-normal text-gray-500 dark:text-gray-400">/month</span>
+                <span className="text-sm font-normal text-gray-500 dark:text-gray-400">
+                  /month
+                </span>
               </div>
             </div>
 
             <ul className="space-y-3 mb-6">
               <li className="flex items-start text-sm">
-                <Check className="w-5 h-5 text-green-500 mr-2 flex-shrink-0 mt-0.5" />
-                <span className="text-gray-700 dark:text-gray-300">1 study material (lifetime)</span>
+                <Check className="w-5 h-5 text-green-500 mr-2 shrink-0 mt-0.5" />
+                <span className="text-gray-700 dark:text-gray-300">
+                  1 study material (lifetime)
+                </span>
               </li>
               <li className="flex items-start text-sm">
-                <Check className="w-5 h-5 text-green-500 mr-2 flex-shrink-0 mt-0.5" />
-                <span className="text-gray-700 dark:text-gray-300">1 AI note generation (lifetime)</span>
+                <Check className="w-5 h-5 text-green-500 mr-2 shrink-0 mt-0.5" />
+                <span className="text-gray-700 dark:text-gray-300">
+                  1 AI note generation (lifetime)
+                </span>
               </li>
               <li className="flex items-start text-sm">
-                <Check className="w-5 h-5 text-green-500 mr-2 flex-shrink-0 mt-0.5" />
-                <span className="text-gray-700 dark:text-gray-300">1 AI quiz generation (lifetime)</span>
+                <Check className="w-5 h-5 text-green-500 mr-2 shrink-0 mt-0.5" />
+                <span className="text-gray-700 dark:text-gray-300">
+                  1 AI quiz generation (lifetime)
+                </span>
               </li>
               <li className="flex items-start text-sm">
-                <X className="w-5 h-5 text-red-500 mr-2 flex-shrink-0 mt-0.5" />
-                <span className="text-gray-500 dark:text-gray-400">PDF conversions (€0.50 each)</span>
+                <X className="w-5 h-5 text-red-500 mr-2 shrink-0 mt-0.5" />
+                <span className="text-gray-500 dark:text-gray-400">
+                  PDF conversions (€0.50 each)
+                </span>
               </li>
             </ul>
 
             <button
-              onClick={() => handleSelectPlan('free')}
+              onClick={() => handleSelectPlan("free")}
               disabled={loading}
               className="w-full bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 text-gray-800 dark:text-gray-200 font-semibold py-3 px-6 rounded-xl transition-colors disabled:opacity-50"
             >
@@ -124,41 +139,55 @@ export default function SubscriptionModal({ isOpen, onClose }: SubscriptionModal
             <div className="text-center mb-4">
               <div className="flex items-center justify-center mb-2">
                 <Zap className="w-6 h-6 text-blue-600 dark:text-blue-400 mr-2" />
-                <h3 className="text-xl font-bold text-gray-900 dark:text-white">Basic</h3>
+                <h3 className="text-xl font-bold text-gray-900 dark:text-white">
+                  Basic
+                </h3>
               </div>
               <div className="text-3xl font-bold text-gray-900 dark:text-white">
                 €4.99
-                <span className="text-sm font-normal text-gray-500 dark:text-gray-400">/month</span>
+                <span className="text-sm font-normal text-gray-500 dark:text-gray-400">
+                  /month
+                </span>
               </div>
             </div>
 
             <ul className="space-y-3 mb-6">
               <li className="flex items-start text-sm">
-                <Check className="w-5 h-5 text-green-500 mr-2 flex-shrink-0 mt-0.5" />
-                <span className="text-gray-700 dark:text-gray-300"><strong>20 PDF conversions</strong>/month</span>
+                <Check className="w-5 h-5 text-green-500 mr-2 shrink-0 mt-0.5" />
+                <span className="text-gray-700 dark:text-gray-300">
+                  <strong>20 PDF conversions</strong>/month
+                </span>
               </li>
               <li className="flex items-start text-sm">
-                <Check className="w-5 h-5 text-green-500 mr-2 flex-shrink-0 mt-0.5" />
-                <span className="text-gray-700 dark:text-gray-300"><strong>10 materials</strong>/month</span>
+                <Check className="w-5 h-5 text-green-500 mr-2 shrink-0 mt-0.5" />
+                <span className="text-gray-700 dark:text-gray-300">
+                  <strong>10 materials</strong>/month
+                </span>
               </li>
               <li className="flex items-start text-sm">
-                <Check className="w-5 h-5 text-green-500 mr-2 flex-shrink-0 mt-0.5" />
-                <span className="text-gray-700 dark:text-gray-300"><strong>10 AI generations</strong>/month</span>
+                <Check className="w-5 h-5 text-green-500 mr-2 shrink-0 mt-0.5" />
+                <span className="text-gray-700 dark:text-gray-300">
+                  <strong>10 AI generations</strong>/month
+                </span>
               </li>
               <li className="flex items-start text-sm">
-                <Check className="w-5 h-5 text-green-500 mr-2 flex-shrink-0 mt-0.5" />
-                <span className="text-gray-700 dark:text-gray-300">Lecture uploads</span>
+                <Check className="w-5 h-5 text-green-500 mr-2 shrink-0 mt-0.5" />
+                <span className="text-gray-700 dark:text-gray-300">
+                  Lecture uploads
+                </span>
               </li>
               <li className="flex items-start text-sm">
-                <Check className="w-5 h-5 text-green-500 mr-2 flex-shrink-0 mt-0.5" />
-                <span className="text-gray-700 dark:text-gray-300">Advanced chatbot</span>
+                <Check className="w-5 h-5 text-green-500 mr-2 shrink-0 mt-0.5" />
+                <span className="text-gray-700 dark:text-gray-300">
+                  Advanced chatbot
+                </span>
               </li>
             </ul>
 
             <button
-              onClick={() => handleSelectPlan('basic')}
+              onClick={() => handleSelectPlan("basic")}
               disabled={loading}
-              className="w-full bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-700 hover:to-cyan-700 text-white font-semibold py-3 px-6 rounded-xl transition-all duration-300 shadow-lg shadow-blue-500/30 hover:shadow-xl hover:shadow-blue-500/40 disabled:opacity-50"
+              className="w-full bg-linear-to-r from-blue-600 to-cyan-600 hover:from-blue-700 hover:to-cyan-700 text-white font-semibold py-3 px-6 rounded-xl transition-all duration-300 shadow-lg shadow-blue-500/30 hover:shadow-xl hover:shadow-blue-500/40 disabled:opacity-50"
             >
               {loading ? "Processing..." : "Start with Basic"}
             </button>
@@ -169,41 +198,55 @@ export default function SubscriptionModal({ isOpen, onClose }: SubscriptionModal
             <div className="text-center mb-4">
               <div className="flex items-center justify-center mb-2">
                 <Crown className="w-6 h-6 text-purple-600 dark:text-purple-400 mr-2" />
-                <h3 className="text-xl font-bold text-gray-900 dark:text-white">Premium</h3>
+                <h3 className="text-xl font-bold text-gray-900 dark:text-white">
+                  Premium
+                </h3>
               </div>
               <div className="text-3xl font-bold text-gray-900 dark:text-white">
                 €9.99
-                <span className="text-sm font-normal text-gray-500 dark:text-gray-400">/month</span>
+                <span className="text-sm font-normal text-gray-500 dark:text-gray-400">
+                  /month
+                </span>
               </div>
             </div>
 
             <ul className="space-y-3 mb-6">
               <li className="flex items-start text-sm">
-                <Check className="w-5 h-5 text-green-500 mr-2 flex-shrink-0 mt-0.5" />
-                <span className="text-gray-700 dark:text-gray-300"><strong>Unlimited</strong> PDF conversions</span>
+                <Check className="w-5 h-5 text-green-500 mr-2 shrink-0 mt-0.5" />
+                <span className="text-gray-700 dark:text-gray-300">
+                  <strong>Unlimited</strong> PDF conversions
+                </span>
               </li>
               <li className="flex items-start text-sm">
-                <Check className="w-5 h-5 text-green-500 mr-2 flex-shrink-0 mt-0.5" />
-                <span className="text-gray-700 dark:text-gray-300"><strong>Unlimited</strong> materials</span>
+                <Check className="w-5 h-5 text-green-500 mr-2 shrink-0 mt-0.5" />
+                <span className="text-gray-700 dark:text-gray-300">
+                  <strong>Unlimited</strong> materials
+                </span>
               </li>
               <li className="flex items-start text-sm">
-                <Check className="w-5 h-5 text-green-500 mr-2 flex-shrink-0 mt-0.5" />
-                <span className="text-gray-700 dark:text-gray-300"><strong>Unlimited</strong> AI generations</span>
+                <Check className="w-5 h-5 text-green-500 mr-2 shrink-0 mt-0.5" />
+                <span className="text-gray-700 dark:text-gray-300">
+                  <strong>Unlimited</strong> AI generations
+                </span>
               </li>
               <li className="flex items-start text-sm">
-                <Check className="w-5 h-5 text-green-500 mr-2 flex-shrink-0 mt-0.5" />
-                <span className="text-gray-700 dark:text-gray-300">Priority support</span>
+                <Check className="w-5 h-5 text-green-500 mr-2 shrink-0 mt-0.5" />
+                <span className="text-gray-700 dark:text-gray-300">
+                  Priority support
+                </span>
               </li>
               <li className="flex items-start text-sm">
-                <Check className="w-5 h-5 text-green-500 mr-2 flex-shrink-0 mt-0.5" />
-                <span className="text-gray-700 dark:text-gray-300">Advanced AI features</span>
+                <Check className="w-5 h-5 text-green-500 mr-2 shrink-0 mt-0.5" />
+                <span className="text-gray-700 dark:text-gray-300">
+                  Advanced AI features
+                </span>
               </li>
             </ul>
 
             <button
-              onClick={() => handleSelectPlan('premium')}
+              onClick={() => handleSelectPlan("premium")}
               disabled={loading}
-              className="w-full bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white font-semibold py-3 px-6 rounded-xl transition-all duration-300 shadow-lg shadow-purple-500/30 hover:shadow-xl hover:shadow-purple-500/40 disabled:opacity-50"
+              className="w-full bg-linear-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white font-semibold py-3 px-6 rounded-xl transition-all duration-300 shadow-lg shadow-purple-500/30 hover:shadow-xl hover:shadow-purple-500/40 disabled:opacity-50"
             >
               {loading ? "Processing..." : "Start with Premium"}
             </button>

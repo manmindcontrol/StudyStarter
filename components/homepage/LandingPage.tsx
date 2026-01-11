@@ -5,9 +5,21 @@ import { BookOpen, Mic, FileText, Brain } from "lucide-react";
 import { motion } from "framer-motion";
 import Image from "next/image";
 import { useTranslation } from "@/hooks/useTranslation";
+import { useEffect, useState } from "react";
+import { supabase } from "@/lib/supabase";
 
 export default function LandingPage() {
   const { t } = useTranslation();
+  const [isLoggedIn, setIsLoggedIn] = useState<boolean | null>(null);
+
+  useEffect(() => {
+    const checkAuth = async () => {
+      const { data: { user } } = await supabase.auth.getUser();
+      setIsLoggedIn(!!user);
+    };
+    checkAuth();
+  }, []);
+
   return (
     <section className="relative bg-linear-to-b from-blue-50 via-blue-50 to-cyan-50 py-24 overflow-hidden ">
       {/* Dekoratívne pozadie */}
@@ -86,7 +98,7 @@ export default function LandingPage() {
                 whileTap={{ scale: 0.95 }}
               >
                 <Link
-                  href="/register"
+                  href={isLoggedIn ? "/dashboard" : "/register"}
                   className="group btn-primary text-lg bg-linear-to-r from-blue-600 to-cyan-600 px-8 py-4 rounded-xl text-white hover:from-blue-700 hover:to-cyan-700 transition-all duration-300 shadow-xl shadow-blue-500/30 hover:shadow-2xl hover:shadow-blue-500/40 font-semibold inline-block"
                 >
                   <span className="flex items-center justify-center space-x-2">

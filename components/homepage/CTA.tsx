@@ -2,9 +2,21 @@
 import Link from "next/link";
 import { motion } from "framer-motion";
 import { useTranslation } from "@/hooks/useTranslation";
+import { useEffect, useState } from "react";
+import { supabase } from "@/lib/supabase";
 
 export default function CTA() {
   const { t } = useTranslation();
+  const [isLoggedIn, setIsLoggedIn] = useState<boolean | null>(null);
+
+  useEffect(() => {
+    const checkAuth = async () => {
+      const { data: { user } } = await supabase.auth.getUser();
+      setIsLoggedIn(!!user);
+    };
+    checkAuth();
+  }, []);
+
   return (
     <section className="relative py-24 bg-linear-to-br from-slate-900 via-blue-900 to-slate-900 overflow-hidden">
       {/* Dekoratívne pozadie */}
@@ -129,7 +141,7 @@ export default function CTA() {
 
           <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
             <Link
-              href="/register"
+              href={isLoggedIn ? "/dashboard" : "/register"}
               className="group inline-flex items-center space-x-2 bg-white text-blue-600 font-bold py-4 px-10 rounded-xl hover:bg-gray-50 transition-all duration-300 text-lg shadow-2xl hover:shadow-white/20 hover:scale-105"
             >
               <span>{t("cta.startFree")}</span>

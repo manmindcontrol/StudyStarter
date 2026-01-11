@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { getCurrentUser } from "@/lib/auth";
 import { supabase } from "@/lib/supabase";
@@ -23,6 +23,7 @@ import type { User } from "@supabase/supabase-js";
 import { useAutoLogout } from "@/hooks/useAutoLogout";
 import { useTheme } from "@/contexts/ThemeContext";
 import { useTranslation } from "@/hooks/useTranslation";
+import SubscriptionModal from "@/components/SubscriptionModal";
 
 type UserProfile = {
   id: string;
@@ -55,6 +56,7 @@ type Lecture = {
 
 export default function DashboardPage() {
   const router = useRouter();
+  const searchParams = useSearchParams();
 
   // Enable automatic logout on inactivity
   useAutoLogout();
@@ -72,8 +74,19 @@ export default function DashboardPage() {
   const [lectures, setLectures] = useState<Lecture[]>([]);
   const [materialsOpen, setMaterialsOpen] = useState(false);
   const [recordingsOpen, setRecordingsOpen] = useState(false);
+  const [showSubscriptionModal, setShowSubscriptionModal] = useState(false);
   const { isDarkMode, toggleDarkMode } = useTheme();
   const { t } = useTranslation();
+
+  // Check if we should show subscription modal from URL params
+  useEffect(() => {
+    const showModal = searchParams?.get('showSubscriptionModal');
+    if (showModal === 'true') {
+      setShowSubscriptionModal(true);
+      // Clean up URL
+      window.history.replaceState({}, '', '/dashboard');
+    }
+  }, [searchParams]);
 
   useEffect(() => {
     let isMounted = true;
@@ -260,7 +273,7 @@ export default function DashboardPage() {
 
             {/* Record Lecture */}
             <Link
-              href="/record-lecture"
+              href="/upload-lecture"
               className="bg-linear-to-br from-green-400 to-green-500 hover:from-green-500 hover:to-green-600 dark:bg-linear-to-br dark:from-green-500 dark:to-green-600 dark:hover:from-green-400 dark:hover:to-green-500 rounded-lg sm:rounded-xl md:rounded-2xl shadow-lg sm:shadow-xl p-4 sm:p-6 md:p-8 hover:shadow-xl sm:hover:shadow-2xl transition-all group relative overflow-hidden"
             >
               <div className="relative z-10">
@@ -514,6 +527,12 @@ export default function DashboardPage() {
           </div>
         </div>
       </div>
+
+      {/* Subscription Modal */}
+      <SubscriptionModal
+        isOpen={showSubscriptionModal}
+        onClose={() => setShowSubscriptionModal(false)}
+      />
     </div>
   );
 }

@@ -113,6 +113,20 @@
     "deleteMaterialConfirm": "Möchten Sie dieses Material wirklich löschen?",
     "errorDeletingMaterial": "Fehler beim Löschen des Materials"
   },
+  "uploadLecture": {
+    "title": "Vorlesung hochladen",
+    "subtitle": "Wählen Sie, wie Sie Ihre Vorlesung hochladen möchten",
+    "recordRealTime": "In Echtzeit aufnehmen",
+    "recordRealTimeDesc": "Starten Sie jetzt die Aufnahme Ihrer Vorlesung mit Mikrofon und Live-Transkription",
+    "realTimeBenefit1": "Live-Transkription während der Aufnahme",
+    "realTimeBenefit2": "Sofortiges Feedback",
+    "realTimeBenefit3": "Automatische Textformatierung",
+    "uploadRecorded": "Aufgenommene Vorlesung hochladen",
+    "uploadRecordedDesc": "Laden Sie eine Audiodatei von Ihrem Computer hoch und lassen Sie AI den Inhalt transkribieren",
+    "uploadBenefit1": "Unterstützt MP3-, WAV-, M4A-Formate",
+    "uploadBenefit2": "Hintergrundverarbeitung",
+    "uploadBenefit3": "Präzise AI-Transkription"
+  },
   "recordLecture": {
     "backToDashboard": "Zurück zum Dashboard",
     "title": "Vorlesung aufnehmen",
@@ -194,7 +208,12 @@
     "errorInvalidEmail": "Ungültiges E-Mail-Format",
     "errorPasswordLength": "Passwort muss mindestens 6 Zeichen lang sein",
     "errorPasswordMismatch": "Passwörter stimmen nicht überein",
-    "errorGoogleSignIn": "Fehler bei der Anmeldung mit Google"
+    "errorGoogleSignIn": "Fehler bei der Anmeldung mit Google",
+    "emailSent": "E-Mail gesendet!",
+    "emailSentMessage": "Wir haben eine Bestätigungs-E-Mail gesendet an:",
+    "checkInbox": "Bitte überprüfen Sie Ihr Postfach und klicken Sie auf den Bestätigungslink, um Ihre Registrierung abzuschließen.",
+    "spamFolder": "Wenn Sie die E-Mail nicht sehen, überprüfen Sie Ihren Spam-Ordner.",
+    "goToLogin": "Zur Anmeldung gehen"
   },
   "profile": {
     "title": "Mein Profil",
@@ -226,6 +245,7 @@
     "unlimitedAccess": "Unbegrenzter Zugang zu Grundfunktionen",
     "upgradePlan": "Plan upgraden",
     "successProfileUpdated": "Profil erfolgreich aktualisiert!",
+    "successDarkModeChanged": "Design erfolgreich geändert!",
     "successPasswordChanged": "Passwort erfolgreich geändert!",
     "successPasswordChangedHint": "Sie können jetzt Ihr neues Passwort zur Anmeldung verwenden.",
     "errorCurrentPassword": "Bitte geben Sie Ihr aktuelles Passwort ein",

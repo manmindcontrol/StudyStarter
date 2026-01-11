@@ -82,7 +82,7 @@ export default function Navbar() {
   };
 
   return (
-    <nav className="sticky top-0 z-50 bg-white dark:bg-slate-900 border-b border-gray-200 dark:border-slate-700">
+    <nav className="sticky top-0 z-50 bg-white dark:bg-slate-800/80 border-b border-gray-200 dark:border-slate-700 backdrop-blur-2xl">
       <div className="container-custom">
         <div className="flex justify-between items-center h-18">
           {/* Logo and name */}
@@ -144,9 +144,7 @@ export default function Navbar() {
                   className="flex items-center space-x-2 text-gray-700 dark:text-gray-200 hover:text-blue-600 dark:hover:text-blue-400 transition-all duration-200 font-medium px-4 py-2 rounded-lg hover:bg-blue-50 dark:hover:bg-slate-800"
                   aria-label="User menu"
                 >
-                  <div className="w-5 h-8  flex items-center justify-center text-white font-semibold shadow-md">
-                    <UserIcon className="w-5 h-5" />
-                  </div>
+                  <UserIcon className="w-5 h-5" />
                   <ChevronDown
                     className={`w-4 h-4 transition-transform duration-200 ${
                       profileDropdownOpen ? "rotate-180" : ""

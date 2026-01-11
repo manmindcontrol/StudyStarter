@@ -113,6 +113,20 @@
     "deleteMaterialConfirm": "Naozaj chcete odstrániť tento materiál?",
     "errorDeletingMaterial": "Chyba pri odstraňovaní materiálu"
   },
+  "uploadLecture": {
+    "title": "Nahrať prednášku",
+    "subtitle": "Vyberte si spôsob, ako chcete nahrať prednášku",
+    "recordRealTime": "Nahrávať v reálnom čase",
+    "recordRealTimeDesc": "Začnite nahrávať prednášku teraz pomocou mikrofónu s live prepisom",
+    "realTimeBenefit1": "Live prepis počas nahrávania",
+    "realTimeBenefit2": "Okamžitá spätná väzba",
+    "realTimeBenefit3": "Automatické formátovanie textu",
+    "uploadRecorded": "Nahrať už nahratú prednášku",
+    "uploadRecordedDesc": "Nahrajte audio súbor z vašich súborov a nechajte AI prepísať obsah",
+    "uploadBenefit1": "Podporuje MP3, WAV, M4A formáty",
+    "uploadBenefit2": "Spracovanie v pozadí",
+    "uploadBenefit3": "Presný AI prepis"
+  },
   "recordLecture": {
     "backToDashboard": "Späť na Dashboard",
     "title": "Nahrať prednášku",
@@ -194,7 +208,12 @@
     "errorInvalidEmail": "Nesprávny formát emailu",
     "errorPasswordLength": "Heslo musí mať aspoň 6 znakov",
     "errorPasswordMismatch": "Heslá sa nezhodujú",
-    "errorGoogleSignIn": "Chyba pri prihlasovaní cez Google"
+    "errorGoogleSignIn": "Chyba pri prihlasovaní cez Google",
+    "emailSent": "Email bol odoslaný!",
+    "emailSentMessage": "Odoslali sme vám potvrdzovací email na adresu:",
+    "checkInbox": "Prosím, skontrolujte si doručenú poštu a kliknite na potvrdzovací odkaz na dokončenie registrácie.",
+    "spamFolder": "Ak email nevidíte, skontrolujte si aj priečinok spam.",
+    "goToLogin": "Prejsť na prihlásenie"
   },
   "profile": {
     "title": "Môj profil",
@@ -226,6 +245,7 @@
     "unlimitedAccess": "Neobmedzený prístup k základným funkciám",
     "upgradePlan": "Vylepšiť plán",
     "successProfileUpdated": "Profil úspešne aktualizovaný!",
+    "successDarkModeChanged": "Téma úspešne zmenená!",
     "successPasswordChanged": "Heslo úspešne zmenené!",
     "successPasswordChangedHint": "Teraz môžete použiť nové heslo na prihlásenie.",
     "errorCurrentPassword": "Prosím zadajte aktuálne heslo",
@@ -234,7 +254,23 @@
     "errorPasswordSame": "Nové heslo musí byť odlišné od aktuálneho hesla",
     "errorSessionExpired": "Relácia vypršala. Prosím prihláste sa znovu.",
     "errorUpdatingProfile": "Pri aktualizácii profilu nastala chyba",
-    "errorChangingPassword": "Pri zmene hesla nastala chyba"
+    "errorChangingPassword": "Pri zmene hesla nastala chyba",
+    "deleteAccount": "Odstrániť účet",
+    "deleteAccountTitle": "Odstrániť účet",
+    "deleteAccountConfirm": "Ste si istý, že naozaj chcete odstrániť tento účet?",
+    "deleteAccountWarning": "Táto akcia je permanentná a nemôže byť vrátená späť. Všetky vaše údaje budú natrvalo odstránené.",
+    "deleteAccountReason": "Prosím, povedzte nám prečo odstraňujete účet (voliteľné):",
+    "reasonNotUseful": "Aplikácia nie je užitočná",
+    "reasonTooComplicated": "Príliš komplikované na používanie",
+    "reasonFoundAlternative": "Našiel/la som lepšiu alternatívu",
+    "reasonPrivacyConcerns": "Obavy o súkromie",
+    "reasonTooExpensive": "Príliš drahé",
+    "reasonOther": "Iné",
+    "cancelDelete": "Zrušiť",
+    "confirmDelete": "Áno, odstrániť účet",
+    "deletingAccount": "Odstraňujem účet...",
+    "accountDeleted": "Účet bol úspešne odstránený",
+    "errorDeletingAccount": "Chyba pri odstraňovaní účtu"
   },
   "materialView": {
     "materialNotFound": "Materiál nenájdený",

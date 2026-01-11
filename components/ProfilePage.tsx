@@ -13,8 +13,6 @@ import {
   XCircle,
   Moon,
   Sun,
-  Trash2,
-  AlertTriangle,
 } from "lucide-react";
 import type { User as SupabaseUser } from "@supabase/supabase-js";
 import { useTheme } from "@/contexts/ThemeContext";
@@ -47,15 +45,8 @@ export default function ProfilePage() {
 
   // Message states
   const [successMessage, setSuccessMessage] = useState("");
-  const [successHint, setSuccessHint] = useState(""); // Optional hint for success message
   const [errorMessage, setErrorMessage] = useState("");
   const [currentPasswordError, setCurrentPasswordError] = useState("");
-
-  // Delete account modal states
-  const [showDeleteModal, setShowDeleteModal] = useState(false);
-  const [deleteReasons, setDeleteReasons] = useState<string[]>([]);
-  const [otherReason, setOtherReason] = useState("");
-  const [deleting, setDeleting] = useState(false);
 
   useEffect(() => {
     const loadUserData = async () => {
@@ -85,7 +76,6 @@ export default function ProfilePage() {
     setSaving(true);
     setErrorMessage("");
     setSuccessMessage("");
-    setSuccessHint("");
 
     try {
       const { error } = await supabase
@@ -99,13 +89,6 @@ export default function ProfilePage() {
       if (error) throw error;
 
       setSuccessMessage(t("profile.successProfileUpdated"));
-      setSuccessHint(""); // No hint for profile updates
-
-      // Auto-hide success message after 3 seconds
-      setTimeout(() => {
-        setSuccessMessage("");
-        setSuccessHint("");
-      }, 3000);
 
       // Refresh profile data
       const { data: updatedProfile } = await supabase
@@ -128,63 +111,6 @@ export default function ProfilePage() {
     }
   };
 
-  const handleDeleteReasonToggle = (reason: string) => {
-    if (deleteReasons.includes(reason)) {
-      setDeleteReasons(deleteReasons.filter((r) => r !== reason));
-    } else {
-      setDeleteReasons([...deleteReasons, reason]);
-    }
-  };
-
-  const handleDeleteAccount = async () => {
-    if (!user) return;
-
-    setDeleting(true);
-    setErrorMessage("");
-
-    try {
-      // Call API to delete account
-      const response = await fetch("/api/auth/delete-account", {
-        method: "DELETE",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          userId: user.id,
-          reasons: deleteReasons,
-          otherReason: deleteReasons.includes("other") ? otherReason : "",
-        }),
-      });
-
-      const data = await response.json();
-
-      if (!response.ok) {
-        setErrorMessage(data.error || t("profile.errorDeletingAccount"));
-        setDeleting(false);
-        return;
-      }
-
-      // Sign out user
-      await supabase.auth.signOut();
-
-      // Clear all local storage to ensure clean state
-      if (typeof window !== 'undefined') {
-        localStorage.clear();
-        sessionStorage.clear();
-      }
-
-      // Force a hard redirect to home page (this will refresh the app)
-      window.location.href = "/";
-    } catch (error) {
-      setErrorMessage(
-        error instanceof Error
-          ? error.message
-          : t("profile.errorDeletingAccount")
-      );
-      setDeleting(false);
-    }
-  };
-
   const handleChangePassword = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!user) return;
@@ -192,7 +118,6 @@ export default function ProfilePage() {
     setSaving(true);
     setErrorMessage("");
     setSuccessMessage("");
-    setSuccessHint("");
     setCurrentPasswordError("");
 
     // Validate passwords
@@ -262,7 +187,6 @@ export default function ProfilePage() {
       }
 
       setSuccessMessage(t("profile.successPasswordChanged"));
-      setSuccessHint(t("profile.successPasswordChangedHint")); // Only show hint for password changes
       setCurrentPassword("");
       setNewPassword("");
       setConfirmPassword("");
@@ -270,7 +194,6 @@ export default function ProfilePage() {
       // Auto-hide success message after 5 seconds
       setTimeout(() => {
         setSuccessMessage("");
-        setSuccessHint("");
       }, 5000);
     } catch (error) {
       setErrorMessage(
@@ -305,15 +228,13 @@ export default function ProfilePage() {
         </div>
         {/* Messages */}
         {successMessage && (
-          <div className="mb-6 bg-green-50 dark:bg-green-900/20 border-2 border-green-300 dark:border-green-700 text-green-800 dark:text-green-300 px-6 py-4 rounded-xl flex items-center space-x-3 shadow-lg shadow-green-500/20 animate-fade-in">
+          <div className="mb-6 bg-green-50 border-2 border-green-300 text-green-800 px-6 py-4 rounded-xl flex items-center space-x-3 shadow-lg shadow-green-500/20 animate-fade-in">
             <CheckCircle className="w-6 h-6 shrink-0" />
             <div>
               <p className="font-semibold">{successMessage}</p>
-              {successHint && (
-                <p className="text-sm text-green-700 dark:text-green-400 mt-0.5">
-                  {successHint}
-                </p>
-              )}
+              <p className="text-sm text-green-700 mt-0.5">
+                {t("profile.successPasswordChangedHint")}
+              </p>
             </div>
           </div>
         )}
@@ -430,15 +351,7 @@ export default function ProfilePage() {
                     </div>
                     <button
                       type="button"
-                      onClick={async () => {
-                        await toggleDarkMode();
-                        setSuccessMessage(t("profile.successDarkModeChanged"));
-                        setSuccessHint("");
-                        // Auto-hide success message after 2 seconds
-                        setTimeout(() => {
-                          setSuccessMessage("");
-                        }, 2000);
-                      }}
+                      onClick={toggleDarkMode}
                       className={`relative inline-flex h-8 w-14 items-center rounded-full transition-colors duration-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 ${
                         isDarkMode ? "bg-blue-600" : "bg-gray-300"
                       }`}
@@ -547,137 +460,12 @@ export default function ProfilePage() {
                   }
                   className="w-full bg-linear-to-r from-blue-600 to-cyan-600 hover:from-blue-700 hover:to-cyan-700 text-white font-semibold py-3 px-6 rounded-lg transition-all duration-300 shadow-lg shadow-blue-500/30 hover:shadow-xl hover:shadow-blue-500/40 disabled:opacity-50 disabled:cursor-not-allowed"
                 >
-                  {saving
-                    ? t("profile.changingPassword")
-                    : t("profile.changePasswordButton")}
+                  {saving ? t("profile.changingPassword") : t("profile.changePasswordButton")}
                 </button>
               </form>
             </div>
-
-            {/* Danger Zone - Delete Account */}
-            <div className="bg-white dark:bg-red-900/10 rounded-xl shadow-sm p-6 border dark:border-red-900/50">
-              <div className="flex items-center space-x-3 mb-4">
-                <AlertTriangle className="w-6 h-6 text-red-600 dark:text-red-400" />
-                <h2 className="text-xl font-semibold text-gray-900 dark:text-red-300">
-                  {t("profile.deleteAccount")}
-                </h2>
-              </div>
-              <p className="text-sm text-gray-700 dark:text-red-300 mb-4">
-                {t("profile.deleteAccountWarning")}
-              </p>
-              <button
-                type="button"
-                onClick={() => setShowDeleteModal(true)}
-                className="w-full bg-red-600 hover:bg-red-700 text-white font-semibold py-3 px-6 rounded-lg transition-all duration-300 shadow-lg shadow-red-500/30 hover:shadow-red-500/40 flex items-center justify-center space-x-2 cursor-pointer"
-              >
-                <Trash2 className="w-5 h-5" />
-                <span>{t("profile.deleteAccount")}</span>
-              </button>
-            </div>
           </div>
         </div>
-
-        {/* Delete Account Modal */}
-        {showDeleteModal && (
-          <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-            <div className="bg-white dark:bg-slate-800 rounded-xl shadow-2xl max-w-md w-full p-6 animate-fade-in">
-              <div className="flex items-center space-x-3 mb-4">
-                <AlertTriangle className="w-8 h-8 text-red-600 dark:text-red-400" />
-                <h3 className="text-2xl font-bold text-gray-900 dark:text-white">
-                  {t("profile.deleteAccountTitle")}
-                </h3>
-              </div>
-
-              <p className="text-gray-700 dark:text-gray-300 mb-4">
-                {t("profile.deleteAccountConfirm")}
-              </p>
-
-              <div className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg p-4 mb-4">
-                <p className="text-sm text-red-800 dark:text-red-300 font-medium">
-                  {t("profile.deleteAccountWarning")}
-                </p>
-              </div>
-
-              <div className="mb-6">
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-3">
-                  {t("profile.deleteAccountReason")}
-                </label>
-                <div className="space-y-2">
-                  {[
-                    { id: "not-useful", label: t("profile.reasonNotUseful") },
-                    {
-                      id: "too-complicated",
-                      label: t("profile.reasonTooComplicated"),
-                    },
-                    {
-                      id: "found-alternative",
-                      label: t("profile.reasonFoundAlternative"),
-                    },
-                    {
-                      id: "privacy-concerns",
-                      label: t("profile.reasonPrivacyConcerns"),
-                    },
-                    {
-                      id: "too-expensive",
-                      label: t("profile.reasonTooExpensive"),
-                    },
-                    { id: "other", label: t("profile.reasonOther") },
-                  ].map((reason) => (
-                    <label
-                      key={reason.id}
-                      className="flex items-center space-x-3 cursor-pointer hover:bg-gray-50 dark:hover:bg-slate-700/50 p-2 rounded-lg transition-colors"
-                    >
-                      <input
-                        type="checkbox"
-                        checked={deleteReasons.includes(reason.id)}
-                        onChange={() => handleDeleteReasonToggle(reason.id)}
-                        className="w-4 h-4 text-blue-600 border-gray-300 dark:border-slate-600 rounded focus:ring-2 focus:ring-blue-500"
-                      />
-                      <span className="text-sm text-gray-700 dark:text-gray-300">
-                        {reason.label}
-                      </span>
-                    </label>
-                  ))}
-                </div>
-
-                {deleteReasons.includes("other") && (
-                  <textarea
-                    value={otherReason}
-                    onChange={(e) => setOtherReason(e.target.value)}
-                    placeholder={t("profile.reasonOther")}
-                    className="w-full mt-3 px-4 py-2 border border-gray-300 dark:border-slate-600 bg-white dark:bg-slate-700/40 text-gray-900 dark:text-white rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none"
-                    rows={3}
-                  />
-                )}
-              </div>
-
-              <div className="flex space-x-3">
-                <button
-                  type="button"
-                  onClick={() => {
-                    setShowDeleteModal(false);
-                    setDeleteReasons([]);
-                    setOtherReason("");
-                  }}
-                  disabled={deleting}
-                  className="flex-1 bg-gray-200 dark:bg-slate-700 hover:bg-gray-300 dark:hover:bg-slate-600 text-gray-800 dark:text-gray-200 font-semibold py-3 px-6 rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-                >
-                  {t("profile.cancelDelete")}
-                </button>
-                <button
-                  type="button"
-                  onClick={handleDeleteAccount}
-                  disabled={deleting}
-                  className="flex-1 bg-red-600 hover:bg-red-700 text-white font-semibold py-3 px-6 rounded-lg transition-all duration-300 shadow-lg shadow-red-500/30 hover:shadow-xl hover:shadow-red-500/40 disabled:opacity-50 disabled:cursor-not-allowed"
-                >
-                  {deleting
-                    ? t("profile.deletingAccount")
-                    : t("profile.confirmDelete")}
-                </button>
-              </div>
-            </div>
-          </div>
-        )}
       </div>
     </div>
   );

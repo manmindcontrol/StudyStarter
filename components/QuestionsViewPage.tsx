@@ -132,13 +132,27 @@ export default function QuestionsViewPage({
 
       // Check if this is unsaved data (questionRecordId === "new")
       if (questionRecordId === "new") {
-        const unsavedData = searchParams.get("data");
         const questionType = searchParams.get("type") || "exam";
 
-        if (unsavedData) {
-          const parsedQuestions = JSON.parse(
-            decodeURIComponent(unsavedData)
-          ) as GeneratedQuestion[];
+        // Try to get data from sessionStorage first (preferred method)
+        const unsavedDataFromStorage = sessionStorage.getItem('unsavedQuestions');
+        let parsedQuestions: GeneratedQuestion[] | null = null;
+
+        if (unsavedDataFromStorage) {
+          parsedQuestions = JSON.parse(unsavedDataFromStorage) as GeneratedQuestion[];
+          // Clear the sessionStorage after reading
+          sessionStorage.removeItem('unsavedQuestions');
+        } else {
+          // Fallback to URL parameter for backward compatibility
+          const unsavedData = searchParams.get("data");
+          if (unsavedData) {
+            parsedQuestions = JSON.parse(
+              decodeURIComponent(unsavedData)
+            ) as GeneratedQuestion[];
+          }
+        }
+
+        if (parsedQuestions) {
           setQuestionRecord({
             id: "new",
             material_id: materialId,
@@ -148,7 +162,6 @@ export default function QuestionsViewPage({
             created_at: new Date().toISOString(),
           });
           setIsUnsaved(true);
-          setLoading(false);
 
           // Initial chat message for unsaved questions
           setChatMessages([
@@ -157,9 +170,9 @@ export default function QuestionsViewPage({
               content: `Hello! I've generated ${parsedQuestions.length} questions from the material "${materialData.title}". You can save them using the Save button above, or I can help you modify questions, add new ones, or explain answers. What do you need?`,
             },
           ]);
-        } else {
-          setLoading(false);
         }
+
+        setLoading(false);
       } else {
         // Load existing question record from database
         const { data: questionData, error: questionError } = await supabase

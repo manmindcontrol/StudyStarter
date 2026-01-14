@@ -36,7 +36,7 @@ export default function GenerateQuestionsModal({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
+    <div className="fixed inset-0 min-h-screen z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
       <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-2xl max-w-lg w-full max-h-[90vh] overflow-y-auto scrollbar-hide">
         {/* Header */}
         <div className="sticky top-0 bg-linear-to-r from-green-600 to-emerald-500 dark:bg-linear-to-r dark:from-green-700 dark:to-emerald-600 p-6 rounded-t-2xl">
@@ -292,10 +292,10 @@ export default function GenerateQuestionsModal({
             <div className="flex items-start space-x-3">
               <HelpCircle className="w-5 h-5 text-blue-600 dark:text-blue-400 mt-0.5 shrink-0" />
               <div className="text-sm text-blue-900 dark:text-blue-200">
-                <p className="font-semibold mb-1">{t("modals.generateQuestions.noteTitle")}</p>
-                <p>
-                  {t("modals.generateQuestions.noteText")}
+                <p className="font-semibold mb-1">
+                  {t("modals.generateQuestions.noteTitle")}
                 </p>
+                <p>{t("modals.generateQuestions.noteText")}</p>
               </div>
             </div>
           </div>

@@ -52,13 +52,14 @@ export default function GenerateNotesButton({
         throw new Error(data.error || "Failed to generate study notes.");
       }
 
-      // Redirect to notes page with unsaved data
+      // Store notes data in sessionStorage to avoid URL length limits
+      sessionStorage.setItem('unsavedNotes', JSON.stringify(data.notes));
+
+      // Redirect to notes page
       if (contentType === "material") {
-        const notesParam = encodeURIComponent(JSON.stringify(data.notes));
-        router.push(`/materials/${id}/notes/new?data=${notesParam}`);
+        router.push(`/materials/${id}/notes/new`);
       } else {
-        const notesParam = encodeURIComponent(JSON.stringify(data.notes));
-        router.push(`/lectures/${id}/notes/new?data=${notesParam}`);
+        router.push(`/lectures/${id}/notes/new`);
       }
     } catch (err) {
       setError(

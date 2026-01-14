@@ -81,14 +81,17 @@ export default function GenerateQuestionsButton({
 
       // Close generating modal and redirect to questions page
       setIsGenerating(false);
-      const questionsParam = encodeURIComponent(JSON.stringify(questions));
+
+      // Store questions data in sessionStorage to avoid URL length limits
+      sessionStorage.setItem('unsavedQuestions', JSON.stringify(questions));
+
       if (contentType === "material") {
         router.push(
-          `/materials/${id}/questions/new?data=${questionsParam}&type=${questionType}`
+          `/materials/${id}/questions/new?type=${questionType}`
         );
       } else {
         router.push(
-          `/lectures/${id}/questions/new?data=${questionsParam}&type=${questionType}`
+          `/lectures/${id}/questions/new?type=${questionType}`
         );
       }
     } catch (err) {

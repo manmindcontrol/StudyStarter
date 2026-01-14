@@ -80,14 +80,14 @@ export default function GeneratingNotesModal({
       clearInterval(textInterval);
       clearInterval(progressInterval);
     };
-  }, [isOpen]);
+  }, [isOpen, loadingTexts.length]);
 
   if (!isOpen) return null;
 
   const currentColor = loadingTexts[currentTextIndex].color;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-md">
+    <div className="fixed min-h-screen inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-md">
       <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-2xl max-w-md w-full p-8 relative overflow-hidden">
         {/* Animated background gradient */}
         <div className="absolute inset-0 bg-linear-to-br from-blue-50 via-cyan-50 to-blue-50 dark:from-blue-900/20 dark:via-cyan-900/20 dark:to-blue-900/20 opacity-50"></div>
@@ -151,8 +151,8 @@ export default function GeneratingNotesModal({
                   index === currentTextIndex
                     ? "w-8 bg-linear-to-r from-blue-600 to-cyan-400 dark:from-blue-500 dark:to-cyan-300"
                     : index < currentTextIndex
-                    ? "w-2 bg-blue-500 dark:bg-blue-400"
-                    : "w-2 bg-gray-300 dark:bg-slate-600"
+                      ? "w-2 bg-blue-500 dark:bg-blue-400"
+                      : "w-2 bg-gray-300 dark:bg-slate-600"
                 }`}
               ></div>
             ))}

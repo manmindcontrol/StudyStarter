@@ -7,20 +7,7 @@
   "background_color": "#ffffff",
   "theme_color": "#2563eb",
   "orientation": "portrait-primary",
-  "icons": [
-    {
-      "src": "/icon-192.png",
-      "sizes": "192x192",
-      "type": "image/png",
-      "purpose": "any maskable"
-    },
-    {
-      "src": "/icon-512.png",
-      "sizes": "512x512",
-      "type": "image/png",
-      "purpose": "any maskable"
-    }
-  ],
+  "icons": [],
   "categories": ["education", "productivity", "utilities"],
   "screenshots": [
     {
@@ -41,37 +28,19 @@
       "name": "Record Lecture",
       "short_name": "Record",
       "description": "Start recording a new lecture",
-      "url": "/prednasky?action=record",
-      "icons": [
-        {
-          "src": "/icon-192.png",
-          "sizes": "192x192"
-        }
-      ]
+      "url": "/prednasky?action=record"
     },
     {
       "name": "Upload Materials",
       "short_name": "Upload",
       "description": "Upload study materials",
-      "url": "/materials?action=upload",
-      "icons": [
-        {
-          "src": "/icon-192.png",
-          "sizes": "192x192"
-        }
-      ]
+      "url": "/materials?action=upload"
     },
     {
       "name": "Generate Tests",
       "short_name": "Tests",
       "description": "Generate practice tests",
-      "url": "/testy?action=generate",
-      "icons": [
-        {
-          "src": "/icon-192.png",
-          "sizes": "192x192"
-        }
-      ]
+      "url": "/testy?action=generate"
     }
   ],
   "related_applications": [],

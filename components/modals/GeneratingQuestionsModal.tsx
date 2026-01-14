@@ -1,7 +1,14 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { FileQuestion, Brain, Sparkles, CheckCircle2, Loader2, HelpCircle } from "lucide-react";
+import {
+  FileQuestion,
+  Brain,
+  Sparkles,
+  CheckCircle2,
+  Loader2,
+  HelpCircle,
+} from "lucide-react";
 import { useTranslation } from "@/hooks/useTranslation";
 
 type GeneratingQuestionsModalProps = {
@@ -80,14 +87,14 @@ export default function GeneratingQuestionsModal({
       clearInterval(textInterval);
       clearInterval(progressInterval);
     };
-  }, [isOpen]);
+  }, [isOpen, loadingTexts.length]);
 
   if (!isOpen) return null;
 
   const currentColor = loadingTexts[currentTextIndex].color;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-md">
+    <div className="fixed inset-0 z-50 min-h-screen flex items-center justify-center p-4 bg-black/60 backdrop-blur-md">
       <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-2xl max-w-md w-full p-8 relative overflow-hidden">
         {/* Animated background gradient */}
         <div className="absolute inset-0 bg-linear-to-br from-green-50 via-emerald-50 to-green-50 dark:from-green-900/20 dark:via-emerald-900/20 dark:to-green-900/20 opacity-50"></div>
@@ -151,8 +158,8 @@ export default function GeneratingQuestionsModal({
                   index === currentTextIndex
                     ? "w-8 bg-linear-to-r from-green-600 to-emerald-400 dark:from-green-500 dark:to-emerald-300"
                     : index < currentTextIndex
-                    ? "w-2 bg-green-500 dark:bg-green-400"
-                    : "w-2 bg-gray-300 dark:bg-slate-600"
+                      ? "w-2 bg-green-500 dark:bg-green-400"
+                      : "w-2 bg-gray-300 dark:bg-slate-600"
                 }`}
               ></div>
             ))}

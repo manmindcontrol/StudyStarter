@@ -79,6 +79,13 @@ export default function MaterialsPage() {
     setUploading(true);
 
     try {
+      // Get session token for authorization
+      const { data: { session } } = await supabase.auth.getSession();
+
+      if (!session) {
+        throw new Error("No active session");
+      }
+
       const formData = new FormData();
       formData.append("file", file);
       formData.append("userId", user.id);
@@ -86,6 +93,9 @@ export default function MaterialsPage() {
 
       const response = await fetch("/api/upload", {
         method: "POST",
+        headers: {
+          Authorization: `Bearer ${session.access_token}`,
+        },
         body: formData,
       });
 

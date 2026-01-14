@@ -2,8 +2,45 @@ import { NextRequest, NextResponse } from 'next/server';
 import pdf from 'pdf-parse';
 import { Document, Packer, Paragraph, TextRun, AlignmentType, HeadingLevel } from 'docx';
 
+// Simple in-memory rate limiting (reset on server restart)
+const rateLimitMap = new Map<string, { count: number; resetTime: number }>();
+const RATE_LIMIT = 3; // Max 3 conversions per hour per IP
+const RATE_WINDOW = 60 * 60 * 1000; // 1 hour in milliseconds
+
+function checkRateLimit(ip: string): { allowed: boolean; remainingTime?: number } {
+  const now = Date.now();
+  const record = rateLimitMap.get(ip);
+
+  if (!record || now > record.resetTime) {
+    // Create or reset record
+    rateLimitMap.set(ip, { count: 1, resetTime: now + RATE_WINDOW });
+    return { allowed: true };
+  }
+
+  if (record.count >= RATE_LIMIT) {
+    const remainingTime = Math.ceil((record.resetTime - now) / 1000 / 60); // minutes
+    return { allowed: false, remainingTime };
+  }
+
+  record.count++;
+  return { allowed: true };
+}
+
 export async function POST(request: NextRequest) {
   try {
+    // Rate limiting check
+    const ip = request.headers.get('x-forwarded-for') || request.headers.get('x-real-ip') || 'unknown';
+    const rateCheck = checkRateLimit(ip);
+
+    if (!rateCheck.allowed) {
+      return NextResponse.json(
+        {
+          error: `Rate limit exceeded. You can convert ${RATE_LIMIT} PDFs per hour. Please try again in ${rateCheck.remainingTime} minutes or make a payment for unlimited conversions.`
+        },
+        { status: 429 }
+      );
+    }
+
     const formData = await request.formData();
     const file = formData.get('file') as File;
 

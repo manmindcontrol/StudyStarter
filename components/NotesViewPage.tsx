@@ -98,9 +98,10 @@ export default function NotesViewPage({ materialId, noteId }: Props) {
 
         // Check if this is unsaved data (noteId === "new")
         if (noteId === "new") {
-          const unsavedData = searchParams.get("data");
-          if (unsavedData) {
-            const parsedData = JSON.parse(decodeURIComponent(unsavedData));
+          // Try to get data from sessionStorage first (preferred method)
+          const unsavedDataFromStorage = sessionStorage.getItem('unsavedNotes');
+          if (unsavedDataFromStorage) {
+            const parsedData = JSON.parse(unsavedDataFromStorage);
             setNote({
               id: "new",
               material_id: materialId,
@@ -111,6 +112,24 @@ export default function NotesViewPage({ materialId, noteId }: Props) {
               created_at: new Date().toISOString(),
             });
             setIsUnsaved(true);
+            // Clear the sessionStorage after reading
+            sessionStorage.removeItem('unsavedNotes');
+          } else {
+            // Fallback to URL parameter for backward compatibility
+            const unsavedData = searchParams.get("data");
+            if (unsavedData) {
+              const parsedData = JSON.parse(decodeURIComponent(unsavedData));
+              setNote({
+                id: "new",
+                material_id: materialId,
+                summary: parsedData.summary,
+                key_points: parsedData.key_points,
+                concepts: parsedData.concepts,
+                study_tips: parsedData.study_tips,
+                created_at: new Date().toISOString(),
+              });
+              setIsUnsaved(true);
+            }
           }
         } else {
           // Load existing note from database

@@ -26,12 +26,19 @@ export async function GET(request: Request) {
         .single()
 
       if (!existingProfile) {
-        await supabase.from('user_profiles').insert({
+        const { error: profileError } = await supabase.from('user_profiles').insert({
           id: user.id,
           email: user.email,
           full_name: user.user_metadata?.full_name || user.user_metadata?.name || null,
         })
+
+        if (profileError) {
+          console.error('Error creating user profile:', profileError)
+          // Continue anyway - user can still use the app
+        }
+
         isNewUser = true
+        // Note: subscription is created automatically by database trigger
       }
     }
   }

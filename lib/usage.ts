@@ -89,6 +89,55 @@ export async function getUserTierAndLimits(userId: string) {
     .eq('user_id', userId)
     .single();
 
+  // If no subscription exists, create a default free tier subscription
+  if (error && error.code === 'PGRST116') {
+    console.warn(`No subscription found for user ${userId}, creating default free tier subscription`);
+
+    const { error: insertError } = await supabaseAdmin
+      .from('user_subscriptions')
+      .insert({
+        user_id: userId,
+        tier_id: 'free',
+        stripe_subscription_status: 'active',
+      });
+
+    if (insertError) {
+      console.error('Error creating default subscription:', insertError);
+      throw insertError;
+    }
+
+    // Retry fetching the subscription
+    const { data: retryData, error: retryError } = await supabaseAdmin
+      .from('user_subscriptions')
+      .select(`
+        tier_id,
+        stripe_customer_id,
+        stripe_subscription_id,
+        subscription_tiers (
+          id,
+          name,
+          pdf_conversions_limit,
+          materials_limit,
+          notes_generations_limit,
+          questions_generations_limit
+        )
+      `)
+      .eq('user_id', userId)
+      .single();
+
+    if (retryError) {
+      console.error('Error fetching user tier after creation:', retryError);
+      throw retryError;
+    }
+
+    return {
+      tierId: retryData.tier_id,
+      stripeCustomerId: retryData.stripe_customer_id,
+      stripeSubscriptionId: retryData.stripe_subscription_id,
+      limits: retryData.subscription_tiers as any,
+    };
+  }
+
   if (error) {
     console.error('Error fetching user tier:', error);
     throw error;

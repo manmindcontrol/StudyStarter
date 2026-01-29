@@ -23,7 +23,9 @@
       "Bash(npx kill-port:*)",
       "Bash(git log:*)",
       "Bash(git add:*)",
-      "Bash(git commit:*)"
+      "Bash(git commit:*)",
+      "Bash(timeout /t 12 /nobreak)",
+      "Bash(curl:*)"
     ],
     "deny": [],
     "ask": []

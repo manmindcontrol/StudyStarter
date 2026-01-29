@@ -15,6 +15,7 @@
     "@supabase/ssr": "^0.7.0",
     "@supabase/supabase-js": "^2.84.0",
     "@types/jsdom": "^27.0.0",
+    "baseline-browser-mapping": "^2.9.19",
     "docx": "^9.5.1",
     "dotenv": "^17.2.3",
     "file-saver": "^2.0.5",

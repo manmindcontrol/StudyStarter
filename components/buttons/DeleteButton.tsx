@@ -50,12 +50,26 @@ export default function DeleteButton({
     try {
       if (!id) throw new Error("No ID provided");
 
-      const { error: deleteError } = await supabase
-        .from(tableName)
-        .delete()
-        .eq("id", id);
+      // Get auth token
+      const { data: { session } } = await supabase.auth.getSession();
+      if (!session) throw new Error("Not authenticated");
 
-      if (deleteError) throw deleteError;
+      // Call API endpoint to delete with proper cleanup
+      const endpoint = itemType === "lecture"
+        ? `/api/lectures/${id}`
+        : `/api/materials/${id}`;
+
+      const response = await fetch(endpoint, {
+        method: 'DELETE',
+        headers: {
+          'Authorization': `Bearer ${session.access_token}`,
+        },
+      });
+
+      if (!response.ok) {
+        const data = await response.json();
+        throw new Error(data.error || 'Failed to delete');
+      }
 
       router.push(redirectTo);
     } catch (err) {

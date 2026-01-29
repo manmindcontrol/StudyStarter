@@ -189,19 +189,33 @@ export default function MaterialsPage() {
   const handleDelete = async (materialId: string) => {
     if (!confirm(t("materials.deleteMaterialConfirm"))) return;
 
-    const { error } = await supabase
-      .from("materials")
-      .delete()
-      .eq("id", materialId);
+    try {
+      // Get auth token
+      const { data: { session } } = await supabase.auth.getSession();
+      if (!session) {
+        alert("Not authenticated");
+        return;
+      }
 
-    if (error) {
+      // Call API endpoint to delete with proper cleanup
+      const response = await fetch(`/api/materials/${materialId}`, {
+        method: 'DELETE',
+        headers: {
+          'Authorization': `Bearer ${session.access_token}`,
+        },
+      });
+
+      if (!response.ok) {
+        const data = await response.json();
+        throw new Error(data.error || 'Failed to delete');
+      }
+
+      // Reload materials
+      await loadMaterials();
+    } catch (error) {
       console.error("Error deleting:", error);
       alert(t("materials.errorDeletingMaterial"));
-      return;
     }
-
-    // Reload materials
-    await loadMaterials();
   };
 
   const filteredMaterials = materials.filter(

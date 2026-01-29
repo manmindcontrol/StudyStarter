@@ -6,6 +6,7 @@ import { toFile } from "openai/uploads";
 // @ts-expect-error - pdf-parse doesn't have proper types
 import pdfParse from "pdf-parse/lib/pdf-parse.js";
 import { createServiceRoleClient, sanitizeFilename } from "@/lib/utils";
+import { checkUsageLimit, incrementUsage } from "@/lib/usage";
 
 export const runtime = "nodejs";
 
@@ -44,6 +45,20 @@ export async function POST(request: NextRequest) {
 
     const userId = user.id;
 
+    // Check usage limits BEFORE processing file
+    const { allowed, reason, current, limit } = await checkUsageLimit(userId, 'materials');
+
+    if (!allowed) {
+      return NextResponse.json(
+        {
+          error: reason || 'Usage limit exceeded',
+          current,
+          limit,
+        },
+        { status: 403 }
+      );
+    }
+
     const formData = await request.formData();
     const file = formData.get("file") as File | null;
     const title = formData.get("title") as string | null;
@@ -74,10 +89,26 @@ export async function POST(request: NextRequest) {
       try {
         const pdfData = await pdfParse(buffer);
         extractedText = pdfData.text;
+
+        // Validate that we extracted meaningful content
+        if (!extractedText || extractedText.trim().length < 10) {
+          return NextResponse.json(
+            {
+              error: "PDF extraction failed - no text content found. The PDF might be scanned images or encrypted. Try converting it to text first or using a different format.",
+            },
+            { status: 400 }
+          );
+        }
       } catch (pdfError) {
         console.error("PDF parsing error:", pdfError);
-        // If parsing fails, at least upload the file without text
-        extractedText = "";
+        const errorMessage = pdfError instanceof Error ? pdfError.message : "Unknown error";
+
+        return NextResponse.json(
+          {
+            error: `Failed to extract text from PDF: ${errorMessage}. The PDF might be corrupted, password-protected, or use unsupported features.`,
+          },
+          { status: 400 }
+        );
       }
     } else {
       return NextResponse.json(
@@ -134,6 +165,15 @@ export async function POST(request: NextRequest) {
         { error: `Error saving to database: ${dbError.message}` },
         { status: 500 }
       );
+    }
+
+    // Increment usage counter AFTER successful upload
+    try {
+      await incrementUsage(userId, 'materials');
+    } catch (usageError) {
+      console.error("Error incrementing usage:", usageError);
+      // Don't fail the request if usage increment fails
+      // Material was uploaded successfully
     }
 
     return NextResponse.json({

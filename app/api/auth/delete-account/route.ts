@@ -56,17 +56,80 @@ export async function DELETE(request: NextRequest) {
     }
 
     // Delete user's data from related tables
-    // 1. Delete study materials
-    const { error: materialsError } = await supabaseAdmin
-      .from("study_materials")
+    // First get all materials and lectures to clean up storage
+    const { data: materials } = await supabaseAdmin
+      .from("materials")
+      .select("storage_path, openai_file_id")
+      .eq("user_id", userId);
+
+    const { data: lectures } = await supabaseAdmin
+      .from("lectures")
+      .select("*")
+      .eq("user_id", userId);
+
+    // 1. Delete materials storage files
+    if (materials && materials.length > 0) {
+      for (const material of materials) {
+        // Delete from Supabase Storage
+        if (material.storage_path && !material.storage_path.startsWith("http")) {
+          try {
+            await supabaseAdmin.storage
+              .from("materials")
+              .remove([material.storage_path]);
+          } catch (err) {
+            console.error("Error deleting material file:", err);
+          }
+        }
+
+        // Delete from OpenAI Files API
+        if (material.openai_file_id) {
+          try {
+            const OpenAI = (await import("openai")).default;
+            const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
+            await openai.files.del(material.openai_file_id);
+          } catch (err) {
+            console.error("Error deleting OpenAI file:", err);
+          }
+        }
+      }
+    }
+
+    // 2. Delete lecture audio files
+    if (lectures && lectures.length > 0) {
+      for (const lecture of lectures) {
+        const audioPath = (lecture as any).audio_file_path;
+        if (audioPath) {
+          try {
+            await supabaseAdmin.storage
+              .from("lecture-recordings")
+              .remove([audioPath]);
+          } catch (err) {
+            console.error("Error deleting lecture audio:", err);
+          }
+        }
+      }
+    }
+
+    // 3. Delete from database (cascade will handle related records)
+    // Note: Order matters for foreign key constraints
+    const { error: chatError } = await supabaseAdmin
+      .from("chat_history")
       .delete()
       .eq("user_id", userId);
 
-    if (materialsError) {
-      console.error("Error deleting study materials:", materialsError);
+    if (chatError) {
+      console.error("Error deleting chat history:", chatError);
     }
 
-    // 2. Delete study notes
+    const { error: questionsError } = await supabaseAdmin
+      .from("generated_questions")
+      .delete()
+      .eq("user_id", userId);
+
+    if (questionsError) {
+      console.error("Error deleting generated questions:", questionsError);
+    }
+
     const { error: notesError } = await supabaseAdmin
       .from("study_notes")
       .delete()
@@ -76,24 +139,49 @@ export async function DELETE(request: NextRequest) {
       console.error("Error deleting study notes:", notesError);
     }
 
-    // 3. Delete question sets
-    const { error: questionsError } = await supabaseAdmin
-      .from("question_sets")
+    const { error: materialsError } = await supabaseAdmin
+      .from("materials")
       .delete()
       .eq("user_id", userId);
 
-    if (questionsError) {
-      console.error("Error deleting question sets:", questionsError);
+    if (materialsError) {
+      console.error("Error deleting materials:", materialsError);
     }
 
-    // 4. Delete lecture recordings
     const { error: lecturesError } = await supabaseAdmin
-      .from("lecture_recordings")
+      .from("lectures")
       .delete()
       .eq("user_id", userId);
 
     if (lecturesError) {
-      console.error("Error deleting lecture recordings:", lecturesError);
+      console.error("Error deleting lectures:", lecturesError);
+    }
+
+    const { error: usageError } = await supabaseAdmin
+      .from("usage_tracking")
+      .delete()
+      .eq("user_id", userId);
+
+    if (usageError) {
+      console.error("Error deleting usage tracking:", usageError);
+    }
+
+    const { error: subscriptionError } = await supabaseAdmin
+      .from("user_subscriptions")
+      .delete()
+      .eq("user_id", userId);
+
+    if (subscriptionError) {
+      console.error("Error deleting user subscriptions:", subscriptionError);
+    }
+
+    const { error: paymentsError} = await supabaseAdmin
+      .from("payment_history")
+      .delete()
+      .eq("user_id", userId);
+
+    if (paymentsError) {
+      console.error("Error deleting payment history:", paymentsError);
     }
 
     // 5. Delete user profile

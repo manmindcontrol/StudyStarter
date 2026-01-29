@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { createServiceRoleClient } from "@/lib/utils";
 import OpenAI from "openai";
 import { toFile } from "openai/uploads";
+import { checkUsageLimit, incrementUsage } from "@/lib/usage";
 
 export const runtime = "nodejs";
 
@@ -42,6 +43,20 @@ export async function POST(request: NextRequest) {
     }
 
     const userId = user.id;
+
+    // Check usage limits BEFORE processing
+    const { allowed, reason, current, limit } = await checkUsageLimit(userId, 'materials');
+
+    if (!allowed) {
+      return NextResponse.json(
+        {
+          error: reason || 'Usage limit exceeded',
+          current,
+          limit,
+        },
+        { status: 403 }
+      );
+    }
 
     const body = await request.json();
     const { text, title } = body;
@@ -114,6 +129,14 @@ export async function POST(request: NextRequest) {
         { error: `Error saving to database: ${dbError.message}` },
         { status: 500 }
       );
+    }
+
+    // Increment usage counter AFTER successful upload
+    try {
+      await incrementUsage(userId, 'materials');
+    } catch (usageError) {
+      console.error("Error incrementing usage:", usageError);
+      // Don't fail the request if usage increment fails
     }
 
     return NextResponse.json({

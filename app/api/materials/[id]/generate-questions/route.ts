@@ -37,12 +37,50 @@ export async function POST(
 ) {
   try {
     const { id: materialId } = await context.params;
+
+    // Get user from session - CRITICAL FOR SECURITY
+    const authHeader = request.headers.get("authorization");
+    if (!authHeader) {
+      return NextResponse.json(
+        { error: "Unauthorized - No authorization header" },
+        { status: 401 }
+      );
+    }
+
+    const token = authHeader.replace("Bearer ", "");
+    const {
+      data: { user },
+      error: authError,
+    } = await supabase.auth.getUser(token);
+
+    if (authError || !user) {
+      return NextResponse.json(
+        { error: "Unauthorized - Invalid token" },
+        { status: 401 }
+      );
+    }
+
     const { searchParams } = new URL(request.url);
 
     const questionType = (searchParams.get("type") as QuestionType) || "exam";
     const targetLanguage = searchParams.get("lang"); // user can request output lang
     const questionCount = parseInt(searchParams.get("count") || "10", 10); // default 10
     const questionFormat = searchParams.get("format") || "mixed"; // mcq, open, mixed
+
+    // Check usage limits BEFORE generation
+    const { checkUsageLimit } = await import("@/lib/usage");
+    const { allowed, reason, current, limit } = await checkUsageLimit(user.id, 'questions_generations');
+
+    if (!allowed) {
+      return NextResponse.json(
+        {
+          error: reason || 'Usage limit exceeded',
+          current,
+          limit,
+        },
+        { status: 403 }
+      );
+    }
 
     // 1️⃣ Load material
     const { data: material, error: materialError } = await supabase
@@ -55,6 +93,14 @@ export async function POST(
       return NextResponse.json(
         { error: "Material not found." },
         { status: 404 }
+      );
+    }
+
+    // VERIFY OWNERSHIP
+    if (material.user_id !== user.id) {
+      return NextResponse.json(
+        { error: "Forbidden - You don't have access to this material" },
+        { status: 403 }
       );
     }
 

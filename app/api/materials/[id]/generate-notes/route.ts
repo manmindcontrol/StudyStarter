@@ -47,6 +47,44 @@ export async function POST(
 ) {
   try {
     const { id: materialId } = await context.params;
+
+    // Get user from session - CRITICAL FOR SECURITY
+    const authHeader = request.headers.get("authorization");
+    if (!authHeader) {
+      return NextResponse.json(
+        { error: "Unauthorized - No authorization header" },
+        { status: 401 }
+      );
+    }
+
+    const token = authHeader.replace("Bearer ", "");
+    const {
+      data: { user },
+      error: authError,
+    } = await supabase.auth.getUser(token);
+
+    if (authError || !user) {
+      return NextResponse.json(
+        { error: "Unauthorized - Invalid token" },
+        { status: 401 }
+      );
+    }
+
+    // Check usage limits BEFORE generation
+    const { checkUsageLimit } = await import("@/lib/usage");
+    const { allowed, reason, current, limit } = await checkUsageLimit(user.id, 'notes_generations');
+
+    if (!allowed) {
+      return NextResponse.json(
+        {
+          error: reason || 'Usage limit exceeded',
+          current,
+          limit,
+        },
+        { status: 403 }
+      );
+    }
+
     const { searchParams } = new URL(request.url);
     const targetLanguage = searchParams.get("lang"); // user can request output lang
 
@@ -61,6 +99,14 @@ export async function POST(
       return NextResponse.json(
         { error: "Material not found." },
         { status: 404 }
+      );
+    }
+
+    // VERIFY OWNERSHIP
+    if (material.user_id !== user.id) {
+      return NextResponse.json(
+        { error: "Forbidden - You don't have access to this material" },
+        { status: 403 }
       );
     }
 

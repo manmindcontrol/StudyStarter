@@ -41,18 +41,26 @@ export async function getCurrentUsage(userId: string) {
   }
 
   // Ak neexistuje, vytvor nový záznam
+  // Použijeme upsert pre handling race conditions
   if (!usage) {
     const { data: newUsage, error: insertError } = await supabaseAdmin
       .from('usage_tracking')
-      .insert({
-        user_id: userId,
-        period_start: periodStart.toISOString(),
-        period_end: periodEnd.toISOString(),
-        pdf_conversions_used: 0,
-        materials_uploaded: 0,
-        notes_generations_used: 0,
-        questions_generations_used: 0,
-      })
+      .upsert(
+        {
+          user_id: userId,
+          period_start: periodStart.toISOString(),
+          period_end: periodEnd.toISOString(),
+          pdf_conversions_used: 0,
+          materials_uploaded: 0,
+          notes_generations_used: 0,
+          questions_generations_used: 0,
+          updated_at: new Date().toISOString(),
+        },
+        {
+          onConflict: 'user_id,period_start',
+          ignoreDuplicates: false,
+        }
+      )
       .select()
       .single();
 
@@ -90,16 +98,24 @@ export async function getUserTierAndLimits(userId: string) {
     .single();
 
   // If no subscription exists, create a default free tier subscription
+  // This should rarely happen - trigger should create it automatically
   if (error && error.code === 'PGRST116') {
-    console.warn(`No subscription found for user ${userId}, creating default free tier subscription`);
+    console.warn(`No subscription found for user ${userId}, trigger may have failed. Creating fallback subscription.`);
 
     const { error: insertError } = await supabaseAdmin
       .from('user_subscriptions')
-      .insert({
-        user_id: userId,
-        tier_id: 'free',
-        stripe_subscription_status: 'active',
-      });
+      .upsert(
+        {
+          user_id: userId,
+          tier_id: 'free',
+          stripe_subscription_status: 'active',
+          updated_at: new Date().toISOString(),
+        },
+        {
+          onConflict: 'user_id',
+          ignoreDuplicates: false,
+        }
+      );
 
     if (insertError) {
       console.error('Error creating default subscription:', insertError);

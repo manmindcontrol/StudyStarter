@@ -34,19 +34,8 @@ export async function signUp(email: string, password: string, fullName: string) 
     if (authError) throw authError
     if (!authData.user) throw new Error('Registrácia zlyhala')
 
-    // 2. Vytvor profil v user_profiles tabuľke
-    const { error: profileError } = await supabase
-      .from('user_profiles')
-      .insert({
-        id: authData.user.id,
-        email: authData.user.email,
-        full_name: fullName,
-      })
-
-    if (profileError) {
-      console.error('Chyba pri vytváraní profilu:', profileError)
-      // Profil sa možno vytvoril cez trigger, takže pokračujeme
-    }
+    // Profile is created automatically by database trigger on auth.users
+    // No need to create it manually here
 
     return { user: authData.user, error: null }
   } catch (error: unknown) {
@@ -119,21 +108,37 @@ export async function getCurrentUser() {
       .single()
 
     if (profileError) {
-      // Ak profil neexistuje, vytvor ho
+      // Profile should exist via database trigger on auth.users
+      // This is a fallback safety net - should rarely happen
       if (profileError.code === 'PGRST116') {
-        const { data: newProfile } = await supabase
+        console.warn('Profile missing for user, trigger may have failed. Creating fallback profile.')
+
+        // Use upsert to handle race conditions
+        const { data: newProfile, error: upsertError } = await supabase
           .from('user_profiles')
-          .insert({
-            id: user.id,
-            email: user.email,
-            full_name: user.user_metadata?.full_name || user.user_metadata?.name || null,
-          })
+          .upsert(
+            {
+              id: user.id,
+              email: user.email,
+              full_name: user.user_metadata?.full_name || user.user_metadata?.name || null,
+              updated_at: new Date().toISOString(),
+            },
+            {
+              onConflict: 'id',
+              ignoreDuplicates: false, // Update if exists
+            }
+          )
           .select()
           .single()
 
+        if (upsertError) {
+          console.error('Failed to create/update profile:', upsertError)
+          return { user, profile: null, error: null }
+        }
+
         return { user, profile: newProfile, error: null }
       }
-      
+
       console.warn('Chyba pri získavaní profilu:', profileError)
       return { user, profile: null, error: null }
     }

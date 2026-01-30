@@ -13,7 +13,7 @@ const supabaseAdmin = createClient(
   }
 );
 
-export type UsageType = 'pdf_conversions' | 'materials' | 'notes_generations' | 'questions_generations';
+export type UsageType = 'pdf_conversions' | 'materials' | 'lectures' | 'notes_generations' | 'questions_generations';
 
 /**
  * Získa aktuálny usage pre používateľa v tomto mesiaci

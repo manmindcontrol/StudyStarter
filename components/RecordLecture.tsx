@@ -339,14 +339,31 @@ export default function RecordLecture({ user }: RecordLectureProps) {
         return;
       }
 
-      const { error } = await supabase.from("lectures").insert({
-        user_id: user.id,
-        title: `Lecture ${new Date().toLocaleDateString()}`,
-        transcript: fullText,
-        duration: recordingTime,
+      // Get auth token
+      const { data: { session } } = await supabase.auth.getSession();
+      if (!session) {
+        alert("Not authenticated");
+        return;
+      }
+
+      // Call API endpoint to save with proper usage tracking
+      const response = await fetch("/api/lectures", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${session.access_token}`,
+        },
+        body: JSON.stringify({
+          title: `Lecture ${new Date().toLocaleDateString()}`,
+          transcript: fullText,
+          duration: recordingTime,
+        }),
       });
 
-      if (error) throw error;
+      if (!response.ok) {
+        const data = await response.json();
+        throw new Error(data.error || "Failed to save lecture");
+      }
 
       alert(t("recordLecture.lectureSaved"));
       router.push("/dashboard");

@@ -105,6 +105,7 @@ export default function QuestionsViewPage({
   const [isChatOpen, setIsChatOpen] = useState(false);
   const [showExportMenu, setShowExportMenu] = useState(false);
   const exportMenuRef = useRef<HTMLDivElement>(null);
+  const [conversationId] = useState<string>(() => crypto.randomUUID()); // Generate conversation ID once
 
   useEffect(() => {
     const loadData = async () => {
@@ -162,14 +163,6 @@ export default function QuestionsViewPage({
             created_at: new Date().toISOString(),
           });
           setIsUnsaved(true);
-
-          // Initial chat message for unsaved questions
-          setChatMessages([
-            {
-              role: "assistant",
-              content: `Hello! I've generated ${parsedQuestions.length} questions from the material "${materialData.title}". You can save them using the Save button above, or I can help you modify questions, add new ones, or explain answers. What do you need?`,
-            },
-          ]);
         }
 
         setLoading(false);
@@ -190,19 +183,50 @@ export default function QuestionsViewPage({
         setQuestionRecord(questionData);
         setIsUnsaved(false);
         setLoading(false);
+      }
 
-        // Initial chat message for saved questions
+      // Load chat history from database
+      try {
+        const { data: { session } } = await supabase.auth.getSession();
+        if (session) {
+          const response = await fetch(
+            `/api/chat/history?conversationId=${conversationId}`,
+            {
+              headers: {
+                'Authorization': `Bearer ${session.access_token}`,
+              },
+            }
+          );
+
+          if (response.ok) {
+            const historyData = await response.json();
+            if (historyData.messages && historyData.messages.length > 0) {
+              setChatMessages(historyData.messages);
+            } else {
+              // Add initial assistant message if no history
+              setChatMessages([
+                {
+                  role: "assistant",
+                  content: `Hello! I can help you with the questions from "${materialData.title}". I can modify questions, add new ones, or explain answers. What do you need?`,
+                },
+              ]);
+            }
+          }
+        }
+      } catch (historyError) {
+        console.error("Error loading chat history:", historyError);
+        // Fallback to initial message
         setChatMessages([
           {
             role: "assistant",
-            content: `Hello! I've loaded ${questionData.questions.length} questions from the material "${materialData.title}". I can help you modify questions, add new ones, or explain answers. What do you need?`,
+            content: `Hello! I can help you with the questions. What do you need?`,
           },
         ]);
       }
     };
 
     loadData();
-  }, [materialId, questionRecordId, router, searchParams]);
+  }, [materialId, questionRecordId, router, searchParams, conversationId]);
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -338,9 +362,10 @@ export default function QuestionsViewPage({
     setChatLoading(true);
 
     // Add user message
+    const newUserMessage = { role: "user" as const, content: userMessage };
     const newMessages: ChatMessage[] = [
       ...chatMessages,
-      { role: "user", content: userMessage },
+      newUserMessage,
     ];
     setChatMessages(newMessages);
 
@@ -362,10 +387,35 @@ export default function QuestionsViewPage({
 
       const data = await response.json();
 
+      const newAssistantMessage = { role: "assistant" as const, content: data.message };
       setChatMessages([
         ...newMessages,
-        { role: "assistant", content: data.message },
+        newAssistantMessage,
       ]);
+
+      // Save messages to database
+      try {
+        const { data: { session } } = await supabase.auth.getSession();
+        if (session) {
+          await fetch('/api/chat/save', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': `Bearer ${session.access_token}`,
+            },
+            body: JSON.stringify({
+              conversationId,
+              messages: [newUserMessage, newAssistantMessage],
+              chatType: 'questions',
+              materialId,
+              questionId: questionRecordId !== 'new' ? questionRecordId : null,
+            }),
+          });
+        }
+      } catch (saveError) {
+        console.error("Error saving chat history:", saveError);
+        // Don't fail the UI if save fails
+      }
     } catch (error) {
       console.error("Chat error:", error);
       setChatMessages([

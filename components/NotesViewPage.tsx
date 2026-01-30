@@ -82,10 +82,14 @@ export default function NotesViewPage({ materialId, noteId }: Props) {
   const [isUnsaved, setIsUnsaved] = useState(false);
   const [savedNoteId, setSavedNoteId] = useState<string | null>(null);
   const [isChatOpen, setIsChatOpen] = useState(false);
+  const [conversationId] = useState<string>(() => crypto.randomUUID()); // Generate conversation ID once
 
   useEffect(() => {
     const loadData = async () => {
       try {
+        const user = await getCurrentUser();
+        if (!user) return;
+
         // Load material first
         const { data: materialData, error: materialError } = await supabase
           .from("materials")
@@ -144,13 +148,52 @@ export default function NotesViewPage({ materialId, noteId }: Props) {
           setIsUnsaved(false);
         }
 
-        // Add initial assistant message
-        setChatMessages([
-          {
-            role: "assistant",
-            content: t("notesView.aiAssistantSubtitle"),
-          },
-        ]);
+        // Load chat history from database
+        try {
+          const { data: { session } } = await supabase.auth.getSession();
+          if (session) {
+            const response = await fetch(
+              `/api/chat/history?conversationId=${conversationId}`,
+              {
+                headers: {
+                  'Authorization': `Bearer ${session.access_token}`,
+                },
+              }
+            );
+
+            if (response.ok) {
+              const historyData = await response.json();
+              if (historyData.messages && historyData.messages.length > 0) {
+                setChatMessages(historyData.messages);
+              } else {
+                // Add initial assistant message if no history
+                setChatMessages([
+                  {
+                    role: "assistant",
+                    content: t("notesView.aiAssistantSubtitle"),
+                  },
+                ]);
+              }
+            } else {
+              // Fallback to initial message
+              setChatMessages([
+                {
+                  role: "assistant",
+                  content: t("notesView.aiAssistantSubtitle"),
+                },
+              ]);
+            }
+          }
+        } catch (historyError) {
+          console.error("Error loading chat history:", historyError);
+          // Fallback to initial message
+          setChatMessages([
+            {
+              role: "assistant",
+              content: t("notesView.aiAssistantSubtitle"),
+            },
+          ]);
+        }
       } catch (error) {
         console.error("Error loading notes:", error);
       } finally {
@@ -159,7 +202,7 @@ export default function NotesViewPage({ materialId, noteId }: Props) {
     };
 
     loadData();
-  }, [noteId, materialId, searchParams]);
+  }, [noteId, materialId, searchParams, conversationId]);
 
   const handleSendMessage = async () => {
     if (!inputMessage.trim() || sendingMessage || !material || !note) return;
@@ -169,10 +212,8 @@ export default function NotesViewPage({ materialId, noteId }: Props) {
     setSendingMessage(true);
 
     // Add user message to chat
-    setChatMessages((prev) => [
-      ...prev,
-      { role: "user", content: userMessage },
-    ]);
+    const newUserMessage = { role: "user" as const, content: userMessage };
+    setChatMessages((prev) => [...prev, newUserMessage]);
 
     try {
       // Call chat API
@@ -207,10 +248,32 @@ export default function NotesViewPage({ materialId, noteId }: Props) {
       }
 
       // Add assistant response to chat
-      setChatMessages((prev) => [
-        ...prev,
-        { role: "assistant", content: data.response },
-      ]);
+      const newAssistantMessage = { role: "assistant" as const, content: data.response };
+      setChatMessages((prev) => [...prev, newAssistantMessage]);
+
+      // Save messages to database
+      try {
+        const { data: { session } } = await supabase.auth.getSession();
+        if (session) {
+          await fetch('/api/chat/save', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': `Bearer ${session.access_token}`,
+            },
+            body: JSON.stringify({
+              conversationId,
+              messages: [newUserMessage, newAssistantMessage],
+              chatType: 'notes',
+              materialId,
+              noteId: noteId !== 'new' ? noteId : null,
+            }),
+          });
+        }
+      } catch (saveError) {
+        console.error("Error saving chat history:", saveError);
+        // Don't fail the UI if save fails
+      }
     } catch (error) {
       console.error("Chat error:", error);
       setChatMessages((prev) => [

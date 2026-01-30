@@ -71,13 +71,24 @@ export async function GET(request: NextRequest) {
 
     if (queryError) {
       console.error("[Chat History] Database error:", queryError);
+
+      // If table doesn't exist yet (migration not applied), return empty array
+      if (queryError.code === '42P01' || queryError.message?.includes('relation "chat_history" does not exist')) {
+        console.warn("[Chat History] chat_history table does not exist. Please run migration 003.");
+        return NextResponse.json({
+          success: true,
+          count: 0,
+          messages: [],
+        });
+      }
+
       return NextResponse.json(
         { error: `Failed to retrieve chat history: ${queryError.message}` },
         { status: 500 }
       );
     }
 
-    console.log(`[Chat History] Retrieved ${messages.length} messages for user ${user.id}`);
+    console.log(`[Chat History] Retrieved ${messages?.length || 0} messages for user ${user.id}`);
 
     // Transform to frontend format
     const formattedMessages = messages.map((msg) => ({

@@ -468,15 +468,24 @@ export default function QuestionsViewPage({
         return;
       }
 
+      // Get auth token
+      const { data: { session } } = await supabase.auth.getSession();
+      if (!session) {
+        router.push("/login");
+        return;
+      }
+
       const response = await fetch(
         `/api/materials/${materialId}/questions/save`,
         {
           method: "POST",
-          headers: { "Content-Type": "application/json" },
+          headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${session.access_token}`,
+          },
           body: JSON.stringify({
             questions: questionRecord.questions,
             questionType: questionRecord.question_type,
-            userId: user.id,
           }),
         }
       );

@@ -478,17 +478,24 @@ export default function NotesViewPage({ materialId, noteId }: Props) {
         return;
       }
 
+      // Get auth token
+      const { data: { session } } = await supabase.auth.getSession();
+      if (!session) {
+        router.push("/login");
+        return;
+      }
+
       const response = await fetch(`/api/materials/${materialId}/notes/save`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          "Authorization": `Bearer ${session.access_token}`,
         },
         body: JSON.stringify({
           summary: note.summary,
           keyPoints: note.key_points,
           concepts: note.concepts,
           studyTips: note.study_tips,
-          userId: user.id,
         }),
       });
 

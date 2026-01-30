@@ -26,7 +26,18 @@ export default function PdfConverterPage() {
   const [checkingBypass, setCheckingBypass] = useState(true);
   const [user, setUser] = useState<SupabaseUser | null>(null);
   const [loading, setLoading] = useState(true);
-  const [usageInfo, setUsageInfo] = useState<any>(null);
+  const [usageInfo, setUsageInfo] = useState<{
+    tierId: string;
+    tierName: string;
+    usage: {
+      pdf_conversions: { used: number; limit: number | null; unlimited: boolean };
+      materials: { used: number; limit: number | null; unlimited: boolean };
+      notes_generations: { used: number; limit: number | null; unlimited: boolean };
+      questions_generations: { used: number; limit: number | null; unlimited: boolean };
+    };
+    periodStart: string;
+    periodEnd: string;
+  } | null>(null);
   const [showPaymentModal, setShowPaymentModal] = useState(false);
   const [paymentSuccess, setPaymentSuccess] = useState(false);
 
@@ -218,7 +229,7 @@ export default function PdfConverterPage() {
         return;
       }
 
-      if (pdfUsage.used >= pdfUsage.limit) {
+      if (pdfUsage.limit !== null && pdfUsage.used >= pdfUsage.limit) {
         // Dosiahol limit
         setError(
           t("pdfConverter.errors.limitReached").replace("{limit}", pdfUsage.limit.toString()),
@@ -535,6 +546,7 @@ export default function PdfConverterPage() {
                 </span>
               </div>
               {!usageInfo.usage.pdf_conversions.unlimited &&
+                usageInfo.usage.pdf_conversions.limit !== null &&
                 usageInfo.usage.pdf_conversions.limit > 0 && (
                   <div className="mt-3">
                     <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2">

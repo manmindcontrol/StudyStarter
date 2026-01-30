@@ -7,6 +7,7 @@ import GenerateQuestionsModal from "../modals/GenerateQuestionsModal";
 import GeneratingQuestionsModal from "../modals/GeneratingQuestionsModal";
 import ErrorModal from "../modals/ErrorModal";
 import { useTranslation } from "@/hooks/useTranslation";
+import { supabase } from "@/lib/supabase";
 
 type QuestionType = "exam" | "test" | "summary";
 type QuestionFormat = "mcq" | "open" | "mixed";
@@ -50,6 +51,12 @@ export default function GenerateQuestionsButton({
     setIsGenerating(true);
 
     try {
+      // Get auth token
+      const { data: { session } } = await supabase.auth.getSession();
+      if (!session) {
+        throw new Error("You must be logged in to generate questions");
+      }
+
       const params = new URLSearchParams();
       params.set("type", questionType);
       params.set("count", count.toString());
@@ -66,6 +73,9 @@ export default function GenerateQuestionsButton({
 
       const res = await fetch(`${apiPath}?${params.toString()}`, {
         method: "POST",
+        headers: {
+          "Authorization": `Bearer ${session.access_token}`,
+        },
       });
 
       const data = await res.json();

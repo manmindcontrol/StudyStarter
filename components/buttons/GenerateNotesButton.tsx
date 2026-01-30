@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { StickyNote, ChevronRight } from "lucide-react";
 import GeneratingNotesModal from "../modals/GeneratingNotesModal";
 import { useTranslation } from "@/hooks/useTranslation";
+import { supabase } from "@/lib/supabase";
 
 type GenerateNotesButtonProps = {
   materialId?: string;
@@ -31,6 +32,12 @@ export default function GenerateNotesButton({
     setLoading(true);
 
     try {
+      // Get auth token
+      const { data: { session } } = await supabase.auth.getSession();
+      if (!session) {
+        throw new Error("You must be logged in to generate notes");
+      }
+
       const params = new URLSearchParams();
       if (lang) {
         params.set("lang", lang);
@@ -44,6 +51,9 @@ export default function GenerateNotesButton({
 
       const res = await fetch(`${apiPath}?${params.toString()}`, {
         method: "POST",
+        headers: {
+          "Authorization": `Bearer ${session.access_token}`,
+        },
       });
 
       const data = await res.json();

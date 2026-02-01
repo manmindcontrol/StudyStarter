@@ -111,7 +111,34 @@
     "openMaterial": "Material öffnen",
     "delete": "Löschen",
     "deleteMaterialConfirm": "Möchten Sie dieses Material wirklich löschen?",
-    "errorDeletingMaterial": "Fehler beim Löschen des Materials"
+    "errorDeletingMaterial": "Fehler beim Löschen des Materials",
+    "fileUpload": {
+      "uploadFile": "Datei hochladen",
+      "addUrl": "URL hinzufügen",
+      "pasteText": "Text einfügen",
+      "dropFile": "Datei hier ablegen",
+      "uploadMaterial": "Material hochladen",
+      "dragOrClick": "Datei hierher ziehen oder klicken zum Hochladen",
+      "supportedFormats": "Unterstützt: PDF, Word, TXT (max {maxSize}MB)",
+      "uploading": "Hochladen...",
+      "addFromUrl": "Material von URL hinzufügen",
+      "enterUrl": "Geben Sie eine URL ein, um Inhalte abzurufen und zu verarbeiten",
+      "smartExtraction": "✨ Intelligente Extraktion: Funktioniert mit statischem HTML und JavaScript-Seiten!",
+      "worksBest": "✅ Funktioniert am besten mit: Wikipedia, Medium, Dev.to, Blogs, MDN Docs, arXiv.org, PubMed Central",
+      "academicWarning": "⚠️ Akademische Artikel (ResearchGate, ScienceDirect, Springer, IEEE):",
+      "academicNote": "Diese Plattformen erfordern Login/Abonnement. Bitte laden Sie die PDF herunter und verwenden Sie \"Datei hochladen\" stattdessen.",
+      "processingUrl": "URL wird verarbeitet...",
+      "pasteYourText": "Ihren Text einfügen",
+      "enterText": "Geben Sie Textinhalte direkt ein oder fügen Sie sie ein",
+      "processingText": "Text wird verarbeitet...",
+      "addFromText": "Material aus Text hinzufügen",
+      "uploadSuccess": "Material erfolgreich hochgeladen!",
+      "errorNoUrl": "Bitte geben Sie eine URL ein",
+      "errorNoTitle": "Bitte geben Sie einen Titel für dieses Material ein",
+      "errorUrlNotSupported": "URL-Upload wird nicht unterstützt",
+      "errorNoText": "Bitte geben Sie Text ein",
+      "errorTextTooShort": "Text ist zu kurz. Bitte geben Sie mindestens 50 Zeichen ein."
+    }
   },
   "uploadLecture": {
     "title": "Vorlesung hochladen",
@@ -158,7 +185,8 @@
     "cannotSaveEmpty": "Leeres Transkript kann nicht gespeichert werden",
     "noTranscriptToFormat": "Kein Transkript zum Formatieren",
     "failedToFormat": "Fehler beim Formatieren des Transkripts",
-    "discardConfirm": "Möchten Sie diese Aufnahme wirklich verwerfen? Diese Aktion kann nicht rückgängig gemacht werden."
+    "discardConfirm": "Möchten Sie diese Aufnahme wirklich verwerfen? Diese Aktion kann nicht rückgängig gemacht werden.",
+    "lectureTranscript": "Vorlesungstranskript"
   },
   "login": {
     "title": "Willkommen zurück!",
@@ -317,7 +345,8 @@
     "examples": "Beispiele",
     "studyTipsRecommendations": "Lerntipps & Empfehlungen",
     "aiAssistant": "AI-Assistent",
-    "aiAssistantSubtitle": "Stellen Sie Fragen oder fordern Sie Änderungen an Ihren Notizen an"
+    "aiAssistantSubtitle": "Stellen Sie Fragen oder fordern Sie Änderungen an Ihren Notizen an",
+    "generatedOn": "Generiert am"
   },
   "questionsView": {
     "questionsNotFound": "Fragen nicht gefunden",
@@ -336,12 +365,17 @@
     "typeYourAnswer": "Geben Sie hier Ihre Antwort ein...",
     "checking": "Überprüfung...",
     "submitAnswer": "Antwort einreichen",
-    "yourAnswer": "Ihre Antwort:",
-    "correctAnswer": "Richtige Antwort:",
+    "yourAnswer": "Ihre Antwort",
+    "correctAnswer": "Richtige Antwort",
     "correct": "Richtig!",
     "incorrect": "Falsch",
     "aiAssistant": "AI-Assistent",
-    "aiAssistantSubtitle": "Stellen Sie Fragen oder fordern Sie Änderungen an"
+    "aiAssistantSubtitle": "Stellen Sie Fragen oder fordern Sie Änderungen an",
+    "chatGreeting": "Hallo! Ich kann Ihnen mit den Fragen aus \"{title}\" helfen. Ich kann Fragen ändern, neue hinzufügen oder Antworten erklären. Was benötigen Sie?",
+    "chatGreetingDefault": "Hallo! Ich kann Ihnen mit den Fragen helfen. Was benötigen Sie?",
+    "chatError": "Entschuldigung, ein Fehler ist aufgetreten. Bitte versuchen Sie es erneut.",
+    "validationError": "Antwort konnte nicht überprüft werden. Bitte prüfen Sie die richtige Antwort unten.",
+    "generatedWithAI": "Mit AI-Assistent generiert"
   },
   "buttons": {
     "openDocument": "Dokument öffnen",
@@ -409,6 +443,13 @@
       "cancel": "Abbrechen",
       "generate": "Fragen generieren",
       "generating": "Generieren..."
+    },
+    "slidingChat": {
+      "defaultTitle": "AI-Assistent",
+      "defaultSubtitle": "Stellen Sie Fragen zum Inhalt",
+      "startConversation": "Gespräch beginnen",
+      "startPrompt": "Fragen Sie mich alles über den Inhalt. Ich kann Ihnen helfen zu verstehen, zusammenzufassen oder bestimmte Teile zu erklären.",
+      "messagePlaceholder": "Schreiben Sie eine Nachricht..."
     }
   },
   "pdfConverter": {

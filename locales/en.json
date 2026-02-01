@@ -111,7 +111,34 @@
     "openMaterial": "Open Material",
     "delete": "Delete",
     "deleteMaterialConfirm": "Are you sure you want to delete this material?",
-    "errorDeletingMaterial": "Error deleting material"
+    "errorDeletingMaterial": "Error deleting material",
+    "fileUpload": {
+      "uploadFile": "Upload File",
+      "addUrl": "Add URL",
+      "pasteText": "Paste Text",
+      "dropFile": "Drop file here",
+      "uploadMaterial": "Upload Material",
+      "dragOrClick": "Drag file here or click to upload",
+      "supportedFormats": "Supported: PDF, Word, TXT (max {maxSize}MB)",
+      "uploading": "Uploading...",
+      "addFromUrl": "Add Material from URL",
+      "enterUrl": "Enter a URL to fetch and process content",
+      "smartExtraction": "✨ Smart extraction: Works with static HTML and JavaScript-heavy pages!",
+      "worksBest": "✅ Works best with: Wikipedia, Medium, Dev.to, blogs, MDN docs, arXiv.org, PubMed Central",
+      "academicWarning": "⚠️ Academic articles (ResearchGate, ScienceDirect, Springer, IEEE):",
+      "academicNote": "These platforms require login/subscription. Please download the PDF and use \"Upload File\" instead.",
+      "processingUrl": "Processing URL...",
+      "pasteYourText": "Paste Your Text",
+      "enterText": "Enter or paste text content directly",
+      "processingText": "Processing Text...",
+      "addFromText": "Add Material from Text",
+      "uploadSuccess": "Material successfully uploaded!",
+      "errorNoUrl": "Please enter a URL",
+      "errorNoTitle": "Please enter a title for this material",
+      "errorUrlNotSupported": "URL upload is not supported",
+      "errorNoText": "Please enter some text",
+      "errorTextTooShort": "Text is too short. Please enter at least 50 characters."
+    }
   },
   "uploadLecture": {
     "title": "Upload Lecture",
@@ -158,7 +185,8 @@
     "cannotSaveEmpty": "Cannot save empty transcript",
     "noTranscriptToFormat": "No transcript to format",
     "failedToFormat": "Failed to format transcript",
-    "discardConfirm": "Are you sure you want to discard this recording? This action cannot be undone."
+    "discardConfirm": "Are you sure you want to discard this recording? This action cannot be undone.",
+    "lectureTranscript": "Lecture Transcript"
   },
   "login": {
     "title": "Welcome back!",
@@ -333,7 +361,8 @@
     "examples": "Examples",
     "studyTipsRecommendations": "Study Tips & Recommendations",
     "aiAssistant": "AI Assistant",
-    "aiAssistantSubtitle": "Ask questions or request modifications to your notes"
+    "aiAssistantSubtitle": "Ask questions or request modifications to your notes",
+    "generatedOn": "Generated on"
   },
   "questionsView": {
     "questionsNotFound": "Questions not found",
@@ -352,12 +381,17 @@
     "typeYourAnswer": "Type your answer here...",
     "checking": "Checking...",
     "submitAnswer": "Submit Answer",
-    "yourAnswer": "Your answer:",
-    "correctAnswer": "Correct answer:",
+    "yourAnswer": "Your answer",
+    "correctAnswer": "Correct answer",
     "correct": "Correct!",
     "incorrect": "Incorrect",
     "aiAssistant": "AI Assistant",
-    "aiAssistantSubtitle": "Ask questions or request modifications"
+    "aiAssistantSubtitle": "Ask questions or request modifications",
+    "chatGreeting": "Hello! I can help you with the questions from \"{title}\". I can modify questions, add new ones, or explain answers. What do you need?",
+    "chatGreetingDefault": "Hello! I can help you with the questions. What do you need?",
+    "chatError": "Sorry, an error occurred. Please try again.",
+    "validationError": "Could not validate answer. Please check the correct answer below.",
+    "generatedWithAI": "Generated with AI assistant"
   },
   "buttons": {
     "openDocument": "Open Document",
@@ -425,6 +459,13 @@
       "cancel": "Cancel",
       "generate": "Generate Questions",
       "generating": "Generating..."
+    },
+    "slidingChat": {
+      "defaultTitle": "AI Assistant",
+      "defaultSubtitle": "Ask questions about the content",
+      "startConversation": "Start a conversation",
+      "startPrompt": "Ask me anything about the content. I can help you understand, summarize, or explain specific parts.",
+      "messagePlaceholder": "Write a message..."
     }
   },
   "pdfConverter": {

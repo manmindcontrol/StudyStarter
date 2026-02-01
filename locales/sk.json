@@ -111,7 +111,34 @@
     "openMaterial": "Otvoriť materiál",
     "delete": "Odstrániť",
     "deleteMaterialConfirm": "Naozaj chcete odstrániť tento materiál?",
-    "errorDeletingMaterial": "Chyba pri odstraňovaní materiálu"
+    "errorDeletingMaterial": "Chyba pri odstraňovaní materiálu",
+    "fileUpload": {
+      "uploadFile": "Nahrať súbor",
+      "addUrl": "Pridať URL",
+      "pasteText": "Vložiť text",
+      "dropFile": "Pustite súbor sem",
+      "uploadMaterial": "Nahrať materiál",
+      "dragOrClick": "Pretiahnite súbor sem alebo kliknite pre nahratie",
+      "supportedFormats": "Podporované: PDF, Word, TXT (max {maxSize}MB)",
+      "uploading": "Nahrávam...",
+      "addFromUrl": "Pridať materiál z URL",
+      "enterUrl": "Zadajte URL na stiahnutie a spracovanie obsahu",
+      "smartExtraction": "✨ Inteligentná extrakcia: Funguje so statickým HTML aj JavaScript stránkami!",
+      "worksBest": "✅ Najlepšie funguje s: Wikipedia, Medium, Dev.to, blogy, MDN docs, arXiv.org, PubMed Central",
+      "academicWarning": "⚠️ Akademické články (ResearchGate, ScienceDirect, Springer, IEEE):",
+      "academicNote": "Tieto platformy vyžadujú prihlásenie/predplatné. Prosím stiahnite PDF a použite \"Nahrať súbor\" namiesto toho.",
+      "processingUrl": "Spracovávam URL...",
+      "pasteYourText": "Vložte váš text",
+      "enterText": "Zadajte alebo vložte textový obsah priamo",
+      "processingText": "Spracovávam text...",
+      "addFromText": "Pridať materiál z textu",
+      "uploadSuccess": "Materiál úspešne nahraný!",
+      "errorNoUrl": "Prosím zadajte URL",
+      "errorNoTitle": "Prosím zadajte názov pre tento materiál",
+      "errorUrlNotSupported": "Nahrávanie z URL nie je podporované",
+      "errorNoText": "Prosím zadajte nejaký text",
+      "errorTextTooShort": "Text je príliš krátky. Prosím zadajte aspoň 50 znakov."
+    }
   },
   "uploadLecture": {
     "title": "Nahrať prednášku",
@@ -158,7 +185,8 @@
     "cannotSaveEmpty": "Nemožno uložiť prázdny prepis",
     "noTranscriptToFormat": "Žiadny prepis na formátovanie",
     "failedToFormat": "Nepodarilo sa naformátovať prepis",
-    "discardConfirm": "Naozaj chcete zrušiť túto nahrávku? Túto akciu nie je možné vrátiť späť."
+    "discardConfirm": "Naozaj chcete zrušiť túto nahrávku? Túto akciu nie je možné vrátiť späť.",
+    "lectureTranscript": "Prepis prednášky"
   },
   "login": {
     "title": "Vitajte späť!",
@@ -333,7 +361,8 @@
     "examples": "Príklady",
     "studyTipsRecommendations": "Tipy a odporúčania na štúdium",
     "aiAssistant": "AI Asistent",
-    "aiAssistantSubtitle": "Opýtajte sa na otázky alebo požiadajte o úpravy poznámok"
+    "aiAssistantSubtitle": "Opýtajte sa na otázky alebo požiadajte o úpravy poznámok",
+    "generatedOn": "Vygenerované"
   },
   "questionsView": {
     "questionsNotFound": "Otázky nenájdené",
@@ -352,12 +381,17 @@
     "typeYourAnswer": "Napíšte vašu odpoveď...",
     "checking": "Kontrolujem...",
     "submitAnswer": "Odoslať odpoveď",
-    "yourAnswer": "Vaša odpoveď:",
-    "correctAnswer": "Správna odpoveď:",
+    "yourAnswer": "Vaša odpoveď",
+    "correctAnswer": "Správna odpoveď",
     "correct": "Správne!",
     "incorrect": "Nesprávne",
     "aiAssistant": "AI Asistent",
-    "aiAssistantSubtitle": "Opýtajte sa na otázky alebo požiadajte o úpravy"
+    "aiAssistantSubtitle": "Opýtajte sa na otázky alebo požiadajte o úpravy",
+    "chatGreeting": "Ahoj! Pomôžem vám s otázkami z \"{title}\". Môžem upraviť otázky, pridať nové, alebo vysvetliť odpovede. Čo potrebujete?",
+    "chatGreetingDefault": "Ahoj! Pomôžem vám s otázkami. Čo potrebujete?",
+    "chatError": "Ospravedlňujem sa, nastala chyba. Skúste to prosím znova.",
+    "validationError": "Nepodarilo sa overiť odpoveď. Skontrolujte správnu odpoveď nižšie.",
+    "generatedWithAI": "Vygenerované s AI asistentom"
   },
   "buttons": {
     "openDocument": "Otvoriť dokument",
@@ -425,6 +459,13 @@
       "cancel": "Zrušiť",
       "generate": "Generovať otázky",
       "generating": "Generujem..."
+    },
+    "slidingChat": {
+      "defaultTitle": "AI Asistent",
+      "defaultSubtitle": "Opýtajte sa na otázky o obsahu",
+      "startConversation": "Začať konverzáciu",
+      "startPrompt": "Opýtajte sa ma na čokoľvek o obsahu. Môžem vám pomôcť pochopiť, zhrnúť alebo vysvetliť konkrétne časti.",
+      "messagePlaceholder": "Napíšte správu..."
     }
   },
   "pdfConverter": {

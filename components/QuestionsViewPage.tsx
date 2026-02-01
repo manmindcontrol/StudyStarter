@@ -74,10 +74,10 @@ export default function QuestionsViewPage({
   const [loading, setLoading] = useState(true);
   const [material, setMaterial] = useState<Material | null>(null);
   const [questionRecord, setQuestionRecord] = useState<QuestionRecord | null>(
-    null
+    null,
   );
   const [selectedQuestions, setSelectedQuestions] = useState<Set<number>>(
-    new Set()
+    new Set(),
   );
   const [saving, setSaving] = useState(false);
   const [isUnsaved, setIsUnsaved] = useState(false);
@@ -91,10 +91,10 @@ export default function QuestionsViewPage({
     feedback?: string;
   };
   const [quizAnswers, setQuizAnswers] = useState<Map<number, QuizAnswer>>(
-    new Map()
+    new Map(),
   );
   const [openAnswerInputs, setOpenAnswerInputs] = useState<Map<number, string>>(
-    new Map()
+    new Map(),
   );
   const [checkingAnswer, setCheckingAnswer] = useState<number | null>(null);
 
@@ -136,19 +136,22 @@ export default function QuestionsViewPage({
         const questionType = searchParams.get("type") || "exam";
 
         // Try to get data from sessionStorage first (preferred method)
-        const unsavedDataFromStorage = sessionStorage.getItem('unsavedQuestions');
+        const unsavedDataFromStorage =
+          sessionStorage.getItem("unsavedQuestions");
         let parsedQuestions: GeneratedQuestion[] | null = null;
 
         if (unsavedDataFromStorage) {
-          parsedQuestions = JSON.parse(unsavedDataFromStorage) as GeneratedQuestion[];
+          parsedQuestions = JSON.parse(
+            unsavedDataFromStorage,
+          ) as GeneratedQuestion[];
           // Clear the sessionStorage after reading
-          sessionStorage.removeItem('unsavedQuestions');
+          sessionStorage.removeItem("unsavedQuestions");
         } else {
           // Fallback to URL parameter for backward compatibility
           const unsavedData = searchParams.get("data");
           if (unsavedData) {
             parsedQuestions = JSON.parse(
-              decodeURIComponent(unsavedData)
+              decodeURIComponent(unsavedData),
             ) as GeneratedQuestion[];
           }
         }
@@ -187,15 +190,17 @@ export default function QuestionsViewPage({
 
       // Load chat history from database
       try {
-        const { data: { session } } = await supabase.auth.getSession();
+        const {
+          data: { session },
+        } = await supabase.auth.getSession();
         if (session) {
           const response = await fetch(
             `/api/chat/history?conversationId=${conversationId}`,
             {
               headers: {
-                'Authorization': `Bearer ${session.access_token}`,
+                Authorization: `Bearer ${session.access_token}`,
               },
-            }
+            },
           );
 
           if (response.ok) {
@@ -207,7 +212,7 @@ export default function QuestionsViewPage({
               setChatMessages([
                 {
                   role: "assistant",
-                  content: `Hello! I can help you with the questions from "${materialData.title}". I can modify questions, add new ones, or explain answers. What do you need?`,
+                  content: t("questionsView.chatGreeting"),
                 },
               ]);
             }
@@ -219,7 +224,7 @@ export default function QuestionsViewPage({
         setChatMessages([
           {
             role: "assistant",
-            content: `Hello! I can help you with the questions. What do you need?`,
+            content: t("questionsView.chatGreetingDefault"),
           },
         ]);
       }
@@ -261,7 +266,7 @@ export default function QuestionsViewPage({
   const handleMCQAnswer = (
     questionIndex: number,
     selectedAnswer: string,
-    correctAnswer: string | null
+    correctAnswer: string | null,
   ) => {
     if (!correctAnswer) {
       const newAnswers = new Map(quizAnswers);
@@ -296,7 +301,7 @@ export default function QuestionsViewPage({
   // Handle open question answer submission
   const handleOpenAnswerSubmit = async (
     questionIndex: number,
-    question: GeneratedQuestion
+    question: GeneratedQuestion,
   ) => {
     const userAnswer = openAnswerInputs.get(questionIndex) || "";
     if (!userAnswer.trim()) return;
@@ -337,8 +342,7 @@ export default function QuestionsViewPage({
         userAnswer: userAnswer.trim(),
         isCorrect: null,
         isChecked: true,
-        feedback:
-          "Could not validate answer. Please check the correct answer below.",
+        feedback: t("questionsView.validationError"),
       });
       setQuizAnswers(newAnswers);
     } finally {
@@ -363,10 +367,7 @@ export default function QuestionsViewPage({
 
     // Add user message
     const newUserMessage = { role: "user" as const, content: userMessage };
-    const newMessages: ChatMessage[] = [
-      ...chatMessages,
-      newUserMessage,
-    ];
+    const newMessages: ChatMessage[] = [...chatMessages, newUserMessage];
     setChatMessages(newMessages);
 
     try {
@@ -387,28 +388,30 @@ export default function QuestionsViewPage({
 
       const data = await response.json();
 
-      const newAssistantMessage = { role: "assistant" as const, content: data.message };
-      setChatMessages([
-        ...newMessages,
-        newAssistantMessage,
-      ]);
+      const newAssistantMessage = {
+        role: "assistant" as const,
+        content: data.message,
+      };
+      setChatMessages([...newMessages, newAssistantMessage]);
 
       // Save messages to database
       try {
-        const { data: { session } } = await supabase.auth.getSession();
+        const {
+          data: { session },
+        } = await supabase.auth.getSession();
         if (session) {
-          await fetch('/api/chat/save', {
-            method: 'POST',
+          await fetch("/api/chat/save", {
+            method: "POST",
             headers: {
-              'Content-Type': 'application/json',
-              'Authorization': `Bearer ${session.access_token}`,
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${session.access_token}`,
             },
             body: JSON.stringify({
               conversationId,
               messages: [newUserMessage, newAssistantMessage],
-              chatType: 'questions',
+              chatType: "questions",
               materialId,
-              questionId: questionRecordId !== 'new' ? questionRecordId : null,
+              questionId: questionRecordId !== "new" ? questionRecordId : null,
             }),
           });
         }
@@ -422,7 +425,7 @@ export default function QuestionsViewPage({
         ...newMessages,
         {
           role: "assistant",
-          content: "Sorry, an error occurred. Please try again.",
+          content: t("questionsView.chatError"),
         },
       ]);
     } finally {
@@ -443,7 +446,7 @@ export default function QuestionsViewPage({
           formatted += "\n";
         }
         if (q.answer) {
-          formatted += `   ✓ Správna odpoveď: ${q.answer}\n`;
+          formatted += `   ✓ ${t("questionsView.correctAnswer")}: ${q.answer}\n`;
         }
         return formatted + "\n";
       })
@@ -469,7 +472,9 @@ export default function QuestionsViewPage({
       }
 
       // Get auth token
-      const { data: { session } } = await supabase.auth.getSession();
+      const {
+        data: { session },
+      } = await supabase.auth.getSession();
       if (!session) {
         router.push("/login");
         return;
@@ -481,13 +486,13 @@ export default function QuestionsViewPage({
           method: "POST",
           headers: {
             "Content-Type": "application/json",
-            "Authorization": `Bearer ${session.access_token}`,
+            Authorization: `Bearer ${session.access_token}`,
           },
           body: JSON.stringify({
             questions: questionRecord.questions,
             questionType: questionRecord.question_type,
           }),
-        }
+        },
       );
 
       const data = await response.json();
@@ -518,7 +523,7 @@ export default function QuestionsViewPage({
         heading: HeadingLevel.HEADING_1,
         alignment: AlignmentType.CENTER,
         spacing: { after: 400 },
-      })
+      }),
     );
 
     // Subtitle
@@ -533,7 +538,7 @@ export default function QuestionsViewPage({
         ],
         alignment: AlignmentType.CENTER,
         spacing: { after: 400 },
-      })
+      }),
     );
 
     // Date
@@ -547,7 +552,7 @@ export default function QuestionsViewPage({
           }),
         ],
         spacing: { after: 600 },
-      })
+      }),
     );
 
     // Questions
@@ -567,7 +572,7 @@ export default function QuestionsViewPage({
             }),
           ],
           spacing: { before: 300, after: 200 },
-        })
+        }),
       );
 
       // Question type badge
@@ -582,7 +587,7 @@ export default function QuestionsViewPage({
             }),
           ],
           spacing: { after: 200 },
-        })
+        }),
       );
 
       // MCQ options
@@ -597,7 +602,7 @@ export default function QuestionsViewPage({
                 }),
               ],
               spacing: { after: 100 },
-            })
+            }),
           );
         });
       }
@@ -608,7 +613,7 @@ export default function QuestionsViewPage({
           new Paragraph({
             children: [
               new TextRun({
-                text: "✓ Správna odpoveď: ",
+                text: `✓ ${t("questionsView.correctAnswer")}: `,
                 bold: true,
                 size: 22,
                 color: "059669",
@@ -620,14 +625,14 @@ export default function QuestionsViewPage({
               }),
             ],
             spacing: { before: 200, after: 400 },
-          })
+          }),
         );
       } else {
         children.push(
           new Paragraph({
             text: "",
             spacing: { after: 400 },
-          })
+          }),
         );
       }
     });
@@ -637,20 +642,20 @@ export default function QuestionsViewPage({
       new Paragraph({
         text: "",
         spacing: { before: 800 },
-      })
+      }),
     );
     children.push(
       new Paragraph({
         children: [
           new TextRun({
-            text: "Generated with AI assistant",
+            text: t("questionsView.generatedWithAI"),
             italics: true,
             size: 18,
             color: "666666",
           }),
         ],
         alignment: AlignmentType.CENTER,
-      })
+      }),
     );
 
     const doc = new Document({
@@ -703,7 +708,7 @@ export default function QuestionsViewPage({
                 onClick={() => router.push(`/materials/${materialId}`)}
                 className="p-2.5 sm:p-3 text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white group rounded-lg transition-colors shrink-0"
               >
-                <ArrowLeft className="w-5 h-5 group-hover:-translate-x-1 transition-transform" />
+                <ArrowLeft className="w-5 h-5 group-hover:-translate-x-1 transition-transform cursor-pointer" />
               </button>
               <div className="min-w-0 flex-1">
                 <h1 className="text-base sm:text-xl font-bold text-gray-900 dark:text-white truncate">
@@ -728,34 +733,6 @@ export default function QuestionsViewPage({
                   </span>
                 )}
               </button>
-              {/* Save button - only visible for unsaved questions */}
-              {isUnsaved ? (
-                <button
-                  onClick={handleSaveQuestions}
-                  disabled={saving}
-                  className="inline-flex items-center justify-center gap-2 bg-linear-to-br from-green-600 to-emerald-500 hover:from-green-700 hover:to-emerald-600 text-white px-3 sm:px-4 py-2.5 sm:py-3 rounded-lg text-xs sm:text-sm font-semibold transition-all disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
-                >
-                  <Save className="w-4 h-4 sm:w-4.5 sm:h-4.5 shrink-0" />
-                  <span className="hidden sm:inline">
-                    {saving
-                      ? t("questionsView.saving")
-                      : t("questionsView.saveQuestions")}
-                  </span>
-                </button>
-              ) : (
-                savedQuestionId && (
-                  <button
-                    disabled
-                    className="inline-flex items-center justify-center gap-2 bg-green-100 text-green-500 px-3 sm:px-4 py-2.5 sm:py-3 rounded-lg text-xs sm:text-sm font-semibold cursor-default"
-                  >
-                    <Check className="w-4 h-4 sm:w-4.5 sm:h-4.5 shrink-0" />
-                    <span className="hidden sm:inline">
-                      {t("questionsView.questionsSaved")}
-                    </span>
-                  </button>
-                )
-              )}
-
               {/* Export dropdown */}
               <div className="relative" ref={exportMenuRef}>
                 <button
@@ -797,6 +774,33 @@ export default function QuestionsViewPage({
                   </div>
                 )}
               </div>
+              {/* Save button - only visible for unsaved questions */}
+              {isUnsaved ? (
+                <button
+                  onClick={handleSaveQuestions}
+                  disabled={saving}
+                  className="inline-flex items-center justify-center gap-2 bg-linear-to-br from-green-600 to-emerald-500 hover:from-green-700 hover:to-emerald-600 text-white px-3 sm:px-4 py-2.5 sm:py-3 rounded-lg text-xs sm:text-sm font-semibold transition-all disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
+                >
+                  <Save className="w-4 h-4 sm:w-4.5 sm:h-4.5 shrink-0" />
+                  <span className="hidden sm:inline">
+                    {saving
+                      ? t("questionsView.saving")
+                      : t("questionsView.saveQuestions")}
+                  </span>
+                </button>
+              ) : (
+                savedQuestionId && (
+                  <button
+                    disabled
+                    className="inline-flex items-center justify-center gap-2 bg-green-100 text-green-500 px-3 sm:px-4 py-2.5 sm:py-3 rounded-lg text-xs sm:text-sm font-semibold cursor-default"
+                  >
+                    <Check className="w-4 h-4 sm:w-4.5 sm:h-4.5 shrink-0" />
+                    <span className="hidden sm:inline">
+                      {t("questionsView.questionsSaved")}
+                    </span>
+                  </button>
+                )
+              )}
             </div>
           </div>
         </div>
@@ -844,7 +848,7 @@ export default function QuestionsViewPage({
                           <div className="space-y-1.5 sm:space-y-2 mb-2 sm:mb-3">
                             {q.options.map((option, optIdx) => {
                               const optionLetter = String.fromCharCode(
-                                97 + optIdx
+                                97 + optIdx,
                               );
                               const isSelected =
                                 quizAnswer?.userAnswer === option;

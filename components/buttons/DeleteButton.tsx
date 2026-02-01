@@ -38,7 +38,7 @@ export default function DeleteButton({
   const handleDelete = async () => {
     if (
       !confirm(
-        `Are you sure you want to delete ${displayTitle}? This action cannot be undone.`
+        `Are you sure you want to delete ${displayTitle}? This action cannot be undone.`,
       )
     ) {
       return;
@@ -50,31 +50,17 @@ export default function DeleteButton({
     try {
       if (!id) throw new Error("No ID provided");
 
-      // Get auth token
-      const { data: { session } } = await supabase.auth.getSession();
-      if (!session) throw new Error("Not authenticated");
+      const { error: deleteError } = await supabase
+        .from(tableName)
+        .delete()
+        .eq("id", id);
 
-      // Call API endpoint to delete with proper cleanup
-      const endpoint = itemType === "lecture"
-        ? `/api/lectures/${id}`
-        : `/api/materials/${id}`;
-
-      const response = await fetch(endpoint, {
-        method: 'DELETE',
-        headers: {
-          'Authorization': `Bearer ${session.access_token}`,
-        },
-      });
-
-      if (!response.ok) {
-        const data = await response.json();
-        throw new Error(data.error || 'Failed to delete');
-      }
+      if (deleteError) throw deleteError;
 
       router.push(redirectTo);
     } catch (err) {
       setError(
-        err instanceof Error ? err.message : `Failed to delete ${itemType}`
+        err instanceof Error ? err.message : `Failed to delete ${itemType}`,
       );
       setLoading(false);
     }
@@ -102,10 +88,14 @@ export default function DeleteButton({
           <ChevronRight className="w-4 h-4 sm:w-5 sm:h-5 text-gray-400 group-hover:text-red-600 transition-colors" />
         </div>
         <h3 className="text-sm sm:text-base md:text-lg font-semibold text-gray-900 dark:text-gray-300 mb-0.5 sm:mb-1">
-          {itemType === "lecture" ? t("buttons.deleteLecture") : t("buttons.deleteMaterial")}
+          {itemType === "lecture"
+            ? t("buttons.deleteLecture")
+            : t("buttons.deleteMaterial")}
         </h3>
         <p className="text-xs sm:text-sm text-gray-600 dark:text-gray-400 leading-snug">
-          {itemType === "lecture" ? t("buttons.deleteLectureDesc") : t("buttons.deleteMaterialDesc")}
+          {itemType === "lecture"
+            ? t("buttons.deleteLectureDesc")
+            : t("buttons.deleteMaterialDesc")}
         </p>
       </button>
 

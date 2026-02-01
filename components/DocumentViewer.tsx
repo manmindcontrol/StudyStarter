@@ -4,11 +4,7 @@ import { useEffect, useState, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { getCurrentUser } from "@/lib/auth";
 import { supabase } from "@/lib/supabase";
-import {
-  FileText,
-  ChevronLeft,
-  Loader2,
-} from "lucide-react";
+import { FileText, ChevronLeft } from "lucide-react";
 import type { User as SupabaseUser } from "@supabase/supabase-js";
 import { useTranslation } from "@/hooks/useTranslation";
 import SlidingChatPanel from "./SlidingChatPanel";
@@ -87,17 +83,20 @@ export default function DocumentViewer({ materialId }: Props) {
         params.set("lang", locale);
       }
 
-      const response = await fetch(`/api/materials/${material.id}/chat?${params.toString()}`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
+      const response = await fetch(
+        `/api/materials/${material.id}/chat?${params.toString()}`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            message: userMessage,
+            context: material.content,
+            messages: messages,
+          }),
         },
-        body: JSON.stringify({
-          message: userMessage,
-          context: material.content,
-          messages: messages,
-        }),
-      });
+      );
 
       if (!response.ok) {
         throw new Error("Failed to get response");

@@ -74,16 +74,15 @@ export default function DashboardPage() {
   const [lectures, setLectures] = useState<Lecture[]>([]);
   const [materialsOpen, setMaterialsOpen] = useState(false);
   const [recordingsOpen, setRecordingsOpen] = useState(false);
-  const [showSubscriptionModal, setShowSubscriptionModal] = useState(false);
+  const [showSubscriptionModal, setShowSubscriptionModal] = useState(
+    () => searchParams?.get('showSubscriptionModal') === 'true'
+  );
   const { isDarkMode, toggleDarkMode } = useTheme();
   const { t } = useTranslation();
 
-  // Check if we should show subscription modal from URL params
+  // Clean up URL if subscription modal was opened via URL param
   useEffect(() => {
-    const showModal = searchParams?.get('showSubscriptionModal');
-    if (showModal === 'true') {
-      setShowSubscriptionModal(true);
-      // Clean up URL
+    if (searchParams?.get('showSubscriptionModal') === 'true') {
       window.history.replaceState({}, '', '/dashboard');
     }
   }, [searchParams]);

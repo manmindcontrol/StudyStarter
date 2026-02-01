@@ -26,29 +26,31 @@ export default function CookiePreferences({
   isOpen,
   onClose,
 }: CookiePreferencesProps) {
-  const [settings, setSettings] = useState<CookieSettings>({
-    necessary: true, // Always true, can't be disabled
-    functional: false,
-    analytics: false,
-    marketing: false,
+  const [settings, setSettings] = useState<CookieSettings>(() => {
+    const defaultSettings = {
+      necessary: true, // Always true, can't be disabled
+      functional: false,
+      analytics: false,
+      marketing: false,
+    };
+    // Only access localStorage on client
+    if (typeof window === "undefined") return defaultSettings;
+    try {
+      const saved = localStorage.getItem("cookiePreferences");
+      if (saved) {
+        return { ...defaultSettings, ...JSON.parse(saved) };
+      }
+    } catch (e) {
+      console.error("Failed to parse cookie preferences", e);
+    }
+    return defaultSettings;
   });
 
   const [mounted, setMounted] = useState(false);
 
-  useEffect(() => {
-    setMounted(true);
-    // Load saved preferences
-    const savedPreferences = localStorage.getItem("cookiePreferences");
-    if (savedPreferences) {
-      try {
-        const parsed = JSON.parse(savedPreferences);
-        setSettings((prev) => ({ ...prev, ...parsed }));
-      } catch (e) {
-        console.error("Failed to parse cookie preferences", e);
-      }
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  // Hydration guard - must use effect to avoid SSR mismatch
+  // eslint-disable-next-line react-hooks/set-state-in-effect
+  useEffect(() => setMounted(true), []);
 
   const handleToggle = (key: keyof CookieSettings) => {
     if (key === "necessary") return; // Can't toggle necessary cookies

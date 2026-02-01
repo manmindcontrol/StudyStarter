@@ -167,6 +167,27 @@ export async function getUserTierAndLimits(userId: string) {
   };
 }
 
+// Admin emails s neobmedzeným prístupom
+const ADMIN_EMAILS = ['info@studystarter.io'];
+
+/**
+ * Skontroluje či je používateľ admin podľa emailu
+ */
+export async function isAdmin(userId: string): Promise<boolean> {
+  try {
+    const { data, error } = await supabaseAdmin
+      .from('user_profiles')
+      .select('email')
+      .eq('id', userId)
+      .single();
+
+    if (error || !data?.email) return false;
+    return ADMIN_EMAILS.includes(data.email.toLowerCase());
+  } catch {
+    return false;
+  }
+}
+
 /**
  * Skontroluje či používateľ môže použiť danú funkciu
  * @returns { allowed: boolean, reason?: string }
@@ -176,6 +197,11 @@ export async function checkUsageLimit(
   usageType: UsageType
 ): Promise<{ allowed: boolean; reason?: string; current?: number; limit?: number | null }> {
   try {
+    // Admin bypass - neobmedzený prístup
+    if (await isAdmin(userId)) {
+      return { allowed: true, limit: null };
+    }
+
     // Získaj tier a limity
     const { limits } = await getUserTierAndLimits(userId);
 

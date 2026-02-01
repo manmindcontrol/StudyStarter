@@ -21,7 +21,8 @@ export default function LanguageSelector() {
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
-  const selectedLanguage = languages.find((l) => l.code === locale) || languages[0];
+  const selectedLanguage =
+    languages.find((l) => l.code === locale) || languages[0];
 
   // Close dropdown when clicking outside
   useEffect(() => {
@@ -69,7 +70,7 @@ export default function LanguageSelector() {
             <button
               key={language.code}
               onClick={() => handleLanguageChange(language)}
-              className={`w-full flex items-center justify-between px-4 py-2.5 hover:bg-gray-100 dark:hover:bg-slate-700 transition-colors duration-150 ${
+              className={`w-full flex items-center justify-between px-4 py-2.5 text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-slate-700 transition-colors duration-150 ${
                 selectedLanguage.code === language.code
                   ? "bg-blue-50 dark:bg-slate-700/50"
                   : ""

@@ -88,12 +88,11 @@ export default function SlidingChatPanel({
           <div className="p-3 sm:p-4 md:p-4 border-b border-gray-200 dark:border-slate-700 bg-linear-to-r from-purple-50 to-blue-50 dark:from-purple-900/20 dark:to-blue-900/20 shrink-0">
             <div className="flex items-center justify-between gap-3">
               <div className="flex items-center gap-3 min-w-0">
-                <div className="relative w-10 h-10 sm:w-12 sm:h-12 shrink-0 flex items-center justify-center">
+                <div className="relative w-10 h-10 sm:w-12 sm:h-12 shrink-0">
                   <Image
                     src="/chatbot.svg"
                     alt="AI Assistant"
-                    width={48}
-                    height={48}
+                    fill
                     className="object-contain"
                   />
                 </div>

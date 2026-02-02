@@ -14,7 +14,7 @@ const translations = {
 export function useTranslation() {
   const { locale, setLocale } = useLanguage();
 
-  const t = (key: string): string => {
+  const t = (key: string, params?: Record<string, string>): string => {
     const keys = key.split(".");
     let value: unknown = translations[locale];
 
@@ -26,7 +26,16 @@ export function useTranslation() {
       }
     }
 
-    return typeof value === "string" ? value : key;
+    let result = typeof value === "string" ? value : key;
+
+    // Interpolate parameters like {title}, {name}, etc.
+    if (params) {
+      Object.entries(params).forEach(([paramKey, paramValue]) => {
+        result = result.replace(new RegExp(`\\{${paramKey}\\}`, "g"), paramValue);
+      });
+    }
+
+    return result;
   };
 
   return { t, locale, setLocale };

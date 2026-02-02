@@ -212,7 +212,9 @@ export default function QuestionsViewPage({
               setChatMessages([
                 {
                   role: "assistant",
-                  content: t("questionsView.chatGreeting"),
+                  content: materialData?.title
+                    ? t("questionsView.chatGreeting", { title: materialData.title })
+                    : t("questionsView.chatGreetingDefault"),
                 },
               ]);
             }

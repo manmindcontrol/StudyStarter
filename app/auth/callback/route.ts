@@ -41,10 +41,13 @@ export async function GET(request: Request) {
     }
   }
 
-  // Redirect to dashboard with subscription modal for new users
-  const dashboardUrl = new URL('/dashboard', requestUrl.origin)
+  // Redirect new users to pricing page, existing users to dashboard
   if (isNewUser) {
-    dashboardUrl.searchParams.set('showSubscriptionModal', 'true')
+    const pricingUrl = new URL('/pricing', requestUrl.origin)
+    pricingUrl.searchParams.set('new', 'true')
+    pricingUrl.searchParams.set('preselect', 'basic')
+    return NextResponse.redirect(pricingUrl)
   }
-  return NextResponse.redirect(dashboardUrl)
+
+  return NextResponse.redirect(new URL('/dashboard', requestUrl.origin))
 }

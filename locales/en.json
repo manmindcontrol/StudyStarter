@@ -298,7 +298,21 @@
     "confirmDelete": "Yes, delete account",
     "deletingAccount": "Deleting account...",
     "accountDeleted": "Account successfully deleted",
-    "errorDeletingAccount": "Error deleting account"
+    "errorDeletingAccount": "Error deleting account",
+    "changePlan": "Change Plan",
+    "cancelSubscription": "Cancel Subscription",
+    "resubscribe": "Resubscribe",
+    "subscriptionCanceled": "Subscription has been canceled",
+    "subscriptionCanceledInfo": "Your subscription has been canceled",
+    "accessUntil": "Access until",
+    "renewsOn": "Renews on",
+    "cancelSubscriptionTitle": "Cancel Subscription",
+    "cancelSubscriptionConfirm": "Are you sure you want to cancel your subscription?",
+    "cancelSubscriptionInfo": "Your subscription will remain active until the end of the current billing period. After that date, you will be downgraded to the free plan.",
+    "keepSubscription": "Keep Subscription",
+    "confirmCancel": "Yes, Cancel",
+    "canceling": "Canceling...",
+    "errorCancelingSubscription": "Error canceling subscription"
   },
   "materialView": {
     "materialNotFound": "Material not found",
@@ -466,6 +480,69 @@
       "startConversation": "Start a conversation",
       "startPrompt": "Ask me anything about the content. I can help you understand, summarize, or explain specific parts.",
       "messagePlaceholder": "Write a message..."
+    }
+  },
+  "pricing": {
+    "title": "Choose Your Plan",
+    "subtitle": "Select the perfect plan for your study needs. Upgrade or downgrade anytime.",
+    "welcomeBadge": "Welcome! Choose your plan to get started",
+    "recommended": "RECOMMENDED",
+    "perMonth": "month",
+    "freeForever": "Free forever",
+    "processing": "Processing...",
+    "unlimited": "Unlimited",
+    "feature": "Feature",
+    "compareTitle": "Compare Plans",
+    "footer1": "All plans include access to our core features. Cancel anytime, no questions asked.",
+    "footer2": "Need help choosing? Contact our support team.",
+    "tryFreeTitle": "Try it free first",
+    "tryFreeDescription": "No credit card. No commitment. Just see if it works for you.",
+    "tryFreeButton": "Start for free",
+    "highlight1": "AI Study Notes",
+    "highlight2": "Smart Materials",
+    "highlight3": "AI Chatbot",
+    "highlight4": "Lecture Recording",
+    "free": {
+      "name": "Free",
+      "description": "Try our platform",
+      "feature1": "1 study material upload",
+      "feature2": "1 AI notes generation",
+      "feature3": "1 AI quiz generation",
+      "feature4": "Basic chatbot",
+      "feature5": "Lecture uploads",
+      "feature6": "Priority support",
+      "cta": "Continue with Free"
+    },
+    "basic": {
+      "name": "Basic",
+      "description": "Perfect for students",
+      "feature1": "10 materials/month",
+      "feature2": "10 AI notes/month",
+      "feature3": "10 AI quizzes/month",
+      "feature4": "20 PDF conversions/month",
+      "feature5": "Lecture uploads",
+      "feature6": "Priority support",
+      "cta": "Start with Basic"
+    },
+    "premium": {
+      "name": "Premium",
+      "description": "Unlimited access",
+      "feature1": "Unlimited materials",
+      "feature2": "Unlimited AI notes",
+      "feature3": "Unlimited AI quizzes",
+      "feature4": "Unlimited PDF conversions",
+      "feature5": "Advanced AI features",
+      "feature6": "Priority support",
+      "cta": "Start with Premium"
+    },
+    "compare": {
+      "materials": "Study Materials",
+      "notes": "AI Notes Generation",
+      "questions": "AI Quiz Generation",
+      "pdfConvert": "PDF Conversions",
+      "lectures": "Lecture Uploads",
+      "advancedAI": "Advanced AI Features",
+      "support": "Priority Support"
     }
   },
   "pdfConverter": {

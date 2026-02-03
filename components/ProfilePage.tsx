@@ -29,13 +29,24 @@ type UserProfile = {
   dark_mode?: boolean;
 };
 
+type UserSubscription = {
+  tier: string;
+  status: string;
+  stripe_subscription_id: string | null;
+  stripe_customer_id: string | null;
+  current_period_end: string | null;
+};
+
 export default function ProfilePage() {
   const { t } = useTranslation();
   const router = useRouter();
   const [user, setUser] = useState<SupabaseUser | null | undefined>(undefined);
   const [profile, setProfile] = useState<UserProfile | null>(null);
+  const [subscription, setSubscription] = useState<UserSubscription | null>(null);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
+  const [cancelingSubscription, setCancelingSubscription] = useState(false);
+  const [showCancelModal, setShowCancelModal] = useState(false);
 
   // Form states
   const [displayName, setDisplayName] = useState("");
@@ -72,6 +83,18 @@ export default function ProfilePage() {
       setDisplayName(
         profile?.display_name || profile?.full_name?.split(" ")[0] || ""
       );
+
+      // Load subscription data
+      const { data: subscriptionData } = await supabase
+        .from("user_subscriptions")
+        .select("tier, status, stripe_subscription_id, stripe_customer_id, current_period_end")
+        .eq("user_id", user.id)
+        .single();
+
+      if (subscriptionData) {
+        setSubscription(subscriptionData);
+      }
+
       setLoading(false);
     };
 
@@ -182,6 +205,40 @@ export default function ProfilePage() {
           : t("profile.errorDeletingAccount")
       );
       setDeleting(false);
+    }
+  };
+
+  const handleCancelSubscription = async () => {
+    setCancelingSubscription(true);
+    setErrorMessage("");
+
+    try {
+      const response = await fetch("/api/stripe/cancel-subscription", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || "Failed to cancel subscription");
+      }
+
+      setSuccessMessage(t("profile.subscriptionCanceled"));
+      setShowCancelModal(false);
+
+      // Update local subscription state
+      if (subscription) {
+        setSubscription({ ...subscription, status: "canceled" });
+      }
+
+      setTimeout(() => setSuccessMessage(""), 5000);
+    } catch (error) {
+      setErrorMessage(
+        error instanceof Error ? error.message : t("profile.errorCancelingSubscription")
+      );
+    } finally {
+      setCancelingSubscription(false);
     }
   };
 
@@ -343,20 +400,74 @@ export default function ProfilePage() {
             </div>
 
             {/* Plan Info Card */}
-            <div className="bg-linear-to-br from-blue-600 to-cyan-600 rounded-xl shadow-sm p-6 text-white">
+            <div className={`rounded-xl shadow-sm p-6 text-white ${
+              subscription?.tier === "premium"
+                ? "bg-linear-to-br from-purple-600 to-pink-600"
+                : subscription?.tier === "basic"
+                ? "bg-linear-to-br from-blue-600 to-cyan-600"
+                : "bg-linear-to-br from-gray-600 to-gray-700"
+            }`}>
               <div className="flex items-center space-x-3 mb-4">
                 <CreditCard className="w-6 h-6" />
                 <h3 className="font-semibold text-lg">
                   {t("profile.yourPlan")}
                 </h3>
               </div>
-              <p className="text-xl font-bold mb-2">{t("profile.freePlan")}</p>
-              <p className="text-blue-100 text-sm mb-4">
-                {t("profile.unlimitedAccess")}
+              <p className="text-xl font-bold mb-2">
+                {subscription?.tier === "premium"
+                  ? t("pricing.premium.name")
+                  : subscription?.tier === "basic"
+                  ? t("pricing.basic.name")
+                  : t("pricing.free.name")}
               </p>
-              <button className="w-full bg-white  text-blue-600  hover:bg-blue-50 dark:bg-slate-800 dark:text-gray-300 dark:hover:bg-slate-700 font-semibold py-2 px-4 rounded-lg transition-colors cursor-pointer">
-                {t("profile.upgradePlan")}
-              </button>
+              {subscription?.status === "canceled" && (
+                <p className="text-yellow-200 text-sm mb-2">
+                  {t("profile.subscriptionCanceledInfo")}
+                </p>
+              )}
+              {subscription?.current_period_end && subscription?.tier !== "free" && (
+                <p className="text-blue-100 text-sm mb-4">
+                  {subscription.status === "canceled"
+                    ? t("profile.accessUntil")
+                    : t("profile.renewsOn")}: {new Date(subscription.current_period_end).toLocaleDateString()}
+                </p>
+              )}
+              {subscription?.tier === "free" && (
+                <p className="text-gray-200 text-sm mb-4">
+                  {t("profile.unlimitedAccess")}
+                </p>
+              )}
+
+              {subscription?.tier === "free" ? (
+                <button
+                  onClick={() => router.push("/pricing")}
+                  className="w-full bg-white text-blue-600 hover:bg-blue-50 dark:bg-slate-800 dark:text-gray-300 dark:hover:bg-slate-700 font-semibold py-2 px-4 rounded-lg transition-colors cursor-pointer"
+                >
+                  {t("profile.upgradePlan")}
+                </button>
+              ) : subscription?.status !== "canceled" ? (
+                <div className="space-y-2">
+                  <button
+                    onClick={() => router.push("/pricing")}
+                    className="w-full bg-white/20 hover:bg-white/30 text-white font-semibold py-2 px-4 rounded-lg transition-colors cursor-pointer"
+                  >
+                    {t("profile.changePlan")}
+                  </button>
+                  <button
+                    onClick={() => setShowCancelModal(true)}
+                    className="w-full bg-transparent border border-white/50 hover:bg-white/10 text-white font-semibold py-2 px-4 rounded-lg transition-colors cursor-pointer"
+                  >
+                    {t("profile.cancelSubscription")}
+                  </button>
+                </div>
+              ) : (
+                <button
+                  onClick={() => router.push("/pricing")}
+                  className="w-full bg-white text-blue-600 hover:bg-blue-50 dark:bg-slate-800 dark:text-gray-300 dark:hover:bg-slate-700 font-semibold py-2 px-4 rounded-lg transition-colors cursor-pointer"
+                >
+                  {t("profile.resubscribe")}
+                </button>
+              )}
             </div>
           </div>
 
@@ -578,6 +689,51 @@ export default function ProfilePage() {
             </div>
           </div>
         </div>
+
+        {/* Cancel Subscription Modal */}
+        {showCancelModal && (
+          <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+            <div className="bg-white dark:bg-slate-800 rounded-xl shadow-2xl max-w-md w-full p-6 animate-fade-in">
+              <div className="flex items-center space-x-3 mb-4">
+                <AlertTriangle className="w-8 h-8 text-orange-500" />
+                <h3 className="text-2xl font-bold text-gray-900 dark:text-white">
+                  {t("profile.cancelSubscriptionTitle")}
+                </h3>
+              </div>
+
+              <p className="text-gray-700 dark:text-gray-300 mb-4">
+                {t("profile.cancelSubscriptionConfirm")}
+              </p>
+
+              <div className="bg-orange-50 dark:bg-orange-900/20 border border-orange-200 dark:border-orange-800 rounded-lg p-4 mb-6">
+                <p className="text-sm text-orange-800 dark:text-orange-300">
+                  {t("profile.cancelSubscriptionInfo")}
+                </p>
+              </div>
+
+              <div className="flex space-x-3">
+                <button
+                  type="button"
+                  onClick={() => setShowCancelModal(false)}
+                  disabled={cancelingSubscription}
+                  className="flex-1 bg-gray-200 dark:bg-slate-700 hover:bg-gray-300 dark:hover:bg-slate-600 text-gray-800 dark:text-gray-200 font-semibold py-3 px-6 rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  {t("profile.keepSubscription")}
+                </button>
+                <button
+                  type="button"
+                  onClick={handleCancelSubscription}
+                  disabled={cancelingSubscription}
+                  className="flex-1 bg-orange-600 hover:bg-orange-700 text-white font-semibold py-3 px-6 rounded-lg transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  {cancelingSubscription
+                    ? t("profile.canceling")
+                    : t("profile.confirmCancel")}
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
 
         {/* Delete Account Modal */}
         {showDeleteModal && (

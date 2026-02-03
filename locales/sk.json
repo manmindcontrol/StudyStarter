@@ -298,7 +298,21 @@
     "confirmDelete": "Áno, odstrániť účet",
     "deletingAccount": "Odstraňujem účet...",
     "accountDeleted": "Účet bol úspešne odstránený",
-    "errorDeletingAccount": "Chyba pri odstraňovaní účtu"
+    "errorDeletingAccount": "Chyba pri odstraňovaní účtu",
+    "changePlan": "Zmeniť plán",
+    "cancelSubscription": "Zrušiť predplatné",
+    "resubscribe": "Obnoviť predplatné",
+    "subscriptionCanceled": "Predplatné bolo zrušené",
+    "subscriptionCanceledInfo": "Vaše predplatné bolo zrušené",
+    "accessUntil": "Prístup do",
+    "renewsOn": "Obnovuje sa",
+    "cancelSubscriptionTitle": "Zrušiť predplatné",
+    "cancelSubscriptionConfirm": "Naozaj chcete zrušiť svoje predplatné?",
+    "cancelSubscriptionInfo": "Vaše predplatné zostane aktívne do konca aktuálneho fakturačného obdobia. Po tomto dátume budete preradený na bezplatný plán.",
+    "keepSubscription": "Ponechať predplatné",
+    "confirmCancel": "Áno, zrušiť",
+    "canceling": "Ruším...",
+    "errorCancelingSubscription": "Chyba pri rušení predplatného"
   },
   "materialView": {
     "materialNotFound": "Materiál nenájdený",
@@ -466,6 +480,69 @@
       "startConversation": "Začať konverzáciu",
       "startPrompt": "Opýtajte sa ma na čokoľvek o obsahu. Môžem vám pomôcť pochopiť, zhrnúť alebo vysvetliť konkrétne časti.",
       "messagePlaceholder": "Napíšte správu..."
+    }
+  },
+  "pricing": {
+    "title": "Vyberte si plán",
+    "subtitle": "Vyberte si ideálny plán pre vaše študijné potreby. Môžete kedykoľvek zmeniť.",
+    "welcomeBadge": "Vitajte! Vyberte si plán na začiatok",
+    "recommended": "ODPORÚČANÉ",
+    "perMonth": "mesiac",
+    "freeForever": "Navždy zadarmo",
+    "processing": "Spracúvam...",
+    "unlimited": "Neobmedzené",
+    "feature": "Funkcia",
+    "compareTitle": "Porovnanie plánov",
+    "footer1": "Všetky plány zahŕňajú prístup k základným funkciám. Zrušte kedykoľvek.",
+    "footer2": "Potrebujete pomôcť s výberom? Kontaktujte našu podporu.",
+    "tryFreeTitle": "Vyskúšajte si to najskôr zadarmo",
+    "tryFreeDescription": "Žiadna kreditná karta. Žiadne záväzky. Jednoducho si vyskúšajte, či vám to vyhovuje.",
+    "tryFreeButton": "Začať zadarmo",
+    "highlight1": "AI Poznámky",
+    "highlight2": "Študijné materiály",
+    "highlight3": "AI Chatbot",
+    "highlight4": "Nahrávanie prednášok",
+    "free": {
+      "name": "Zadarmo",
+      "description": "Vyskúšajte platformu",
+      "feature1": "1 študijný materiál",
+      "feature2": "1 AI generovanie poznámok",
+      "feature3": "1 AI generovanie testu",
+      "feature4": "Základný chatbot",
+      "feature5": "Nahrávanie prednášok",
+      "feature6": "Prioritná podpora",
+      "cta": "Pokračovať zadarmo"
+    },
+    "basic": {
+      "name": "Basic",
+      "description": "Ideálne pre študentov",
+      "feature1": "10 materiálov/mesiac",
+      "feature2": "10 AI poznámok/mesiac",
+      "feature3": "10 AI testov/mesiac",
+      "feature4": "20 PDF konverzií/mesiac",
+      "feature5": "Nahrávanie prednášok",
+      "feature6": "Prioritná podpora",
+      "cta": "Začať s Basic"
+    },
+    "premium": {
+      "name": "Premium",
+      "description": "Neobmedzený prístup",
+      "feature1": "Neobmedzené materiály",
+      "feature2": "Neobmedzené AI poznámky",
+      "feature3": "Neobmedzené AI testy",
+      "feature4": "Neobmedzené PDF konverzie",
+      "feature5": "Pokročilé AI funkcie",
+      "feature6": "Prioritná podpora",
+      "cta": "Začať s Premium"
+    },
+    "compare": {
+      "materials": "Študijné materiály",
+      "notes": "AI Generovanie poznámok",
+      "questions": "AI Generovanie testov",
+      "pdfConvert": "PDF Konverzie",
+      "lectures": "Nahrávanie prednášok",
+      "advancedAI": "Pokročilé AI funkcie",
+      "support": "Prioritná podpora"
     }
   },
   "pdfConverter": {

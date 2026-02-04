@@ -198,3 +198,199 @@ export function constructWebhookEvent(
 ): Stripe.Event {
   return stripe.webhooks.constructEvent(payload, signature, webhookSecret);
 }
+
+/*{
+// src/lib/stripe.ts
+// Stripe konfigurácia a helper funkcie
+
+import Stripe from "stripe";
+
+function requiredEnv(name: string): string {
+  const v = process.env[name];
+  if (!v) throw new Error(`${name} is not set in environment variables`);
+  return v;
+}
+
+export const STRIPE_SECRET_KEY = requiredEnv("STRIPE_SECRET_KEY");
+
+// ✅ Match Stripe CLI/account version to avoid TS/apiVersion mismatch headaches
+export const STRIPE_API_VERSION: Stripe.LatestApiVersion = "2025-12-15.clover";
+
+export const stripe = new Stripe(STRIPE_SECRET_KEY, {
+  apiVersion: STRIPE_API_VERSION,
+  typescript: true,
+});
+
+// Stripe Price IDs z environment variables (fail fast)
+export const STRIPE_PRICES = {
+  PDF_CONVERSION: requiredEnv("STRIPE_PRICE_PDF_CONVERSION"),
+  BASIC: requiredEnv("STRIPE_PRICE_BASIC"),
+  PREMIUM: requiredEnv("STRIPE_PRICE_PREMIUM"),
+} as const;
+
+// Subscription tier mapping
+export const SUBSCRIPTION_TIERS = {
+  FREE: "free",
+  BASIC: "basic",
+  PREMIUM: "premium",
+} as const;
+
+// Usage limits pre každý tier
+export const TIER_LIMITS = {
+  [SUBSCRIPTION_TIERS.FREE]: {
+    pdf_conversions: 0, // PDF konverzie sú vždy spoplatnené
+    materials: 1,
+    notes_generations: 1,
+    questions_generations: 1,
+  },
+  [SUBSCRIPTION_TIERS.BASIC]: {
+    pdf_conversions: 20,
+    materials: 10,
+    notes_generations: 10,
+    questions_generations: 10,
+  },
+  [SUBSCRIPTION_TIERS.PREMIUM]: {
+    pdf_conversions: null, // null = unlimited
+    materials: null,
+    notes_generations: null,
+    questions_generations: null,
+  },
+} as const;
+
+
+export async function createPdfConversionCheckout(params: {
+  successUrl: string;
+  cancelUrl: string;
+  metadata?: Record<string, string>;
+}) {
+  const session = await stripe.checkout.sessions.create({
+    mode: "payment",
+    line_items: [
+      {
+        price: STRIPE_PRICES.PDF_CONVERSION,
+        quantity: 1,
+      },
+    ],
+    success_url: params.successUrl,
+    cancel_url: params.cancelUrl,
+    metadata: params.metadata ?? {},
+  });
+
+  return session;
+}
+
+
+export async function createSubscriptionCheckout(params: {
+  priceId: string;
+  customerId?: string;
+  customerEmail?: string;
+  userId: string;
+  successUrl: string;
+  cancelUrl: string;
+}) {
+  const sessionParams: Stripe.Checkout.SessionCreateParams = {
+    mode: "subscription",
+    line_items: [
+      {
+        price: params.priceId,
+        quantity: 1,
+      },
+    ],
+    success_url: params.successUrl,
+    cancel_url: params.cancelUrl,
+    metadata: {
+      user_id: params.userId,
+    },
+    subscription_data: {
+      metadata: {
+        user_id: params.userId,
+      },
+    },
+  };
+
+  // Pridaj customer ID ak existuje, inak email
+  if (params.customerId) {
+    sessionParams.customer = params.customerId;
+  } else if (params.customerEmail) {
+    sessionParams.customer_email = params.customerEmail;
+  }
+
+  const session = await stripe.checkout.sessions.create(sessionParams);
+  return session;
+}
+
+
+export async function getOrCreateCustomer(params: {
+  email: string;
+  userId: string;
+  name?: string;
+}): Promise<Stripe.Customer> {
+  const existingCustomers = await stripe.customers.list({
+    email: params.email,
+    limit: 1,
+  });
+
+  if (existingCustomers.data.length > 0) {
+    return existingCustomers.data[0];
+  }
+
+  const customer = await stripe.customers.create({
+    email: params.email,
+    name: params.name,
+    metadata: {
+      user_id: params.userId,
+    },
+  });
+
+  return customer;
+}
+
+export async function cancelSubscription(subscriptionId: string) {
+  return await stripe.subscriptions.cancel(subscriptionId);
+}
+
+
+export async function updateSubscription(params: {
+  subscriptionId: string;
+  newPriceId: string;
+}) {
+  const subscription = await stripe.subscriptions.retrieve(params.subscriptionId);
+
+  if (!subscription.items.data[0]) {
+    throw new Error(`Subscription ${params.subscriptionId} has no items to update`);
+  }
+
+  return await stripe.subscriptions.update(params.subscriptionId, {
+    items: [
+      {
+        id: subscription.items.data[0].id,
+        price: params.newPriceId,
+      },
+    ],
+    proration_behavior: "create_prorations",
+  });
+}
+
+
+export async function createBillingPortalSession(params: {
+  customerId: string;
+  returnUrl: string;
+}) {
+  const session = await stripe.billingPortal.sessions.create({
+    customer: params.customerId,
+    return_url: params.returnUrl,
+  });
+
+  return session;
+}
+
+
+export function constructWebhookEvent(
+  payload: string | Buffer,
+  signature: string,
+  webhookSecret: string
+): Stripe.Event {
+  return stripe.webhooks.constructEvent(payload, signature, webhookSecret);
+}
+}*/
+

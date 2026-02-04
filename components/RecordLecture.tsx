@@ -340,7 +340,9 @@ export default function RecordLecture({ user }: RecordLectureProps) {
       }
 
       // Get auth token
-      const { data: { session } } = await supabase.auth.getSession();
+      const {
+        data: { session },
+      } = await supabase.auth.getSession();
       if (!session) {
         alert("Not authenticated");
         return;
@@ -351,7 +353,7 @@ export default function RecordLecture({ user }: RecordLectureProps) {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          "Authorization": `Bearer ${session.access_token}`,
+          Authorization: `Bearer ${session.access_token}`,
         },
         body: JSON.stringify({
           title: `Lecture ${new Date().toLocaleDateString()}`,
@@ -411,11 +413,7 @@ export default function RecordLecture({ user }: RecordLectureProps) {
   };
 
   const discardRecording = () => {
-    if (
-      confirm(
-        t("recordLecture.discardConfirm")
-      )
-    ) {
+    if (confirm(t("recordLecture.discardConfirm"))) {
       setRecordingTime(0);
       setTranscript("");
       setFinalTranscript("");
@@ -432,23 +430,25 @@ export default function RecordLecture({ user }: RecordLectureProps) {
     <div className="min-h-screen bg-gray-100 dark:bg-linear-to-br dark:from-slate-900 dark:via-slate-800 dark:to-slate-900 overflow-hidden">
       <div className="container-custom py-8">
         {/* Header */}
-        <div className="mb-8">
+        <div className="mb-8 pt-14">
           <button
             onClick={() => router.push("/dashboard")}
             className="mb-4 flex items-center space-x-2 text-gray-600 hover:text-gray-900 dark:text-gray-300 dark:hover:text-gray-400 transition-colors group cursor-pointer"
           >
             <ArrowLeft className="w-5 h-5 group-hover:-translate-x-1 transition-transform" />
-            <span className="font-medium">{t("recordLecture.backToDashboard")}</span>
+            <span className="font-medium">
+              {t("recordLecture.backToDashboard")}
+            </span>
           </button>
-          <div className="flex items-center space-x-2 md:space-x-5 bg-linear-to-br from-emerald-600 to-green-400 p-6 rounded-2xl shadow-md">
-            <div className="bg-green-100  p-4 rounded-2xl shadow-lg">
+          <div className="flex items-center space-x-2 md:space-x-5 bg-linear-to-br from-emerald-600 to-green-500 p-4 md:p-6 rounded-2xl shadow-md">
+            <div className="bg-green-100 p-2 md:p-4 rounded-xl md:rounded-2xl shadow-lg">
               <Mic className="w-5 h-5 md:w-8 md:h-8 text-green-500" />
             </div>
             <div>
               <h1 className="text-lg md:text-3xl font-bold text-white mb-1">
                 {t("recordLecture.title")}
               </h1>
-              <p className="text-gray-100 text-l md:text-lg">
+              <p className="text-gray-100 text-sm md:text-lg">
                 {t("recordLecture.description")}
               </p>
             </div>
@@ -456,47 +456,50 @@ export default function RecordLecture({ user }: RecordLectureProps) {
         </div>
 
         {/* Main Content - Split Layout */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-5 mb-6">
           {/* Left Side - Recording Controls */}
-          <div className="bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm rounded-2xl shadow-xl border border-white/50 dark:border-slate-700 p-8 hover:shadow-2xl transition-shadow">
-            <div className="flex items-center justify-between mb-8">
-              <h2 className="text-2xl font-bold text-slate-800 dark:text-gray-200 flex items-center">
-                <div className="w-2 h-8 bg-linear-to-b from-green-500 to-green-600 rounded-full mr-3"></div>
+          <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-lg border border-gray-100 dark:border-slate-700 p-5 sm:p-6">
+            <div className="flex items-center justify-between mb-5">
+              <h2 className="text-xl font-bold text-slate-800 dark:text-gray-200 flex items-center">
+                <div className="w-1 h-6 bg-green-500 rounded-full mr-3"></div>
                 {t("recordLecture.recordingStudio")}
               </h2>
               {isRecording && (
-                <div className="flex items-center space-x-2 bg-red-50 px-3 py-1.5 rounded-full">
-                  <div className="w-2 h-2 bg-red-600 rounded-full animate-pulse"></div>
-                  <span className="text-red-600 text-sm font-medium">{t("recordLecture.live")}</span>
+                <div className="flex items-center space-x-2 bg-red-50 dark:bg-red-900/20 px-2.5 py-1 rounded-full">
+                  <div className="w-2 h-2 bg-red-500 rounded-full animate-pulse"></div>
+                  <span className="text-red-600 dark:text-red-400 text-xs font-medium">
+                    {t("recordLecture.live")}
+                  </span>
                 </div>
               )}
             </div>
 
             {/* Timer Display */}
-            <div className="mb-10 text-center bg-white dark:bg-slate-700/70 rounded-2xl p-8 border border-slate-200 dark:border-slate-700">
-              <div className="text-4xl md:text-7xl font-bold bg-linear-to-r from-slate-700 to-slate-900 dark:from-gray-300 dark:to-gray-200 bg-clip-text text-transparent mb-3 font-mono tracking-tight">
+            <div className="mb-6 text-center bg-gray-50 dark:bg-slate-700/50 rounded-xl p-5 border border-gray-200 dark:border-slate-600">
+              <div className="text-4xl md:text-5xl font-bold text-slate-800 dark:text-gray-200 mb-1 font-mono tracking-tight">
                 {formatTime(recordingTime)}
               </div>
-              <p className="text-gray-600 font-medium">
-                {isRecording ? t("recordLecture.recordingInProgress") : t("recordLecture.readyToRecord")}
+              <p className="text-gray-500 dark:text-gray-400 text-sm">
+                {isRecording
+                  ? t("recordLecture.recordingInProgress")
+                  : t("recordLecture.readyToRecord")}
               </p>
             </div>
 
             {/* Recording Button */}
-            <div className="flex flex-col items-center mb-8">
+            <div className="flex flex-col items-center mb-5">
               {!isRecording ? (
                 <div className="flex flex-col items-center">
                   <button
                     onClick={startRecording}
-                    className="cursor-pointer group relative w-20 h-20 md:w-32 md:h-32 bg-linear-to-br from-green-400 to-emerald-600 hover:from-green-500 hover:to-emeral-700 rounded-full shadow-2xl hover:shadow-3xl transition-all hover:scale-110 flex items-center justify-center mb-4"
+                    className="cursor-pointer group relative w-16 h-16 md:w-20 md:h-20 bg-green-500 hover:bg-green-600 rounded-full shadow-lg hover:shadow-xl transition-all hover:scale-105 flex items-center justify-center mb-3"
                   >
-                    <div className="absolute inset-0 rounded-full bg-white/20 group-hover:animate-ping"></div>
                     <Play
-                      className="w-9 h-9 md:w-12 md:h-12 text-white relative z-10 ml-1"
+                      className="w-7 h-7 md:w-8 md:h-8 text-white relative z-10 ml-0.5"
                       fill="white"
                     />
                   </button>
-                  <span className="text-slate-800 dark:text-gray-300 text-lg font-semibold">
+                  <span className="text-slate-700 dark:text-gray-300 font-medium">
                     {t("recordLecture.startRecording")}
                   </span>
                 </div>
@@ -504,15 +507,15 @@ export default function RecordLecture({ user }: RecordLectureProps) {
                 <div className="flex flex-col items-center">
                   <button
                     onClick={stopRecording}
-                    className="group relative w-32 h-32 bg-linear-to-br from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 rounded-full shadow-2xl hover:shadow-3xl transition-all hover:scale-110 flex items-center justify-center mb-4 animate-pulse"
+                    className="cursor-pointer group relative w-16 h-16 md:w-20 md:h-20 bg-red-500 hover:bg-red-600 rounded-full shadow-lg hover:shadow-xl transition-all hover:scale-105 flex items-center justify-center mb-3"
                   >
-                    <div className="absolute inset-0 rounded-full bg-white/20 animate-ping"></div>
+                    <div className="absolute inset-0 rounded-full bg-red-400 animate-ping opacity-30"></div>
                     <Square
-                      className="w-10 h-10 text-white relative z-10"
+                      className="w-6 h-6 md:w-7 md:h-7 text-white relative z-10"
                       fill="white"
                     />
                   </button>
-                  <span className="text-slate-800 dark:text-gray-300 text-lg font-semibold">
+                  <span className="text-slate-700 dark:text-gray-300 font-medium">
                     {t("recordLecture.stopRecording")}
                   </span>
                 </div>
@@ -521,18 +524,18 @@ export default function RecordLecture({ user }: RecordLectureProps) {
 
             {/* Action Buttons - Show if there's a transcript */}
             {hasTranscript && (
-              <div className="flex justify-center gap-3 mb-6">
+              <div className="flex justify-center gap-2 mb-4">
                 <button
                   onClick={reformatTranscript}
                   disabled={isProcessing}
-                  className="flex items-center space-x-2 px-6 py-3 bg-blue-50 hover:bg-blue-100 text-blue-600 dark:text-blue-300 dark:bg-blue-300/20 dark:hover:bg-blue-600/20 font-medium rounded-lg transition-colors border border-blue-200 dark:border-blue-900/20 disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
+                  className="flex items-center space-x-2 px-4 py-2 bg-blue-50 hover:bg-blue-100 text-blue-600 dark:text-blue-300 dark:bg-blue-900/20 dark:hover:bg-blue-900/30 text-sm font-medium rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
                 >
                   <FileText className="w-4 h-4" />
                   <span>{t("recordLecture.reformatText")}</span>
                 </button>
                 <button
                   onClick={discardRecording}
-                  className="flex items-center space-x-2 px-6 py-3 bg-red-50 hover:bg-red-100 text-red-600 dark:bg-red-900/20 dark:text-red-400 dark:hover:bg-red-600/20 font-medium rounded-lg transition-colors border border-red-200 dark:border-red-900/20 cursor-pointer"
+                  className="flex items-center space-x-2 px-4 py-2 bg-red-50 hover:bg-red-100 text-red-600 dark:bg-red-900/20 dark:text-red-400 dark:hover:bg-red-900/30 text-sm font-medium rounded-lg transition-colors cursor-pointer"
                 >
                   <Trash2 className="w-4 h-4" />
                   <span>{t("recordLecture.discardRecording")}</span>
@@ -542,16 +545,15 @@ export default function RecordLecture({ user }: RecordLectureProps) {
 
             {/* Recording Status */}
             {isRecording && (
-              <div className="bg-linear-to-r from-red-50 to-orange-50 border-2 border-red-200 rounded-xl p-5 flex items-center space-x-4 shadow-sm">
+              <div className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg p-3 flex items-center space-x-3">
                 <div className="relative">
-                  <div className="w-4 h-4 bg-red-600 rounded-full animate-pulse"></div>
-                  <div className="absolute inset-0 w-4 h-4 bg-red-600 rounded-full animate-ping"></div>
+                  <div className="w-3 h-3 bg-red-500 rounded-full animate-pulse"></div>
                 </div>
                 <div>
-                  <span className="text-red-800 font-bold text-lg block">
+                  <span className="text-red-700 dark:text-red-300 font-medium text-sm block">
                     {t("recordLecture.recordingActive")}
                   </span>
-                  <span className="text-red-600 text-sm">
+                  <span className="text-red-600 dark:text-red-400 text-xs">
                     {t("recordLecture.speakClearly")}
                   </span>
                 </div>
@@ -559,13 +561,13 @@ export default function RecordLecture({ user }: RecordLectureProps) {
             )}
 
             {isProcessing && (
-              <div className="bg-linear-to-r from-blue-50 to-indigo-50 border-2 border-blue-200 rounded-xl p-5 flex items-center space-x-4 shadow-sm">
-                <div className="animate-spin rounded-full h-6 w-6 border-3 border-blue-600 border-t-transparent"></div>
+              <div className="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-3 flex items-center space-x-3">
+                <div className="animate-spin rounded-full h-4 w-4 border-2 border-blue-600 border-t-transparent"></div>
                 <div>
-                  <span className="text-blue-800 font-bold text-lg block">
+                  <span className="text-blue-700 dark:text-blue-300 font-medium text-sm block">
                     {t("recordLecture.processing")}
                   </span>
-                  <span className="text-blue-600 text-sm">
+                  <span className="text-blue-600 dark:text-blue-400 text-xs">
                     {t("recordLecture.addingPunctuation")}
                   </span>
                 </div>
@@ -574,41 +576,40 @@ export default function RecordLecture({ user }: RecordLectureProps) {
           </div>
 
           {/* Right Side - Live Transcription */}
-          <div className="bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm rounded-2xl shadow-xl border border-white/50 dark:border-slate-700 p-8 hover:shadow-2xl transition-shadow">
-            <div className="flex items-center justify-between mb-8">
-              <h2 className="text-2xl font-bold text-slate-800 dark:text-gray-200 flex items-center">
-                <div className="w-2 h-8 bg-linear-to-b from-blue-500 to-cyan-500 rounded-full mr-3"></div>
+          <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-lg border border-gray-100 dark:border-slate-700 p-5 sm:p-6">
+            <div className="flex items-center justify-between mb-4">
+              <h2 className="text-xl font-bold text-slate-800 dark:text-gray-200 flex items-center">
+                <div className="w-1 h-6 bg-blue-500 rounded-full mr-3"></div>
                 {t("recordLecture.liveTranscription")}
               </h2>
               {hasTranscript && (
-                <div className="bg-green-50 px-3 py-1.5 rounded-full">
-                  <span className="text-green-600 text-sm font-medium">
-                    {finalTranscript.split(" ").length} {t("recordLecture.words")}
+                <div className="bg-green-50 dark:bg-green-900/20 px-2.5 py-1 rounded-full">
+                  <span className="text-green-600 dark:text-green-400 text-xs font-medium">
+                    {finalTranscript.split(" ").length}{" "}
+                    {t("recordLecture.words")}
                   </span>
                 </div>
               )}
             </div>
 
-            <div className="bg-gray-50 dark:bg-slate-700/70 rounded-2xl p-6 min-h-[500px] max-h-[600px] overflow-y-auto border border-gray-200 dark:border-slate-700 shadow-inner">
+            <div className="bg-gray-50 dark:bg-slate-700/50 rounded-xl p-4 min-h-[400px] max-h-[400px] overflow-y-auto border border-gray-200 dark:border-slate-600">
               {hasTranscript ? (
-                <div className="space-y-2">
-                  <p className="text-gray-800 dark:text-gray-200 text-lg leading-relaxed whitespace-pre-wrap">
-                    {finalTranscript}
-                    <span className="text-blue-600 dark:text-blue-400 italic font-medium">
-                      {transcript}
-                    </span>
-                  </p>
-                </div>
+                <p className="text-gray-800 dark:text-gray-200 text-sm leading-relaxed whitespace-pre-wrap">
+                  {finalTranscript}
+                  <span className="text-blue-600 dark:text-blue-400 italic">
+                    {transcript}
+                  </span>
+                </p>
               ) : (
-                <div className="flex items-center justify-center h-full">
+                <div className="flex items-center justify-center h-full min-h-[250px]">
                   <div className="text-center text-gray-400">
-                    <div className="bg-linear-to-br from-gray-100 to-gray-200 dark:bg-linear-to-br dark:from-gray-700 dark:to-gray-600 p-6 rounded-full mx-auto mb-6 w-fit">
-                      <FileText className="w-16 h-16 opacity-50" />
+                    <div className="bg-gray-100 dark:bg-slate-600 p-4 rounded-full mx-auto mb-4 w-fit">
+                      <FileText className="w-10 h-10 opacity-50" />
                     </div>
-                    <p className="text-lg font-medium mb-2">
+                    <p className="font-medium mb-1">
                       {t("recordLecture.waitingForAudio")}
                     </p>
-                    <p className="text-sm">
+                    <p className="text-sm text-gray-400 dark:text-gray-500">
                       {t("recordLecture.transcriptionAppears")}
                     </p>
                   </div>
@@ -620,77 +621,67 @@ export default function RecordLecture({ user }: RecordLectureProps) {
 
         {/* Download Section */}
         {!isRecording && hasTranscript && (
-          <div className="bg-white/80 dark:bg-slate-700 backdrop-blur-sm rounded-2xl shadow-xl border border-white/50 dark:border-slate-700 p-8 hover:shadow-2xl transition-shadow">
-            <div className="flex items-center mb-8">
-              <div className="w-2 h-8 bg-linear-to-b from-purple-500 to-pink-600 rounded-full mr-3"></div>
-              <h2 className="text-2xl font-bold text-slate-800 dark:text-gray-200">
+          <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-lg border border-gray-100 dark:border-slate-700 p-5 sm:p-6">
+            <div className="flex items-center mb-4">
+              <div className="w-1 h-6 bg-purple-500 rounded-full mr-3"></div>
+              <h2 className="text-xl font-bold text-slate-800 dark:text-gray-200">
                 {t("recordLecture.exportTranscript")}
               </h2>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
               <button
                 onClick={downloadAsText}
                 disabled={downloadingFormat !== null}
-                className="relative group flex items-center justify-center space-x-3 bg-linear-to-br from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 dark:bg-blue-900/20 text-white px-6 py-4 rounded-xl transition-all shadow-lg hover:shadow-xl hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
+                className="flex items-center justify-center space-x-2 bg-blue-600 hover:bg-blue-700 text-white px-4 py-3 rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 {downloadingFormat === "txt" ? (
                   <LoadingSpinner size="sm" />
                 ) : (
-                  <Download className="w-5 h-5 group-hover:translate-y-0.5 transition-transform" />
+                  <Download className="w-4 h-4" />
                 )}
-                <div className="text-left">
-                  <div className="font-bold">TXT</div>
-                  <div className="text-xs opacity-90">{t("recordLecture.plainText")}</div>
-                </div>
+                <span className="font-medium text-sm">TXT</span>
               </button>
 
               <button
                 onClick={downloadAsWord}
                 disabled={downloadingFormat !== null}
-                className="relative group flex items-center justify-center space-x-3 bg-linear-to-br from-indigo-500 to-indigo-600 hover:from-indigo-600 hover:to-indigo-700 text-white px-6 py-4 rounded-xl transition-all shadow-lg hover:shadow-xl hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
+                className="flex items-center justify-center space-x-2 bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-3 rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 {downloadingFormat === "docx" ? (
                   <LoadingSpinner size="sm" />
                 ) : (
-                  <FileDown className="w-5 h-5 group-hover:translate-y-0.5 transition-transform" />
+                  <FileDown className="w-4 h-4" />
                 )}
-                <div className="text-left">
-                  <div className="font-bold">DOCX</div>
-                  <div className="text-xs opacity-90">{t("recordLecture.wordDoc")}</div>
-                </div>
+                <span className="font-medium text-sm">DOCX</span>
               </button>
 
               <button
                 onClick={downloadAsPDF}
                 disabled={downloadingFormat !== null}
-                className="relative group flex items-center justify-center space-x-3 bg-linear-to-br from-purple-500 to-purple-600 hover:from-purple-600 hover:to-purple-700 text-white px-6 py-4 rounded-xl transition-all shadow-lg hover:shadow-xl hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
+                className="flex items-center justify-center space-x-2 bg-purple-600 hover:bg-purple-700 text-white px-4 py-3 rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 {downloadingFormat === "pdf" ? (
                   <LoadingSpinner size="sm" />
                 ) : (
-                  <FileText className="w-5 h-5 group-hover:translate-y-0.5 transition-transform" />
+                  <FileText className="w-4 h-4" />
                 )}
-                <div className="text-left">
-                  <div className="font-bold">PDF</div>
-                  <div className="text-xs opacity-90">{t("recordLecture.document")}</div>
-                </div>
+                <span className="font-medium text-sm">PDF</span>
               </button>
 
               <button
                 onClick={saveToDatabase}
                 disabled={downloadingFormat !== null}
-                className="relative group flex items-center justify-center space-x-3 bg-linear-to-br from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white px-6 py-4 rounded-xl transition-all shadow-lg hover:shadow-xl hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
+                className="flex items-center justify-center space-x-2 bg-green-600 hover:bg-green-700 text-white px-4 py-3 rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 {downloadingFormat === "save" ? (
                   <LoadingSpinner size="sm" />
                 ) : (
-                  <FileText className="w-5 h-5 group-hover:scale-110 transition-transform" />
+                  <FileText className="w-4 h-4" />
                 )}
-                <div className="text-left">
-                  <div className="font-bold">Save</div>
-                  <div className="text-xs opacity-90">{t("recordLecture.saveToLibrary")}</div>
-                </div>
+                <span className="font-medium text-sm">
+                  {t("recordLecture.saveToLibrary")}
+                </span>
               </button>
             </div>
           </div>

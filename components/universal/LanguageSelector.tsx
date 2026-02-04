@@ -16,7 +16,11 @@ const languages: Language[] = [
   { code: "de", name: "Deutsch", flag: "🇩🇪" },
 ];
 
-export default function LanguageSelector() {
+type LanguageSelectorProps = {
+  mobile?: boolean;
+};
+
+export default function LanguageSelector({ mobile = false }: LanguageSelectorProps) {
   const { locale, setLocale } = useLanguage();
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
@@ -65,7 +69,13 @@ export default function LanguageSelector() {
 
       {/* Dropdown */}
       {isOpen && (
-        <div className="absolute right-0 mt-2 w-48 bg-white dark:bg-slate-800 rounded-lg shadow-xl border border-gray-200 dark:border-slate-700 py-2 z-50 animate-in fade-in slide-in-from-top-2 duration-200">
+        <div
+          className={`absolute w-48 bg-white dark:bg-slate-800 rounded-lg shadow-xl border border-gray-200 dark:border-slate-700 py-2 z-50 animate-in fade-in duration-200 ${
+            mobile
+              ? "left-0 mt-2 slide-in-from-top-2"
+              : "right-0 mt-2 slide-in-from-top-2"
+          }`}
+        >
           {languages.map((language) => (
             <button
               key={language.code}

@@ -73,7 +73,7 @@ export default function RegisterPage() {
     const { user, error } = await signUp(
       formData.email,
       formData.password,
-      formData.fullName
+      formData.fullName,
     );
 
     if (error) {
@@ -107,7 +107,7 @@ export default function RegisterPage() {
     <div className="min-h-screen bg-linear-to-br from-slate-900 via-blue-900 to-slate-900 flex items-center justify-center py-12 px-4 relative overflow-hidden">
       {/* Decorative background */}
       <div className="absolute inset-0 overflow-hidden">
-        <div className="absolute top-0 right-1/4 w-96 h-96 bg-purple-600/20 rounded-full blur-3xl"></div>
+        <div className="absolute top-0 right-1/4 w-96 h-96 bg-cyan-600/20 rounded-full blur-3xl"></div>
         <div className="absolute bottom-0 left-1/4 w-80 h-80 bg-blue-600/20 rounded-full blur-3xl"></div>
 
         {/* Animated stars */}
@@ -172,7 +172,7 @@ export default function RegisterPage() {
         />
       </div>
 
-      <div className="max-w-md w-full relative z-10">
+      <div className="max-w-md w-full relative z-10 pt-14">
         {/* Logo and title */}
         <motion.div
           initial={{ opacity: 0, y: -20 }}
@@ -202,7 +202,7 @@ export default function RegisterPage() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.1 }}
-          className="bg-white/10 backdrop-blur-lg rounded-2xl shadow-2xl p-8 border border-white/20"
+          className="bg-white/10 backdrop-blur-lg rounded-2xl shadow-2xl py-8 px-4 border border-white/20"
         >
           {/* Success message */}
           {success && (
@@ -483,7 +483,9 @@ export default function RegisterPage() {
               {t("register.emailSentMessage")}
             </p>
             <p className="text-center text-sm text-gray-500 dark:text-gray-400 mb-6">
-              <strong className="text-gray-700 dark:text-gray-200">{formData.email}</strong>
+              <strong className="text-gray-700 dark:text-gray-200">
+                {formData.email}
+              </strong>
             </p>
 
             {/* Instructions */}

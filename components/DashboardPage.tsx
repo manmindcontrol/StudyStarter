@@ -75,15 +75,15 @@ export default function DashboardPage() {
   const [materialsOpen, setMaterialsOpen] = useState(false);
   const [recordingsOpen, setRecordingsOpen] = useState(false);
   const [showSubscriptionModal, setShowSubscriptionModal] = useState(
-    () => searchParams?.get('showSubscriptionModal') === 'true'
+    () => searchParams?.get("showSubscriptionModal") === "true",
   );
   const { isDarkMode, toggleDarkMode } = useTheme();
   const { t } = useTranslation();
 
   // Clean up URL if subscription modal was opened via URL param
   useEffect(() => {
-    if (searchParams?.get('showSubscriptionModal') === 'true') {
-      window.history.replaceState({}, '', '/dashboard');
+    if (searchParams?.get("showSubscriptionModal") === "true") {
+      window.history.replaceState({}, "", "/dashboard");
     }
   }, [searchParams]);
 
@@ -184,7 +184,7 @@ export default function DashboardPage() {
 
   const handleDeleteMaterial = async (
     e: React.MouseEvent,
-    materialId: string
+    materialId: string,
   ) => {
     e.preventDefault();
     e.stopPropagation();
@@ -207,7 +207,7 @@ export default function DashboardPage() {
 
   const handleDeleteLecture = async (
     e: React.MouseEvent,
-    lectureId: string
+    lectureId: string,
   ) => {
     e.preventDefault();
     e.stopPropagation();
@@ -238,7 +238,7 @@ export default function DashboardPage() {
       <div className="py-4 sm:py-6 md:py-8 px-3 sm:px-4 md:px-6 lg:px-8 min-h-screen">
         <div className="container-custom max-w-7xl mx-auto relative">
           {/* Header */}
-          <div className="mb-4 sm:mb-6 md:mb-8">
+          <div className="mb-4 sm:mb-6 md:mb-8 pt-18">
             <h1 className="text-lg sm:text-xl md:text-2xl lg:text-3xl font-bold text-slate-800 dark:text-white mb-1 sm:mb-2 leading-tight">
               {t("dashboard.greeting")}, {displayName}! 👋
             </h1>
@@ -520,7 +520,9 @@ export default function DashboardPage() {
                   isDarkMode ? "text-white" : "text-gray-700"
                 }`}
               >
-                {isDarkMode ? t("dashboard.darkMode") : t("dashboard.lightMode")}
+                {isDarkMode
+                  ? t("dashboard.darkMode")
+                  : t("dashboard.lightMode")}
               </span>
             </button>
           </div>

@@ -1,7 +1,15 @@
 "use client";
 
 import { useCallback, useState } from "react";
-import { Upload, File, X, CheckCircle, AlertCircle, Link as LinkIcon, FileText } from "lucide-react";
+import {
+  Upload,
+  File,
+  X,
+  CheckCircle,
+  AlertCircle,
+  Link as LinkIcon,
+  FileText,
+} from "lucide-react";
 
 type FileUploadProps = {
   onUpload: (file: File) => Promise<void>;
@@ -36,7 +44,7 @@ export default function FileUpload({
     const fileExtension = "." + file.name.split(".").pop()?.toLowerCase();
     if (!acceptedFileTypes.includes(fileExtension)) {
       return `Unsupported file type. Supported: ${acceptedFileTypes.join(
-        ", "
+        ", ",
       )}`;
     }
 
@@ -94,7 +102,7 @@ export default function FileUpload({
         handleFile(files[0]);
       }
     },
-    [handleFile]
+    [handleFile],
   );
 
   const handleFileInput = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -230,23 +238,23 @@ export default function FileUpload({
   };
 
   return (
-    <div className="w-full dark:bg-slate-800">
-      {/* Mode Toggle */}
-      <div className="flex gap-2 mb-6">
+    <div className="w-full">
+      {/* Mode Toggle - Horizontal tabs */}
+      <div className="flex gap-2 mb-5 p-1 bg-gray-100 dark:bg-slate-700/50 rounded-xl">
         <button
           onClick={() => {
             setMode("file");
             clearUrl();
             clearText();
           }}
-          className={`flex-1 py-3 px-4 rounded-lg font-semibold transition-all flex items-center justify-center gap-2 ${
+          className={`flex-1 py-2.5 px-3 rounded-lg font-medium transition-all flex items-center justify-center gap-2 text-sm ${
             mode === "file"
-              ? "bg-blue-600 text-white shadow-md"
-              : "bg-gray-100 dark:bg-slate-700 text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-slate-600"
+              ? "bg-white dark:bg-slate-600 text-blue-600 dark:text-blue-400 shadow-sm"
+              : "text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200"
           }`}
         >
-          <Upload className="w-5 h-5" />
-          Upload File
+          <Upload className="w-4 h-4" />
+          File
         </button>
         <button
           onClick={() => {
@@ -254,14 +262,14 @@ export default function FileUpload({
             clearFile();
             clearText();
           }}
-          className={`flex-1 py-3 px-4 rounded-lg font-semibold transition-all flex items-center justify-center gap-2 ${
+          className={`flex-1 py-2.5 px-3 rounded-lg font-medium transition-all flex items-center justify-center gap-2 text-sm ${
             mode === "url"
-              ? "bg-blue-600 text-white shadow-md"
-              : "bg-gray-100 dark:bg-slate-700 text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-slate-600"
+              ? "bg-white dark:bg-slate-600 text-blue-600 dark:text-blue-400 shadow-sm"
+              : "text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200"
           }`}
         >
-          <LinkIcon className="w-5 h-5" />
-          Add URL
+          <LinkIcon className="w-4 h-4" />
+          URL
         </button>
         <button
           onClick={() => {
@@ -269,14 +277,14 @@ export default function FileUpload({
             clearFile();
             clearUrl();
           }}
-          className={`flex-1 py-3 px-4 rounded-lg font-semibold transition-all flex items-center justify-center gap-2 ${
+          className={`flex-1 py-2.5 px-3 rounded-lg font-medium transition-all flex items-center justify-center gap-2 text-sm ${
             mode === "text"
-              ? "bg-blue-600 text-white shadow-md"
-              : "bg-gray-100 dark:bg-slate-700 text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-slate-600"
+              ? "bg-white dark:bg-slate-600 text-blue-600 dark:text-blue-400 shadow-sm"
+              : "text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200"
           }`}
         >
-          <FileText className="w-5 h-5" />
-          Paste Text
+          <FileText className="w-4 h-4" />
+          Text
         </button>
       </div>
 
@@ -288,11 +296,11 @@ export default function FileUpload({
             onDragLeave={handleDragLeave}
             onDrop={handleDrop}
             className={`
-              border-2 border-dashed rounded-xl p-8 text-center transition-all
+              border-2 border-dashed rounded-xl p-6 text-center transition-all cursor-pointer
               ${
                 isDragging
                   ? "border-blue-500 bg-blue-50 dark:bg-blue-900/20"
-                  : "border-gray-300 dark:border-slate-600 bg-gray-50/10 hover:border-gray-400 dark:hover:border-slate-500 dark:bg-slate-800"
+                  : "border-gray-300 dark:border-slate-600 hover:border-blue-400 dark:hover:border-blue-500 hover:bg-blue-50/50 dark:hover:bg-blue-900/10"
               }
             `}
           >
@@ -306,38 +314,41 @@ export default function FileUpload({
             />
 
             <label htmlFor="file-upload" className="cursor-pointer">
-              <Upload
-                className={`
-                w-12 h-12 mx-auto mb-4
-                ${isDragging ? "text-blue-600" : "text-gray-400"}
-              `}
-              />
+              <div className={`w-12 h-12 mx-auto mb-3 rounded-full flex items-center justify-center ${
+                isDragging ? "bg-blue-100 dark:bg-blue-900/30" : "bg-gray-100 dark:bg-slate-700"
+              }`}>
+                <Upload
+                  className={`w-6 h-6 ${isDragging ? "text-blue-600" : "text-gray-500 dark:text-gray-400"}`}
+                />
+              </div>
 
-              <p className="text-lg font-semibold text-gray-900 dark:text-gray-300 mb-2">
-                {isDragging ? "Drop file here" : "Upload Material"}
+              <p className="font-semibold text-gray-900 dark:text-gray-200 mb-1">
+                {isDragging ? "Drop file here" : "Drop your file here"}
               </p>
 
-              <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">
-                Drag file here or click to upload
+              <p className="text-sm text-gray-500 dark:text-gray-400 mb-2">
+                or <span className="text-blue-600 dark:text-blue-400 font-medium">browse</span> to upload
               </p>
 
-              <p className="text-xs text-gray-500 dark:text-gray-400">
-                Supported: PDF, Word, TXT (max {maxSizeMB}MB)
+              <p className="text-xs text-gray-400 dark:text-gray-500">
+                PDF, Word, TXT (max {maxSizeMB}MB)
               </p>
             </label>
           </div>
 
           {/* Selected file */}
           {selectedFile && (
-            <div className="mt-4 p-4 bg-white dark:bg-slate-700 border border-gray-200 dark:border-slate-600 rounded-lg">
-              <div className="flex items-center justify-between">
+            <div className="mt-4 p-3 bg-blue-50 dark:bg-slate-700 border border-blue-200 dark:border-slate-600 rounded-lg">
+              <div className="flex items-center justify-between mb-3">
                 <div className="flex items-center space-x-3">
                   <div className="bg-blue-100 dark:bg-slate-600 p-2 rounded-lg">
-                    <File className="w-5 h-5 text-blue-600 dark:text-blue-400" />
+                    <File className="w-4 h-4 text-blue-600 dark:text-blue-400" />
                   </div>
                   <div>
-                    <p className="font-medium text-gray-900 dark:text-gray-200">{selectedFile.name}</p>
-                    <p className="text-sm text-gray-500 dark:text-gray-400">
+                    <p className="font-medium text-gray-900 dark:text-gray-200 text-sm">
+                      {selectedFile.name}
+                    </p>
+                    <p className="text-xs text-gray-500 dark:text-gray-400">
                       {(selectedFile.size / (1024 * 1024)).toFixed(2)} MB
                     </p>
                   </div>
@@ -346,9 +357,9 @@ export default function FileUpload({
                 {!uploading && (
                   <button
                     onClick={clearFile}
-                    className="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition-colors"
+                    className="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition-colors p-1"
                   >
-                    <X className="w-5 h-5" />
+                    <X className="w-4 h-4" />
                   </button>
                 )}
               </div>
@@ -357,12 +368,12 @@ export default function FileUpload({
               <button
                 onClick={handleFileUpload}
                 disabled={uploading}
-                className="w-full mt-4 bg-linear-to-r from-blue-600 to-cyan-500 hover:from-blue-700 hover:to-cyan-600 text-white font-semibold py-3 rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center cursor-pointer"
+                className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2.5 rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center cursor-pointer"
               >
                 {uploading ? (
                   <>
                     <svg
-                      className="animate-spin -ml-1 mr-3 h-5 w-5 text-white"
+                      className="animate-spin -ml-1 mr-2 h-4 w-4 text-white"
                       xmlns="http://www.w3.org/2000/svg"
                       fill="none"
                       viewBox="0 0 24 24"
@@ -384,7 +395,7 @@ export default function FileUpload({
                     Uploading...
                   </>
                 ) : (
-                  "Upload Material"
+                  "Upload"
                 )}
               </button>
             </div>
@@ -395,106 +406,81 @@ export default function FileUpload({
       {mode === "url" && (
         <>
           {/* URL Input Form */}
-          <div className="border-2 border-dashed border-gray-300 dark:border-slate-600 rounded-xl p-8 bg-gray-50/10 dark:bg-slate-800">
-            <div className="flex items-center justify-center mb-6">
-              <LinkIcon className="w-12 h-12 text-gray-400" />
-            </div>
-
-            <p className="text-lg font-semibold text-gray-900 dark:text-gray-300 mb-2 text-center">
-              Add Material from URL
-            </p>
-
-            <p className="text-sm text-gray-600 dark:text-gray-400 mb-6 text-center">
-              Enter a URL to fetch and process content
-            </p>
-
-            <div className="mb-6 space-y-3">
-              {/* Main info box */}
-              <div className="p-3 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg">
-                <p className="text-xs text-blue-700 dark:text-blue-300 mb-2">
-                  <strong>✨ Smart extraction:</strong> Works with static HTML and JavaScript-heavy pages!
-                </p>
-                <p className="text-xs text-blue-600 dark:text-blue-400">
-                  <strong>✅ Works best with:</strong> Wikipedia, Medium, Dev.to, blogs, MDN docs, arXiv.org, PubMed Central
-                </p>
-              </div>
-
-              {/* Academic platforms warning */}
-              <div className="p-3 bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 rounded-lg">
-                <p className="text-xs text-amber-800 dark:text-amber-300 mb-1">
-                  <strong>⚠️ Academic articles (ResearchGate, ScienceDirect, Springer, IEEE):</strong>
-                </p>
-                <p className="text-xs text-amber-700 dark:text-amber-400">
-                  These platforms require login/subscription. Please download the PDF and use "Upload File" instead.
-                </p>
-              </div>
-            </div>
-
-            <div className="space-y-4">
-              <div>
-                <label htmlFor="url-input" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                  URL
-                </label>
-                <input
-                  id="url-input"
-                  type="url"
-                  value={url}
-                  onChange={(e) => setUrl(e.target.value)}
-                  placeholder="https://example.com/article"
-                  disabled={uploading}
-                  className="w-full px-4 py-3 border border-gray-300 dark:border-slate-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white dark:bg-slate-700 text-gray-900 dark:text-gray-200 placeholder-gray-400 dark:placeholder-gray-500"
-                />
-              </div>
-
-              <div>
-                <label htmlFor="title-input" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                  Title
-                </label>
-                <input
-                  id="title-input"
-                  type="text"
-                  value={urlTitle}
-                  onChange={(e) => setUrlTitle(e.target.value)}
-                  placeholder="Enter a title for this material"
-                  disabled={uploading}
-                  className="w-full px-4 py-3 border border-gray-300 dark:border-slate-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white dark:bg-slate-700 text-gray-900 dark:text-gray-200 placeholder-gray-400 dark:placeholder-gray-500"
-                />
-              </div>
-
-              <button
-                onClick={handleUrlSubmit}
-                disabled={uploading || !url.trim() || !urlTitle.trim()}
-                className="w-full bg-linear-to-r from-blue-600 to-cyan-500 hover:from-blue-700 hover:to-cyan-600 text-white font-semibold py-3 rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center cursor-pointer"
+          <div className="space-y-4">
+            <div>
+              <label
+                htmlFor="url-input"
+                className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5"
               >
-                {uploading ? (
-                  <>
-                    <svg
-                      className="animate-spin -ml-1 mr-3 h-5 w-5 text-white"
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                    >
-                      <circle
-                        className="opacity-25"
-                        cx="12"
-                        cy="12"
-                        r="10"
-                        stroke="currentColor"
-                        strokeWidth="4"
-                      ></circle>
-                      <path
-                        className="opacity-75"
-                        fill="currentColor"
-                        d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                      ></path>
-                    </svg>
-                    Processing URL...
-                  </>
-                ) : (
-                  "Add Material from URL"
-                )}
-              </button>
+                URL
+              </label>
+              <input
+                id="url-input"
+                type="url"
+                value={url}
+                onChange={(e) => setUrl(e.target.value)}
+                placeholder="https://example.com/article"
+                disabled={uploading}
+                className="w-full px-4 py-2.5 border border-gray-300 dark:border-slate-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white dark:bg-slate-700 text-gray-900 dark:text-gray-200 placeholder-gray-400 dark:placeholder-gray-500"
+              />
             </div>
+
+            <div>
+              <label
+                htmlFor="title-input"
+                className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5"
+              >
+                Title
+              </label>
+              <input
+                id="title-input"
+                type="text"
+                value={urlTitle}
+                onChange={(e) => setUrlTitle(e.target.value)}
+                placeholder="Enter a title for this material"
+                disabled={uploading}
+                className="w-full px-4 py-2.5 border border-gray-300 dark:border-slate-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white dark:bg-slate-700 text-gray-900 dark:text-gray-200 placeholder-gray-400 dark:placeholder-gray-500"
+              />
+            </div>
+
+            {/* Compact info */}
+            <p className="text-xs text-gray-500 dark:text-gray-400">
+              Works with Wikipedia, Medium, blogs, docs. For paywalled sites, download PDF and use File tab.
+            </p>
+
+            <button
+              onClick={handleUrlSubmit}
+              disabled={uploading || !url.trim() || !urlTitle.trim()}
+              className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2.5 rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center cursor-pointer"
+            >
+              {uploading ? (
+                <>
+                  <svg
+                    className="animate-spin -ml-1 mr-2 h-4 w-4 text-white"
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                  >
+                    <circle
+                      className="opacity-25"
+                      cx="12"
+                      cy="12"
+                      r="10"
+                      stroke="currentColor"
+                      strokeWidth="4"
+                    ></circle>
+                    <path
+                      className="opacity-75"
+                      fill="currentColor"
+                      d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                    ></path>
+                  </svg>
+                  Processing...
+                </>
+              ) : (
+                "Add from URL"
+              )}
+            </button>
           </div>
         </>
       )}
@@ -502,105 +488,102 @@ export default function FileUpload({
       {mode === "text" && (
         <>
           {/* Text Input Form */}
-          <div className="border-2 border-dashed border-gray-300 dark:border-slate-600 rounded-xl p-8 bg-gray-50/10 dark:bg-slate-800">
-            <div className="flex items-center justify-center mb-6">
-              <FileText className="w-12 h-12 text-gray-400" />
-            </div>
-
-            <p className="text-lg font-semibold text-gray-900 dark:text-gray-300 mb-2 text-center">
-              Paste Your Text
-            </p>
-
-            <p className="text-sm text-gray-600 dark:text-gray-400 mb-6 text-center">
-              Enter or paste text content directly
-            </p>
-
-            <div className="space-y-4">
-              <div>
-                <label htmlFor="title-input-text" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                  Title
-                </label>
-                <input
-                  id="title-input-text"
-                  type="text"
-                  value={textTitle}
-                  onChange={(e) => setTextTitle(e.target.value)}
-                  placeholder="Enter a title for this material"
-                  disabled={uploading}
-                  className="w-full px-4 py-3 border border-gray-300 dark:border-slate-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white dark:bg-slate-700 text-gray-900 dark:text-gray-200 placeholder-gray-400 dark:placeholder-gray-500"
-                />
-              </div>
-
-              <div>
-                <label htmlFor="text-input" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                  Text Content
-                </label>
-                <textarea
-                  id="text-input"
-                  value={text}
-                  onChange={(e) => setText(e.target.value)}
-                  placeholder="Paste or type your text here..."
-                  disabled={uploading}
-                  rows={12}
-                  className="w-full px-4 py-3 border border-gray-300 dark:border-slate-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white dark:bg-slate-700 text-gray-900 dark:text-gray-200 placeholder-gray-400 dark:placeholder-gray-500 resize-vertical"
-                />
-                <p className="mt-2 text-xs text-gray-500 dark:text-gray-400">
-                  Minimum 50 characters. Current: {text.length}
-                </p>
-              </div>
-
-              <button
-                onClick={handleTextSubmit}
-                disabled={uploading || !text.trim() || !textTitle.trim() || text.trim().length < 50}
-                className="w-full bg-linear-to-r from-blue-600 to-cyan-500 hover:from-blue-700 hover:to-cyan-600 text-white font-semibold py-3 rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center cursor-pointer"
+          <div className="space-y-4">
+            <div>
+              <label
+                htmlFor="title-input-text"
+                className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5"
               >
-                {uploading ? (
-                  <>
-                    <svg
-                      className="animate-spin -ml-1 mr-3 h-5 w-5 text-white"
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                    >
-                      <circle
-                        className="opacity-25"
-                        cx="12"
-                        cy="12"
-                        r="10"
-                        stroke="currentColor"
-                        strokeWidth="4"
-                      ></circle>
-                      <path
-                        className="opacity-75"
-                        fill="currentColor"
-                        d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                      ></path>
-                    </svg>
-                    Processing Text...
-                  </>
-                ) : (
-                  "Add Material from Text"
-                )}
-              </button>
+                Title
+              </label>
+              <input
+                id="title-input-text"
+                type="text"
+                value={textTitle}
+                onChange={(e) => setTextTitle(e.target.value)}
+                placeholder="Enter a title for this material"
+                disabled={uploading}
+                className="w-full px-4 py-2.5 border border-gray-300 dark:border-slate-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white dark:bg-slate-700 text-gray-900 dark:text-gray-200 placeholder-gray-400 dark:placeholder-gray-500"
+              />
             </div>
+
+            <div>
+              <label
+                htmlFor="text-input"
+                className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5"
+              >
+                Content
+              </label>
+              <textarea
+                id="text-input"
+                value={text}
+                onChange={(e) => setText(e.target.value)}
+                placeholder="Paste or type your text here..."
+                disabled={uploading}
+                rows={8}
+                className="w-full px-4 py-2.5 border border-gray-300 dark:border-slate-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white dark:bg-slate-700 text-gray-900 dark:text-gray-200 placeholder-gray-400 dark:placeholder-gray-500 resize-vertical"
+              />
+              <p className="mt-1.5 text-xs text-gray-500 dark:text-gray-400">
+                Min 50 characters ({text.length} entered)
+              </p>
+            </div>
+
+            <button
+              onClick={handleTextSubmit}
+              disabled={
+                uploading ||
+                !text.trim() ||
+                !textTitle.trim() ||
+                text.trim().length < 50
+              }
+              className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2.5 rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center cursor-pointer"
+            >
+              {uploading ? (
+                <>
+                  <svg
+                    className="animate-spin -ml-1 mr-2 h-4 w-4 text-white"
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                  >
+                    <circle
+                      className="opacity-25"
+                      cx="12"
+                      cy="12"
+                      r="10"
+                      stroke="currentColor"
+                      strokeWidth="4"
+                    ></circle>
+                    <path
+                      className="opacity-75"
+                      fill="currentColor"
+                      d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                    ></path>
+                  </svg>
+                  Processing...
+                </>
+              ) : (
+                "Add from Text"
+              )}
+            </button>
           </div>
         </>
       )}
 
       {/* Error message */}
       {error && (
-        <div className="mt-4 p-4 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg flex items-start space-x-3">
-          <AlertCircle className="w-5 h-5 text-red-600 dark:text-red-400 mt-0.5 shrink-0" />
+        <div className="mt-3 p-3 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg flex items-center space-x-2">
+          <AlertCircle className="w-4 h-4 text-red-600 dark:text-red-400 shrink-0" />
           <p className="text-sm text-red-700 dark:text-red-300">{error}</p>
         </div>
       )}
 
       {/* Success message */}
       {success && (
-        <div className="mt-4 p-4 bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-lg flex items-start space-x-3">
-          <CheckCircle className="w-5 h-5 text-green-600 dark:text-green-400 mt-0.5 shrink-0" />
+        <div className="mt-3 p-3 bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-lg flex items-center space-x-2">
+          <CheckCircle className="w-4 h-4 text-green-600 dark:text-green-400 shrink-0" />
           <p className="text-sm text-green-700 dark:text-green-300">
-            Material successfully uploaded!
+            Upload successful!
           </p>
         </div>
       )}

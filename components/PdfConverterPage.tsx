@@ -10,6 +10,7 @@ import {
   Shield,
   CreditCard,
   Zap,
+  Trash2,
 } from "lucide-react";
 import { getCurrentUser } from "@/lib/auth";
 import type { User as SupabaseUser } from "@supabase/supabase-js";
@@ -30,10 +31,22 @@ export default function PdfConverterPage() {
     tierId: string;
     tierName: string;
     usage: {
-      pdf_conversions: { used: number; limit: number | null; unlimited: boolean };
+      pdf_conversions: {
+        used: number;
+        limit: number | null;
+        unlimited: boolean;
+      };
       materials: { used: number; limit: number | null; unlimited: boolean };
-      notes_generations: { used: number; limit: number | null; unlimited: boolean };
-      questions_generations: { used: number; limit: number | null; unlimited: boolean };
+      notes_generations: {
+        used: number;
+        limit: number | null;
+        unlimited: boolean;
+      };
+      questions_generations: {
+        used: number;
+        limit: number | null;
+        unlimited: boolean;
+      };
     };
     periodStart: string;
     periodEnd: string;
@@ -121,20 +134,14 @@ export default function PdfConverterPage() {
             })
             .catch((err) => {
               console.error("Failed to restore file blob:", err);
-              setError(
-                t("pdfConverter.errors.paymentSuccessUploadAgain"),
-              );
+              setError(t("pdfConverter.errors.paymentSuccessUploadAgain"));
             });
         } catch (err) {
           console.error("Failed to parse saved file:", err);
-          setError(
-            t("pdfConverter.errors.paymentSuccessUploadAgain"),
-          );
+          setError(t("pdfConverter.errors.paymentSuccessUploadAgain"));
         }
       } else {
-        setError(
-          t("pdfConverter.errors.paymentSuccessUploadAgain"),
-        );
+        setError(t("pdfConverter.errors.paymentSuccessUploadAgain"));
       }
 
       // Clean URL
@@ -232,7 +239,10 @@ export default function PdfConverterPage() {
       if (pdfUsage.limit !== null && pdfUsage.used >= pdfUsage.limit) {
         // Dosiahol limit
         setError(
-          t("pdfConverter.errors.limitReached").replace("{limit}", pdfUsage.limit.toString()),
+          t("pdfConverter.errors.limitReached").replace(
+            "{limit}",
+            pdfUsage.limit.toString(),
+          ),
         );
         return;
       }
@@ -278,7 +288,9 @@ export default function PdfConverterPage() {
 
       if (!response.ok) {
         const errorData = await response.json();
-        throw new Error(errorData.error || t("pdfConverter.errors.conversionFailed"));
+        throw new Error(
+          errorData.error || t("pdfConverter.errors.conversionFailed"),
+        );
       }
 
       // Download the converted file
@@ -304,7 +316,11 @@ export default function PdfConverterPage() {
         }
       }
     } catch (err) {
-      setError(err instanceof Error ? err.message : t("pdfConverter.errors.failedToConvert"));
+      setError(
+        err instanceof Error
+          ? err.message
+          : t("pdfConverter.errors.failedToConvert"),
+      );
     } finally {
       setConverting(false);
     }
@@ -343,7 +359,9 @@ export default function PdfConverterPage() {
         const data = await response.json();
 
         if (!response.ok) {
-          throw new Error(data.error || t("pdfConverter.errors.failedToCreateCheckout"));
+          throw new Error(
+            data.error || t("pdfConverter.errors.failedToCreateCheckout"),
+          );
         }
 
         // Presmeruj na Stripe Checkout
@@ -359,7 +377,9 @@ export default function PdfConverterPage() {
       reader.readAsDataURL(file);
     } catch (err) {
       setError(
-        err instanceof Error ? err.message : t("pdfConverter.errors.failedToInitiatePayment"),
+        err instanceof Error
+          ? err.message
+          : t("pdfConverter.errors.failedToInitiatePayment"),
       );
     }
   };
@@ -369,7 +389,7 @@ export default function PdfConverterPage() {
       <div className="container-custom py-12">
         <div className="max-w-3xl mx-auto">
           {/* Header */}
-          <div className="text-center mb-12">
+          <div className="text-center mb-12 pt-14">
             <div className="inline-flex items-center justify-center w-16 h-16 bg-linear-to-br from-blue-600 to-cyan-500 rounded-2xl mb-6 shadow-lg shadow-blue-500/30">
               <FileText className="w-8 h-8 text-white" />
             </div>
@@ -399,26 +419,19 @@ export default function PdfConverterPage() {
           )}
 
           {/* Main Card */}
-          <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-xl shadow-blue-500/5 dark:shadow-slate-900/20 p-8 border border-gray-200/50 dark:border-slate-700/50">
+          <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-xl shadow-blue-500/5 dark:shadow-slate-900/20 p-5 sm:p-6 border border-gray-200/50 dark:border-slate-700/50">
             {/* Upload Area */}
             <div
-              className={`border-2 border-dashed rounded-xl p-12 text-center transition-all duration-300 ${
+              className={`border-2 border-dashed rounded-xl p-6 text-center transition-all cursor-pointer ${
                 dragActive
                   ? "border-blue-500 bg-blue-50 dark:bg-blue-900/20"
-                  : "border-gray-300 dark:border-slate-600 hover:border-blue-400 dark:hover:border-blue-500"
+                  : "border-gray-300 dark:border-slate-600 hover:border-blue-400 dark:hover:border-blue-500 hover:bg-blue-50/50 dark:hover:bg-blue-900/10"
               }`}
               onDragEnter={handleDrag}
               onDragLeave={handleDrag}
               onDragOver={handleDrag}
               onDrop={handleDrop}
             >
-              <Upload className="w-16 h-16 mx-auto mb-4 text-gray-400 dark:text-gray-500" />
-              <p className="text-lg font-medium text-gray-700 dark:text-gray-200 mb-2">
-                {t("pdfConverter.dragAndDrop")}
-              </p>
-              <p className="text-sm text-gray-500 dark:text-gray-400 mb-4">
-                {t("pdfConverter.orClickBrowse")}
-              </p>
               <input
                 type="file"
                 accept=".pdf,application/pdf"
@@ -426,34 +439,47 @@ export default function PdfConverterPage() {
                 className="hidden"
                 id="file-upload"
               />
-              <label
-                htmlFor="file-upload"
-                className="inline-block bg-linear-to-r from-blue-600 to-cyan-500 hover:from-blue-700 hover:to-cyan-600 text-white font-semibold py-3 px-8 rounded-xl transition-all duration-300 shadow-lg shadow-blue-500/30 hover:shadow-xl hover:shadow-blue-500/40 hover:scale-105 cursor-pointer"
-              >
-                {t("pdfConverter.chooseFile")}
+              <label htmlFor="file-upload" className="cursor-pointer">
+                <div className={`w-12 h-12 mx-auto mb-3 rounded-full flex items-center justify-center ${
+                  dragActive ? "bg-blue-100 dark:bg-blue-900/30" : "bg-gray-100 dark:bg-slate-700"
+                }`}>
+                  <Upload className={`w-6 h-6 ${dragActive ? "text-blue-600" : "text-gray-500 dark:text-gray-400"}`} />
+                </div>
+                <p className="font-semibold text-gray-900 dark:text-gray-200 mb-1">
+                  {t("pdfConverter.dragAndDrop")}
+                </p>
+                <p className="text-sm text-gray-500 dark:text-gray-400 mb-3">
+                  {t("pdfConverter.orClickBrowse")}
+                </p>
+                <span className="inline-block bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-6 rounded-lg transition-colors text-sm">
+                  {t("pdfConverter.chooseFile")}
+                </span>
               </label>
             </div>
 
             {/* Selected File */}
             {file && (
-              <div className="mt-6 p-4 bg-blue-50 dark:bg-blue-900/20 rounded-xl border border-blue-200 dark:border-blue-800">
+              <div className="mt-4 p-3 bg-blue-50 dark:bg-slate-700 rounded-lg border border-blue-200 dark:border-slate-600">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center space-x-3">
-                    <FileCheck className="w-6 h-6 text-blue-600 dark:text-blue-400" />
+                    <div className="bg-blue-100 dark:bg-slate-600 p-2 rounded-lg">
+                      <FileCheck className="w-4 h-4 text-blue-600 dark:text-blue-400" />
+                    </div>
                     <div>
-                      <p className="font-medium text-gray-900 dark:text-gray-100">
+                      <p className="font-medium text-gray-900 dark:text-gray-200 text-sm">
                         {file.name}
                       </p>
-                      <p className="text-sm text-gray-600 dark:text-gray-400">
+                      <p className="text-xs text-gray-500 dark:text-gray-400">
                         {(file.size / 1024 / 1024).toFixed(2)} MB
                       </p>
                     </div>
                   </div>
                   <button
                     onClick={() => setFile(null)}
-                    className="text-red-600 dark:text-red-400 hover:text-red-700 dark:hover:text-red-300 transition-colors"
+                    className="text-red-500 dark:text-red-400 hover:text-red-600 dark:hover:text-red-300 transition-colors text-sm font-medium"
                   >
-                    {t("pdfConverter.remove")}
+                    <span className="hidden sm:inline">{t("pdfConverter.remove")}</span>
+                    <Trash2 className="w-4 h-4 sm:hidden" />
                   </button>
                 </div>
               </div>
@@ -461,8 +487,8 @@ export default function PdfConverterPage() {
 
             {/* Error Message */}
             {error && (
-              <div className="mt-6 p-4 bg-red-50 dark:bg-red-900/20 rounded-xl border border-red-200 dark:border-red-800">
-                <p className="text-red-600 dark:text-red-400 text-center">
+              <div className="mt-3 p-3 bg-red-50 dark:bg-red-900/20 rounded-lg border border-red-200 dark:border-red-800">
+                <p className="text-red-600 dark:text-red-400 text-sm text-center">
                   {error}
                 </p>
               </div>
@@ -470,8 +496,8 @@ export default function PdfConverterPage() {
 
             {/* Success Message */}
             {success && (
-              <div className="mt-6 p-4 bg-green-50 dark:bg-green-900/20 rounded-xl border border-green-200 dark:border-green-800">
-                <p className="text-green-600 dark:text-green-400 text-center font-medium">
+              <div className="mt-3 p-3 bg-green-50 dark:bg-green-900/20 rounded-lg border border-green-200 dark:border-green-800">
+                <p className="text-green-600 dark:text-green-400 text-sm text-center font-medium">
                   {t("pdfConverter.successMessage")}
                 </p>
               </div>
@@ -481,20 +507,20 @@ export default function PdfConverterPage() {
             <button
               onClick={handleConvert}
               disabled={!file || converting}
-              className={`w-full mt-8 py-4 rounded-xl font-semibold text-lg transition-all duration-300 flex items-center justify-center space-x-2 ${
+              className={`w-full mt-4 py-3 rounded-xl font-semibold transition-all flex items-center justify-center space-x-2 ${
                 !file || converting
                   ? "bg-gray-300 dark:bg-gray-700 text-gray-500 dark:text-gray-400 cursor-not-allowed"
-                  : "bg-linear-to-r from-blue-600 to-cyan-500 hover:from-blue-700 hover:to-cyan-600 text-white shadow-lg shadow-blue-500/30 hover:shadow-xl hover:shadow-blue-500/40 hover:scale-105"
+                  : "bg-blue-600 hover:bg-blue-700 text-white"
               }`}
             >
               {converting ? (
                 <>
-                  <Loader2 className="w-6 h-6 animate-spin" />
+                  <Loader2 className="w-5 h-5 animate-spin" />
                   <span>{t("pdfConverter.converting")}</span>
                 </>
               ) : (
                 <>
-                  <Download className="w-6 h-6" />
+                  <Download className="w-5 h-5" />
                   <span>{t("pdfConverter.convertToDocx")}</span>
                 </>
               )}
@@ -611,7 +637,11 @@ export default function PdfConverterPage() {
               {!user && (
                 <div className="mb-6 p-4 bg-yellow-50 dark:bg-yellow-900/20 rounded-xl border border-yellow-200 dark:border-yellow-800">
                   <p className="text-sm text-yellow-800 dark:text-yellow-300">
-                    <span dangerouslySetInnerHTML={{ __html: t("pdfConverter.signupTip") }} />{" "}
+                    <span
+                      dangerouslySetInnerHTML={{
+                        __html: t("pdfConverter.signupTip"),
+                      }}
+                    />{" "}
                     <a href="/register" className="underline font-semibold">
                       {t("pdfConverter.signUp")}
                     </a>

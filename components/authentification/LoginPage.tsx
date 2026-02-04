@@ -55,7 +55,7 @@ export default function LoginPage() {
     const { user, error } = await signIn(
       formData.email,
       formData.password,
-      rememberMe
+      rememberMe,
     );
 
     if (error) {
@@ -146,7 +146,7 @@ export default function LoginPage() {
         />
       </div>
 
-      <div className="max-w-md w-full relative z-10">
+      <div className="max-w-md w-full relative z-10 pt-14">
         {/* Logo and heading */}
         <motion.div
           initial={{ opacity: 0, y: -20 }}
@@ -165,7 +165,9 @@ export default function LoginPage() {
               <BookOpen className="w-8 h-8" />
             </motion.div>
           </Link>
-          <h1 className="text-4xl font-bold text-white mb-2">{t("login.title")}</h1>
+          <h1 className="text-4xl font-bold text-white mb-2">
+            {t("login.title")}
+          </h1>
           <p className="text-blue-200">{t("login.subtitle")}</p>
         </motion.div>
 
@@ -174,7 +176,7 @@ export default function LoginPage() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.1 }}
-          className="bg-white/10 backdrop-blur-lg rounded-2xl shadow-2xl p-8 border border-white/20"
+          className="bg-white/10 backdrop-blur-lg rounded-2xl shadow-2xl py-8 px-4 border border-white/20"
         >
           {/* Error message */}
           {error && (

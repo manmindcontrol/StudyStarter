@@ -213,7 +213,9 @@ export default function QuestionsViewPage({
                 {
                   role: "assistant",
                   content: materialData?.title
-                    ? t("questionsView.chatGreeting", { title: materialData.title })
+                    ? t("questionsView.chatGreeting", {
+                        title: materialData.title,
+                      })
                     : t("questionsView.chatGreetingDefault"),
                 },
               ]);
@@ -702,7 +704,7 @@ export default function QuestionsViewPage({
   return (
     <div className="min-h-screen bg-linear-to-br from-blue-50 via-gray-100 to-cyan-50 dark:bg-linear-to-br dark:from-slate-900 dark:via-slate-800 dark:to-slate-900">
       {/* Header */}
-      <div className="bg-white dark:bg-slate-800/80 border-b border-gray-200 dark:border-slate-700 sticky top-0 z-10">
+      <div className="bg-white dark:bg-slate-800/80 border-b border-gray-200 dark:border-slate-700 sticky top-0 z-10 pt-18">
         <div className="container-custom py-3 sm:py-4 md:py-5">
           <div className="flex items-center justify-between gap-2">
             <div className="flex items-center space-x-2 sm:space-x-4 flex-1 min-w-0">

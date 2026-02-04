@@ -128,9 +128,21 @@ export default function RootLayout({
         />
       </head>
       <body
-        className={`${inter.className} flex flex-col min-h-screen antialiased`}
+        className={`${inter.className} relative flex flex-col min-h-screen antialiased bg-gradient-to-r from-slate-900 to-slate-700 overflow-x-hidden`}
         suppressHydrationWarning
       >
+        {/* Grid background */}
+        <div
+          className="absolute inset-0 z-[-1] opacity-30 pointer-events-none"
+          style={{
+            backgroundImage: `
+              linear-gradient(rgba(255,255,255,0.05) 1px, transparent 1px),
+              linear-gradient(90deg, rgba(255,255,255,0.05) 1px, transparent 1px)
+            `,
+            backgroundSize: "50px 50px",
+          }}
+        />
+
         <ThemeWrapper>
           {/* Navbar - displayed on all pages */}
           <Navbar />

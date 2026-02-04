@@ -1,11 +1,10 @@
 "use client";
 
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { getCurrentUser } from "@/lib/auth";
 import { supabase } from "@/lib/supabase";
 import { FileText, ChevronLeft } from "lucide-react";
-import type { User as SupabaseUser } from "@supabase/supabase-js";
 import { useTranslation } from "@/hooks/useTranslation";
 import SlidingChatPanel from "./SlidingChatPanel";
 
@@ -28,7 +27,6 @@ type Props = {
 export default function DocumentViewer({ materialId }: Props) {
   const router = useRouter();
   const { locale } = useTranslation();
-  const [user, setUser] = useState<SupabaseUser | null>(null);
   const [loading, setLoading] = useState(true);
   const [material, setMaterial] = useState<Material | null>(null);
   const [messages, setMessages] = useState<Message[]>([]);
@@ -43,7 +41,6 @@ export default function DocumentViewer({ materialId }: Props) {
         router.push("/login");
         return;
       }
-      setUser(user);
 
       // Load material
       const { data: materialData, error: materialError } = await supabase

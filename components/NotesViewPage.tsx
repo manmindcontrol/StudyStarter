@@ -103,7 +103,7 @@ export default function NotesViewPage({ materialId, noteId }: Props) {
         // Check if this is unsaved data (noteId === "new")
         if (noteId === "new") {
           // Try to get data from sessionStorage first (preferred method)
-          const unsavedDataFromStorage = sessionStorage.getItem('unsavedNotes');
+          const unsavedDataFromStorage = sessionStorage.getItem("unsavedNotes");
           if (unsavedDataFromStorage) {
             const parsedData = JSON.parse(unsavedDataFromStorage);
             setNote({
@@ -117,7 +117,7 @@ export default function NotesViewPage({ materialId, noteId }: Props) {
             });
             setIsUnsaved(true);
             // Clear the sessionStorage after reading
-            sessionStorage.removeItem('unsavedNotes');
+            sessionStorage.removeItem("unsavedNotes");
           } else {
             // Fallback to URL parameter for backward compatibility
             const unsavedData = searchParams.get("data");
@@ -150,15 +150,17 @@ export default function NotesViewPage({ materialId, noteId }: Props) {
 
         // Load chat history from database
         try {
-          const { data: { session } } = await supabase.auth.getSession();
+          const {
+            data: { session },
+          } = await supabase.auth.getSession();
           if (session) {
             const response = await fetch(
               `/api/chat/history?conversationId=${conversationId}`,
               {
                 headers: {
-                  'Authorization': `Bearer ${session.access_token}`,
+                  Authorization: `Bearer ${session.access_token}`,
                 },
-              }
+              },
             );
 
             if (response.ok) {
@@ -238,7 +240,7 @@ export default function NotesViewPage({ materialId, noteId }: Props) {
               study_tips: note.study_tips,
             },
           }),
-        }
+        },
       );
 
       const data = await response.json();
@@ -248,25 +250,30 @@ export default function NotesViewPage({ materialId, noteId }: Props) {
       }
 
       // Add assistant response to chat
-      const newAssistantMessage = { role: "assistant" as const, content: data.response };
+      const newAssistantMessage = {
+        role: "assistant" as const,
+        content: data.response,
+      };
       setChatMessages((prev) => [...prev, newAssistantMessage]);
 
       // Save messages to database
       try {
-        const { data: { session } } = await supabase.auth.getSession();
+        const {
+          data: { session },
+        } = await supabase.auth.getSession();
         if (session) {
-          await fetch('/api/chat/save', {
-            method: 'POST',
+          await fetch("/api/chat/save", {
+            method: "POST",
             headers: {
-              'Content-Type': 'application/json',
-              'Authorization': `Bearer ${session.access_token}`,
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${session.access_token}`,
             },
             body: JSON.stringify({
               conversationId,
               messages: [newUserMessage, newAssistantMessage],
-              chatType: 'notes',
+              chatType: "notes",
               materialId,
-              noteId: noteId !== 'new' ? noteId : null,
+              noteId: noteId !== "new" ? noteId : null,
             }),
           });
         }
@@ -300,7 +307,7 @@ export default function NotesViewPage({ materialId, noteId }: Props) {
         heading: HeadingLevel.TITLE,
         alignment: AlignmentType.CENTER,
         spacing: { after: 200 },
-      })
+      }),
     );
 
     // Generated date
@@ -309,7 +316,7 @@ export default function NotesViewPage({ materialId, noteId }: Props) {
         text: `Generated on: ${new Date(note.created_at).toLocaleDateString()}`,
         alignment: AlignmentType.CENTER,
         spacing: { after: 400 },
-      })
+      }),
     );
 
     // Summary Section
@@ -318,13 +325,13 @@ export default function NotesViewPage({ materialId, noteId }: Props) {
         text: "Summary",
         heading: HeadingLevel.HEADING_1,
         spacing: { before: 400, after: 200 },
-      })
+      }),
     );
     paragraphs.push(
       new Paragraph({
         text: note.summary,
         spacing: { after: 400 },
-      })
+      }),
     );
 
     // Key Points Section
@@ -333,7 +340,7 @@ export default function NotesViewPage({ materialId, noteId }: Props) {
         text: "Key Points",
         heading: HeadingLevel.HEADING_1,
         spacing: { before: 400, after: 200 },
-      })
+      }),
     );
 
     note.key_points.forEach((point, index) => {
@@ -344,13 +351,13 @@ export default function NotesViewPage({ materialId, noteId }: Props) {
           } [${point.importance.toUpperCase()}]`,
           heading: HeadingLevel.HEADING_2,
           spacing: { before: 200, after: 100 },
-        })
+        }),
       );
       paragraphs.push(
         new Paragraph({
           text: point.description,
           spacing: { after: 200 },
-        })
+        }),
       );
     });
 
@@ -360,7 +367,7 @@ export default function NotesViewPage({ materialId, noteId }: Props) {
         text: "Important Concepts",
         heading: HeadingLevel.HEADING_1,
         spacing: { before: 400, after: 200 },
-      })
+      }),
     );
 
     note.concepts.forEach((concept, index) => {
@@ -369,13 +376,13 @@ export default function NotesViewPage({ materialId, noteId }: Props) {
           text: `${index + 1}. ${concept.concept}`,
           heading: HeadingLevel.HEADING_2,
           spacing: { before: 200, after: 100 },
-        })
+        }),
       );
       paragraphs.push(
         new Paragraph({
           text: concept.explanation,
           spacing: { after: 200 },
-        })
+        }),
       );
 
       if (concept.examples && concept.examples.length > 0) {
@@ -388,7 +395,7 @@ export default function NotesViewPage({ materialId, noteId }: Props) {
               }),
             ],
             spacing: { before: 100, after: 100 },
-          })
+          }),
         );
 
         concept.examples.forEach((example) => {
@@ -396,7 +403,7 @@ export default function NotesViewPage({ materialId, noteId }: Props) {
             new Paragraph({
               text: `• ${example}`,
               spacing: { after: 100 },
-            })
+            }),
           );
         });
       }
@@ -408,13 +415,13 @@ export default function NotesViewPage({ materialId, noteId }: Props) {
         text: "Study Tips & Recommendations",
         heading: HeadingLevel.HEADING_1,
         spacing: { before: 400, after: 200 },
-      })
+      }),
     );
     paragraphs.push(
       new Paragraph({
         text: note.study_tips,
         spacing: { after: 200 },
-      })
+      }),
     );
 
     // Create document
@@ -479,7 +486,9 @@ export default function NotesViewPage({ materialId, noteId }: Props) {
       }
 
       // Get auth token
-      const { data: { session } } = await supabase.auth.getSession();
+      const {
+        data: { session },
+      } = await supabase.auth.getSession();
       if (!session) {
         router.push("/login");
         return;
@@ -489,7 +498,7 @@ export default function NotesViewPage({ materialId, noteId }: Props) {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          "Authorization": `Bearer ${session.access_token}`,
+          Authorization: `Bearer ${session.access_token}`,
         },
         body: JSON.stringify({
           summary: note.summary,
@@ -545,7 +554,7 @@ export default function NotesViewPage({ materialId, noteId }: Props) {
   return (
     <div className="min-h-screen bg-linear-to-br from-purple-50 via-white to-blue-50 dark:bg-linear-to-br dark:from-slate-900 dark:via-slate-800 dark:to-slate-900">
       {/* Header */}
-      <div className="bg-white border-b border-gray-200 dark:border-slate-700 dark:bg-slate-800/80 sticky top-0 z-10 shadow-sm">
+      <div className="bg-white border-b border-gray-200 dark:border-slate-700 dark:bg-slate-800/80 sticky top-0 z-10 shadow-sm pt-18">
         <div className="container-custom py-3 sm:py-4 md:py-5 px-3 sm:px-4">
           <div className="flex items-center justify-between gap-2">
             <div className="flex items-center gap-2 sm:gap-3 md:gap-4 flex-1 min-w-0">
@@ -664,7 +673,7 @@ export default function NotesViewPage({ materialId, noteId }: Props) {
                       </h3>
                       <span
                         className={`inline-flex items-center gap-0.5 sm:gap-1 px-1.5 sm:px-2 py-0.5 sm:py-1 rounded-full text-[10px] sm:text-xs font-bold border ${getImportanceColor(
-                          point.importance
+                          point.importance,
                         )} shrink-0`}
                       >
                         {getImportanceIcon(point.importance)}

@@ -80,7 +80,9 @@ export default function MaterialsPage() {
 
     try {
       // Get session token for authorization
-      const { data: { session } } = await supabase.auth.getSession();
+      const {
+        data: { session },
+      } = await supabase.auth.getSession();
 
       if (!session) {
         throw new Error("No active session");
@@ -120,7 +122,9 @@ export default function MaterialsPage() {
     setUploading(true);
 
     try {
-      const { data: { session } } = await supabase.auth.getSession();
+      const {
+        data: { session },
+      } = await supabase.auth.getSession();
 
       if (!session) {
         throw new Error("No active session");
@@ -130,7 +134,7 @@ export default function MaterialsPage() {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          "Authorization": `Bearer ${session.access_token}`,
+          Authorization: `Bearer ${session.access_token}`,
         },
         body: JSON.stringify({ url, title }),
       });
@@ -156,7 +160,9 @@ export default function MaterialsPage() {
     setUploading(true);
 
     try {
-      const { data: { session } } = await supabase.auth.getSession();
+      const {
+        data: { session },
+      } = await supabase.auth.getSession();
 
       if (!session) {
         throw new Error("No active session");
@@ -166,7 +172,7 @@ export default function MaterialsPage() {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          "Authorization": `Bearer ${session.access_token}`,
+          Authorization: `Bearer ${session.access_token}`,
         },
         body: JSON.stringify({ text, title }),
       });
@@ -191,7 +197,9 @@ export default function MaterialsPage() {
 
     try {
       // Get auth token
-      const { data: { session } } = await supabase.auth.getSession();
+      const {
+        data: { session },
+      } = await supabase.auth.getSession();
       if (!session) {
         alert("Not authenticated");
         return;
@@ -199,15 +207,15 @@ export default function MaterialsPage() {
 
       // Call API endpoint to delete with proper cleanup
       const response = await fetch(`/api/materials/${materialId}`, {
-        method: 'DELETE',
+        method: "DELETE",
         headers: {
-          'Authorization': `Bearer ${session.access_token}`,
+          Authorization: `Bearer ${session.access_token}`,
         },
       });
 
       if (!response.ok) {
         const data = await response.json();
-        throw new Error(data.error || 'Failed to delete');
+        throw new Error(data.error || "Failed to delete");
       }
 
       // Reload materials
@@ -221,7 +229,7 @@ export default function MaterialsPage() {
   const filteredMaterials = materials.filter(
     (material) =>
       material.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      material.file_name?.toLowerCase().includes(searchQuery.toLowerCase())
+      material.file_name?.toLowerCase().includes(searchQuery.toLowerCase()),
   );
 
   const formatDate = (dateString: string) => {
@@ -246,8 +254,8 @@ export default function MaterialsPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-100 dark:bg-linear-to-br dark:from-slate-900 dark:via-slate-800 dark:to-slate-900 ">
-      <div className="container-custom py-12">
+    <div className="min-h-screen bg-gray-100 dark:bg-linear-to-br dark:from-slate-900 dark:via-slate-800 dark:to-slate-900 pt-14">
+      <div className="container-custom py-12 ">
         <button
           onClick={() => router.push("/dashboard")}
           className="mb-4 flex items-center space-x-2 text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-200 transition-colors group cursor-pointer"
@@ -256,8 +264,8 @@ export default function MaterialsPage() {
           <span className="font-medium">{t("materials.backToDashboard")}</span>
         </button>
         {/* Header */}
-        <div className="flex items-center space-x-2 md:space-x-5 bg-linear-to-br from-blue-600 to-cyan-500 dark:bg-linear-to-br dark:from-blue-700 dark:to-cyan-700 p-6 rounded-2xl shadow-md mb-8">
-          <div className="bg-blue-100  p-2 md:p-4 rounded-xl md:rounded-2xl shadow-lg">
+        <div className="flex items-center space-x-2 md:space-x-5 bg-linear-to-br from-blue-600 to-cyan-500 dark:bg-linear-to-br dark:from-blue-700 dark:to-cyan-700 p-4 md:p-6 rounded-2xl shadow-md mb-8">
+          <div className="bg-blue-100 p-2 md:p-4 rounded-xl md:rounded-2xl shadow-lg">
             <Plus className="w-5 h-5 md:w-8 md:h-8 text-blue-500" />
           </div>
           <div>
@@ -271,7 +279,7 @@ export default function MaterialsPage() {
         </div>
 
         {/* Upload section - highlighted card */}
-        <div className="mb-10 bg-white rounded-2xl shadow-lg p-8 border border-gray-100 dark:bg-slate-800/80 dark:border-gray-700">
+        <div className="mb-10 bg-white rounded-2xl shadow-lg p-5 sm:p-6 border border-gray-100 dark:bg-slate-800/80 dark:border-gray-700">
           <FileUpload
             onUpload={handleUpload}
             onUrlUpload={handleUrlUpload}
@@ -320,7 +328,9 @@ export default function MaterialsPage() {
                 <FileText className="w-12 h-12 text-blue-600 dark:text-blue-400" />
               </div>
               <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-3">
-                {searchQuery ? t("materials.noResultsFound") : t("materials.noMaterialsYet")}
+                {searchQuery
+                  ? t("materials.noResultsFound")
+                  : t("materials.noMaterialsYet")}
               </h3>
               <p className="text-gray-600 dark:text-gray-400 mb-8 max-w-md mx-auto">
                 {searchQuery

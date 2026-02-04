@@ -4,6 +4,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
+import { motion, AnimatePresence } from "framer-motion";
 import {
   Menu,
   X,
@@ -36,10 +37,12 @@ export default function Navbar() {
     checkUser();
 
     // Listen for auth state changes
-    const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event, session) => {
-      if (event === 'SIGNED_IN' && session?.user) {
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange(async (event, session) => {
+      if (event === "SIGNED_IN" && session?.user) {
         setUser(session.user);
-      } else if (event === 'SIGNED_OUT') {
+      } else if (event === "SIGNED_OUT") {
         setUser(null);
       }
     });
@@ -82,9 +85,9 @@ export default function Navbar() {
   };
 
   return (
-    <nav className="sticky top-0 z-50 bg-white dark:bg-slate-800/80 border-b border-gray-200 dark:border-slate-700 backdrop-blur-2xl">
-      <div className="container-custom">
-        <div className="flex justify-between items-center h-18">
+    <nav className="fixed top-0 left-0 right-0 z-50 glass-morphism border-b border-white/10">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="flex justify-between items-center h-18 cursor-pointer">
           {/* Logo and name */}
           <Link
             href="/"
@@ -204,92 +207,99 @@ export default function Navbar() {
             )}
           </button>
         </div>
+      </div>
 
-        {/* Mobile menu */}
+      {/* Mobile menu - inside nav, inherits glass-morphism */}
+      <AnimatePresence>
         {mobileMenuOpen && (
-          <div className="md:hidden py-4 border-t border-gray-200 dark:border-slate-700 bg-gray-50 dark:bg-slate-800">
-            <div className="flex flex-col space-y-2">
+          <motion.div
+            initial={{ height: 0, opacity: 0 }}
+            animate={{ height: "100vh", opacity: 1 }}
+            exit={{ height: 0, opacity: 0 }}
+            transition={{ duration: 0.3, ease: "easeInOut" }}
+            className="md:hidden w-full overflow-hidden"
+          >
+            <motion.div
+              initial={{ y: -20, opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              exit={{ y: -20, opacity: 0 }}
+              transition={{ duration: 0.2, delay: 0.1 }}
+              className="flex flex-col text-slate-800 dark:text-slate-200 text-3xl items-start px-10 py-6 space-y-4"
+            >
               <Link
                 href="/"
-                className="flex items-center space-x-2 text-gray-700 dark:text-gray-200 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-blue-50 dark:hover:bg-slate-700 transition-all duration-200 font-medium px-4 py-3 rounded-lg mx-2"
+                className=" font-medium hover:text-blue-400 transition duration-300"
                 onClick={() => setMobileMenuOpen(false)}
               >
-                <Home className="w-5 h-5" />
-                <span>{t("nav.home")}</span>
+                {t("nav.home")}
               </Link>
+              <hr className="w-full border-slate-400/50" />
               <Link
                 href="/pdf-converter"
-                className="flex items-center space-x-2 text-gray-700 dark:text-gray-200 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-blue-50 dark:hover:bg-slate-700 transition-all duration-200 font-medium px-4 py-3 rounded-lg mx-2"
+                className="font-medium hover:text-blue-400 transition duration-300"
                 onClick={() => setMobileMenuOpen(false)}
               >
-                <FileText className="w-5 h-5" />
-                <span>{t("nav.pdfConverter")}</span>
+                {t("nav.pdfConverter")}
               </Link>
+              <hr className="w-full border-slate-400/50" />
               {user && (
-                <Link
-                  href="/dashboard"
-                  className="flex items-center space-x-2 text-gray-700 dark:text-gray-200 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-blue-50 dark:hover:bg-slate-700 transition-all duration-200 font-medium px-4 py-3 rounded-lg mx-2"
-                  onClick={() => setMobileMenuOpen(false)}
-                >
-                  <LayoutDashboard className="w-5 h-5" />
-                  <span>{t("nav.dashboard")}</span>
-                </Link>
+                <>
+                  <Link
+                    href="/dashboard"
+                    className=" text-3xl font-medium hover:text-blue-400 transition duration-300"
+                    onClick={() => setMobileMenuOpen(false)}
+                  >
+                    {t("nav.dashboard")}
+                  </Link>
+                  <hr className="w-full border-slate-400/50" />
+                </>
               )}
 
-              <div
-                className={`pt-4 px-4 space-y-3 ${
-                  user
-                    ? "border-t border-gray-200 dark:border-slate-700 mt-2"
-                    : ""
-                }`}
-              >
-                <div className="flex justify-center mb-3">
-                  <LanguageSelector />
-                </div>
-                {user ? (
-                  <>
-                    <Link
-                      href="/profile"
-                      className="flex items-center justify-center space-x-2 text-gray-700 dark:text-gray-200 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-blue-50 dark:hover:bg-slate-700 transition-all duration-200 font-medium py-3 rounded-lg"
-                      onClick={() => setMobileMenuOpen(false)}
-                    >
-                      <UserIcon className="w-5 h-5" />
-                      <span>{t("nav.profile")}</span>
-                    </Link>
-                    <button
-                      onClick={() => {
-                        setMobileMenuOpen(false);
-                        handleSignOut();
-                      }}
-                      className="w-full flex items-center justify-center space-x-2 text-gray-700 dark:text-gray-200 hover:text-red-600 dark:hover:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 transition-all duration-200 font-medium py-3 rounded-lg"
-                    >
-                      <LogOut className="w-5 h-5" />
-                      <span>{t("nav.signOut")}</span>
-                    </button>
-                  </>
-                ) : (
-                  <>
-                    <Link
-                      href="/login"
-                      className="block text-center text-gray-700 dark:text-gray-200 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-blue-50 dark:hover:bg-slate-700 transition-all duration-200 font-medium py-3 rounded-lg"
-                      onClick={() => setMobileMenuOpen(false)}
-                    >
-                      {t("nav.signIn")}
-                    </Link>
-                    <Link
-                      href="/register"
-                      className="block text-center bg-linear-to-r from-blue-600 to-cyan-500 hover:from-blue-700 hover:to-cyan-600 text-white font-semibold py-3 px-6 rounded-xl transition-all duration-300 shadow-lg shadow-blue-500/30"
-                      onClick={() => setMobileMenuOpen(false)}
-                    >
-                      {t("nav.register")}
-                    </Link>
-                  </>
-                )}
-              </div>
-            </div>
-          </div>
+              {user ? (
+                <>
+                  <Link
+                    href="/profile"
+                    className=" font-medium hover:text-blue-400 transition duration-300 block"
+                    onClick={() => setMobileMenuOpen(false)}
+                  >
+                    {t("nav.profile")}
+                  </Link>
+                  <hr className="w-full border-slate-400/50" />
+                  <button
+                    onClick={() => {
+                      setMobileMenuOpen(false);
+                      handleSignOut();
+                    }}
+                    className="font-medium hover:text-red-400 transition duration-300"
+                  >
+                    {t("nav.signOut")}
+                  </button>
+                </>
+              ) : (
+                <>
+                  <Link
+                    href="/login"
+                    className="font-medium hover:text-blue-400 transition duration-300"
+                    onClick={() => setMobileMenuOpen(false)}
+                  >
+                    {t("nav.signIn")}
+                  </Link>
+                  <hr className="w-full border-slate-400/50" />
+                  <Link
+                    href="/register"
+                    className="font-medium hover:text-blue-400 transition duration-300"
+                    onClick={() => setMobileMenuOpen(false)}
+                  >
+                    {t("nav.register")}
+                  </Link>
+                </>
+              )}
+              <hr className="w-full border-slate-400/50" />
+              <LanguageSelector mobile />
+            </motion.div>
+          </motion.div>
         )}
-      </div>
+      </AnimatePresence>
     </nav>
   );
 }

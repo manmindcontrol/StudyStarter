@@ -72,6 +72,18 @@ export default function Navbar() {
     };
   }, [profileDropdownOpen]);
 
+  // Disable body scroll when mobile menu is open
+  useEffect(() => {
+    if (mobileMenuOpen) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "";
+    }
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [mobileMenuOpen]);
+
   const toggleMobileMenu = () => {
     setMobileMenuOpen(!mobileMenuOpen);
   };
@@ -94,11 +106,11 @@ export default function Navbar() {
             className="flex items-center space-x-3 hover:scale-105 transition-transform duration-200"
           >
             <Image
-              src="/logo.png"
+              src="/chat.png"
               alt="StudyStarter Logo"
               width={30}
               height={30}
-              className="w-10 h-10"
+              className="w-10 h-10 sm:w-12 sm:h-12"
             />
 
             <span className="text-xl text-gray-800 dark:text-white hidden sm:block">

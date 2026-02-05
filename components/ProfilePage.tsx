@@ -30,8 +30,8 @@ type UserProfile = {
 };
 
 type UserSubscription = {
-  tier: string;
-  status: string;
+  tier_id: string;
+  stripe_subscription_status: string;
   stripe_subscription_id: string | null;
   stripe_customer_id: string | null;
   current_period_end: string | null;
@@ -90,7 +90,7 @@ export default function ProfilePage() {
       const { data: subscriptionData } = await supabase
         .from("user_subscriptions")
         .select(
-          "tier, status, stripe_subscription_id, stripe_customer_id, current_period_end",
+          "tier_id, stripe_subscription_status, stripe_subscription_id, stripe_customer_id, current_period_end",
         )
         .eq("user_id", user.id)
         .single();
@@ -217,9 +217,20 @@ export default function ProfilePage() {
     setErrorMessage("");
 
     try {
+      // Get session token for authorization
+      const { data: { session } } = await supabase.auth.getSession();
+      if (!session) {
+        setErrorMessage("Session expired. Please log in again.");
+        setCancelingSubscription(false);
+        return;
+      }
+
       const response = await fetch("/api/stripe/cancel-subscription", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${session.access_token}`,
+        },
       });
 
       const data = await response.json();
@@ -233,7 +244,7 @@ export default function ProfilePage() {
 
       // Update local subscription state
       if (subscription) {
-        setSubscription({ ...subscription, status: "canceled" });
+        setSubscription({ ...subscription, stripe_subscription_status: "canceled" });
       }
 
       setTimeout(() => setSuccessMessage(""), 5000);
@@ -408,9 +419,9 @@ export default function ProfilePage() {
             {/* Plan Info Card */}
             <div
               className={`rounded-xl shadow-sm p-6 text-white ${
-                subscription?.tier === "premium"
+                subscription?.tier_id === "premium"
                   ? "bg-linear-to-br from-purple-600 to-pink-600"
-                  : subscription?.tier === "basic"
+                  : subscription?.tier_id === "basic"
                     ? "bg-linear-to-br from-blue-600 to-cyan-600"
                     : "bg-linear-to-br from-gray-600 to-gray-700"
               }`}
@@ -422,21 +433,21 @@ export default function ProfilePage() {
                 </h3>
               </div>
               <p className="text-xl font-bold mb-2">
-                {subscription?.tier === "premium"
+                {subscription?.tier_id === "premium"
                   ? t("pricing.premium.name")
-                  : subscription?.tier === "basic"
+                  : subscription?.tier_id === "basic"
                     ? t("pricing.basic.name")
                     : t("pricing.free.name")}
               </p>
-              {subscription?.status === "canceled" && (
+              {subscription?.stripe_subscription_status === "canceled" && (
                 <p className="text-yellow-200 text-sm mb-2">
                   {t("profile.subscriptionCanceledInfo")}
                 </p>
               )}
               {subscription?.current_period_end &&
-                subscription?.tier !== "free" && (
+                subscription?.tier_id !== "free" && (
                   <p className="text-blue-100 text-sm mb-4">
-                    {subscription.status === "canceled"
+                    {subscription.stripe_subscription_status === "canceled"
                       ? t("profile.accessUntil")
                       : t("profile.renewsOn")}
                     :{" "}
@@ -445,20 +456,20 @@ export default function ProfilePage() {
                     ).toLocaleDateString()}
                   </p>
                 )}
-              {subscription?.tier === "free" && (
+              {subscription?.tier_id === "free" && (
                 <p className="text-gray-200 text-sm mb-4">
                   {t("profile.unlimitedAccess")}
                 </p>
               )}
 
-              {subscription?.tier === "free" ? (
+              {subscription?.tier_id === "free" ? (
                 <button
                   onClick={() => router.push("/pricing")}
                   className="w-full bg-white text-blue-600 hover:bg-blue-50 dark:bg-slate-800 dark:text-gray-300 dark:hover:bg-slate-700 font-semibold py-2 px-4 rounded-lg transition-colors cursor-pointer"
                 >
                   {t("profile.upgradePlan")}
                 </button>
-              ) : subscription?.status !== "canceled" ? (
+              ) : subscription?.stripe_subscription_status !== "canceled" ? (
                 <div className="space-y-2">
                   <button
                     onClick={() => router.push("/pricing")}

@@ -41,12 +41,12 @@ export default function SlidingChatPanel({
   // Prevent body scroll when chat is open on mobile
   useEffect(() => {
     if (isOpen) {
-      document.body.style.overflow = 'hidden';
+      document.body.style.overflow = "hidden";
     } else {
-      document.body.style.overflow = '';
+      document.body.style.overflow = "";
     }
     return () => {
-      document.body.style.overflow = '';
+      document.body.style.overflow = "";
     };
   }, [isOpen]);
 
@@ -82,15 +82,14 @@ export default function SlidingChatPanel({
           overflow-hidden
         `}
       >
-
         <div className="h-full w-full flex flex-col overflow-hidden">
           {/* Chat Header */}
-          <div className="p-3 sm:p-4 md:p-4 border-b border-gray-200 dark:border-slate-700 bg-linear-to-r from-purple-50 to-blue-50 dark:from-purple-900/20 dark:to-blue-900/20 shrink-0">
+          <div className="p-3 sm:p-4 md:p-4 border-b border-gray-200 dark:border-slate-700 bg-linear-to-r from-purple-50 to-blue-50 dark:from-blue-900/20 dark:to-cyan-700/20 shrink-0">
             <div className="flex items-center justify-between gap-3">
               <div className="flex items-center gap-3 min-w-0">
                 <div className="relative w-10 h-10 sm:w-12 sm:h-12 shrink-0">
                   <Image
-                    src="/chatbot.svg"
+                    src="/chat.png"
                     alt="AI Assistant"
                     fill
                     className="object-contain"
@@ -123,7 +122,7 @@ export default function SlidingChatPanel({
                 <div className="text-center max-w-md px-4">
                   <div className="relative w-16 h-16 sm:w-20 sm:h-20 mx-auto mb-4 flex items-center justify-center">
                     <Image
-                      src="/chatbot.svg"
+                      src="/chat.png"
                       alt="AI Assistant"
                       width={80}
                       height={80}

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
   X,
   Check,
@@ -12,6 +12,7 @@ import {
   ArrowRight,
 } from "lucide-react";
 import { useTranslation } from "@/hooks/useTranslation";
+import { supabase } from "@/lib/supabase";
 
 interface SubscriptionModalProps {
   isOpen?: boolean;
@@ -32,6 +33,18 @@ export default function SubscriptionModal({
   const [loading, setLoading] = useState<string | null>(null);
   const [selectedTier, setSelectedTier] = useState<string>(preselectedTier);
 
+  // Disable body scroll when modal is open
+  useEffect(() => {
+    if (isOpen && !isFullPage) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "";
+    }
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [isOpen, isFullPage]);
+
   if (!isOpen && !isFullPage) return null;
 
   const handleSelectPlan = async (tierId: string) => {
@@ -46,9 +59,20 @@ export default function SubscriptionModal({
 
     setLoading(tierId);
     try {
+      // Get session token for authorization
+      const { data: { session } } = await supabase.auth.getSession();
+      if (!session) {
+        alert("Please log in to subscribe.");
+        setLoading(null);
+        return;
+      }
+
       const response = await fetch("/api/stripe/create-subscription-checkout", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${session.access_token}`,
+        },
         body: JSON.stringify({ tierId }),
       });
 

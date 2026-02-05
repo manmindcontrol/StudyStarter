@@ -1,7 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createSubscriptionCheckout, getOrCreateCustomer, STRIPE_PRICES } from '@/lib/stripe';
-import { getCurrentUser } from '@/lib/auth';
-import { supabase } from '@/lib/supabase';
+import { createServiceRoleClient } from '@/lib/utils';
+
+const supabase = createServiceRoleClient();
 
 /**
  * API endpoint pre vytvorenie Stripe Checkout Session pre subscription
@@ -18,10 +19,19 @@ import { supabase } from '@/lib/supabase';
  */
 export async function POST(request: NextRequest) {
   try {
-    // Získaj aktuálneho používateľa
-    const { user } = await getCurrentUser();
+    // Získaj token z Authorization header
+    const authHeader = request.headers.get('authorization');
+    if (!authHeader) {
+      return NextResponse.json(
+        { error: 'Unauthorized - No authorization header' },
+        { status: 401 }
+      );
+    }
 
-    if (!user || !user.email) {
+    const token = authHeader.replace('Bearer ', '');
+    const { data: { user }, error: authError } = await supabase.auth.getUser(token);
+
+    if (authError || !user || !user.email) {
       return NextResponse.json(
         { error: 'Unauthorized - User must be logged in' },
         { status: 401 }

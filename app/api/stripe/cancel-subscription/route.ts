@@ -1,7 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getCurrentUser } from '@/lib/auth';
-import { supabase } from '@/lib/supabase';
+import { createServiceRoleClient } from '@/lib/utils';
 import { cancelSubscription } from '@/lib/stripe';
+
+const supabase = createServiceRoleClient();
 
 /**
  * API endpoint pre zrušenie subscription
@@ -14,10 +15,19 @@ import { cancelSubscription } from '@/lib/stripe';
  */
 export async function POST(request: NextRequest) {
   try {
-    // Získaj aktuálneho používateľa
-    const { user } = await getCurrentUser();
+    // Získaj token z Authorization header
+    const authHeader = request.headers.get('authorization');
+    if (!authHeader) {
+      return NextResponse.json(
+        { error: 'Unauthorized - No authorization header' },
+        { status: 401 }
+      );
+    }
 
-    if (!user) {
+    const token = authHeader.replace('Bearer ', '');
+    const { data: { user }, error: authError } = await supabase.auth.getUser(token);
+
+    if (authError || !user) {
       return NextResponse.json(
         { error: 'Unauthorized - User must be logged in' },
         { status: 401 }

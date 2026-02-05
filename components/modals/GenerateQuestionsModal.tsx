@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
   X,
   FileQuestion,
@@ -28,6 +28,18 @@ export default function GenerateQuestionsModal({
   const { t } = useTranslation();
   const [questionCount, setQuestionCount] = useState<number>(10);
   const [questionFormat, setQuestionFormat] = useState<QuestionFormat>("mixed");
+
+  // Disable body scroll when modal is open
+  useEffect(() => {
+    if (isOpen) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "";
+    }
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [isOpen]);
 
   if (!isOpen) return null;
 

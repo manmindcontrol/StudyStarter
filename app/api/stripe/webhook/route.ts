@@ -67,16 +67,24 @@ export async function POST(request: NextRequest) {
           }
 
           // Update user subscription in database
+          const subData = subscription as any;
+          const periodStart = subData.current_period_start
+            ? new Date(subData.current_period_start * 1000).toISOString()
+            : null;
+          const periodEnd = subData.current_period_end
+            ? new Date(subData.current_period_end * 1000).toISOString()
+            : null;
+
           const { error: updateError } = await supabase
             .from('user_subscriptions')
             .update({
-              tier,
+              tier_id: tier,
               stripe_customer_id: session.customer as string,
               stripe_subscription_id: subscription.id,
               stripe_price_id: priceId,
-              status: 'active',
-              current_period_start: new Date(subscription.current_period_start * 1000).toISOString(),
-              current_period_end: new Date(subscription.current_period_end * 1000).toISOString(),
+              stripe_subscription_status: 'active',
+              ...(periodStart && { current_period_start: periodStart }),
+              ...(periodEnd && { current_period_end: periodEnd }),
               updated_at: new Date().toISOString(),
             })
             .eq('user_id', userId);
@@ -88,17 +96,19 @@ export async function POST(request: NextRequest) {
           }
 
           // Reset usage tracking for new subscription period
-          await supabase
-            .from('usage_tracking')
-            .update({
-              materials_count: 0,
-              notes_count: 0,
-              questions_count: 0,
-              pdf_conversions_count: 0,
-              period_start: new Date().toISOString(),
-              period_end: new Date(subscription.current_period_end * 1000).toISOString(),
-            })
-            .eq('user_id', userId);
+          if (periodEnd) {
+            await supabase
+              .from('usage_tracking')
+              .update({
+                materials_uploaded: 0,
+                notes_generations_used: 0,
+                questions_generations_used: 0,
+                pdf_conversions_used: 0,
+                period_start: new Date().toISOString(),
+                period_end: periodEnd,
+              })
+              .eq('user_id', userId);
+          }
         }
         break;
       }
@@ -125,19 +135,27 @@ export async function POST(request: NextRequest) {
                        subscription.status === 'past_due' ? 'past_due' :
                        subscription.status === 'canceled' ? 'canceled' : 'inactive';
 
+        const subData = subscription as any;
+        const periodStart = subData.current_period_start
+          ? new Date(subData.current_period_start * 1000).toISOString()
+          : null;
+        const periodEnd = subData.current_period_end
+          ? new Date(subData.current_period_end * 1000).toISOString()
+          : null;
+
         await supabase
           .from('user_subscriptions')
           .update({
-            tier,
+            tier_id: tier,
             stripe_price_id: priceId,
-            status,
-            current_period_start: new Date(subscription.current_period_start * 1000).toISOString(),
-            current_period_end: new Date(subscription.current_period_end * 1000).toISOString(),
+            stripe_subscription_status: status,
+            ...(periodStart && { current_period_start: periodStart }),
+            ...(periodEnd && { current_period_end: periodEnd }),
             updated_at: new Date().toISOString(),
           })
           .eq('user_id', userId);
 
-        console.log('Subscription updated for user ' + userId + ': tier=' + tier + ', status=' + status);
+        console.log('Subscription updated for user ' + userId + ': tier_id=' + tier + ', status=' + status);
         break;
       }
 
@@ -157,8 +175,8 @@ export async function POST(request: NextRequest) {
             await supabase
               .from('user_subscriptions')
               .update({
-                tier: SUBSCRIPTION_TIERS.FREE,
-                status: 'canceled',
+                tier_id: SUBSCRIPTION_TIERS.FREE,
+                stripe_subscription_status: 'canceled',
                 stripe_subscription_id: null,
                 stripe_price_id: null,
                 updated_at: new Date().toISOString(),
@@ -171,8 +189,8 @@ export async function POST(request: NextRequest) {
           await supabase
             .from('user_subscriptions')
             .update({
-              tier: SUBSCRIPTION_TIERS.FREE,
-              status: 'canceled',
+              tier_id: SUBSCRIPTION_TIERS.FREE,
+              stripe_subscription_status: 'canceled',
               stripe_subscription_id: null,
               stripe_price_id: null,
               updated_at: new Date().toISOString(),
@@ -196,19 +214,29 @@ export async function POST(request: NextRequest) {
 
           if (userId) {
             // Reset usage for new billing period
-            await supabase
-              .from('usage_tracking')
-              .update({
-                materials_count: 0,
-                notes_count: 0,
-                questions_count: 0,
-                pdf_conversions_count: 0,
-                period_start: new Date(subscription.current_period_start * 1000).toISOString(),
-                period_end: new Date(subscription.current_period_end * 1000).toISOString(),
-              })
-              .eq('user_id', userId);
+            const subData = subscription as any;
+            const pStart = subData.current_period_start
+              ? new Date(subData.current_period_start * 1000).toISOString()
+              : new Date().toISOString();
+            const pEnd = subData.current_period_end
+              ? new Date(subData.current_period_end * 1000).toISOString()
+              : null;
 
-            console.log('Usage reset for user ' + userId + ' after payment');
+            if (pEnd) {
+              await supabase
+                .from('usage_tracking')
+                .update({
+                  materials_uploaded: 0,
+                  notes_generations_used: 0,
+                  questions_generations_used: 0,
+                  pdf_conversions_used: 0,
+                  period_start: pStart,
+                  period_end: pEnd,
+                })
+                .eq('user_id', userId);
+
+              console.log('Usage reset for user ' + userId + ' after payment');
+            }
           }
         }
         break;
@@ -228,7 +256,7 @@ export async function POST(request: NextRequest) {
             await supabase
               .from('user_subscriptions')
               .update({
-                status: 'past_due',
+                stripe_subscription_status: 'past_due',
                 updated_at: new Date().toISOString(),
               })
               .eq('user_id', userId);

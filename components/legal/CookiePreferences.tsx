@@ -52,6 +52,18 @@ export default function CookiePreferences({
   // eslint-disable-next-line react-hooks/set-state-in-effect
   useEffect(() => setMounted(true), []);
 
+  // Disable body scroll when modal is open
+  useEffect(() => {
+    if (isOpen) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "";
+    }
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [isOpen]);
+
   const handleToggle = (key: keyof CookieSettings) => {
     if (key === "necessary") return; // Can't toggle necessary cookies
     setSettings((prev) => ({

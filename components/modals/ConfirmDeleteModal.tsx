@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect } from "react";
 import { AlertTriangle, X } from "lucide-react";
 import { useTranslation } from "@/hooks/useTranslation";
 
@@ -21,6 +22,18 @@ export default function ConfirmDeleteModal({
   isDeleting = false,
 }: ConfirmDeleteModalProps) {
   const { t } = useTranslation();
+
+  // Disable body scroll when modal is open
+  useEffect(() => {
+    if (isOpen) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "";
+    }
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [isOpen]);
 
   if (!isOpen) return null;
 

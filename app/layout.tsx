@@ -7,6 +7,7 @@ import CookieConsent from "@/components/legal/CookieConsent";
 import CookieSettingsFloatingButton from "@/components/legal/CookieSettingsFloatingButton";
 import StructuredData from "./structured-data";
 import ThemeWrapper from "@/components/ThemeWrapper";
+import { GoogleAnalytics } from "@next/third-parties/google";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -14,7 +15,9 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL(process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000'),
+  metadataBase: new URL(
+    process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000",
+  ),
   title: {
     default: "Study Starter - AI-Powered Study Helper for Students",
     template: "%s | Study Starter",
@@ -84,9 +87,7 @@ export const metadata: Metadata = {
   },
   manifest: "/manifest.json",
   icons: {
-    icon: [
-      { url: "/favicon.ico" },
-    ],
+    icon: [{ url: "/favicon.ico" }],
   },
   alternates: {
     canonical: "https://studyassistant.app",
@@ -110,7 +111,12 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className="scroll-smooth" data-scroll-behavior="smooth" suppressHydrationWarning>
+    <html
+      lang="en"
+      className="scroll-smooth"
+      data-scroll-behavior="smooth"
+      suppressHydrationWarning
+    >
       <head>
         <StructuredData />
         <script
@@ -128,7 +134,7 @@ export default function RootLayout({
         />
       </head>
       <body
-        className={`${inter.className} relative flex flex-col min-h-screen antialiased bg-gradient-to-r from-slate-900 to-slate-700 overflow-x-hidden`}
+        className={`${inter.className} relative flex flex-col min-h-screen antialiased bg-linear-to-r from-slate-900 to-slate-700 overflow-x-hidden`}
         suppressHydrationWarning
       >
         {/* Grid background */}
@@ -159,6 +165,8 @@ export default function RootLayout({
           {/* Floating Cookie Settings Button */}
           <CookieSettingsFloatingButton />
         </ThemeWrapper>
+        {/* Google Analytics */}
+        <GoogleAnalytics gaId="G-XMXGNQ709X" />
       </body>
     </html>
   );

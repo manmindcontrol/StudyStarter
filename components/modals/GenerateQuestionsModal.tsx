@@ -36,37 +36,37 @@ export default function GenerateQuestionsModal({
   };
 
   return (
-    <div className="fixed inset-0 min-h-screen z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
+    <div className="fixed inset-0 min-h-screen z-50 flex items-center justify-center p-3 sm:p-4 bg-black/60 backdrop-blur-sm">
       <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-2xl max-w-lg w-full max-h-[90vh] overflow-y-auto scrollbar-hide">
         {/* Header */}
-        <div className="sticky top-0 bg-linear-to-r from-green-600 to-emerald-500 dark:bg-linear-to-r dark:from-green-700 dark:to-emerald-600 p-6 rounded-t-2xl">
+        <div className="sticky top-0 bg-linear-to-r from-green-600 to-emerald-500 dark:bg-linear-to-r dark:from-green-700 dark:to-emerald-600 p-4 sm:p-5 rounded-t-2xl">
           <div className="flex items-center justify-between">
-            <div className="flex items-center space-x-3">
-              <div className="bg-white/20  p-2 rounded-lg">
-                <FileQuestion className="w-6 h-6 text-white" />
+            <div className="flex items-center space-x-2 sm:space-x-3">
+              <div className="bg-white/20 p-1.5 sm:p-2 rounded-lg">
+                <FileQuestion className="w-5 h-5 sm:w-6 sm:h-6 text-white" />
               </div>
-              <h2 className="text-2xl font-bold text-white">
+              <h2 className="text-lg sm:text-xl font-bold text-white">
                 {t("modals.generateQuestions.title")}
               </h2>
             </div>
             <button
               onClick={onClose}
               disabled={loading}
-              className="text-white/80 hover:text-white transition-colors disabled:opacity-50"
+              className="text-white/80 hover:text-white transition-colors disabled:opacity-50 p-1"
             >
-              <X className="w-6 h-6" />
+              <X className="w-5 h-5 sm:w-6 sm:h-6" />
             </button>
           </div>
         </div>
 
         {/* Content */}
-        <div className="p-6 space-y-6">
+        <div className="p-4 sm:p-5 space-y-4 sm:space-y-5">
           {/* Question Count */}
           <div>
-            <label className="block text-sm font-semibold text-gray-900 dark:text-gray-300 mb-3">
+            <label className="block text-sm font-semibold text-gray-900 dark:text-gray-300 mb-2">
               {t("modals.generateQuestions.numberOfQuestions")}
             </label>
-            <div className="space-y-3">
+            <div className="space-y-2">
               <div className="relative">
                 <style jsx>{`
                   input[type="range"] {
@@ -132,16 +132,16 @@ export default function GenerateQuestionsModal({
                 />
               </div>
               <div className="flex items-center justify-between">
-                <span className="text-sm text-gray-600 dark:text-gray-400">
-                  5 {t("modals.generateQuestions.questionsLabel")}
+                <span className="text-xs sm:text-sm text-gray-600 dark:text-gray-400">
+                  5
                 </span>
-                <div className="bg-green-100 dark:bg-green-900/50 px-4 py-2 rounded-lg">
-                  <span className="text-2xl font-bold text-green-700 dark:text-green-400">
+                <div className="bg-green-100 dark:bg-green-900/50 px-3 py-1.5 rounded-lg">
+                  <span className="text-xl sm:text-2xl font-bold text-green-700 dark:text-green-400">
                     {questionCount}
                   </span>
                 </div>
-                <span className="text-sm text-gray-600 dark:text-gray-400">
-                  30 {t("modals.generateQuestions.questionsLabel")}
+                <span className="text-xs sm:text-sm text-gray-600 dark:text-gray-400">
+                  30
                 </span>
               </div>
             </div>
@@ -149,17 +149,17 @@ export default function GenerateQuestionsModal({
 
           {/* Question Format */}
           <div>
-            <label className="block text-sm font-semibold text-gray-900 dark:text-gray-300 mb-3">
+            <label className="block text-sm font-semibold text-gray-900 dark:text-gray-300 mb-2">
               {t("modals.generateQuestions.questionType")}
             </label>
-            <div className="space-y-3">
+            <div className="space-y-2">
               {/* MCQ Option */}
               <button
                 type="button"
                 onClick={() => setQuestionFormat("mcq")}
                 disabled={loading}
                 className={`
-                  w-full p-4 rounded-xl border-2 transition-all text-left
+                  w-full p-3 rounded-xl border-2 transition-all text-left
                   ${
                     questionFormat === "mcq"
                       ? "border-green-500 bg-green-50 dark:bg-green-900/50 dark:border-green-700/50"
@@ -168,29 +168,27 @@ export default function GenerateQuestionsModal({
                   disabled:opacity-50 disabled:cursor-not-allowed
                 `}
               >
-                <div className="flex items-start space-x-3">
+                <div className="flex items-center space-x-2.5">
                   <div
                     className={`
-                    mt-0.5 w-5 h-5 rounded-full border-2 flex items-center justify-center transition-all
+                    w-4 h-4 sm:w-5 sm:h-5 rounded-full border-2 flex items-center justify-center transition-all shrink-0
                     ${
                       questionFormat === "mcq"
-                        ? "border-green-500 bg-green-500 "
+                        ? "border-green-500 bg-green-500"
                         : "border-gray-300"
                     }
                   `}
                   >
                     {questionFormat === "mcq" && (
-                      <CheckCircle className="w-3 h-3 text-white" />
+                      <CheckCircle className="w-2.5 h-2.5 sm:w-3 sm:h-3 text-white" />
                     )}
                   </div>
-                  <div className="flex-1">
-                    <div className="flex items-center space-x-2 mb-1">
-                      <HelpCircle className="w-5 h-5 text-blue-600 dark:text-blue-400" />
-                      <h3 className="font-semibold text-gray-900 dark:text-gray-300">
-                        {t("modals.generateQuestions.mcqTitle")}
-                      </h3>
-                    </div>
-                    <p className="text-sm text-gray-600 dark:text-gray-400">
+                  <HelpCircle className="w-4 h-4 text-blue-600 dark:text-blue-400 shrink-0" />
+                  <div className="flex-1 min-w-0">
+                    <h3 className="font-semibold text-gray-900 dark:text-gray-300 text-sm">
+                      {t("modals.generateQuestions.mcqTitle")}
+                    </h3>
+                    <p className="text-xs text-gray-500 dark:text-gray-400 truncate">
                       {t("modals.generateQuestions.mcqDesc")}
                     </p>
                   </div>
@@ -203,7 +201,7 @@ export default function GenerateQuestionsModal({
                 onClick={() => setQuestionFormat("open")}
                 disabled={loading}
                 className={`
-                  w-full p-4 rounded-xl border-2 transition-all text-left
+                  w-full p-3 rounded-xl border-2 transition-all text-left
                   ${
                     questionFormat === "open"
                       ? "border-green-500 bg-green-50 dark:bg-green-900/50 dark:border-green-700/50"
@@ -212,10 +210,10 @@ export default function GenerateQuestionsModal({
                   disabled:opacity-50 disabled:cursor-not-allowed
                 `}
               >
-                <div className="flex items-start space-x-3">
+                <div className="flex items-center space-x-2.5">
                   <div
                     className={`
-                    mt-0.5 w-5 h-5 rounded-full border-2 flex items-center justify-center transition-all
+                    w-4 h-4 sm:w-5 sm:h-5 rounded-full border-2 flex items-center justify-center transition-all shrink-0
                     ${
                       questionFormat === "open"
                         ? "border-green-500 bg-green-500"
@@ -224,17 +222,15 @@ export default function GenerateQuestionsModal({
                   `}
                   >
                     {questionFormat === "open" && (
-                      <CheckCircle className="w-3 h-3 text-white" />
+                      <CheckCircle className="w-2.5 h-2.5 sm:w-3 sm:h-3 text-white" />
                     )}
                   </div>
-                  <div className="flex-1">
-                    <div className="flex items-center space-x-2 mb-1">
-                      <FileQuestion className="w-5 h-5 text-purple-600 dark:text-purple-400" />
-                      <h3 className="font-semibold text-gray-900 dark:text-gray-300">
-                        {t("modals.generateQuestions.openTitle")}
-                      </h3>
-                    </div>
-                    <p className="text-sm text-gray-600 dark:text-gray-400">
+                  <FileQuestion className="w-4 h-4 text-purple-600 dark:text-purple-400 shrink-0" />
+                  <div className="flex-1 min-w-0">
+                    <h3 className="font-semibold text-gray-900 dark:text-gray-300 text-sm">
+                      {t("modals.generateQuestions.openTitle")}
+                    </h3>
+                    <p className="text-xs text-gray-500 dark:text-gray-400 truncate">
                       {t("modals.generateQuestions.openDesc")}
                     </p>
                   </div>
@@ -247,7 +243,7 @@ export default function GenerateQuestionsModal({
                 onClick={() => setQuestionFormat("mixed")}
                 disabled={loading}
                 className={`
-                  w-full p-4 rounded-xl border-2 transition-all text-left
+                  w-full p-3 rounded-xl border-2 transition-all text-left
                   ${
                     questionFormat === "mixed"
                       ? "border-green-500 bg-green-50 dark:bg-green-900/50 dark:border-green-700/50"
@@ -256,10 +252,10 @@ export default function GenerateQuestionsModal({
                   disabled:opacity-50 disabled:cursor-not-allowed
                 `}
               >
-                <div className="flex items-start space-x-3">
+                <div className="flex items-center space-x-2.5">
                   <div
                     className={`
-                    mt-0.5 w-5 h-5 rounded-full border-2 flex items-center justify-center transition-all
+                    w-4 h-4 sm:w-5 sm:h-5 rounded-full border-2 flex items-center justify-center transition-all shrink-0
                     ${
                       questionFormat === "mixed"
                         ? "border-green-500 bg-green-500"
@@ -268,17 +264,15 @@ export default function GenerateQuestionsModal({
                   `}
                   >
                     {questionFormat === "mixed" && (
-                      <CheckCircle className="w-3 h-3 text-white" />
+                      <CheckCircle className="w-2.5 h-2.5 sm:w-3 sm:h-3 text-white" />
                     )}
                   </div>
-                  <div className="flex-1">
-                    <div className="flex items-center space-x-2 mb-1">
-                      <Shuffle className="w-5 h-5 text-green-600 dark:text-green-400" />
-                      <h3 className="font-semibold text-gray-900 dark:text-gray-300">
-                        {t("modals.generateQuestions.mixedTitle")}
-                      </h3>
-                    </div>
-                    <p className="text-sm text-gray-600 dark:text-gray-400">
+                  <Shuffle className="w-4 h-4 text-green-600 dark:text-green-400 shrink-0" />
+                  <div className="flex-1 min-w-0">
+                    <h3 className="font-semibold text-gray-900 dark:text-gray-300 text-sm">
+                      {t("modals.generateQuestions.mixedTitle")}
+                    </h3>
+                    <p className="text-xs text-gray-500 dark:text-gray-400 truncate">
                       {t("modals.generateQuestions.mixedDesc")}
                     </p>
                   </div>
@@ -288,38 +282,38 @@ export default function GenerateQuestionsModal({
           </div>
 
           {/* Info Box */}
-          <div className="bg-blue-50 border border-blue-200 dark:border-blue-900/40 dark:bg-blue-900/20 rounded-xl p-4">
-            <div className="flex items-start space-x-3">
-              <HelpCircle className="w-5 h-5 text-blue-600 dark:text-blue-400 mt-0.5 shrink-0" />
-              <div className="text-sm text-blue-900 dark:text-blue-200">
-                <p className="font-semibold mb-1">
+          <div className="bg-blue-50 border border-blue-200 dark:border-blue-900/40 dark:bg-blue-900/20 rounded-lg p-3">
+            <div className="flex items-start space-x-2">
+              <HelpCircle className="w-4 h-4 text-blue-600 dark:text-blue-400 mt-0.5 shrink-0" />
+              <div className="text-xs text-blue-900 dark:text-blue-200">
+                <p className="font-semibold">
                   {t("modals.generateQuestions.noteTitle")}
                 </p>
-                <p>{t("modals.generateQuestions.noteText")}</p>
+                <p className="text-blue-700 dark:text-blue-300">{t("modals.generateQuestions.noteText")}</p>
               </div>
             </div>
           </div>
         </div>
 
         {/* Footer */}
-        <div className="sticky bottom-0 bg-gray-50 dark:bg-slate-800 p-6 rounded-b-2xl border-t border-gray-200 dark:border-slate-700/70">
-          <div className="flex items-center space-x-3">
+        <div className="sticky bottom-0 bg-gray-50 dark:bg-slate-800 p-4 rounded-b-2xl border-t border-gray-200 dark:border-slate-700/70">
+          <div className="flex items-center space-x-2 sm:space-x-3">
             <button
               onClick={onClose}
               disabled={loading}
-              className="flex-1 bg-white dark:bg-slate-700/70 border border-gray-300 dark:border-slate-700 text-gray-700 dark:text-gray-300 font-semibold py-3 px-4 rounded-xl hover:bg-gray-50 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+              className="flex-1 bg-white dark:bg-slate-700/70 border border-gray-300 dark:border-slate-700 text-gray-700 dark:text-gray-300 font-semibold py-2.5 px-3 rounded-xl hover:bg-gray-50 transition-colors disabled:opacity-50 disabled:cursor-not-allowed text-sm"
             >
               {t("modals.generateQuestions.cancel")}
             </button>
             <button
               onClick={handleGenerate}
               disabled={loading}
-              className="flex-1 bg-linear-to-r from-green-600 to-emerald-500 hover:from-green-700 hover:to-emerald-600 text-white font-semibold py-3 px-4 rounded-xl transition-all disabled:opacity-50 disabled:cursor-not-allowed shadow-lg flex items-center justify-center"
+              className="flex-1 bg-linear-to-r from-green-600 to-emerald-500 hover:from-green-700 hover:to-emerald-600 text-white font-semibold py-2.5 px-3 rounded-xl transition-all disabled:opacity-50 disabled:cursor-not-allowed shadow-md flex items-center justify-center text-sm"
             >
               {loading ? (
                 <>
                   <svg
-                    className="animate-spin -ml-1 mr-3 h-5 w-5 text-white"
+                    className="animate-spin -ml-1 mr-2 h-4 w-4 text-white"
                     xmlns="http://www.w3.org/2000/svg"
                     fill="none"
                     viewBox="0 0 24 24"

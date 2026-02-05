@@ -42,7 +42,9 @@ export default function ProfilePage() {
   const router = useRouter();
   const [user, setUser] = useState<SupabaseUser | null | undefined>(undefined);
   const [profile, setProfile] = useState<UserProfile | null>(null);
-  const [subscription, setSubscription] = useState<UserSubscription | null>(null);
+  const [subscription, setSubscription] = useState<UserSubscription | null>(
+    null,
+  );
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [cancelingSubscription, setCancelingSubscription] = useState(false);
@@ -81,13 +83,15 @@ export default function ProfilePage() {
       setProfile(profile);
       setFullName(profile?.full_name || "");
       setDisplayName(
-        profile?.display_name || profile?.full_name?.split(" ")[0] || ""
+        profile?.display_name || profile?.full_name?.split(" ")[0] || "",
       );
 
       // Load subscription data
       const { data: subscriptionData } = await supabase
         .from("user_subscriptions")
-        .select("tier, status, stripe_subscription_id, stripe_customer_id, current_period_end")
+        .select(
+          "tier, status, stripe_subscription_id, stripe_customer_id, current_period_end",
+        )
         .eq("user_id", user.id)
         .single();
 
@@ -144,7 +148,7 @@ export default function ProfilePage() {
       setErrorMessage(
         error instanceof Error
           ? error.message
-          : t("profile.errorUpdatingProfile")
+          : t("profile.errorUpdatingProfile"),
       );
     } finally {
       setSaving(false);
@@ -202,7 +206,7 @@ export default function ProfilePage() {
       setErrorMessage(
         error instanceof Error
           ? error.message
-          : t("profile.errorDeletingAccount")
+          : t("profile.errorDeletingAccount"),
       );
       setDeleting(false);
     }
@@ -235,7 +239,9 @@ export default function ProfilePage() {
       setTimeout(() => setSuccessMessage(""), 5000);
     } catch (error) {
       setErrorMessage(
-        error instanceof Error ? error.message : t("profile.errorCancelingSubscription")
+        error instanceof Error
+          ? error.message
+          : t("profile.errorCancelingSubscription"),
       );
     } finally {
       setCancelingSubscription(false);
@@ -333,7 +339,7 @@ export default function ProfilePage() {
       setErrorMessage(
         error instanceof Error
           ? error.message
-          : t("profile.errorChangingPassword")
+          : t("profile.errorChangingPassword"),
       );
     } finally {
       setSaving(false);
@@ -352,7 +358,7 @@ export default function ProfilePage() {
     <div className="min-h-screen bg-linear-to-br from-blue-50 via-gray-100 to-cyan-50 dark:bg-linear-to-br dark:from-slate-900 dark:via-slate-800 dark:to-slate-900 overflow-hidden py-8">
       <div className="container-custom max-w-4xl">
         {/* Header */}
-        <div className="mb-8">
+        <div className="mb-8 pt-14">
           <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">
             {t("profile.title")}
           </h1>
@@ -400,13 +406,15 @@ export default function ProfilePage() {
             </div>
 
             {/* Plan Info Card */}
-            <div className={`rounded-xl shadow-sm p-6 text-white ${
-              subscription?.tier === "premium"
-                ? "bg-linear-to-br from-purple-600 to-pink-600"
-                : subscription?.tier === "basic"
-                ? "bg-linear-to-br from-blue-600 to-cyan-600"
-                : "bg-linear-to-br from-gray-600 to-gray-700"
-            }`}>
+            <div
+              className={`rounded-xl shadow-sm p-6 text-white ${
+                subscription?.tier === "premium"
+                  ? "bg-linear-to-br from-purple-600 to-pink-600"
+                  : subscription?.tier === "basic"
+                    ? "bg-linear-to-br from-blue-600 to-cyan-600"
+                    : "bg-linear-to-br from-gray-600 to-gray-700"
+              }`}
+            >
               <div className="flex items-center space-x-3 mb-4">
                 <CreditCard className="w-6 h-6" />
                 <h3 className="font-semibold text-lg">
@@ -417,21 +425,26 @@ export default function ProfilePage() {
                 {subscription?.tier === "premium"
                   ? t("pricing.premium.name")
                   : subscription?.tier === "basic"
-                  ? t("pricing.basic.name")
-                  : t("pricing.free.name")}
+                    ? t("pricing.basic.name")
+                    : t("pricing.free.name")}
               </p>
               {subscription?.status === "canceled" && (
                 <p className="text-yellow-200 text-sm mb-2">
                   {t("profile.subscriptionCanceledInfo")}
                 </p>
               )}
-              {subscription?.current_period_end && subscription?.tier !== "free" && (
-                <p className="text-blue-100 text-sm mb-4">
-                  {subscription.status === "canceled"
-                    ? t("profile.accessUntil")
-                    : t("profile.renewsOn")}: {new Date(subscription.current_period_end).toLocaleDateString()}
-                </p>
-              )}
+              {subscription?.current_period_end &&
+                subscription?.tier !== "free" && (
+                  <p className="text-blue-100 text-sm mb-4">
+                    {subscription.status === "canceled"
+                      ? t("profile.accessUntil")
+                      : t("profile.renewsOn")}
+                    :{" "}
+                    {new Date(
+                      subscription.current_period_end,
+                    ).toLocaleDateString()}
+                  </p>
+                )}
               {subscription?.tier === "free" && (
                 <p className="text-gray-200 text-sm mb-4">
                   {t("profile.unlimitedAccess")}

@@ -14,7 +14,9 @@ export default function LandingPage() {
 
   useEffect(() => {
     const checkAuth = async () => {
-      const { data: { user } } = await supabase.auth.getUser();
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
       setIsLoggedIn(!!user);
     };
     checkAuth();
@@ -99,7 +101,7 @@ export default function LandingPage() {
               >
                 <Link
                   href={isLoggedIn ? "/dashboard" : "/register"}
-                  className="group btn-primary text-lg bg-linear-to-r from-blue-600 to-cyan-600 px-8 py-4 rounded-xl text-white hover:from-blue-700 hover:to-cyan-700 transition-all duration-300 shadow-xl shadow-blue-500/30 hover:shadow-2xl hover:shadow-blue-500/40 font-semibold inline-block"
+                  className="group btn-primary text-lg bg-linear-to-r from-blue-600 to-cyan-600 px-8 py-4 rounded-4xl text-white hover:from-blue-700 hover:to-cyan-700 transition-all duration-300 shadow-xl shadow-blue-500/30 hover:shadow-2xl hover:shadow-blue-500/40 font-semibold inline-block"
                 >
                   <span className="flex items-center justify-center space-x-2">
                     <span>{t("landing.startFree")}</span>
@@ -116,7 +118,7 @@ export default function LandingPage() {
               >
                 <Link
                   href="#funkcie"
-                  className="btn-secondary text-lg bg-white border-2 border-gray-100 px-8 py-4 rounded-xl hover:bg-gray-50 hover:border-blue-300 transition-all duration-300 shadow-lg hover:shadow-xl font-semibold text-gray-700 hover:text-blue-600 inline-block"
+                  className="btn-secondary text-lg bg-white border-2 border-gray-100 px-8 py-4 rounded-4xl hover:bg-gray-50 hover:border-blue-300 transition-all duration-300 shadow-lg hover:shadow-xl font-semibold text-gray-700 hover:text-blue-600 inline-block"
                 >
                   {t("landing.learnMore")}
                 </Link>

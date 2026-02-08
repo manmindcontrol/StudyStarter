@@ -374,7 +374,7 @@ export default function ProfilePage() {
     <div className="min-h-screen bg-linear-to-br from-blue-50 via-gray-100 to-cyan-50 dark:bg-linear-to-br dark:from-slate-900 dark:via-slate-800 dark:to-slate-900 overflow-hidden py-8">
       <div className="container-custom max-w-4xl">
         {/* Header */}
-        <div className="mb-8 pt-14">
+        <div className="mb-8 ">
           <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">
             {t("profile.title")}
           </h1>

@@ -238,7 +238,7 @@ export default function DashboardPage() {
       <div className="py-4 sm:py-6 md:py-8 px-3 sm:px-4 md:px-6 lg:px-8 min-h-screen">
         <div className="container-custom max-w-7xl mx-auto relative">
           {/* Header */}
-          <div className="mb-4 sm:mb-6 md:mb-8 pt-18">
+          <div className="mb-4 sm:mb-6 md:mb-8">
             <h1 className="text-lg sm:text-xl md:text-2xl lg:text-3xl font-bold text-slate-800 dark:text-white mb-1 sm:mb-2 leading-tight">
               {t("dashboard.greeting")}, {displayName}! 👋
             </h1>

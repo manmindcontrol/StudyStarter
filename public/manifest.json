@@ -1,46 +1,48 @@
 {
-  "name": "Study Starter - AI Study Helper",
-  "short_name": "Study Starter",
-  "description": "Free AI-powered Study Starter for students. Automatic lecture transcription, study material processing, and test question generation.",
+  "name": "StudyStarter - Ako sa efektívne učiť",
+  "short_name": "StudyStarter",
+  "description": "AI aplikácia pre študentov. Prepis prednášok, generovanie testov a študijných materiálov. Učte sa efektívnejšie.",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#ffffff",
   "theme_color": "#2563eb",
   "orientation": "portrait-primary",
-  "icons": [],
-  "categories": ["education", "productivity", "utilities"],
+  "lang": "sk",
+  "icons": [
+    {
+      "src": "/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "categories": ["education", "productivity"],
   "screenshots": [
     {
       "src": "/screenshot-1.png",
       "sizes": "1280x720",
       "type": "image/png",
-      "label": "Study Starter Dashboard"
-    },
-    {
-      "src": "/screenshot-2.png",
-      "sizes": "1280x720",
-      "type": "image/png",
-      "label": "Lecture Transcription Feature"
+      "label": "StudyStarter Dashboard"
     }
   ],
   "shortcuts": [
     {
-      "name": "Record Lecture",
-      "short_name": "Record",
-      "description": "Start recording a new lecture",
-      "url": "/prednasky?action=record"
+      "name": "Nahrať prednášku",
+      "short_name": "Nahrávať",
+      "description": "Začať nahrávať novú prednášku",
+      "url": "/record-lecture"
     },
     {
-      "name": "Upload Materials",
-      "short_name": "Upload",
-      "description": "Upload study materials",
-      "url": "/materials?action=upload"
-    },
-    {
-      "name": "Generate Tests",
-      "short_name": "Tests",
-      "description": "Generate practice tests",
-      "url": "/testy?action=generate"
+      "name": "Nahrať materiály",
+      "short_name": "Materiály",
+      "description": "Nahrať študijné materiály",
+      "url": "/materials"
     }
   ],
   "related_applications": [],

@@ -554,7 +554,7 @@ export default function NotesViewPage({ materialId, noteId }: Props) {
   return (
     <div className="min-h-screen bg-linear-to-br from-purple-50 via-white to-blue-50 dark:bg-linear-to-br dark:from-slate-900 dark:via-slate-800 dark:to-slate-900">
       {/* Header */}
-      <div className="bg-white border-b border-gray-200 dark:border-slate-700 dark:bg-slate-800/80 sticky top-0 z-10 shadow-sm pt-18">
+      <div className="bg-white border-b border-gray-200 dark:border-slate-700 dark:bg-slate-800/80 sticky top-0 z-10 shadow-sm ">
         <div className="container-custom py-3 sm:py-4 md:py-5 px-3 sm:px-4">
           <div className="flex items-center justify-between gap-2">
             <div className="flex items-center gap-2 sm:gap-3 md:gap-4 flex-1 min-w-0">

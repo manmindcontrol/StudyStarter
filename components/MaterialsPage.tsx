@@ -254,7 +254,7 @@ export default function MaterialsPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-100 dark:bg-linear-to-br dark:from-slate-900 dark:via-slate-800 dark:to-slate-900 pt-14">
+    <div className="min-h-screen bg-gray-100 dark:bg-linear-to-br dark:from-slate-900 dark:via-slate-800 dark:to-slate-900">
       <div className="container-custom py-12 ">
         <button
           onClick={() => router.push("/dashboard")}

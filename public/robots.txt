@@ -5,9 +5,11 @@ Allow: /
 # Disallow admin and API routes
 Disallow: /api/
 Disallow: /admin/
+Disallow: /dashboard/
+Disallow: /profile/
 
 # Sitemap location
-Sitemap: https://studyassistant.app/sitemap.xml
+Sitemap: https://studystarter.io/sitemap.xml
 
 # Crawl-delay (optional, helps prevent server overload)
 Crawl-delay: 1

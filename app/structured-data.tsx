@@ -2,34 +2,35 @@ export default function StructuredData() {
   const organizationSchema = {
     "@context": "https://schema.org",
     "@type": "Organization",
-    name: "Study Starter",
+    name: "StudyStarter",
     description:
-      "AI-powered Study Starter for students helping with lecture transcription, study materials, and test preparation.",
-    url: "https://studyassistant.app",
-    logo: "https://studyassistant.app/logo.png",
+      "AI aplikácia pre študentov - prepis prednášok, generovanie testových otázok a študijných materiálov. Naučte sa efektívne s umelou inteligenciou.",
+    url: "https://studystarter.io",
+    logo: "https://studystarter.io/logo.png",
     sameAs: [
-      "https://twitter.com/studyassistant",
-      "https://github.com/studyassistant",
-      "https://linkedin.com/company/studyassistant",
+      "https://twitter.com/studystarter",
+      "https://instagram.com/studystarter",
+      "https://facebook.com/studystarter",
     ],
     contactPoint: {
       "@type": "ContactPoint",
-      email: "info@studyassistant.app",
+      email: "info@studystarter.io",
       contactType: "Customer Support",
-      availableLanguage: ["English"],
+      availableLanguage: ["Slovak", "English", "German"],
     },
   };
 
   const websiteSchema = {
     "@context": "https://schema.org",
     "@type": "WebSite",
-    name: "Study Starter",
-    url: "https://studyassistant.app",
+    name: "StudyStarter",
+    url: "https://studystarter.io",
     description:
-      "Free AI-powered Study Starter for students. Automatic lecture transcription, study material processing, and test question generation.",
+      "Ako sa efektívne učiť? StudyStarter je bezplatná AI aplikácia pre študentov. Automatický prepis prednášok, generovanie testových otázok a študijných materiálov.",
+    inLanguage: ["sk", "en", "de"],
     potentialAction: {
       "@type": "SearchAction",
-      target: "https://studyassistant.app/search?q={search_term_string}",
+      target: "https://studystarter.io/search?q={search_term_string}",
       "query-input": "required name=search_term_string",
     },
   };
@@ -37,13 +38,13 @@ export default function StructuredData() {
   const softwareApplicationSchema = {
     "@context": "https://schema.org",
     "@type": "SoftwareApplication",
-    name: "Study Starter",
+    name: "StudyStarter",
     applicationCategory: "EducationalApplication",
-    operatingSystem: "Web, iOS, Android",
+    operatingSystem: "Web",
     offers: {
       "@type": "Offer",
       price: "0",
-      priceCurrency: "USD",
+      priceCurrency: "EUR",
     },
     aggregateRating: {
       "@type": "AggregateRating",
@@ -53,13 +54,13 @@ export default function StructuredData() {
       worstRating: "1",
     },
     description:
-      "AI-powered Study Starter that helps students with automatic lecture transcription, intelligent study material processing, and test question generation.",
+      "AI pomôcka pre efektívne učenie. Automatický prepis prednášok, inteligentné spracovanie študijných materiálov a generovanie testových otázok.",
     featureList: [
-      "Automatic lecture recording and transcription",
-      "AI-powered study material processing",
-      "Test and quiz question generation",
-      "Study guide creation",
-      "Exam preparation tools",
+      "Automatický prepis prednášok v reálnom čase",
+      "Generovanie testových otázok z materiálov",
+      "AI študijné poznámky",
+      "Spracovanie PDF a Word dokumentov",
+      "Príprava na skúšky",
     ],
   };
 
@@ -69,34 +70,42 @@ export default function StructuredData() {
     mainEntity: [
       {
         "@type": "Question",
-        name: "What is Study Starter?",
+        name: "Ako sa efektívne učiť?",
         acceptedAnswer: {
           "@type": "Answer",
-          text: "Study Starter is a free AI-powered tool that helps students study more effectively through automatic lecture transcription, intelligent study material processing, and test question generation.",
+          text: "Efektívne učenie zahŕňa aktívne opakovanie, testovanie sa a organizáciu materiálov. StudyStarter vám pomôže automaticky vytvárať testové otázky a študijné poznámky z vašich materiálov, čo zefektívni váš proces učenia.",
         },
       },
       {
         "@type": "Question",
-        name: "How does the lecture transcription work?",
+        name: "Čo je StudyStarter?",
         acceptedAnswer: {
           "@type": "Answer",
-          text: "You can record lectures in real-time using your microphone. Our AI automatically transcribes the speech to text and creates a clear, editable transcript.",
+          text: "StudyStarter je bezplatná AI aplikácia, ktorá pomáha študentom efektívnejšie sa učiť. Ponúka automatický prepis prednášok, spracovanie študijných materiálov a generovanie testových otázok.",
         },
       },
       {
         "@type": "Question",
-        name: "Is Study Starter free to use?",
+        name: "Ako funguje prepis prednášok?",
         acceptedAnswer: {
           "@type": "Answer",
-          text: "Yes, Study Starter is completely free to use. You can create an account and start using all features immediately without a credit card.",
+          text: "Môžete nahrávať prednášky v reálnom čase pomocou mikrofónu. Naša AI automaticky prepisuje reč na text a vytvára prehľadný, upraviteľný prepis.",
         },
       },
       {
         "@type": "Question",
-        name: "What file formats does Study Starter support?",
+        name: "Je StudyStarter zadarmo?",
         acceptedAnswer: {
           "@type": "Answer",
-          text: "Study Starter supports PDF and Word documents for study material processing. You can upload these files and our AI will analyze them to create study guides and test questions.",
+          text: "Áno, StudyStarter ponúka bezplatný plán s prístupom k základným funkciám. Môžete si vytvoriť účet a začať používať aplikáciu ihneď bez platobnej karty.",
+        },
+      },
+      {
+        "@type": "Question",
+        name: "Aké formáty súborov StudyStarter podporuje?",
+        acceptedAnswer: {
+          "@type": "Answer",
+          text: "StudyStarter podporuje PDF a Word dokumenty pre spracovanie študijných materiálov. Môžete nahrať tieto súbory a naša AI z nich vytvorí študijné poznámky a testové otázky.",
         },
       },
     ],
@@ -109,14 +118,51 @@ export default function StructuredData() {
       {
         "@type": "ListItem",
         position: 1,
-        name: "Home",
-        item: "https://studyassistant.app",
+        name: "Domov",
+        item: "https://studystarter.io",
       },
       {
         "@type": "ListItem",
         position: 2,
-        name: "Features",
-        item: "https://studyassistant.app/#funkcie",
+        name: "Funkcie",
+        item: "https://studystarter.io/#funkcie",
+      },
+      {
+        "@type": "ListItem",
+        position: 3,
+        name: "Cenník",
+        item: "https://studystarter.io/pricing",
+      },
+    ],
+  };
+
+  // HowTo schema pre lepšie zobrazenie v Google
+  const howToSchema = {
+    "@context": "https://schema.org",
+    "@type": "HowTo",
+    name: "Ako sa efektívne učiť so StudyStarter",
+    description:
+      "Návod ako používať AI na efektívnejšie učenie a prípravu na skúšky",
+    step: [
+      {
+        "@type": "HowToStep",
+        name: "Zaregistrujte sa",
+        text: "Vytvorte si bezplatný účet na studystarter.io",
+      },
+      {
+        "@type": "HowToStep",
+        name: "Nahrajte materiály",
+        text: "Nahrajte PDF alebo Word dokumenty, alebo začnite nahrávať prednášku",
+      },
+      {
+        "@type": "HowToStep",
+        name: "Nechajte AI pracovať",
+        text: "AI spracuje vaše materiály a vytvorí študijné poznámky a testové otázky",
+      },
+      {
+        "@type": "HowToStep",
+        name: "Učte sa efektívne",
+        text: "Používajte vygenerované testy a poznámky na prípravu na skúšky",
       },
     ],
   };
@@ -144,6 +190,10 @@ export default function StructuredData() {
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(howToSchema) }}
       />
     </>
   );

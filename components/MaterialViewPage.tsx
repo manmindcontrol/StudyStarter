@@ -258,7 +258,7 @@ export default function MaterialViewPage({ materialId }: Props) {
   }
 
   return (
-    <div className="min-h-screen bg-linear-to-br from-blue-50 via-gray-100 to-cyan-50 dark:bg-linear-to-br dark:from-slate-900 dark:via-slate-800 dark:to-slate-900 overflow-hidden pt-18">
+    <div className="min-h-screen bg-linear-to-br from-blue-50 via-gray-100 to-cyan-50 dark:bg-linear-to-br dark:from-slate-900 dark:via-slate-800 dark:to-slate-900 overflow-hidden ">
       {/* Header */}
 
       {/* Content */}

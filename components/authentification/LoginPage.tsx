@@ -146,7 +146,7 @@ export default function LoginPage() {
         />
       </div>
 
-      <div className="max-w-md w-full relative z-10 pt-14">
+      <div className="max-w-md w-full relative z-10 ">
         {/* Logo and heading */}
         <motion.div
           initial={{ opacity: 0, y: -20 }}

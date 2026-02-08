@@ -430,7 +430,7 @@ export default function RecordLecture({ user }: RecordLectureProps) {
     <div className="min-h-screen bg-gray-100 dark:bg-linear-to-br dark:from-slate-900 dark:via-slate-800 dark:to-slate-900 overflow-hidden">
       <div className="container-custom py-8">
         {/* Header */}
-        <div className="mb-8 pt-14">
+        <div className="mb-8 ">
           <button
             onClick={() => router.push("/dashboard")}
             className="mb-4 flex items-center space-x-2 text-gray-600 hover:text-gray-900 dark:text-gray-300 dark:hover:text-gray-400 transition-colors group cursor-pointer"

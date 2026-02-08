@@ -19,35 +19,41 @@ export const metadata: Metadata = {
     process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000",
   ),
   title: {
-    default: "Study Starter - AI-Powered Study Helper for Students",
-    template: "%s | Study Starter",
+    default: "StudyStarter - Ako sa efektívne učiť | AI pomôcka pre študentov",
+    template: "%s | StudyStarter",
   },
   description:
-    "Free AI-powered Study Starter for students. Automatic lecture transcription, intelligent study material processing, and test question generation. Study smarter, not harder with AI technology.",
+    "Ako sa učiť efektívne? StudyStarter je bezplatná AI aplikácia pre študentov. Automatický prepis prednášok, generovanie testových otázok a študijných materiálov. Učte sa rýchlejšie s umelou inteligenciou.",
   keywords: [
-    "AI Study Starter",
-    "study helper",
+    // Slovenské kľúčové slová (priorita)
+    "ako sa učiť",
+    "ako sa efektívne učiť",
+    "tipy na učenie",
+    "efektívne učenie",
+    "ako sa naučiť rýchlo",
+    "generátor testov",
+    "testové otázky",
+    "študijné materiály",
+    "prepis prednášok",
+    "AI pre študentov",
+    "príprava na skúšky",
+    "učenie s AI",
+    "študijný pomocník",
+    "poznámky z prednášok",
+    // Anglické kľúčové slová
+    "AI study helper",
     "lecture transcription",
-    "AI for students",
+    "test question generator",
     "study materials",
-    "test preparation",
     "exam preparation",
     "AI learning",
     "study smarter",
     "educational AI",
-    "student productivity",
-    "automated note-taking",
-    "study guide generator",
-    "quiz generator",
-    "free study tools",
-    "AI tutor",
-    "learning assistant",
-    "academic help",
   ],
-  authors: [{ name: "Study Starter Team" }],
-  creator: "Study Starter",
-  publisher: "Study Starter",
-  applicationName: "Study Starter",
+  authors: [{ name: "StudyStarter Team" }],
+  creator: "StudyStarter",
+  publisher: "StudyStarter",
+  applicationName: "StudyStarter",
   referrer: "origin-when-cross-origin",
   robots: {
     index: true,
@@ -62,35 +68,41 @@ export const metadata: Metadata = {
   },
   openGraph: {
     type: "website",
-    locale: "en_US",
-    url: "https://studyassistant.app",
-    title: "Study Starter - AI-Powered Study Helper for Students",
+    locale: "sk_SK",
+    alternateLocale: ["en_US", "de_DE"],
+    url: "https://studystarter.io",
+    title: "StudyStarter - Ako sa efektívne učiť | AI pre študentov",
     description:
-      "Free AI-powered Study Starter. Automatic lecture transcription, study material processing, and test generation. Study smarter with AI.",
-    siteName: "Study Starter",
+      "Ako sa učiť efektívne? Bezplatná AI aplikácia pre študentov. Prepis prednášok, generovanie testov a študijných materiálov.",
+    siteName: "StudyStarter",
     images: [
       {
         url: "/og-image.png",
         width: 1200,
         height: 630,
-        alt: "Study Starter - AI Study Helper",
+        alt: "StudyStarter - AI pomôcka pre efektívne učenie",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Study Starter - AI Study Helper",
+    title: "StudyStarter - Ako sa efektívne učiť",
     description:
-      "Free AI-powered Study Starter for students. Automatic lecture transcription and test generation.",
-    images: ["/twitter-image.png"],
-    creator: "@studyassistant",
+      "Bezplatná AI aplikácia pre študentov. Prepis prednášok, generovanie testov a študijných materiálov.",
+    images: ["/og-image.png"],
+    creator: "@studystarter",
   },
   manifest: "/manifest.json",
   icons: {
     icon: [{ url: "/favicon.ico" }],
   },
   alternates: {
-    canonical: "https://studyassistant.app",
+    canonical: "https://studystarter.io",
+    languages: {
+      "sk-SK": "https://studystarter.io",
+      "en-US": "https://studystarter.io/en",
+      "de-DE": "https://studystarter.io/de",
+    },
   },
   category: "education",
 };
@@ -112,7 +124,7 @@ export default function RootLayout({
 }) {
   return (
     <html
-      lang="en"
+      lang="sk"
       className="scroll-smooth"
       data-scroll-behavior="smooth"
       suppressHydrationWarning

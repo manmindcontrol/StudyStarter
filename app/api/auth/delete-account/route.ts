@@ -86,7 +86,8 @@ export async function DELETE(request: NextRequest) {
           try {
             const OpenAI = (await import("openai")).default;
             const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
-            await openai.files.del(material.openai_file_id);
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            await (openai.files as any).del(material.openai_file_id);
           } catch (err) {
             console.error("Error deleting OpenAI file:", err);
           }

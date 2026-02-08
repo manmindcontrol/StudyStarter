@@ -15,6 +15,15 @@ const supabaseAdmin = createClient(
 
 export type UsageType = 'pdf_conversions' | 'materials' | 'lectures' | 'notes_generations' | 'questions_generations';
 
+export interface SubscriptionTierLimits {
+  id: string;
+  name: string;
+  pdf_conversions_limit: number | null;
+  materials_limit: number | null;
+  notes_generations_limit: number | null;
+  questions_generations_limit: number | null;
+}
+
 /**
  * Získa aktuálny usage pre používateľa v tomto mesiaci
  */
@@ -206,8 +215,14 @@ export async function checkUsageLimit(
     const { limits } = await getUserTierAndLimits(userId);
 
     // Mapovanie usageType na limit field
-    const limitField = `${usageType}_limit` as keyof typeof limits;
-    const limit = limits[limitField];
+    const limitMapping: Record<UsageType, number | null> = {
+      pdf_conversions: limits.pdf_conversions_limit,
+      materials: limits.materials_limit,
+      lectures: limits.materials_limit,
+      notes_generations: limits.notes_generations_limit,
+      questions_generations: limits.questions_generations_limit,
+    };
+    const limit = limitMapping[usageType];
 
     // Ak je limit NULL, znamená to unlimited
     if (limit === null) {
@@ -226,7 +241,15 @@ export async function checkUsageLimit(
 
     // Získaj aktuálne použitie
     const usage = await getCurrentUsage(userId);
-    const usedField = `${usageType}_used` as keyof typeof usage;
+    // Map usageType to actual column names
+    const usageFieldMapping: Record<UsageType, string> = {
+      pdf_conversions: 'pdf_conversions_used',
+      materials: 'materials_uploaded',
+      lectures: 'materials_uploaded',
+      notes_generations: 'notes_generations_used',
+      questions_generations: 'questions_generations_used',
+    };
+    const usedField = usageFieldMapping[usageType] as keyof typeof usage;
     const used = usage[usedField] as number;
 
     // Skontroluj či neprekročil limit
@@ -260,7 +283,15 @@ export async function incrementUsage(
 ): Promise<void> {
   try {
     const usage = await getCurrentUsage(userId);
-    const usedField = `${usageType}_used`;
+    // Map usageType to actual column names
+    const fieldMapping: Record<UsageType, string> = {
+      pdf_conversions: 'pdf_conversions_used',
+      materials: 'materials_uploaded',
+      lectures: 'materials_uploaded', // lectures use same column as materials
+      notes_generations: 'notes_generations_used',
+      questions_generations: 'questions_generations_used',
+    };
+    const usedField = fieldMapping[usageType];
 
     const { error } = await supabaseAdmin
       .from('usage_tracking')

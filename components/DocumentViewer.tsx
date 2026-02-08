@@ -153,7 +153,7 @@ export default function DocumentViewer({ materialId }: Props) {
             <div className="flex items-center space-x-2 sm:space-x-3 md:space-x-4 min-w-0 flex-1">
               <button
                 onClick={() => router.push(`/materials/${materialId}`)}
-                className="p-1.5 sm:p-2 hover:bg-gray-100 dark:hover:bg-slate-700 rounded-lg transition-colors shrink-0"
+                className="p-1.5 sm:p-2 hover:bg-gray-100 dark:hover:bg-slate-700 rounded-lg transition-colors shrink-0 cursor-pointer"
               >
                 <ChevronLeft className="w-4 h-4 sm:w-5 sm:h-5 text-gray-800 hover:text-gray-700 dark:text-gray-300 dark:hover:text-gray-400" />
               </button>

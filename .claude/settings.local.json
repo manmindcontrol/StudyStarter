@@ -25,7 +25,8 @@
       "Bash(git add:*)",
       "Bash(git commit:*)",
       "Bash(timeout /t 12 /nobreak)",
-      "Bash(curl:*)"
+      "Bash(curl:*)",
+      "Bash(npm test)"
     ],
     "deny": [],
     "ask": []

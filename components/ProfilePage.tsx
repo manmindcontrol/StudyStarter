@@ -218,7 +218,9 @@ export default function ProfilePage() {
 
     try {
       // Get session token for authorization
-      const { data: { session } } = await supabase.auth.getSession();
+      const {
+        data: { session },
+      } = await supabase.auth.getSession();
       if (!session) {
         setErrorMessage("Session expired. Please log in again.");
         setCancelingSubscription(false);
@@ -229,7 +231,7 @@ export default function ProfilePage() {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          "Authorization": `Bearer ${session.access_token}`,
+          Authorization: `Bearer ${session.access_token}`,
         },
       });
 
@@ -244,7 +246,10 @@ export default function ProfilePage() {
 
       // Update local subscription state
       if (subscription) {
-        setSubscription({ ...subscription, stripe_subscription_status: "canceled" });
+        setSubscription({
+          ...subscription,
+          stripe_subscription_status: "canceled",
+        });
       }
 
       setTimeout(() => setSuccessMessage(""), 5000);
@@ -705,7 +710,7 @@ export default function ProfilePage() {
               <button
                 type="button"
                 onClick={() => setShowDeleteModal(true)}
-                className="w-full bg-red-600 hover:bg-red-700 text-white font-semibold py-3 px-6 rounded-lg transition-all duration-300 shadow-lg shadow-red-400/30 hover:shadow-red-400/40 flex items-center justify-center space-x-2 cursor-pointer"
+                className="w-full bg-red-700 hover:bg-red-800 text-white font-semibold py-3 px-6 rounded-lg transition-all duration-300 shadow-lg flex items-center justify-center space-x-2 cursor-pointer"
               >
                 <Trash2 className="w-5 h-5" />
                 <span>{t("profile.deleteAccount")}</span>

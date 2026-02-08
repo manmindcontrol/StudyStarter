@@ -7,7 +7,7 @@ const supabase = createServiceRoleClient();
 
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     // Get user from session
@@ -32,7 +32,8 @@ export async function DELETE(
       );
     }
 
-    const lectureId = params.id;
+    const { id } = await params;
+    const lectureId = id;
 
     // First, fetch the lecture to get audio file path and verify ownership
     const { data: lecture, error: fetchError } = await supabase

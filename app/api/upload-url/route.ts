@@ -85,7 +85,7 @@ function extractContentFromHTML(html: string, url: string): string | null {
 
     // Remove script and style tags before parsing
     const scripts = dom.window.document.querySelectorAll('script, style, noscript');
-    scripts.forEach(el => el.remove());
+    scripts.forEach((el: Element) => el.remove());
 
     const reader = new Readability(dom.window.document);
     const article = reader.parse();

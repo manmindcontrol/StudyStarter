@@ -59,7 +59,7 @@ export async function POST(request: NextRequest) {
           const priceId = subscription.items.data[0]?.price.id;
 
           // Determine tier based on price ID
-          let tier = SUBSCRIPTION_TIERS.FREE;
+          let tier: 'free' | 'basic' | 'premium' = SUBSCRIPTION_TIERS.FREE;
           if (priceId === process.env.STRIPE_PRICE_BASIC) {
             tier = SUBSCRIPTION_TIERS.BASIC;
           } else if (priceId === process.env.STRIPE_PRICE_PREMIUM) {
@@ -124,7 +124,7 @@ export async function POST(request: NextRequest) {
 
         const priceId = subscription.items.data[0]?.price.id;
 
-        let tier = SUBSCRIPTION_TIERS.FREE;
+        let tier: 'free' | 'basic' | 'premium' = SUBSCRIPTION_TIERS.FREE;
         if (priceId === process.env.STRIPE_PRICE_BASIC) {
           tier = SUBSCRIPTION_TIERS.BASIC;
         } else if (priceId === process.env.STRIPE_PRICE_PREMIUM) {
@@ -204,10 +204,11 @@ export async function POST(request: NextRequest) {
 
       case 'invoice.payment_succeeded': {
         const invoice = event.data.object as Stripe.Invoice;
+        const invoiceSubscriptionId = (invoice as unknown as { subscription?: string }).subscription;
 
-        if (invoice.subscription) {
+        if (invoiceSubscriptionId) {
           const subscription = await stripe.subscriptions.retrieve(
-            invoice.subscription as string
+            invoiceSubscriptionId
           );
 
           const userId = subscription.metadata?.user_id;
@@ -244,10 +245,11 @@ export async function POST(request: NextRequest) {
 
       case 'invoice.payment_failed': {
         const invoice = event.data.object as Stripe.Invoice;
+        const failedInvoiceSubscriptionId = (invoice as unknown as { subscription?: string }).subscription;
 
-        if (invoice.subscription) {
+        if (failedInvoiceSubscriptionId) {
           const subscription = await stripe.subscriptions.retrieve(
-            invoice.subscription as string
+            failedInvoiceSubscriptionId
           );
 
           const userId = subscription.metadata?.user_id;

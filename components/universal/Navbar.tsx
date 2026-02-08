@@ -36,7 +36,6 @@ export default function Navbar() {
     };
     checkUser();
 
-    // Listen for auth state changes
     const {
       data: { subscription },
     } = supabase.auth.onAuthStateChange(async (event, session) => {
@@ -52,7 +51,6 @@ export default function Navbar() {
     };
   }, []);
 
-  // Close dropdown when clicking outside
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (
@@ -72,7 +70,6 @@ export default function Navbar() {
     };
   }, [profileDropdownOpen]);
 
-  // Disable body scroll when mobile menu is open
   useEffect(() => {
     if (mobileMenuOpen) {
       document.body.style.overflow = "hidden";
@@ -84,10 +81,6 @@ export default function Navbar() {
     };
   }, [mobileMenuOpen]);
 
-  const toggleMobileMenu = () => {
-    setMobileMenuOpen(!mobileMenuOpen);
-  };
-
   const handleSignOut = async () => {
     await signOut();
     setUser(null);
@@ -97,59 +90,51 @@ export default function Navbar() {
   };
 
   return (
-    <nav className="fixed top-0 left-0 right-0 z-50 glass-morphism border-b border-white/10">
+    <nav className="bg-white dark:bg-slate-900 top-0 left-0 right-0 z-50 border-b border-gray-200 dark:border-slate-700">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between items-center h-18 cursor-pointer">
-          {/* Logo and name */}
+        <div className="flex justify-between items-center h-18">
           <Link
             href="/"
-            className="flex items-center space-x-3 hover:scale-105 transition-transform duration-200"
+            className="flex items-center space-x-2 hover:scale-105 transition-transform duration-200"
           >
             <Image
-              src="/chat.png"
+              src="/logo.png"
               alt="StudyStarter Logo"
-              width={30}
-              height={30}
+              width={100}
+              height={100}
               className="w-10 h-10 sm:w-12 sm:h-12"
             />
-
-            <span className="text-xl text-gray-800 dark:text-white hidden sm:block">
-              StudyStarter.io
+            <span className="text-2xl text-gray-800 dark:text-white font-semibold">
+              Study<span className="text-cyan-600">Starter</span>.io
             </span>
-            <span className="text-xl font-bold text-gray-800 dark:text-white sm:hidden"></span>
           </Link>
 
-          {/* Desktop navigation */}
           <div className="hidden md:flex items-center space-x-1">
             <Link
               href="/"
-              className="flex items-center space-x-2 text-gray-700 dark:text-gray-200 hover:text-blue-600 dark:hover:text-blue-400 transition-all duration-200 font-medium px-4 py-2 rounded-lg hover:bg-blue-50 dark:hover:bg-slate-800 relative group"
+              className="flex items-center space-x-2 text-gray-700 dark:text-gray-200 hover:text-blue-600 dark:hover:text-blue-400 transition-all duration-200 font-medium px-4 py-2 rounded-lg hover:bg-blue-50 dark:hover:bg-slate-800"
             >
               <Home className="w-5 h-5" />
               <span>{t("nav.home")}</span>
-              <span className="absolute bottom-0 left-1/2 -translate-x-1/2 w-0 h-0.5 bg-linear-to-r from-blue-400 to-cyan-300 group-hover:w-3/4 transition-all duration-300"></span>
             </Link>
             <Link
               href="/pdf-converter"
-              className="flex items-center space-x-2 text-gray-700 dark:text-gray-200 hover:text-blue-600 dark:hover:text-blue-400 transition-all duration-200 font-medium px-4 py-2 rounded-lg hover:bg-blue-50 dark:hover:bg-slate-800 relative group"
+              className="flex items-center space-x-2 text-gray-700 dark:text-gray-200 hover:text-blue-600 dark:hover:text-blue-400 transition-all duration-200 font-medium px-4 py-2 rounded-lg hover:bg-blue-50 dark:hover:bg-slate-800"
             >
               <FileText className="w-5 h-5" />
               <span>{t("nav.pdfConverter")}</span>
-              <span className="absolute bottom-0 left-1/2 -translate-x-1/2 w-0 h-0.5 bg-linear-to-r from-blue-400 to-cyan-300 group-hover:w-3/4 transition-all duration-300"></span>
             </Link>
             {user && (
               <Link
                 href="/dashboard"
-                className="flex items-center space-x-2 text-gray-700 dark:text-gray-200 hover:text-blue-600 dark:hover:text-blue-400 transition-all duration-200 font-medium px-4 py-2 rounded-lg hover:bg-blue-50 dark:hover:bg-slate-800 relative group"
+                className="flex items-center space-x-2 text-gray-700 dark:text-gray-200 hover:text-blue-600 dark:hover:text-blue-400 transition-all duration-200 font-medium px-4 py-2 rounded-lg hover:bg-blue-50 dark:hover:bg-slate-800"
               >
                 <LayoutDashboard className="w-5 h-5" />
                 <span>{t("nav.dashboard")}</span>
-                <span className="absolute bottom-0 left-1/2 -translate-x-1/2 w-0 h-0.5 bg-linear-to-r from-blue-400 to-cyan-300 group-hover:w-3/4 transition-all duration-300"></span>
               </Link>
             )}
           </div>
 
-          {/* Desktop login */}
           <div className="hidden md:flex items-center gap-2">
             <LanguageSelector />
             {user ? (
@@ -167,9 +152,8 @@ export default function Navbar() {
                   />
                 </button>
 
-                {/* Dropdown Menu */}
                 {profileDropdownOpen && (
-                  <div className="absolute right-0 mt-2 w-48 bg-white dark:bg-slate-800 rounded-lg shadow-xl border border-gray-200 dark:border-slate-700 py-2 px-3 z-50 animate-in fade-in slide-in-from-top-2 duration-200">
+                  <div className="absolute right-0 mt-2 w-48 bg-white dark:bg-slate-800 rounded-lg shadow-xl border border-gray-200 dark:border-slate-700 py-2 px-3 z-50">
                     <Link
                       href="/profile"
                       onClick={() => setProfileDropdownOpen(false)}
@@ -206,9 +190,8 @@ export default function Navbar() {
             )}
           </div>
 
-          {/* Mobile hamburger button */}
           <button
-            onClick={toggleMobileMenu}
+            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
             className="md:hidden p-2.5 rounded-xl hover:bg-gray-100 dark:hover:bg-slate-800 transition-all duration-200"
             aria-label="Toggle menu"
           >
@@ -221,7 +204,6 @@ export default function Navbar() {
         </div>
       </div>
 
-      {/* Mobile menu - inside nav, inherits glass-morphism */}
       <AnimatePresence>
         {mobileMenuOpen && (
           <motion.div
@@ -240,7 +222,7 @@ export default function Navbar() {
             >
               <Link
                 href="/"
-                className=" font-medium hover:text-blue-400 transition duration-300"
+                className="font-medium hover:text-blue-400 transition duration-300"
                 onClick={() => setMobileMenuOpen(false)}
               >
                 {t("nav.home")}
@@ -258,7 +240,7 @@ export default function Navbar() {
                 <>
                   <Link
                     href="/dashboard"
-                    className=" text-3xl font-medium hover:text-blue-400 transition duration-300"
+                    className="font-medium hover:text-blue-400 transition duration-300"
                     onClick={() => setMobileMenuOpen(false)}
                   >
                     {t("nav.dashboard")}
@@ -271,7 +253,7 @@ export default function Navbar() {
                 <>
                   <Link
                     href="/profile"
-                    className=" font-medium hover:text-blue-400 transition duration-300 block"
+                    className="font-medium hover:text-blue-400 transition duration-300"
                     onClick={() => setMobileMenuOpen(false)}
                   >
                     {t("nav.profile")}

@@ -440,10 +440,16 @@ export default function PdfConverterPage() {
                 id="file-upload"
               />
               <label htmlFor="file-upload" className="cursor-pointer">
-                <div className={`w-12 h-12 mx-auto mb-3 rounded-full flex items-center justify-center ${
-                  dragActive ? "bg-blue-100 dark:bg-blue-900/30" : "bg-gray-100 dark:bg-slate-700"
-                }`}>
-                  <Upload className={`w-6 h-6 ${dragActive ? "text-blue-600" : "text-gray-500 dark:text-gray-400"}`} />
+                <div
+                  className={`w-12 h-12 mx-auto mb-3 rounded-full flex items-center justify-center ${
+                    dragActive
+                      ? "bg-blue-100 dark:bg-blue-900/30"
+                      : "bg-gray-100 dark:bg-slate-700"
+                  }`}
+                >
+                  <Upload
+                    className={`w-6 h-6 ${dragActive ? "text-blue-600" : "text-gray-500 dark:text-gray-400"}`}
+                  />
                 </div>
                 <p className="font-semibold text-gray-900 dark:text-gray-200 mb-1">
                   {t("pdfConverter.dragAndDrop")}
@@ -478,7 +484,9 @@ export default function PdfConverterPage() {
                     onClick={() => setFile(null)}
                     className="text-red-500 dark:text-red-400 hover:text-red-600 dark:hover:text-red-300 transition-colors text-sm font-medium"
                   >
-                    <span className="hidden sm:inline">{t("pdfConverter.remove")}</span>
+                    <span className="hidden sm:inline">
+                      {t("pdfConverter.remove")}
+                    </span>
                     <Trash2 className="w-4 h-4 sm:hidden" />
                   </button>
                 </div>

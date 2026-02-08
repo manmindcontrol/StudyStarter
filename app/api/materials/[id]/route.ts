@@ -18,7 +18,7 @@ const openai = new OpenAI({
 
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     // Get user from session
@@ -43,7 +43,8 @@ export async function DELETE(
       );
     }
 
-    const materialId = params.id;
+    const { id } = await params;
+    const materialId = id;
 
     // First, fetch the material to get file paths and verify ownership
     const { data: material, error: fetchError } = await supabase
@@ -80,7 +81,8 @@ export async function DELETE(
     // Step 2: Delete from OpenAI Files API (if exists)
     if (material.openai_file_id) {
       try {
-        await openai.files.del(material.openai_file_id);
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        await (openai.files as any).del(material.openai_file_id);
       } catch (openaiErr) {
         console.error("OpenAI file deletion error:", openaiErr);
         // Continue anyway - file might already be deleted

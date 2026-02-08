@@ -1,5 +1,6 @@
 import Link from "next/link";
-import { BookOpen, Mail, Github, Linkedin } from "lucide-react";
+import Image from "next/image";
+import { Mail, Github, Linkedin } from "lucide-react";
 import CookieSettingsButton from "./CookieSettingsButton";
 
 export default function Footer() {
@@ -15,12 +16,16 @@ export default function Footer() {
           {/* About the app */}
           <div className="space-y-5">
             <div className="flex items-center space-x-3">
-              <div className="bg-linear-to-br from-blue-500 via-blue-600 to-cyan-600 text-white w-10 h-10 rounded-xl flex items-center justify-center shadow-lg shadow-blue-500/30">
-                <BookOpen className="w-6 h-6" />
-              </div>
-              <h3 className="font-bold text-xl bg-linear-to-r from-white to-blue-100 bg-clip-text text-transparent">
-                Study Starter
-              </h3>
+              <Image
+                src="/logo.png"
+                alt="StudyStarter Logo"
+                width={100}
+                height={100}
+                className="w-10 h-10 sm:w-12 sm:h-12"
+              />
+              <span className="text-2xl text-white font-semibold">
+                Study<span className="text-cyan-400">Starter</span>.io
+              </span>
             </div>
             <p className="text-gray-300 text-sm leading-relaxed">
               Intelligent helper for effective studying with AI support.

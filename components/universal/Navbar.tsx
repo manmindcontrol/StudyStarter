@@ -104,7 +104,7 @@ export default function Navbar() {
               height={100}
               className="w-10 h-10 sm:w-12 sm:h-12"
             />
-            <span className="text-2xl text-gray-800 dark:text-white font-semibold">
+            <span className="text-2xl text-slate-800 dark:text-white font-semibold">
               Study<span className="text-cyan-600">Starter</span>.io
             </span>
           </Link>

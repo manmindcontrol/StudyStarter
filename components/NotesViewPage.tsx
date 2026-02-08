@@ -560,7 +560,7 @@ export default function NotesViewPage({ materialId, noteId }: Props) {
             <div className="flex items-center gap-2 sm:gap-3 md:gap-4 flex-1 min-w-0">
               <button
                 onClick={() => router.push(`/materials/${materialId}`)}
-                className="p-2.5 sm:p-3 text-gray-600 dark:text-gray-300 dark:hover:text-gray-400 hover:text-gray-900 group rounded-lg transition-colors shrink-0"
+                className="p-2.5 sm:p-3 text-gray-600 dark:text-gray-300 dark:hover:text-gray-400 hover:text-gray-900 group rounded-lg transition-colors shrink-0 cursor-pointer"
               >
                 <ArrowLeft className="w-4 h-4 sm:w-5 sm:h-5 group-hover:-translate-x-1 transition-transform" />
               </button>

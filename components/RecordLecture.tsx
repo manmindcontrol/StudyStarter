@@ -12,94 +12,91 @@ import {
   Play,
   Square,
   Trash2,
+  Check,
+  Loader2,
 } from "lucide-react";
-import type { User } from "@supabase/supabase-js";
 import { saveAs } from "file-saver";
 import { Document, Paragraph, TextRun, Packer } from "docx";
 import jsPDF from "jspdf";
 import LoadingSpinner from "./LoadingSpinner";
 import { useTranslation } from "@/hooks/useTranslation";
 
-// Web Speech API type definitions
-interface ISpeechRecognition extends EventTarget {
+// Web Speech API types
+interface SpeechRecognitionEvent extends Event {
+  resultIndex: number;
+  results: SpeechRecognitionResultList;
+}
+
+interface SpeechRecognitionErrorEvent extends Event {
+  error: string;
+}
+
+interface SpeechRecognition extends EventTarget {
   continuous: boolean;
   interimResults: boolean;
   lang: string;
-  onresult: ((event: ISpeechRecognitionEvent) => void) | null;
-  onerror: ((event: ISpeechRecognitionErrorEvent) => void) | null;
+  onresult: ((event: SpeechRecognitionEvent) => void) | null;
+  onerror: ((event: SpeechRecognitionErrorEvent) => void) | null;
   onend: (() => void) | null;
-  start(): void;
-  stop(): void;
+  start: () => void;
+  stop: () => void;
 }
 
-interface ISpeechRecognitionEvent {
-  resultIndex: number;
-  results: ISpeechRecognitionResultList;
+declare global {
+  interface Window {
+    SpeechRecognition: new () => SpeechRecognition;
+    webkitSpeechRecognition: new () => SpeechRecognition;
+  }
 }
 
-interface ISpeechRecognitionResultList {
-  length: number;
-  item(index: number): ISpeechRecognitionResult;
-  [index: number]: ISpeechRecognitionResult;
-}
-
-interface ISpeechRecognitionResult {
-  isFinal: boolean;
-  length: number;
-  item(index: number): ISpeechRecognitionAlternative;
-  [index: number]: ISpeechRecognitionAlternative;
-}
-
-interface ISpeechRecognitionAlternative {
-  transcript: string;
-  confidence: number;
-}
-
-interface ISpeechRecognitionErrorEvent {
-  error: string;
-  message: string;
-}
-
-interface ISpeechRecognitionConstructor {
-  new (): ISpeechRecognition;
-}
-
-interface WindowWithSpeechRecognition extends Window {
-  SpeechRecognition?: ISpeechRecognitionConstructor;
-  webkitSpeechRecognition?: ISpeechRecognitionConstructor;
-}
-
-type RecordLectureProps = {
-  user: User;
-};
-
-export default function RecordLecture({ user }: RecordLectureProps) {
+export default function RecordLecture() {
   const router = useRouter();
-  const { t } = useTranslation();
+  const { t, locale } = useTranslation();
   const [isRecording, setIsRecording] = useState(false);
   const [recordingTime, setRecordingTime] = useState(0);
   const [transcript, setTranscript] = useState("");
-  const [finalTranscript, setFinalTranscript] = useState("");
+  const [interimTranscript, setInterimTranscript] = useState("");
+  const [pendingText, setPendingText] = useState("");
   const [isProcessing, setIsProcessing] = useState(false);
   const [downloadingFormat, setDownloadingFormat] = useState<
     "txt" | "docx" | "pdf" | "save" | null
   >(null);
+  const [isSaved, setIsSaved] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
+  // Refs for recording
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
   const audioChunksRef = useRef<Blob[]>([]);
+  const streamRef = useRef<MediaStream | null>(null);
   const timerIntervalRef = useRef<NodeJS.Timeout | null>(null);
-  const recognitionRef = useRef<ISpeechRecognition | null>(null);
+  const recognitionRef = useRef<SpeechRecognition | null>(null);
+  const isRecordingRef = useRef<boolean>(false);
+  const finalTranscriptRef = useRef<string>("");
 
+  // Cleanup on unmount
   useEffect(() => {
     return () => {
-      if (timerIntervalRef.current) {
-        clearInterval(timerIntervalRef.current);
-      }
-      if (recognitionRef.current) {
-        recognitionRef.current.stop();
-      }
+      cleanup();
     };
   }, []);
+
+  const cleanup = () => {
+    if (timerIntervalRef.current) {
+      clearInterval(timerIntervalRef.current);
+      timerIntervalRef.current = null;
+    }
+    if (recognitionRef.current) {
+      recognitionRef.current.stop();
+      recognitionRef.current = null;
+    }
+    if (mediaRecorderRef.current && mediaRecorderRef.current.state !== "inactive") {
+      mediaRecorderRef.current.stop();
+    }
+    if (streamRef.current) {
+      streamRef.current.getTracks().forEach((track) => track.stop());
+      streamRef.current = null;
+    }
+  };
 
   const formatTime = (seconds: number) => {
     const hrs = Math.floor(seconds / 3600);
@@ -110,13 +107,115 @@ export default function RecordLecture({ user }: RecordLectureProps) {
       .padStart(2, "0")}:${secs.toString().padStart(2, "0")}`;
   };
 
+  // Get language code for Speech Recognition
+  const getSpeechLang = () => {
+    const langMap: Record<string, string> = {
+      sk: "sk-SK",
+      en: "en-US",
+      de: "de-DE",
+    };
+    return langMap[locale] || "sk-SK";
+  };
+
+  // Get language code for Whisper
+  const getWhisperLanguage = () => {
+    const langMap: Record<string, string> = {
+      sk: "sk",
+      en: "en",
+      de: "de",
+    };
+    return langMap[locale] || "sk";
+  };
+
+  // Setup Web Speech API for real-time transcription
+  const setupSpeechRecognition = () => {
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    if (!SpeechRecognition) {
+      console.warn("Speech Recognition not supported");
+      return null;
+    }
+
+    const recognition = new SpeechRecognition();
+    recognition.continuous = true;
+    recognition.interimResults = true;
+    recognition.lang = getSpeechLang();
+
+    recognition.onresult = (event: SpeechRecognitionEvent) => {
+      let interim = "";
+      let final = "";
+
+      for (let i = event.resultIndex; i < event.results.length; i++) {
+        const result = event.results[i];
+        if (result.isFinal) {
+          final += result[0].transcript + " ";
+        } else {
+          interim += result[0].transcript;
+        }
+      }
+
+      if (final) {
+        finalTranscriptRef.current += final;
+        setTranscript(finalTranscriptRef.current);
+      }
+      setInterimTranscript(interim);
+    };
+
+    recognition.onerror = (event: SpeechRecognitionErrorEvent) => {
+      console.error("Speech recognition error:", event.error);
+      // Restart on error if still recording
+      if (isRecordingRef.current && recognitionRef.current) {
+        setTimeout(() => {
+          try {
+            recognitionRef.current?.start();
+          } catch {
+            // Ignore if already started
+          }
+        }, 100);
+      }
+    };
+
+    recognition.onend = () => {
+      // Restart if still recording
+      if (isRecordingRef.current && recognitionRef.current) {
+        try {
+          recognitionRef.current.start();
+        } catch {
+          // Ignore if already started
+        }
+      }
+    };
+
+    return recognition;
+  };
+
   const startRecording = async () => {
     try {
-      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      setError(null);
+      setTranscript("");
+      setInterimTranscript("");
+      finalTranscriptRef.current = "";
 
-      // Setup MediaRecorder for audio recording
-      const mediaRecorder = new MediaRecorder(stream);
-      mediaRecorderRef.current = mediaRecorder;
+      // Request microphone access
+      const stream = await navigator.mediaDevices.getUserMedia({
+        audio: {
+          echoCancellation: true,
+          noiseSuppression: true,
+          autoGainControl: true,
+        },
+      });
+
+      streamRef.current = stream;
+
+      // Setup MediaRecorder for audio capture (for Whisper later)
+      const mimeType = MediaRecorder.isTypeSupported("audio/webm;codecs=opus")
+        ? "audio/webm;codecs=opus"
+        : "audio/webm";
+
+      const mediaRecorder = new MediaRecorder(stream, {
+        mimeType,
+        audioBitsPerSecond: 128000,
+      });
+
       audioChunksRef.current = [];
 
       mediaRecorder.ondataavailable = (event) => {
@@ -125,123 +224,126 @@ export default function RecordLecture({ user }: RecordLectureProps) {
         }
       };
 
-      mediaRecorder.start();
+      mediaRecorderRef.current = mediaRecorder;
+      mediaRecorder.start(1000); // Get chunks every second
 
-      // Setup Web Speech API for real-time transcription
-      const windowWithSpeech = window as WindowWithSpeechRecognition;
-      const SpeechRecognitionAPI =
-        windowWithSpeech.SpeechRecognition ||
-        windowWithSpeech.webkitSpeechRecognition;
-
-      if (SpeechRecognitionAPI) {
-        const recognition = new SpeechRecognitionAPI();
-        recognition.continuous = true;
-        recognition.interimResults = true;
-        recognition.lang = "sk-SK";
-
-        recognition.onresult = (event: ISpeechRecognitionEvent) => {
-          let interimTranscript = "";
-          let finalText = "";
-
-          for (let i = event.resultIndex; i < event.results.length; i++) {
-            const transcriptPiece = event.results[i][0].transcript;
-            if (event.results[i].isFinal) {
-              finalText += transcriptPiece + " ";
-            } else {
-              interimTranscript += transcriptPiece;
-            }
-          }
-
-          if (finalText) {
-            setFinalTranscript((prev) => prev + finalText);
-          }
-          setTranscript(interimTranscript);
-        };
-
-        recognition.onerror = (event: ISpeechRecognitionErrorEvent) => {
-          console.error("Speech recognition error:", event.error);
-
-          // Don't restart on abort error (user stopped intentionally)
-          if (event.error === "aborted" || event.error === "no-speech") {
-            return;
-          }
-
-          // For other errors, log but continue recording
-          console.warn("Recognition error occurred, but continuing...");
-        };
-
-        recognition.onend = () => {
-          // Auto-restart recognition if still recording
-          // This handles cases where recognition stops due to silence or timeout
-          if (mediaRecorderRef.current?.state === "recording") {
-            try {
-              recognition.start();
-            } catch (error) {
-              console.error("Failed to restart recognition:", error);
-            }
-          }
-        };
-
-        recognition.start();
+      // Setup and start Speech Recognition for real-time display
+      const recognition = setupSpeechRecognition();
+      if (recognition) {
         recognitionRef.current = recognition;
+        recognition.start();
       }
 
+      isRecordingRef.current = true;
       setIsRecording(true);
       setRecordingTime(0);
 
+      // Start timer
       timerIntervalRef.current = setInterval(() => {
         setRecordingTime((prev) => prev + 1);
       }, 1000);
-    } catch (error) {
-      console.error("Error starting recording:", error);
-      alert(t("recordLecture.failedToStart"));
+
+    } catch (err) {
+      console.error("Error starting recording:", err);
+      setError(t("recordLecture.failedToStart"));
     }
   };
 
-  const stopRecording = () => {
-    if (mediaRecorderRef.current && isRecording) {
-      mediaRecorderRef.current.stop();
-      mediaRecorderRef.current.stream
-        .getTracks()
-        .forEach((track) => track.stop());
+  const stopRecording = async () => {
+    isRecordingRef.current = false;
 
-      if (recognitionRef.current) {
-        recognitionRef.current.stop();
+    // Stop speech recognition
+    if (recognitionRef.current) {
+      recognitionRef.current.stop();
+      recognitionRef.current = null;
+    }
+
+    // Stop timer
+    if (timerIntervalRef.current) {
+      clearInterval(timerIntervalRef.current);
+      timerIntervalRef.current = null;
+    }
+
+    setIsRecording(false);
+    setInterimTranscript("");
+
+    // Stop media recorder and get final audio
+    if (mediaRecorderRef.current && mediaRecorderRef.current.state !== "inactive") {
+      setIsProcessing(true);
+      setPendingText("Spracúvam audio s Whisper AI...");
+
+      await new Promise<void>((resolve) => {
+        mediaRecorderRef.current!.onstop = () => resolve();
+        mediaRecorderRef.current!.stop();
+      });
+
+      // Stop stream
+      if (streamRef.current) {
+        streamRef.current.getTracks().forEach((track) => track.stop());
+        streamRef.current = null;
       }
 
-      if (timerIntervalRef.current) {
-        clearInterval(timerIntervalRef.current);
-      }
+      // Transcribe with Whisper for accuracy
+      if (audioChunksRef.current.length > 0) {
+        const audioBlob = new Blob(audioChunksRef.current, { type: "audio/webm" });
 
-      setIsRecording(false);
+        if (audioBlob.size > 1000) {
+          try {
+            const formData = new FormData();
+            const audioFile = new File([audioBlob], "recording.webm", { type: "audio/webm" });
+            formData.append("audio", audioFile);
+            formData.append("language", getWhisperLanguage());
 
-      // Format transcript in background - don't block UI
-      const rawTranscript = finalTranscript + transcript;
-      if (rawTranscript.trim().length > 0) {
-        setIsProcessing(true);
+            const response = await fetch("/api/transcribe-realtime", {
+              method: "POST",
+              body: formData,
+            });
 
-        // Run formatting async without blocking
-        fetch("/api/format-transcript", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ transcript: rawTranscript }),
-        })
-          .then((response) => response.json())
-          .then((data) => {
-            if (data.formattedTranscript) {
-              setFinalTranscript(data.formattedTranscript);
-              setTranscript("");
+            if (response.ok) {
+              const data = await response.json();
+              if (data.text && data.text.trim()) {
+                // Replace with Whisper transcription (more accurate)
+                setTranscript(data.text.trim());
+                finalTranscriptRef.current = data.text.trim();
+              }
             }
-          })
-          .catch((error) => {
-            console.error("Error formatting transcript:", error);
-            // Keep original transcript if formatting fails
-          })
-          .finally(() => {
-            setIsProcessing(false);
+          } catch (err) {
+            console.error("Whisper transcription error:", err);
+            // Keep the Web Speech transcript if Whisper fails
+          }
+        }
+      }
+
+      // Format transcript if we have content
+      const currentTranscript = finalTranscriptRef.current;
+      if (currentTranscript && currentTranscript.trim().length > 0) {
+        setPendingText("Formátujem prepis...");
+
+        try {
+          const response = await fetch("/api/format-transcript", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ transcript: currentTranscript }),
           });
+
+          if (response.ok) {
+            const data = await response.json();
+            if (data.formattedTranscript) {
+              setTranscript(data.formattedTranscript);
+            }
+          }
+        } catch (err) {
+          console.error("Formatting error:", err);
+        }
+      }
+
+      setIsProcessing(false);
+      setPendingText("");
+    } else {
+      // Stop stream if recorder wasn't active
+      if (streamRef.current) {
+        streamRef.current.getTracks().forEach((track) => track.stop());
+        streamRef.current = null;
       }
     }
   };
@@ -249,8 +351,7 @@ export default function RecordLecture({ user }: RecordLectureProps) {
   const downloadAsText = async () => {
     setDownloadingFormat("txt");
     try {
-      const fullText = finalTranscript + transcript;
-      const blob = new Blob([fullText], { type: "text/plain;charset=utf-8" });
+      const blob = new Blob([transcript], { type: "text/plain;charset=utf-8" });
       saveAs(blob, `lecture-transcript-${new Date().getTime()}.txt`);
       await new Promise((resolve) => setTimeout(resolve, 500));
     } finally {
@@ -261,7 +362,6 @@ export default function RecordLecture({ user }: RecordLectureProps) {
   const downloadAsWord = async () => {
     setDownloadingFormat("docx");
     try {
-      const fullText = finalTranscript + transcript;
       const doc = new Document({
         sections: [
           {
@@ -270,7 +370,7 @@ export default function RecordLecture({ user }: RecordLectureProps) {
               new Paragraph({
                 children: [
                   new TextRun({
-                    text: "Lecture Transcript",
+                    text: t("recordLecture.lectureTranscript"),
                     bold: true,
                     size: 32,
                   }),
@@ -288,7 +388,7 @@ export default function RecordLecture({ user }: RecordLectureProps) {
               new Paragraph({
                 children: [
                   new TextRun({
-                    text: fullText,
+                    text: transcript,
                   }),
                 ],
               }),
@@ -308,17 +408,16 @@ export default function RecordLecture({ user }: RecordLectureProps) {
   const downloadAsPDF = async () => {
     setDownloadingFormat("pdf");
     try {
-      const fullText = finalTranscript + transcript;
       const doc = new jsPDF();
 
       doc.setFontSize(16);
-      doc.text("Lecture Transcript", 20, 20);
+      doc.text(t("recordLecture.lectureTranscript"), 20, 20);
 
       doc.setFontSize(10);
       doc.text(new Date().toLocaleString(), 20, 30);
 
       doc.setFontSize(12);
-      const lines = doc.splitTextToSize(fullText, 170);
+      const lines = doc.splitTextToSize(transcript, 170);
       doc.text(lines, 20, 45);
 
       doc.save(`lecture-transcript-${new Date().getTime()}.pdf`);
@@ -331,24 +430,20 @@ export default function RecordLecture({ user }: RecordLectureProps) {
   const saveToDatabase = async () => {
     setDownloadingFormat("save");
     try {
-      const fullText = finalTranscript + transcript;
-
-      // Validate transcript is not empty before saving
-      if (!fullText || fullText.trim().length === 0) {
+      if (!transcript || transcript.trim().length === 0) {
         alert(t("recordLecture.cannotSaveEmpty"));
         return;
       }
 
-      // Get auth token
       const {
         data: { session },
       } = await supabase.auth.getSession();
+
       if (!session) {
         alert("Not authenticated");
         return;
       }
 
-      // Call API endpoint to save with proper usage tracking
       const response = await fetch("/api/lectures", {
         method: "POST",
         headers: {
@@ -357,7 +452,7 @@ export default function RecordLecture({ user }: RecordLectureProps) {
         },
         body: JSON.stringify({
           title: `Lecture ${new Date().toLocaleDateString()}`,
-          transcript: fullText,
+          transcript: transcript,
           duration: recordingTime,
         }),
       });
@@ -367,10 +462,9 @@ export default function RecordLecture({ user }: RecordLectureProps) {
         throw new Error(data.error || "Failed to save lecture");
       }
 
-      alert(t("recordLecture.lectureSaved"));
-      router.push("/dashboard");
-    } catch (error) {
-      console.error("Error saving lecture:", error);
+      setIsSaved(true);
+    } catch (err) {
+      console.error("Error saving lecture:", err);
       alert(t("recordLecture.failedToSave"));
     } finally {
       setDownloadingFormat(null);
@@ -378,59 +472,60 @@ export default function RecordLecture({ user }: RecordLectureProps) {
   };
 
   const reformatTranscript = async () => {
+    if (transcript.trim().length === 0) {
+      alert(t("recordLecture.noTranscriptToFormat"));
+      return;
+    }
+
     setIsProcessing(true);
+    setPendingText("Formátujem prepis...");
+
     try {
-      const currentText = finalTranscript + transcript;
-
-      if (currentText.trim().length === 0) {
-        alert(t("recordLecture.noTranscriptToFormat"));
-        return;
-      }
-
       const response = await fetch("/api/format-transcript", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ transcript: currentText }),
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ transcript }),
       });
 
       if (response.ok) {
         const data = await response.json();
         if (data.formattedTranscript) {
-          setFinalTranscript(data.formattedTranscript);
-          setTranscript("");
+          setTranscript(data.formattedTranscript);
         }
       } else {
         alert(t("recordLecture.failedToFormat"));
       }
-    } catch (error) {
-      console.error("Error reformatting transcript:", error);
+    } catch (err) {
+      console.error("Error reformatting:", err);
       alert(t("recordLecture.failedToFormat"));
     } finally {
       setIsProcessing(false);
+      setPendingText("");
     }
   };
 
   const discardRecording = () => {
     if (confirm(t("recordLecture.discardConfirm"))) {
+      cleanup();
       setRecordingTime(0);
       setTranscript("");
-      setFinalTranscript("");
-      if (isRecording) {
-        stopRecording();
-      }
+      setInterimTranscript("");
+      finalTranscriptRef.current = "";
+      setPendingText("");
+      setIsRecording(false);
+      setIsProcessing(false);
+      setIsSaved(false);
     }
   };
 
-  const fullText = finalTranscript + transcript;
-  const hasTranscript = fullText.trim().length > 0;
+  const hasTranscript = transcript.trim().length > 0;
+  const displayText = transcript + (interimTranscript ? " " + interimTranscript : "");
 
   return (
     <div className="min-h-screen bg-gray-100 dark:bg-linear-to-br dark:from-slate-900 dark:via-slate-800 dark:to-slate-900 overflow-hidden">
       <div className="container-custom py-8">
         {/* Header */}
-        <div className="mb-8 ">
+        <div className="mb-8">
           <button
             onClick={() => router.push("/dashboard")}
             className="mb-4 flex items-center space-x-2 text-gray-600 hover:text-gray-900 dark:text-gray-300 dark:hover:text-gray-400 transition-colors group cursor-pointer"
@@ -455,7 +550,14 @@ export default function RecordLecture({ user }: RecordLectureProps) {
           </div>
         </div>
 
-        {/* Main Content - Split Layout */}
+        {/* Error Message */}
+        {error && (
+          <div className="mb-6 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg p-4">
+            <p className="text-red-700 dark:text-red-300">{error}</p>
+          </div>
+        )}
+
+        {/* Main Content */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-5 mb-6">
           {/* Left Side - Recording Controls */}
           <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-lg border border-gray-100 dark:border-slate-700 p-5 sm:p-6">
@@ -492,7 +594,8 @@ export default function RecordLecture({ user }: RecordLectureProps) {
                 <div className="flex flex-col items-center">
                   <button
                     onClick={startRecording}
-                    className="cursor-pointer group relative w-16 h-16 md:w-20 md:h-20 bg-green-500 hover:bg-green-600 rounded-full shadow-lg hover:shadow-xl transition-all hover:scale-105 flex items-center justify-center mb-3"
+                    disabled={isProcessing}
+                    className="cursor-pointer group relative w-16 h-16 md:w-20 md:h-20 bg-green-500 hover:bg-green-600 disabled:bg-gray-400 rounded-full shadow-lg hover:shadow-xl transition-all hover:scale-105 disabled:hover:scale-100 flex items-center justify-center mb-3"
                   >
                     <Play
                       className="w-7 h-7 md:w-8 md:h-8 text-white relative z-10 ml-0.5"
@@ -522,8 +625,8 @@ export default function RecordLecture({ user }: RecordLectureProps) {
               )}
             </div>
 
-            {/* Action Buttons - Show if there's a transcript */}
-            {hasTranscript && (
+            {/* Action Buttons */}
+            {hasTranscript && !isRecording && (
               <div className="flex justify-center gap-2 mb-4">
                 <button
                   onClick={reformatTranscript}
@@ -543,7 +646,7 @@ export default function RecordLecture({ user }: RecordLectureProps) {
               </div>
             )}
 
-            {/* Recording Status */}
+            {/* Status Messages */}
             {isRecording && (
               <div className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg p-3 flex items-center space-x-3">
                 <div className="relative">
@@ -561,15 +664,17 @@ export default function RecordLecture({ user }: RecordLectureProps) {
             )}
 
             {isProcessing && (
-              <div className="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-3 flex items-center space-x-3">
-                <div className="animate-spin rounded-full h-4 w-4 border-2 border-blue-600 border-t-transparent"></div>
+              <div className="mt-3 bg-purple-50 dark:bg-purple-900/20 border border-purple-200 dark:border-purple-800 rounded-lg p-3 flex items-center space-x-3">
+                <Loader2 className="w-4 h-4 text-purple-600 animate-spin" />
                 <div>
-                  <span className="text-blue-700 dark:text-blue-300 font-medium text-sm block">
+                  <span className="text-purple-700 dark:text-purple-300 font-medium text-sm block">
                     {t("recordLecture.processing")}
                   </span>
-                  <span className="text-blue-600 dark:text-blue-400 text-xs">
-                    {t("recordLecture.addingPunctuation")}
-                  </span>
+                  {pendingText && (
+                    <span className="text-purple-600 dark:text-purple-400 text-xs">
+                      {pendingText}
+                    </span>
+                  )}
                 </div>
               </div>
             )}
@@ -582,23 +687,24 @@ export default function RecordLecture({ user }: RecordLectureProps) {
                 <div className="w-1 h-6 bg-blue-500 rounded-full mr-3"></div>
                 {t("recordLecture.liveTranscription")}
               </h2>
-              {hasTranscript && (
+              {(hasTranscript || interimTranscript) && (
                 <div className="bg-green-50 dark:bg-green-900/20 px-2.5 py-1 rounded-full">
                   <span className="text-green-600 dark:text-green-400 text-xs font-medium">
-                    {finalTranscript.split(" ").length}{" "}
-                    {t("recordLecture.words")}
+                    {displayText.split(/\s+/).filter(Boolean).length} {t("recordLecture.words")}
                   </span>
                 </div>
               )}
             </div>
 
             <div className="bg-gray-50 dark:bg-slate-700/50 rounded-xl p-4 min-h-[400px] max-h-[400px] overflow-y-auto border border-gray-200 dark:border-slate-600">
-              {hasTranscript ? (
+              {displayText.trim() ? (
                 <p className="text-gray-800 dark:text-gray-200 text-sm leading-relaxed whitespace-pre-wrap">
-                  {finalTranscript}
-                  <span className="text-blue-600 dark:text-blue-400 italic">
-                    {transcript}
-                  </span>
+                  {transcript}
+                  {interimTranscript && (
+                    <span className="text-gray-400 dark:text-gray-500 italic">
+                      {" "}{interimTranscript}
+                    </span>
+                  )}
                 </p>
               ) : (
                 <div className="flex items-center justify-center h-full min-h-[250px]">
@@ -669,20 +775,32 @@ export default function RecordLecture({ user }: RecordLectureProps) {
                 <span className="font-medium text-sm">PDF</span>
               </button>
 
-              <button
-                onClick={saveToDatabase}
-                disabled={downloadingFormat !== null}
-                className="flex items-center justify-center space-x-2 bg-green-600 hover:bg-green-700 text-white px-4 py-3 rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-              >
-                {downloadingFormat === "save" ? (
-                  <LoadingSpinner size="sm" />
-                ) : (
-                  <FileText className="w-4 h-4" />
-                )}
-                <span className="font-medium text-sm">
-                  {t("recordLecture.saveToLibrary")}
-                </span>
-              </button>
+              {!isSaved ? (
+                <button
+                  onClick={saveToDatabase}
+                  disabled={downloadingFormat !== null}
+                  className="flex items-center justify-center space-x-2 bg-green-600 hover:bg-green-700 text-white px-4 py-3 rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  {downloadingFormat === "save" ? (
+                    <LoadingSpinner size="sm" />
+                  ) : (
+                    <FileText className="w-4 h-4" />
+                  )}
+                  <span className="font-medium text-sm">
+                    {t("recordLecture.saveToLibrary")}
+                  </span>
+                </button>
+              ) : (
+                <button
+                  disabled
+                  className="flex items-center justify-center space-x-2 bg-green-100 dark:bg-green-900/30 text-green-600 dark:text-green-400 px-4 py-3 rounded-lg cursor-default"
+                >
+                  <Check className="w-4 h-4" />
+                  <span className="font-medium text-sm">
+                    {t("recordLecture.lectureSaved")}
+                  </span>
+                </button>
+              )}
             </div>
           </div>
         )}

@@ -180,6 +180,9 @@
     "document": "Dokument",
     "saveToLibrary": "Zur Bibliothek",
     "lectureSaved": "Vorlesung erfolgreich gespeichert!",
+    "successModalTitle": "Erfolg!",
+    "successModalMessage": "Ihre Vorlesung wurde in der Bibliothek gespeichert.",
+    "successModalButton": "Zum Dashboard",
     "failedToSave": "Fehler beim Speichern der Vorlesung.",
     "failedToStart": "Fehler beim Starten der Aufnahme. Bitte überprüfen Sie die Mikrofonberechtigungen.",
     "cannotSaveEmpty": "Leeres Transkript kann nicht gespeichert werden",
@@ -588,5 +591,16 @@
       "failedToInitiatePayment": "Zahlung konnte nicht initiiert werden",
       "failedToCreateCheckout": "Checkout-Sitzung konnte nicht erstellt werden"
     }
+  },
+  "contact": {
+    "title": "Kontaktieren Sie uns",
+    "subtitle": "Haben Sie Fragen oder technische Probleme? Wir sind hier, um zu helfen.",
+    "emailTitle": "E-Mail",
+    "emailDescription": "Schreiben Sie uns und wir antworten so schnell wie möglich.",
+    "supportTitle": "Technischer Support",
+    "supportDescription": "Bei technischen Problemen oder Fragen zur Anwendung zögern Sie nicht, uns zu kontaktieren. Wir helfen Ihnen gerne bei der Lösung jedes Problems.",
+    "responseTitle": "Antwortzeit",
+    "responseDescription": "Wir antworten auf die meisten Nachrichten innerhalb von 24 Stunden an Werktagen.",
+    "sendEmail": "E-Mail senden"
   }
 }

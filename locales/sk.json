@@ -180,6 +180,9 @@
     "document": "Dokument",
     "saveToLibrary": "Do knižnice",
     "lectureSaved": "Prednáška úspešne uložená!",
+    "successModalTitle": "Úspech!",
+    "successModalMessage": "Vaša prednáška bola uložená do knižnice.",
+    "successModalButton": "Prejsť na Dashboard",
     "failedToSave": "Nepodarilo sa uložiť prednášku.",
     "failedToStart": "Nepodarilo sa spustiť nahrávanie. Skontrolujte oprávnenia mikrofónu.",
     "cannotSaveEmpty": "Nemožno uložiť prázdny prepis",
@@ -588,5 +591,16 @@
       "failedToInitiatePayment": "Nepodarilo sa inicializovať platbu",
       "failedToCreateCheckout": "Nepodarilo sa vytvoriť platobné sedenie"
     }
+  },
+  "contact": {
+    "title": "Kontaktujte nás",
+    "subtitle": "Máte otázky alebo technické problémy? Sme tu, aby sme vám pomohli.",
+    "emailTitle": "Email",
+    "emailDescription": "Napíšte nám a odpovieme vám čo najskôr.",
+    "supportTitle": "Technická podpora",
+    "supportDescription": "V prípade technických problémov alebo otázok ohľadom aplikácie nás neváhajte kontaktovať. Radi vám pomôžeme vyriešiť akýkoľvek problém.",
+    "responseTitle": "Doba odpovede",
+    "responseDescription": "Na väčšinu správ odpovedáme do 24 hodín v pracovných dňoch.",
+    "sendEmail": "Napísať email"
   }
 }

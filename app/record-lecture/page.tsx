@@ -3,12 +3,11 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { getCurrentUser } from "@/lib/auth";
-import type { User } from "@supabase/supabase-js";
 import RecordLecture from "@/components/RecordLecture";
 
 export default function RecordLecturePage() {
   const router = useRouter();
-  const [user, setUser] = useState<User | null | undefined>(undefined);
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null);
 
   useEffect(() => {
     const checkAuth = async () => {
@@ -17,14 +16,12 @@ export default function RecordLecturePage() {
         router.push("/login");
         return;
       }
-      setUser(user);
+      setIsAuthenticated(true);
     };
     checkAuth();
   }, [router]);
 
-  const loading = user === undefined;
-
-  if (loading) {
+  if (isAuthenticated === null) {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
@@ -32,9 +29,9 @@ export default function RecordLecturePage() {
     );
   }
 
-  if (!user) {
+  if (!isAuthenticated) {
     return null;
   }
 
-  return <RecordLecture user={user} />;
+  return <RecordLecture />;
 }

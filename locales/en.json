@@ -180,6 +180,9 @@
     "document": "Document",
     "saveToLibrary": "To Library",
     "lectureSaved": "Lecture saved successfully!",
+    "successModalTitle": "Success!",
+    "successModalMessage": "Your lecture has been saved to the library.",
+    "successModalButton": "Go to Dashboard",
     "failedToSave": "Failed to save lecture.",
     "failedToStart": "Failed to start recording. Please check microphone permissions.",
     "cannotSaveEmpty": "Cannot save empty transcript",
@@ -588,5 +591,16 @@
       "failedToInitiatePayment": "Failed to initiate payment",
       "failedToCreateCheckout": "Failed to create checkout session"
     }
+  },
+  "contact": {
+    "title": "Contact Us",
+    "subtitle": "Have questions or technical issues? We're here to help.",
+    "emailTitle": "Email",
+    "emailDescription": "Write to us and we'll respond as soon as possible.",
+    "supportTitle": "Technical Support",
+    "supportDescription": "If you have technical issues or questions about the application, don't hesitate to contact us. We'll be happy to help you resolve any problem.",
+    "responseTitle": "Response Time",
+    "responseDescription": "We respond to most messages within 24 hours on business days.",
+    "sendEmail": "Send Email"
   }
 }

@@ -25,7 +25,7 @@ export default function FileUpload({
   onUpload,
   onUrlUpload,
   onTextUpload,
-  acceptedFileTypes = [".pdf", ".docx", ".doc", ".txt"],
+  acceptedFileTypes = [".pdf", ".docx", ".txt"],
   maxSizeMB = 10,
 }: FileUploadProps) {
   const [mode, setMode] = useState<UploadMode>("file");

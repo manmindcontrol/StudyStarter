@@ -26,7 +26,10 @@
       "Bash(git commit:*)",
       "Bash(timeout /t 12 /nobreak)",
       "Bash(curl:*)",
-      "Bash(npm test)"
+      "Bash(npm test)",
+      "Bash(npm ls:*)",
+      "Bash(npm view:*)",
+      "Bash(npm audit:*)"
     ],
     "deny": [],
     "ask": []

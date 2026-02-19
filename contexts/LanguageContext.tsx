@@ -47,6 +47,17 @@ export function LanguageProvider({
         const stored = localStorage.getItem('preferredLanguage') as Locale;
         if (stored && (stored === 'en' || stored === 'sk' || stored === 'de')) {
           setLocaleState(stored);
+        } else {
+          // First visit - detect browser language
+          const browserLang = navigator.language?.toLowerCase() || '';
+          let detected: Locale = 'en';
+          if (browserLang.startsWith('sk')) {
+            detected = 'sk';
+          } else if (browserLang.startsWith('de')) {
+            detected = 'de';
+          }
+          setLocaleState(detected);
+          localStorage.setItem('preferredLanguage', detected);
         }
       }
     };

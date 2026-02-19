@@ -154,6 +154,33 @@
     "uploadBenefit2": "Background processing",
     "uploadBenefit3": "Accurate AI transcription"
   },
+  "uploadRecordedLecture": {
+    "back": "Back",
+    "title": "Upload Recorded Lecture",
+    "subtitle": "Upload an audio file and let AI transcribe the content",
+    "dragHere": "Drag and drop your audio file here",
+    "or": "or",
+    "selectFile": "Select File",
+    "supportedFormats": "Supported formats: MP3, WAV, M4A (max. 25MB)",
+    "selectDifferentFile": "Select a different file",
+    "error": "Error",
+    "invalidFileType": "Please upload an audio file in MP3, WAV, or M4A format.",
+    "uploading": "Uploading...",
+    "processingAudio": "Processing audio...",
+    "aiTranscribing": "AI is transcribing your audio file...",
+    "uploadAndProcess": "Upload and Process",
+    "successTitle": "Successfully uploaded!",
+    "successMessage": "Your lecture has been transcribed and saved to the library",
+    "redirecting": "Redirecting to dashboard...",
+    "howItWorks": "How does it work?",
+    "step1": "Upload your audio file (MP3, WAV, or M4A)",
+    "step2": "AI will automatically transcribe the lecture content",
+    "step3": "The transcript will be saved to your library for further processing",
+    "fileTooLarge": "File is too large. Maximum size is 25MB.",
+    "notAuthenticated": "Not authenticated. Please log in.",
+    "processingFailed": "Processing failed. Please try again.",
+    "uploadError": "An error occurred during upload."
+  },
   "recordLecture": {
     "backToDashboard": "Back to Dashboard",
     "title": "Record Lecture",
@@ -189,7 +216,9 @@
     "noTranscriptToFormat": "No transcript to format",
     "failedToFormat": "Failed to format transcript",
     "discardConfirm": "Are you sure you want to discard this recording? This action cannot be undone.",
-    "lectureTranscript": "Lecture Transcript"
+    "lectureTranscript": "Lecture Transcript",
+    "processingWhisper": "Processing audio with Whisper AI...",
+    "formatting": "Formatting transcript..."
   },
   "login": {
     "title": "Welcome back!",

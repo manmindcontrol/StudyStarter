@@ -6,7 +6,7 @@ export default function StructuredData() {
     description:
       "AI aplikácia pre študentov - prepis prednášok, generovanie testových otázok a študijných materiálov. Naučte sa efektívne s umelou inteligenciou.",
     url: "https://studystarter.io",
-    logo: "https://studystarter.io/logo.png",
+    logo: "https://studystarter.io/logo.webp",
     sameAs: [
       "https://twitter.com/studystarter",
       "https://instagram.com/studystarter",

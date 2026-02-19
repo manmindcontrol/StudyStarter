@@ -270,7 +270,7 @@ export default function RecordLecture() {
     // Stop media recorder and get final audio
     if (mediaRecorderRef.current && mediaRecorderRef.current.state !== "inactive") {
       setIsProcessing(true);
-      setPendingText("Spracúvam audio s Whisper AI...");
+      setPendingText(t("recordLecture.processingWhisper"));
 
       await new Promise<void>((resolve) => {
         mediaRecorderRef.current!.onstop = () => resolve();
@@ -282,6 +282,9 @@ export default function RecordLecture() {
         streamRef.current.getTracks().forEach((track) => track.stop());
         streamRef.current = null;
       }
+
+      // Get auth token for API calls
+      const { data: { session } } = await supabase.auth.getSession();
 
       // Transcribe with Whisper for accuracy
       if (audioChunksRef.current.length > 0) {
@@ -296,6 +299,9 @@ export default function RecordLecture() {
 
             const response = await fetch("/api/transcribe-realtime", {
               method: "POST",
+              headers: {
+                Authorization: `Bearer ${session?.access_token}`,
+              },
               body: formData,
             });
 
@@ -317,12 +323,15 @@ export default function RecordLecture() {
       // Format transcript if we have content
       const currentTranscript = finalTranscriptRef.current;
       if (currentTranscript && currentTranscript.trim().length > 0) {
-        setPendingText("Formátujem prepis...");
+        setPendingText(t("recordLecture.formatting"));
 
         try {
           const response = await fetch("/api/format-transcript", {
             method: "POST",
-            headers: { "Content-Type": "application/json" },
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${session?.access_token}`,
+            },
             body: JSON.stringify({ transcript: currentTranscript }),
           });
 
@@ -478,12 +487,17 @@ export default function RecordLecture() {
     }
 
     setIsProcessing(true);
-    setPendingText("Formátujem prepis...");
+    setPendingText(t("recordLecture.formatting"));
 
     try {
+      const { data: { session } } = await supabase.auth.getSession();
+
       const response = await fetch("/api/format-transcript", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${session?.access_token}`,
+        },
         body: JSON.stringify({ transcript }),
       });
 

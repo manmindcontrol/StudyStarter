@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import OpenAI from "openai";
+import { createServiceRoleClient } from "@/lib/utils";
 import fs from "fs";
 import path from "path";
 import os from "os";
@@ -10,6 +11,8 @@ export const maxDuration = 60;
 const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY!,
 });
+
+const supabase = createServiceRoleClient();
 
 // Get file extension from MIME type
 function getExtensionFromMime(mimeType: string): string {
@@ -24,6 +27,17 @@ export async function POST(request: NextRequest) {
   let tempFilePath: string | null = null;
 
   try {
+    // Auth check
+    const authHeader = request.headers.get("authorization");
+    if (!authHeader) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
+    const token = authHeader.replace("Bearer ", "");
+    const { data: { user }, error: authError } = await supabase.auth.getUser(token);
+    if (authError || !user) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
+
     const formData = await request.formData();
     const audioBlob = formData.get("audio") as Blob | null;
     const language = (formData.get("language") as string) || "sk";

@@ -89,8 +89,8 @@ export default function SlidingChatPanel({
               <div className="flex items-center gap-3 min-w-0">
                 <div className="relative w-10 h-10 sm:w-12 sm:h-12 shrink-0">
                   <Image
-                    src="/chat.png"
-                    alt="AI Assistant"
+                    src="/chat.webp"
+                    alt="StudyStarter AI študijný asistent"
                     fill
                     className="object-contain"
                   />
@@ -122,8 +122,8 @@ export default function SlidingChatPanel({
                 <div className="text-center max-w-md px-4">
                   <div className="relative w-16 h-16 sm:w-20 sm:h-20 mx-auto mb-4 flex items-center justify-center">
                     <Image
-                      src="/chat.png"
-                      alt="AI Assistant"
+                      src="/chat.webp"
+                      alt="StudyStarter AI študijný asistent"
                       width={80}
                       height={80}
                       className="opacity-60 object-contain"

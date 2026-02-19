@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { Inter } from "next/font/google";
+import { Inter, Sora } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/components/universal/Navbar";
 import Footer from "@/components/universal/Footer";
@@ -12,6 +12,13 @@ import { GoogleAnalytics } from "@next/third-parties/google";
 const inter = Inter({
   subsets: ["latin"],
   display: "swap",
+});
+
+export const sora = Sora({
+  subsets: ["latin"],
+  display: "swap",
+  weight: ["400", "500", "600", "700", "800"],
+  variable: "--font-sora",
 });
 
 export const metadata: Metadata = {
@@ -49,6 +56,14 @@ export const metadata: Metadata = {
     "AI learning",
     "study smarter",
     "educational AI",
+    // Nemecké kľúčové slová
+    "effektiv lernen",
+    "KI Lernhilfe",
+    "Vorlesungstranskription",
+    "Testfragen Generator",
+    "Studienmaterialien",
+    "Prüfungsvorbereitung",
+    "KI für Studenten",
   ],
   authors: [{ name: "StudyStarter Team" }],
   creator: "StudyStarter",
@@ -77,7 +92,7 @@ export const metadata: Metadata = {
     siteName: "StudyStarter",
     images: [
       {
-        url: "/og-image.png",
+        url: "/og-image.webp",
         width: 1200,
         height: 630,
         alt: "StudyStarter - AI pomôcka pre efektívne učenie",
@@ -89,7 +104,7 @@ export const metadata: Metadata = {
     title: "StudyStarter - Ako sa efektívne učiť",
     description:
       "Bezplatná AI aplikácia pre študentov. Prepis prednášok, generovanie testov a študijných materiálov.",
-    images: ["/og-image.png"],
+    images: ["/og-image.webp"],
     creator: "@studystarter",
   },
   manifest: "/manifest.json",
@@ -100,8 +115,8 @@ export const metadata: Metadata = {
     canonical: "https://studystarter.io",
     languages: {
       "sk-SK": "https://studystarter.io",
-      "en-US": "https://studystarter.io/en",
-      "de-DE": "https://studystarter.io/de",
+      "en-US": "https://studystarter.io",
+      "de-DE": "https://studystarter.io",
     },
   },
   category: "education",
@@ -146,7 +161,7 @@ export default function RootLayout({
         />
       </head>
       <body
-        className={`${inter.className} relative flex flex-col min-h-screen antialiased bg-linear-to-r from-slate-900 to-slate-700 overflow-x-hidden`}
+        className={`${inter.className} ${sora.variable} relative flex flex-col min-h-screen antialiased bg-linear-to-r from-slate-900 to-slate-700 overflow-x-hidden`}
         suppressHydrationWarning
       >
         {/* Grid background */}

@@ -59,6 +59,7 @@ export async function POST(request: NextRequest) {
     const formData = await request.formData();
     const file = formData.get("file") as File | null;
     const fileName = formData.get("fileName") as string | null;
+    const language = (formData.get("language") as string) || "sk";
 
     if (!file) {
       return NextResponse.json(
@@ -125,7 +126,7 @@ export async function POST(request: NextRequest) {
       const transcription = await openai.audio.transcriptions.create({
         file: file,
         model: "whisper-1",
-        language: "sk", // Slovak - can be made dynamic via request param
+        language: language,
         response_format: "verbose_json", // Get detailed info including duration
       });
 

@@ -79,9 +79,22 @@ export async function POST(request: NextRequest) {
     const sanitizedFileName = sanitizeFilename(file.name);
 
     // Extract text from various formats
-    if (fileType === "docx" || fileType === "doc") {
-      const result = await mammoth.extractRawText({ buffer });
-      extractedText = result.value;
+    if (fileType === "docx") {
+      try {
+        const result = await mammoth.extractRawText({ buffer });
+        extractedText = result.value;
+      } catch (docxError) {
+        console.error("DOCX parsing error:", docxError);
+        return NextResponse.json(
+          { error: "Failed to extract text from DOCX. The file might be corrupted." },
+          { status: 400 }
+        );
+      }
+    } else if (fileType === "doc") {
+      return NextResponse.json(
+        { error: "Old .doc format is not supported. Please convert your file to .docx, .pdf, or .txt and try again." },
+        { status: 400 }
+      );
     } else if (fileType === "txt") {
       extractedText = buffer.toString("utf-8");
     } else if (fileType === "pdf") {
@@ -89,16 +102,6 @@ export async function POST(request: NextRequest) {
       try {
         const pdfData = await pdfParse(buffer);
         extractedText = pdfData.text;
-
-        // Validate that we extracted meaningful content
-        if (!extractedText || extractedText.trim().length < 10) {
-          return NextResponse.json(
-            {
-              error: "PDF extraction failed - no text content found. The PDF might be scanned images or encrypted. Try converting it to text first or using a different format.",
-            },
-            { status: 400 }
-          );
-        }
       } catch (pdfError) {
         console.error("PDF parsing error:", pdfError);
         const errorMessage = pdfError instanceof Error ? pdfError.message : "Unknown error";
@@ -113,6 +116,16 @@ export async function POST(request: NextRequest) {
     } else {
       return NextResponse.json(
         { error: "Unsupported file type" },
+        { status: 400 }
+      );
+    }
+
+    // Validate that we extracted meaningful content
+    if (!extractedText || extractedText.trim().length < 10) {
+      return NextResponse.json(
+        {
+          error: "No text content found in the file. The file might be empty, scanned images, or encrypted. Try a different format.",
+        },
         { status: 400 }
       );
     }

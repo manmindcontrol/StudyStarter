@@ -154,6 +154,33 @@
     "uploadBenefit2": "Hintergrundverarbeitung",
     "uploadBenefit3": "Präzise AI-Transkription"
   },
+  "uploadRecordedLecture": {
+    "back": "Zurück",
+    "title": "Aufgenommene Vorlesung hochladen",
+    "subtitle": "Laden Sie eine Audiodatei hoch und lassen Sie AI den Inhalt transkribieren",
+    "dragHere": "Audiodatei hierher ziehen",
+    "or": "oder",
+    "selectFile": "Datei auswählen",
+    "supportedFormats": "Unterstützte Formate: MP3, WAV, M4A (max. 25MB)",
+    "selectDifferentFile": "Andere Datei auswählen",
+    "error": "Fehler",
+    "invalidFileType": "Bitte laden Sie eine Audiodatei im MP3-, WAV- oder M4A-Format hoch.",
+    "uploading": "Hochladen...",
+    "processingAudio": "Audio wird verarbeitet...",
+    "aiTranscribing": "AI transkribiert Ihre Audiodatei...",
+    "uploadAndProcess": "Hochladen und verarbeiten",
+    "successTitle": "Erfolgreich hochgeladen!",
+    "successMessage": "Ihre Vorlesung wurde transkribiert und in der Bibliothek gespeichert",
+    "redirecting": "Weiterleitung zum Dashboard...",
+    "howItWorks": "Wie funktioniert es?",
+    "step1": "Laden Sie Ihre Audiodatei hoch (MP3, WAV oder M4A)",
+    "step2": "AI transkribiert den Vorlesungsinhalt automatisch",
+    "step3": "Das Transkript wird in Ihrer Bibliothek zur weiteren Verarbeitung gespeichert",
+    "fileTooLarge": "Datei ist zu groß. Maximale Größe ist 25MB.",
+    "notAuthenticated": "Nicht authentifiziert. Bitte melden Sie sich an.",
+    "processingFailed": "Verarbeitung fehlgeschlagen. Bitte versuchen Sie es erneut.",
+    "uploadError": "Beim Hochladen ist ein Fehler aufgetreten."
+  },
   "recordLecture": {
     "backToDashboard": "Zurück zum Dashboard",
     "title": "Vorlesung aufnehmen",
@@ -189,7 +216,9 @@
     "noTranscriptToFormat": "Kein Transkript zum Formatieren",
     "failedToFormat": "Fehler beim Formatieren des Transkripts",
     "discardConfirm": "Möchten Sie diese Aufnahme wirklich verwerfen? Diese Aktion kann nicht rückgängig gemacht werden.",
-    "lectureTranscript": "Vorlesungstranskript"
+    "lectureTranscript": "Vorlesungstranskript",
+    "processingWhisper": "Audio wird mit Whisper AI verarbeitet...",
+    "formatting": "Transkript wird formatiert..."
   },
   "login": {
     "title": "Willkommen zurück!",

@@ -9,11 +9,11 @@ export default function ContactPage() {
 
   return (
     <div className="relative min-h-screen bg-linear-to-br from-slate-900 via-blue-900 to-slate-900">
-      {/* Full-screen background image */}
-      <div className="absolute inset-0">
+      {/* Full-screen background image - hidden on small screens */}
+      <div className="absolute inset-0 hidden md:block">
         <Image
-          src="/contact.png"
-          alt="Contact StudyStarter"
+          src="/contact.webp"
+          alt="Kontaktujte StudyStarter - zákaznícka podpora pre študentov"
           fill
           className="object-cover object-[center_10%]"
           priority
@@ -23,9 +23,9 @@ export default function ContactPage() {
       </div>
 
       {/* Content */}
-      <div className="relative z-10 min-h-screen flex items-center">
+      <div className="relative z-10 min-h-screen flex items-center justify-center md:justify-start">
         <div className="container mx-auto px-4 py-16">
-          <div className="max-w-xl">
+          <div className="max-w-xl mx-auto md:mx-0 text-center md:text-left">
             {/* Header */}
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-4 text-white">
               {t("contact.title")}

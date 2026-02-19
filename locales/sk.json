@@ -154,6 +154,33 @@
     "uploadBenefit2": "Spracovanie v pozadí",
     "uploadBenefit3": "Presný AI prepis"
   },
+  "uploadRecordedLecture": {
+    "back": "Späť",
+    "title": "Nahrať nahratú prednášku",
+    "subtitle": "Nahrajte audio súbor a nechajte AI prepísať obsah",
+    "dragHere": "Pretiahnite audio súbor sem",
+    "or": "alebo",
+    "selectFile": "Vybrať súbor",
+    "supportedFormats": "Podporované formáty: MP3, WAV, M4A (max. 25MB)",
+    "selectDifferentFile": "Vybrať iný súbor",
+    "error": "Chyba",
+    "invalidFileType": "Prosím, nahrajte audio súbor vo formáte MP3, WAV alebo M4A.",
+    "uploading": "Nahrávam...",
+    "processingAudio": "Spracúvam audio...",
+    "aiTranscribing": "AI prepisuje váš audio súbor...",
+    "uploadAndProcess": "Nahrať a spracovať",
+    "successTitle": "Úspešne nahraté!",
+    "successMessage": "Vaša prednáška bola prepísaná a uložená do knižnice",
+    "redirecting": "Presmerovávam na dashboard...",
+    "howItWorks": "Ako to funguje?",
+    "step1": "Nahrajte váš audio súbor (MP3, WAV alebo M4A)",
+    "step2": "AI automaticky prepíše obsah prednášky",
+    "step3": "Prepis sa uloží do vašej knižnice na ďalšie spracovanie",
+    "fileTooLarge": "Súbor je príliš veľký. Maximálna veľkosť je 25MB.",
+    "notAuthenticated": "Nie ste prihlásený. Prihláste sa prosím.",
+    "processingFailed": "Spracovanie zlyhalo. Skúste to prosím znovu.",
+    "uploadError": "Počas nahrávania sa vyskytla chyba."
+  },
   "recordLecture": {
     "backToDashboard": "Späť na Dashboard",
     "title": "Nahrať prednášku",
@@ -189,7 +216,9 @@
     "noTranscriptToFormat": "Žiadny prepis na formátovanie",
     "failedToFormat": "Nepodarilo sa naformátovať prepis",
     "discardConfirm": "Naozaj chcete zrušiť túto nahrávku? Túto akciu nie je možné vrátiť späť.",
-    "lectureTranscript": "Prepis prednášky"
+    "lectureTranscript": "Prepis prednášky",
+    "processingWhisper": "Spracúvam audio s Whisper AI...",
+    "formatting": "Formátujem prepis..."
   },
   "login": {
     "title": "Vitajte späť!",

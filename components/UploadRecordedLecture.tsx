@@ -13,7 +13,7 @@ type UploadRecordedLectureProps = {
 
 export default function UploadRecordedLecture({ user }: UploadRecordedLectureProps) {
   const router = useRouter();
-  const { t } = useTranslation();
+  const { t, locale } = useTranslation();
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [isUploading, setIsUploading] = useState(false);
   const [uploadProgress, setUploadProgress] = useState(0);
@@ -33,13 +33,13 @@ export default function UploadRecordedLecture({ user }: UploadRecordedLecturePro
                           validExtensions.some(ext => file.name.toLowerCase().endsWith(ext));
 
       if (!isValidType) {
-        setError("Prosím, nahrajte audio súbor vo formáte MP3, WAV alebo M4A.");
+        setError(t("uploadRecordedLecture.invalidFileType"));
         return;
       }
 
-      // Validate file size (max 100MB)
-      if (file.size > 100 * 1024 * 1024) {
-        setError("Súbor je príliš veľký. Maximálna veľkosť je 100MB.");
+      // Validate file size (max 25MB - Whisper API limit)
+      if (file.size > 25 * 1024 * 1024) {
+        setError(t("uploadRecordedLecture.fileTooLarge"));
         return;
       }
 
@@ -57,6 +57,13 @@ export default function UploadRecordedLecture({ user }: UploadRecordedLecturePro
     setError(null);
 
     try {
+      // Get session token for authorization
+      const { data: { session } } = await supabase.auth.getSession();
+      if (!session) {
+        throw new Error(t("uploadRecordedLecture.notAuthenticated"));
+        return;
+      }
+
       // Simulate upload progress
       const progressInterval = setInterval(() => {
         setUploadProgress((prev) => {
@@ -68,52 +75,29 @@ export default function UploadRecordedLecture({ user }: UploadRecordedLecturePro
         });
       }, 200);
 
-      // Upload file to storage
-      const fileExt = selectedFile.name.split(".").pop();
-      const fileName = `${user.id}/${Date.now()}.${fileExt}`;
+      // Send file as FormData to the API (handles storage + transcription + DB save)
+      const formData = new FormData();
+      formData.append("file", selectedFile);
+      formData.append("fileName", selectedFile.name);
+      formData.append("language", locale);
 
-      const { error: uploadError } = await supabase.storage
-        .from("lecture-recordings")
-        .upload(fileName, selectedFile);
-
+      setIsUploading(false);
+      setIsProcessing(true);
       clearInterval(progressInterval);
       setUploadProgress(100);
 
-      if (uploadError) throw uploadError;
-
-      // Start processing
-      setIsUploading(false);
-      setIsProcessing(true);
-
-      // Call transcription API
       const response = await fetch("/api/transcribe-audio", {
         method: "POST",
         headers: {
-          "Content-Type": "application/json",
+          Authorization: `Bearer ${session.access_token}`,
         },
-        body: JSON.stringify({
-          fileName,
-          userId: user.id,
-          originalName: selectedFile.name,
-        }),
+        body: formData,
       });
 
       if (!response.ok) {
-        throw new Error("Nepodarilo sa spracovať audio súbor");
+        const data = await response.json();
+        throw new Error(data.error || t("uploadRecordedLecture.processingFailed"));
       }
-
-      const data = await response.json();
-
-      // Save to database
-      const { error: dbError } = await supabase.from("lectures").insert({
-        user_id: user.id,
-        title: `Lecture ${new Date().toLocaleDateString()}`,
-        transcript: data.transcript,
-        duration: data.duration || 0,
-        audio_file_path: fileName,
-      });
-
-      if (dbError) throw dbError;
 
       setIsProcessing(false);
       setSuccess(true);
@@ -124,7 +108,7 @@ export default function UploadRecordedLecture({ user }: UploadRecordedLecturePro
       }, 2000);
     } catch (err) {
       console.error("Error uploading lecture:", err);
-      setError(err instanceof Error ? err.message : "Nastala chyba pri nahrávaní");
+      setError(err instanceof Error ? err.message : t("uploadRecordedLecture.uploadError"));
       setIsUploading(false);
       setIsProcessing(false);
     }
@@ -164,7 +148,7 @@ export default function UploadRecordedLecture({ user }: UploadRecordedLecturePro
             className="mb-4 flex items-center space-x-2 text-gray-600 hover:text-gray-900 dark:text-gray-300 dark:hover:text-gray-400 transition-colors group cursor-pointer"
           >
             <ArrowLeft className="w-5 h-5 group-hover:-translate-x-1 transition-transform" />
-            <span className="font-medium">Späť</span>
+            <span className="font-medium">{t("uploadRecordedLecture.back")}</span>
           </button>
 
           <div className="flex items-center space-x-2 md:space-x-5 bg-linear-to-br from-blue-600 to-blue-400 p-6 rounded-2xl shadow-md">
@@ -173,10 +157,10 @@ export default function UploadRecordedLecture({ user }: UploadRecordedLecturePro
             </div>
             <div>
               <h1 className="text-lg md:text-3xl font-bold text-white mb-1">
-                Nahrať nahratú prednášku
+                {t("uploadRecordedLecture.title")}
               </h1>
               <p className="text-gray-100 text-l md:text-lg">
-                Nahrajte audio súbor a nechajte AI prepísať obsah
+                {t("uploadRecordedLecture.subtitle")}
               </p>
             </div>
           </div>
@@ -211,19 +195,19 @@ export default function UploadRecordedLecture({ user }: UploadRecordedLecturePro
                         <FileAudio className="w-16 h-16 text-blue-600 dark:text-blue-400" />
                       </div>
                       <h3 className="text-xl font-bold text-slate-800 dark:text-white mb-3">
-                        Pretiahnite audio súbor sem
+                        {t("uploadRecordedLecture.dragHere")}
                       </h3>
                       <p className="text-gray-600 dark:text-gray-300 mb-6">
-                        alebo
+                        {t("uploadRecordedLecture.or")}
                       </p>
                       <button
                         onClick={() => fileInputRef.current?.click()}
                         className="bg-linear-to-r from-blue-600 to-cyan-500 hover:from-blue-700 hover:to-cyan-600 text-white font-semibold py-3 px-8 rounded-xl transition-all shadow-lg hover:shadow-xl hover:scale-105 cursor-pointer"
                       >
-                        Vybrať súbor
+                        {t("uploadRecordedLecture.selectFile")}
                       </button>
                       <p className="text-sm text-gray-500 dark:text-gray-400 mt-6">
-                        Podporované formáty: MP3, WAV, M4A (max. 100MB)
+                        {t("uploadRecordedLecture.supportedFormats")}
                       </p>
                     </div>
                   ) : (
@@ -241,7 +225,7 @@ export default function UploadRecordedLecture({ user }: UploadRecordedLecturePro
                         onClick={() => fileInputRef.current?.click()}
                         className="text-blue-600 dark:text-blue-400 hover:underline cursor-pointer"
                       >
-                        Vybrať iný súbor
+                        {t("uploadRecordedLecture.selectDifferentFile")}
                       </button>
                     </div>
                   )}
@@ -253,7 +237,7 @@ export default function UploadRecordedLecture({ user }: UploadRecordedLecturePro
                     <XCircle className="w-6 h-6 text-red-600 dark:text-red-400 shrink-0 mt-0.5" />
                     <div>
                       <h4 className="font-bold text-red-800 dark:text-red-400 mb-1">
-                        Chyba
+                        {t("uploadRecordedLecture.error")}
                       </h4>
                       <p className="text-red-700 dark:text-red-300">{error}</p>
                     </div>
@@ -266,7 +250,7 @@ export default function UploadRecordedLecture({ user }: UploadRecordedLecturePro
                     <div className="mb-4">
                       <div className="flex justify-between mb-2">
                         <span className="text-blue-800 dark:text-blue-400 font-semibold">
-                          {isUploading ? "Nahrávam..." : "Spracúvam audio..."}
+                          {isUploading ? t("uploadRecordedLecture.uploading") : t("uploadRecordedLecture.processingAudio")}
                         </span>
                         <span className="text-blue-600 dark:text-blue-300">
                           {isUploading ? `${uploadProgress}%` : ""}
@@ -284,7 +268,7 @@ export default function UploadRecordedLecture({ user }: UploadRecordedLecturePro
                         <div className="flex items-center space-x-3">
                           <div className="animate-spin rounded-full h-6 w-6 border-3 border-blue-600 border-t-transparent"></div>
                           <span className="text-blue-700 dark:text-blue-300">
-                            AI prepisuje váš audio súbor...
+                            {t("uploadRecordedLecture.aiTranscribing")}
                           </span>
                         </div>
                       )}
@@ -299,7 +283,7 @@ export default function UploadRecordedLecture({ user }: UploadRecordedLecturePro
                       onClick={handleUpload}
                       className="bg-linear-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white font-semibold py-4 px-12 rounded-xl transition-all shadow-lg hover:shadow-xl hover:scale-105 cursor-pointer"
                     >
-                      Nahrať a spracovať
+                      {t("uploadRecordedLecture.uploadAndProcess")}
                     </button>
                   </div>
                 )}
@@ -310,13 +294,13 @@ export default function UploadRecordedLecture({ user }: UploadRecordedLecturePro
                   <CheckCircle className="w-24 h-24 text-green-600 dark:text-green-400" />
                 </div>
                 <h3 className="text-2xl font-bold text-slate-800 dark:text-white mb-3">
-                  Úspešne nahraté!
+                  {t("uploadRecordedLecture.successTitle")}
                 </h3>
                 <p className="text-gray-600 dark:text-gray-300 mb-6">
-                  Vaša prednáška bola prepísaná a uložená do knižnice
+                  {t("uploadRecordedLecture.successMessage")}
                 </p>
                 <p className="text-sm text-gray-500 dark:text-gray-400">
-                  Presmerovávam na dashboard...
+                  {t("uploadRecordedLecture.redirecting")}
                 </p>
               </div>
             )}
@@ -325,20 +309,20 @@ export default function UploadRecordedLecture({ user }: UploadRecordedLecturePro
           {/* Info Card */}
           <div className="mt-6 bg-white/60 dark:bg-slate-800/60 backdrop-blur-sm rounded-xl p-6 border border-white/50 dark:border-slate-700">
             <h4 className="font-bold text-slate-800 dark:text-white mb-3">
-              Ako to funguje?
+              {t("uploadRecordedLecture.howItWorks")}
             </h4>
             <ol className="space-y-2 text-gray-600 dark:text-gray-300 text-sm">
               <li className="flex items-start">
                 <span className="font-bold text-blue-600 dark:text-blue-400 mr-2">1.</span>
-                Nahrajte váš audio súbor (MP3, WAV alebo M4A)
+                {t("uploadRecordedLecture.step1")}
               </li>
               <li className="flex items-start">
                 <span className="font-bold text-blue-600 dark:text-blue-400 mr-2">2.</span>
-                AI automaticky prepíše obsah prednášky
+                {t("uploadRecordedLecture.step2")}
               </li>
               <li className="flex items-start">
                 <span className="font-bold text-blue-600 dark:text-blue-400 mr-2">3.</span>
-                Prepis sa uloží do vašej knižnice na ďalšie spracovanie
+                {t("uploadRecordedLecture.step3")}
               </li>
             </ol>
           </div>

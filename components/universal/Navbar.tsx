@@ -98,14 +98,20 @@ export default function Navbar() {
             className="flex items-center space-x-2 hover:scale-105 transition-transform duration-200"
           >
             <Image
-              src="/logo.png"
+              src="/logo.webp"
               alt="StudyStarter Logo"
               width={100}
               height={100}
               className="w-10 h-10 sm:w-12 sm:h-12"
             />
-            <span className="text-2xl text-slate-800 dark:text-white font-semibold">
-              Study<span className="text-cyan-600">Starter</span>.io
+            <span className="text-2xl font-bold font-sora tracking-tight">
+              <span className="text-slate-800 dark:text-white">Study</span>
+              <span className="bg-linear-to-r from-cyan-400  to-sky-500 bg-clip-text text-transparent">
+                Starter
+              </span>
+              <span className="text-slate-900 dark:text-white text-xl">
+                .io
+              </span>
             </span>
           </Link>
 

@@ -17,7 +17,7 @@ export default function NotFound() {
           <div className="relative z-10 flex justify-center py-2">
             <Image
               src="/confused.svg"
-              alt="404 Monster"
+              alt="StudyStarter maskot - stránka nebola nájdená 404"
               width={400}
               height={400}
               className="drop-shadow-2xl w-[300px] h-[300px] md:w-[400px] md:h-[400px]"

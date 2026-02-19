@@ -30,7 +30,7 @@ export default function Error({
           <div className="relative z-10 flex justify-center py-2">
             <Image
               src="/confused.svg"
-              alt="Error Monster"
+              alt="StudyStarter maskot - na stránke nastala chyba"
               width={400}
               height={400}
               className="drop-shadow-2xl w-[200px] h-[200px] md:w-[400px] md:h-[400px]"

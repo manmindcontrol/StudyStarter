@@ -8,26 +8,13 @@
   "theme_color": "#2563eb",
   "orientation": "portrait-primary",
   "lang": "sk",
-  "icons": [
-    {
-      "src": "/icon-192.png",
-      "sizes": "192x192",
-      "type": "image/png",
-      "purpose": "any maskable"
-    },
-    {
-      "src": "/icon-512.png",
-      "sizes": "512x512",
-      "type": "image/png",
-      "purpose": "any maskable"
-    }
-  ],
+  "icons": [],
   "categories": ["education", "productivity"],
   "screenshots": [
     {
-      "src": "/screenshot-1.png",
+      "src": "/screenshot-1.webp",
       "sizes": "1280x720",
-      "type": "image/png",
+      "type": "image/webp",
       "label": "StudyStarter Dashboard"
     }
   ],

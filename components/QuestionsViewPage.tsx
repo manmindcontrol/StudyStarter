@@ -314,9 +314,13 @@ export default function QuestionsViewPage({
 
     try {
       // Call API to validate answer
+      const { data: { session } } = await supabase.auth.getSession();
       const response = await fetch("/api/validate-answer", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${session?.access_token}`,
+        },
         body: JSON.stringify({
           question: question.question,
           userAnswer: userAnswer.trim(),
@@ -376,9 +380,13 @@ export default function QuestionsViewPage({
 
     try {
       // Call OpenAI API
+      const { data: { session: chatSession } } = await supabase.auth.getSession();
       const response = await fetch("/api/chat", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${chatSession?.access_token}`,
+        },
         body: JSON.stringify({
           messages: newMessages,
           questions: questionRecord?.questions,

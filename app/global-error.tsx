@@ -2,7 +2,7 @@
 
 import { useEffect } from "react";
 import Image from "next/image";
-import { Link } from "lucide-react";
+import Link from "next/link";
 
 export default function GlobalError({
   error,
@@ -31,7 +31,7 @@ export default function GlobalError({
               {/* Monster SVG */}
               <div className="relative z-10 flex justify-center py-12">
                 <Image
-                  src="/confused.svg"
+                  src="/confused.webp"
                   alt="StudyStarter maskot - na stránke nastala chyba"
                   width={400}
                   height={400}

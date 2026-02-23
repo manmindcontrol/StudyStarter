@@ -1,23 +1,26 @@
 import { NextRequest, NextResponse } from 'next/server';
 import pdf from 'pdf-parse';
 import { Document, Packer, Paragraph, TextRun, AlignmentType, HeadingLevel } from 'docx';
+import { createServiceRoleClient } from '@/lib/utils';
+import { getUserTierAndLimits } from '@/lib/usage';
 
-// Simple in-memory rate limiting (reset on server restart)
+const supabase = createServiceRoleClient();
+
+// Account-based rate limiting for Basic users
 const rateLimitMap = new Map<string, { count: number; resetTime: number }>();
-const RATE_LIMIT = 3; // Max 3 conversions per hour per IP
+const BASIC_RATE_LIMIT = 20; // 20 conversions per hour for Basic
 const RATE_WINDOW = 60 * 60 * 1000; // 1 hour in milliseconds
 
-function checkRateLimit(ip: string): { allowed: boolean; remainingTime?: number } {
+function checkRateLimit(key: string, limit: number): { allowed: boolean; remainingTime?: number } {
   const now = Date.now();
-  const record = rateLimitMap.get(ip);
+  const record = rateLimitMap.get(key);
 
   if (!record || now > record.resetTime) {
-    // Create or reset record
-    rateLimitMap.set(ip, { count: 1, resetTime: now + RATE_WINDOW });
+    rateLimitMap.set(key, { count: 1, resetTime: now + RATE_WINDOW });
     return { allowed: true };
   }
 
-  if (record.count >= RATE_LIMIT) {
+  if (record.count >= limit) {
     const remainingTime = Math.ceil((record.resetTime - now) / 1000 / 60); // minutes
     return { allowed: false, remainingTime };
   }
@@ -28,17 +31,41 @@ function checkRateLimit(ip: string): { allowed: boolean; remainingTime?: number 
 
 export async function POST(request: NextRequest) {
   try {
-    // Rate limiting check
-    const ip = request.headers.get('x-forwarded-for') || request.headers.get('x-real-ip') || 'unknown';
-    const rateCheck = checkRateLimit(ip);
+    // Check auth and determine tier
+    const authHeader = request.headers.get('authorization');
+    if (!authHeader) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    }
+    const token = authHeader.replace('Bearer ', '');
+    const { data: { user }, error: authError } = await supabase.auth.getUser(token);
+    if (authError || !user) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    }
 
-    if (!rateCheck.allowed) {
-      return NextResponse.json(
-        {
-          error: `Rate limit exceeded. You can convert ${RATE_LIMIT} PDFs per hour. Please try again in ${rateCheck.remainingTime} minutes or make a payment for unlimited conversions.`
-        },
-        { status: 429 }
-      );
+    let tierId = 'free';
+    const userId = user.id;
+
+    try {
+      const tierInfo = await getUserTierAndLimits(user.id);
+      tierId = tierInfo.tierId;
+    } catch {
+      // Fallback to free tier if we can't fetch tier info
+    }
+
+    // Rate limiting based on tier
+    // Free / No account: No hourly rate limit (payment per use is the gate)
+    // Basic: 20/hour per account
+    // Premium: Unlimited
+    if (tierId === 'basic' && userId) {
+      const rateCheck = checkRateLimit(`user:${userId}`, BASIC_RATE_LIMIT);
+      if (!rateCheck.allowed) {
+        return NextResponse.json(
+          {
+            error: `Rate limit exceeded. Basic plan allows ${BASIC_RATE_LIMIT} conversions per hour. Please try again in ${rateCheck.remainingTime} minutes or upgrade to Premium for unlimited conversions.`
+          },
+          { status: 429 }
+        );
+      }
     }
 
     const formData = await request.formData();

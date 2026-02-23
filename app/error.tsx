@@ -29,7 +29,7 @@ export default function Error({
           {/* Monster SVG */}
           <div className="relative z-10 flex justify-center py-2">
             <Image
-              src="/confused.svg"
+              src="/confused.webp"
               alt="StudyStarter maskot - na stránke nastala chyba"
               width={400}
               height={400}

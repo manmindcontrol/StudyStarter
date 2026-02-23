@@ -224,11 +224,15 @@ export default function NotesViewPage({ materialId, noteId }: Props) {
         params.set("lang", locale);
       }
 
+      const { data: { session } } = await supabase.auth.getSession();
       const response = await fetch(
         `/api/materials/${materialId}/notes/chat?${params.toString()}`,
         {
           method: "POST",
-          headers: { "Content-Type": "application/json" },
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${session?.access_token}`,
+          },
           body: JSON.stringify({
             message: userMessage,
             noteId: noteId,

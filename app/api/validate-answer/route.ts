@@ -1,12 +1,24 @@
 import { NextRequest, NextResponse } from "next/server";
 import OpenAI from "openai";
+import { createServiceRoleClient } from "@/lib/utils";
 
 export const runtime = "nodejs";
 
 const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY! });
+const supabase = createServiceRoleClient();
 
 export async function POST(request: NextRequest) {
   try {
+    const authHeader = request.headers.get("authorization");
+    if (!authHeader) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
+    const token = authHeader.replace("Bearer ", "");
+    const { data: { user }, error: authError } = await supabase.auth.getUser(token);
+    if (authError || !user) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
+
     const body = await request.json();
     const { question, userAnswer, correctAnswer } = body as {
       question: string;

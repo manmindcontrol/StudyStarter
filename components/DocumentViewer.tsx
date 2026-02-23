@@ -80,12 +80,14 @@ export default function DocumentViewer({ materialId }: Props) {
         params.set("lang", locale);
       }
 
+      const { data: { session } } = await supabase.auth.getSession();
       const response = await fetch(
         `/api/materials/${material.id}/chat?${params.toString()}`,
         {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
+            Authorization: `Bearer ${session?.access_token}`,
           },
           body: JSON.stringify({
             message: userMessage,

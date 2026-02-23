@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getCurrentUser } from '@/lib/auth';
 import { getUsageSummary } from '@/lib/usage';
+import { createServiceRoleClient } from '@/lib/utils';
+
+const supabase = createServiceRoleClient();
 
 /**
  * API endpoint pre získanie usage informácií používateľa
@@ -21,12 +23,21 @@ import { getUsageSummary } from '@/lib/usage';
  */
 export async function GET(request: NextRequest) {
   try {
-    // Získaj aktuálneho používateľa
-    const { user } = await getCurrentUser();
-
-    if (!user) {
+    // Autentifikácia cez Bearer token
+    const authHeader = request.headers.get('authorization');
+    if (!authHeader) {
       return NextResponse.json(
-        { error: 'Unauthorized - User must be logged in' },
+        { error: 'Unauthorized - No authorization header' },
+        { status: 401 }
+      );
+    }
+
+    const token = authHeader.replace('Bearer ', '');
+    const { data: { user }, error: authError } = await supabase.auth.getUser(token);
+
+    if (authError || !user) {
+      return NextResponse.json(
+        { error: 'Unauthorized - Invalid token' },
         { status: 401 }
       );
     }

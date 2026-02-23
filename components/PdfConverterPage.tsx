@@ -12,7 +12,7 @@ import {
   Zap,
   Trash2,
 } from "lucide-react";
-import { getCurrentUser } from "@/lib/auth";
+import { getCurrentUser, getSession } from "@/lib/auth";
 import type { User as SupabaseUser } from "@supabase/supabase-js";
 import { useTranslation } from "@/hooks/useTranslation";
 
@@ -64,10 +64,17 @@ export default function PdfConverterPage() {
 
         // Ak je prihlásený, načítaj usage info
         if (currentUser) {
-          const usageResponse = await fetch("/api/usage");
-          if (usageResponse.ok) {
-            const usageData = await usageResponse.json();
-            setUsageInfo(usageData);
+          const { session } = await getSession();
+          if (session?.access_token) {
+            const usageResponse = await fetch("/api/usage", {
+              headers: {
+                Authorization: `Bearer ${session.access_token}`,
+              },
+            });
+            if (usageResponse.ok) {
+              const usageData = await usageResponse.json();
+              setUsageInfo(usageData);
+            }
           }
         }
 
@@ -220,8 +227,13 @@ export default function PdfConverterPage() {
     }
 
     // Ak je prihlásený používateľ
+    if (user && loading) {
+      // Ešte sa načítavajú údaje - počkaj
+      setError(t("pdfConverter.errors.pleaseSelectFile").includes("Please") ? "Loading your account info, please try again in a moment." : "Načítavam údaje o účte, skúste to znova o chvíľu.");
+      return;
+    }
+
     if (user && usageInfo) {
-      // Skontroluj či má unlimited alebo ešte má kredity
       const pdfUsage = usageInfo.usage.pdf_conversions;
 
       if (pdfUsage.unlimited) {
@@ -230,24 +242,31 @@ export default function PdfConverterPage() {
         return;
       }
 
-      if (pdfUsage.limit === 0) {
-        // Free tier - musí zaplatiť
-        setShowPaymentModal(true);
+      // Platený plán (basic/premium) - skontroluj limit
+      if (usageInfo.tierId !== "free") {
+        if (pdfUsage.limit !== null && pdfUsage.used >= pdfUsage.limit) {
+          // Dosiahol mesačný limit
+          setError(
+            t("pdfConverter.errors.limitReached").replace(
+              "{limit}",
+              pdfUsage.limit.toString(),
+            ),
+          );
+          return;
+        }
+        // Má ešte kredity - konvertuj
+        await performConversion();
         return;
       }
 
-      if (pdfUsage.limit !== null && pdfUsage.used >= pdfUsage.limit) {
-        // Dosiahol limit
-        setError(
-          t("pdfConverter.errors.limitReached").replace(
-            "{limit}",
-            pdfUsage.limit.toString(),
-          ),
-        );
-        return;
-      }
+      // Free tier - musí zaplatiť
+      setShowPaymentModal(true);
+      return;
+    }
 
-      // Má ešte kredity - konvertuj
+    // Prihlásený ale usage info sa nepodarilo načítať - skús konverziu aj tak
+    if (user && !usageInfo) {
+      console.warn("Usage info not available for logged-in user, allowing conversion");
       await performConversion();
       return;
     }
@@ -281,9 +300,13 @@ export default function PdfConverterPage() {
 
       console.log("FormData created, sending request...");
 
+      const { session: convSession } = await getSession();
       const response = await fetch("/api/pdf-to-docx", {
         method: "POST",
         body: formData,
+        headers: convSession?.access_token
+          ? { Authorization: `Bearer ${convSession.access_token}` }
+          : {},
       });
 
       if (!response.ok) {
@@ -309,7 +332,12 @@ export default function PdfConverterPage() {
 
       // Refresh usage info ak je prihlásený
       if (user) {
-        const usageResponse = await fetch("/api/usage");
+        const { session } = await getSession();
+        const usageResponse = await fetch("/api/usage", {
+          headers: session?.access_token
+            ? { Authorization: `Bearer ${session.access_token}` }
+            : {},
+        });
         if (usageResponse.ok) {
           const usageData = await usageResponse.json();
           setUsageInfo(usageData);

@@ -204,6 +204,7 @@ export default function NotesViewPage({ materialId, noteId }: Props) {
     };
 
     loadData();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [noteId, materialId, searchParams, conversationId]);
 
   const handleSendMessage = async () => {

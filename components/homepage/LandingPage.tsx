@@ -35,7 +35,7 @@ export default function LandingPage() {
       <div className="absolute inset-0 flex items-end justify-center pointer-events-none overflow-hidden ">
         <div className="w-[420px] sm:w-[420px] md:w-[480px] lg:w-[580px] xl:w-[580px] opacity-50 lg:opacity-100 lg:translate-x-60 translate-y-0 lg:translate-y-34">
           <Image
-            src="/monster.webp"
+            src="/monster.svg"
             alt="StudyStarter maskot - AI pomôcka pre efektívne učenie a prepis prednášok"
             width={400}
             height={520}

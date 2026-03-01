@@ -16,7 +16,7 @@ export default function NotFound() {
           {/* Monster SVG */}
           <div className="relative z-10 flex justify-center py-2">
             <Image
-              src="/confused.webp"
+              src="/confused.svg"
               alt="StudyStarter maskot - stránka nebola nájdená 404"
               width={400}
               height={400}

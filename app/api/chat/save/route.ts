@@ -83,8 +83,7 @@ export async function POST(request: NextRequest) {
 
       // If table doesn't exist yet (migration not applied), fail gracefully
       if (insertError.code === '42P01' || insertError.message?.includes('relation "chat_history" does not exist')) {
-        console.warn("[Chat Save] chat_history table does not exist. Please run migration 003. Messages not saved.");
-        // Return success to not break UI, but log warning
+        // Return success to not break UI
         return NextResponse.json({
           success: true,
           count: 0,
@@ -98,8 +97,6 @@ export async function POST(request: NextRequest) {
         { status: 500 }
       );
     }
-
-    console.log(`[Chat Save] Saved ${inserted?.length || 0} messages for user ${user.id}`);
 
     return NextResponse.json({
       success: true,

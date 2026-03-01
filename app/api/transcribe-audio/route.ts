@@ -92,9 +92,6 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    console.log("[Transcribe] Starting transcription for:", file.name);
-    console.log("[Transcribe] File size:", (file.size / 1024 / 1024).toFixed(2), "MB");
-
     // Upload to Supabase Storage first
     const timestamp = Date.now();
     const storagePath = `${userId}/${timestamp}-${fileName || file.name}`;
@@ -117,22 +114,14 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    console.log("[Transcribe] File uploaded to storage:", storagePath);
-
     // Transcribe with OpenAI Whisper
     try {
-      console.log("[Transcribe] Sending to Whisper API...");
-
       const transcription = await openai.audio.transcriptions.create({
         file: file,
         model: "whisper-1",
         language: language,
         response_format: "verbose_json", // Get detailed info including duration
       });
-
-      console.log("[Transcribe] Transcription completed");
-      console.log("[Transcribe] Duration:", transcription.duration, "seconds");
-      console.log("[Transcribe] Text length:", transcription.text.length, "chars");
 
       // Save lecture to database
       const { data: lecture, error: dbError } = await supabase
@@ -168,8 +157,6 @@ export async function POST(request: NextRequest) {
         console.error("[Transcribe] Error incrementing usage:", usageError);
         // Don't fail the request if usage increment fails
       }
-
-      console.log("[Transcribe] Success! Lecture ID:", lecture.id);
 
       return NextResponse.json({
         success: true,

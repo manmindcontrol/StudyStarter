@@ -41,7 +41,7 @@ export default function ProfilePage() {
   const { t } = useTranslation();
   const router = useRouter();
   const [user, setUser] = useState<SupabaseUser | null | undefined>(undefined);
-  const [profile, setProfile] = useState<UserProfile | null>(null);
+  const [_profile, setProfile] = useState<UserProfile | null>(null);
   const [subscription, setSubscription] = useState<UserSubscription | null>(
     null,
   );

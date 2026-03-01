@@ -87,7 +87,7 @@ export default function PrivacyPolicyPage() {
             <p className="text-gray-700 leading-relaxed mt-4">
               We reserve the right to make changes to this Privacy Policy at any
               time and for any reason. We will alert you about any changes by
-              updating the "Last updated" date of this Privacy Policy. You are
+              updating the &ldquo;Last updated&rdquo; date of this Privacy Policy. You are
               encouraged to periodically review this Privacy Policy to stay
               informed of updates. You will be deemed to have been made aware
               of, will be subject to, and will be deemed to have accepted the
@@ -348,7 +348,7 @@ export default function PrivacyPolicyPage() {
             </p>
             <p className="text-gray-700 leading-relaxed mt-4">
               Account information and user-generated content are retained for
-              the duration of your account's active status. If you delete your
+              the duration of your account&apos;s active status. If you delete your
               account, your personal information will be removed from our active
               databases within 30 days, although some information may be
               retained in backup systems for up to 90 days for security and
@@ -451,7 +451,7 @@ export default function PrivacyPolicyPage() {
             </ul>
             <p className="text-gray-700 leading-relaxed mt-4">
               To exercise these rights, please contact us using the information
-              provided in the "Contact Us" section below. We will respond to
+              provided in the &ldquo;Contact Us&rdquo; section below. We will respond to
               your request within 30 days. Please note that we may need to
               verify your identity before processing your request.
             </p>
@@ -528,7 +528,7 @@ export default function PrivacyPolicyPage() {
             </ul>
             <p className="text-gray-700 leading-relaxed mt-4">
               If you click on a third-party link or use a third-party service,
-              you will be directed to that third party's site. We strongly
+              you will be directed to that third party&apos;s site. We strongly
               advise you to review the Privacy Policy of every site you visit or
               service you use. We have no control over and assume no
               responsibility for the content, privacy policies, or practices of
@@ -547,7 +547,7 @@ export default function PrivacyPolicyPage() {
             <div className="flex items-center gap-3 mb-4">
               <Shield className="w-6 h-6 text-blue-600" />
               <h2 className="text-2xl font-bold text-gray-900">
-                Children's Privacy
+                Children&apos;s Privacy
               </h2>
             </div>
             <p className="text-gray-700 leading-relaxed">

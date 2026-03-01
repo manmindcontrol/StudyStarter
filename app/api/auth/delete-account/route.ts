@@ -98,7 +98,7 @@ export async function DELETE(request: NextRequest) {
     // 2. Delete lecture audio files
     if (lectures && lectures.length > 0) {
       for (const lecture of lectures) {
-        const audioPath = (lecture as any).audio_file_path;
+        const audioPath = (lecture as { audio_file_path?: string }).audio_file_path;
         if (audioPath) {
           try {
             await supabaseAdmin.storage

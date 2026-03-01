@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import pdf from 'pdf-parse';
-import { Document, Packer, Paragraph, TextRun, AlignmentType, HeadingLevel } from 'docx';
+import { Document, Packer, Paragraph, TextRun, AlignmentType } from 'docx';
 import { createServiceRoleClient } from '@/lib/utils';
 import { getUserTierAndLimits } from '@/lib/usage';
 
@@ -86,8 +86,6 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    console.log('Received file:', file.name, 'Type:', file.type, 'Size:', file.size);
-
     // Check if file is PDF - check both MIME type and file extension
     const isPdfMimeType = file.type === 'application/pdf';
     const isPdfExtension = file.name.toLowerCase().endsWith('.pdf');
@@ -97,11 +95,6 @@ export async function POST(request: NextRequest) {
         { error: `File must be a PDF. Received type: ${file.type}, name: ${file.name}` },
         { status: 400 }
       );
-    }
-
-    // Warn if MIME type is missing but extension is correct
-    if (!isPdfMimeType && isPdfExtension) {
-      console.warn('PDF file has incorrect MIME type:', file.type, 'but extension is .pdf');
     }
 
     // Convert file to buffer
@@ -115,7 +108,6 @@ export async function POST(request: NextRequest) {
     try {
       pdfData = await pdf(buffer);
       textContent = pdfData.text;
-      console.log('PDF parsed successfully. Text length:', textContent.length);
     } catch (pdfError) {
       console.error('PDF parsing error:', pdfError);
       throw new Error(`Failed to parse PDF: ${pdfError instanceof Error ? pdfError.message : 'Unknown error'}`);

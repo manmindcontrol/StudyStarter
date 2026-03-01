@@ -65,7 +65,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Save to DB
-    const lectureData: any = {
+    const lectureData: Record<string, unknown> = {
       user_id: userId,
       title,
       transcript,

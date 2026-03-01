@@ -1,4 +1,4 @@
-import { supabase, createSupabaseClient } from './supabase'
+import { supabase } from './supabase'
 
 // Typy
 export type User = {
@@ -44,7 +44,7 @@ export async function signUp(email: string, password: string, fullName: string) 
 }
 
 // Prihlásenie existujúceho používateľa
-export async function signIn(email: string, password: string, rememberMe: boolean = false) {
+export async function signIn(email: string, password: string) {
   try {
     // Použij hlavný supabase client
     const { data, error } = await supabase.auth.signInWithPassword({

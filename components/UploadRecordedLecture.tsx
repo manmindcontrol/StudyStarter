@@ -11,7 +11,7 @@ type UploadRecordedLectureProps = {
   user: User;
 };
 
-export default function UploadRecordedLecture({ user }: UploadRecordedLectureProps) {
+export default function UploadRecordedLecture({ user: _user }: UploadRecordedLectureProps) {
   const router = useRouter();
   const { t, locale } = useTranslation();
   const [selectedFile, setSelectedFile] = useState<File | null>(null);

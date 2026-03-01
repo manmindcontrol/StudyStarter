@@ -287,7 +287,7 @@ DO:
       if (!notesData.summary || !Array.isArray(notesData.key_points) || !Array.isArray(notesData.concepts)) {
         throw new Error("Invalid notes structure");
       }
-    } catch (err) {
+    } catch (_err) {
       console.error("JSON parse error:", jsonText);
       return NextResponse.json(
         { error: "OpenAI did not return valid JSON." },

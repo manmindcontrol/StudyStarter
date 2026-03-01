@@ -34,7 +34,7 @@ type Props = {
 export default function LectureViewPage({ lectureId }: Props) {
   const router = useRouter();
   const { t, locale } = useTranslation();
-  const [user, setUser] = useState<User | null>(null);
+  const [_user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
   const [lecture, setLecture] = useState<Lecture | null>(null);
 

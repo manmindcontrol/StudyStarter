@@ -73,7 +73,7 @@ type Props = {
 export default function MaterialViewPage({ materialId }: Props) {
   const router = useRouter();
   const { t, locale } = useTranslation();
-  const [user, setUser] = useState<User | null>(null);
+  const [_user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
   const [material, setMaterial] = useState<Material | null>(null);
   const [stats, setStats] = useState({
@@ -163,7 +163,7 @@ export default function MaterialViewPage({ materialId }: Props) {
       minute: "2-digit",
     });
   };
-  const { isDarkMode, toggleDarkMode } = useTheme();
+  const { isDarkMode: _isDarkMode, toggleDarkMode: _toggleDarkMode } = useTheme();
   const handleDeleteConfirm = async () => {
     setIsDeleting(true);
     try {

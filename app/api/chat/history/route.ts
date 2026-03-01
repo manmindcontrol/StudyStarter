@@ -74,7 +74,6 @@ export async function GET(request: NextRequest) {
 
       // If table doesn't exist yet (migration not applied), return empty array
       if (queryError.code === '42P01' || queryError.message?.includes('relation "chat_history" does not exist')) {
-        console.warn("[Chat History] chat_history table does not exist. Please run migration 003.");
         return NextResponse.json({
           success: true,
           count: 0,
@@ -87,8 +86,6 @@ export async function GET(request: NextRequest) {
         { status: 500 }
       );
     }
-
-    console.log(`[Chat History] Retrieved ${messages?.length || 0} messages for user ${user.id}`);
 
     // Transform to frontend format
     const formattedMessages = messages.map((msg) => ({

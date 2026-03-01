@@ -116,8 +116,6 @@ function extractContentFromHTML(html: string, url: string): string | null {
 async function fetchWithPuppeteer(url: string): Promise<string | null> {
   let browser = null;
   try {
-    console.log("[Puppeteer] Launching browser for URL:", url);
-
     browser = await puppeteer.launch({
       headless: true,
       args: [
@@ -180,7 +178,6 @@ async function fetchWithPuppeteer(url: string): Promise<string | null> {
     if (textContent && textContent.length > 100) {
       const cleaned = cleanExtractedText(textContent);
       if (cleaned.length > 100) {
-        console.log("[Puppeteer] Successfully extracted content, length:", cleaned.length);
         return cleaned;
       }
     }
@@ -188,7 +185,6 @@ async function fetchWithPuppeteer(url: string): Promise<string | null> {
     // If page evaluation didn't work well, try JSDOM on the rendered HTML
     const extracted = extractContentFromHTML(html, url);
     if (extracted) {
-      console.log("[Puppeteer] Extracted via JSDOM from rendered HTML, length:", extracted.length);
       return extracted;
     }
 
@@ -205,35 +201,25 @@ async function fetchWithPuppeteer(url: string): Promise<string | null> {
 
 // Hybrid extraction: try JSDOM first, fallback to Puppeteer
 async function extractContent(url: string): Promise<string> {
-  console.log("[Extraction] Starting hybrid extraction for:", url);
-
-  let jsdomError: any = null;
+  let jsdomError: unknown = null;
   let jsdomContent: string | null = null;
 
   // Step 1: Try simple fetch + JSDOM (fast)
   try {
-    console.log("[Extraction] Step 1: Trying JSDOM...");
     const html = await fetchUrlContent(url);
     jsdomContent = extractContentFromHTML(html, url);
 
     if (jsdomContent && jsdomContent.length >= 300) {
-      console.log("[Extraction] ✓ JSDOM extraction successful, length:", jsdomContent.length);
       return jsdomContent;
     }
-
-    console.log("[Extraction] JSDOM content too short:", jsdomContent?.length || 0, "chars. Trying Puppeteer...");
   } catch (error) {
     jsdomError = error;
-    console.log("[Extraction] JSDOM fetch failed:", error instanceof Error ? error.message : String(error));
-    console.log("[Extraction] Falling back to Puppeteer...");
   }
 
   // Step 2: Fallback to Puppeteer (slower but handles JS)
-  console.log("[Extraction] Step 2: Trying Puppeteer...");
   const puppeteerContent = await fetchWithPuppeteer(url);
 
   if (puppeteerContent && puppeteerContent.length >= 100) {
-    console.log("[Extraction] ✓ Puppeteer extraction successful, length:", puppeteerContent.length);
     return puppeteerContent;
   }
 

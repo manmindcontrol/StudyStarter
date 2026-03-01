@@ -52,7 +52,7 @@ export async function DELETE(
 
     // Step 1: Delete audio file from Supabase Storage (if exists)
     // Note: audio_file_path might not exist in schema yet, but adding for future-proofing
-    const audioPath = (lecture as any).audio_file_path;
+    const audioPath = (lecture as { audio_file_path?: string }).audio_file_path;
     if (audioPath) {
       try {
         const { error: storageError } = await supabase.storage

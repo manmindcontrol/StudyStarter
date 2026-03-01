@@ -16,8 +16,7 @@ import {
   ArrowLeft,
 } from "lucide-react";
 import type { User } from "@supabase/supabase-js";
-import GenerateQuestionsButton from "@/components/buttons/GenerateQuestionsButton";
-import GenerateNotesButton from "@/components/buttons/GenerateNotesButton";
+
 import { useTranslation } from "@/hooks/useTranslation";
 
 type Material = {
@@ -241,7 +240,7 @@ export default function MaterialsPage() {
     });
   };
 
-  const getFileIcon = (fileType: string | null) => {
+  const getFileIcon = (_fileType: string | null) => {
     return <FileText className="w-4 h-4 sm:w-5 sm:h-5" />;
   };
 

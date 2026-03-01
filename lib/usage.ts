@@ -36,7 +36,7 @@ export async function getCurrentUsage(userId: string) {
   periodEnd.setMonth(periodEnd.getMonth() + 1); // Prvý deň budúceho mesiaca
 
   // Skús získať existujúci usage záznam
-  let { data: usage, error } = await supabaseAdmin
+  const { data: usage, error } = await supabaseAdmin
     .from('usage_tracking')
     .select('*')
     .eq('user_id', userId)
@@ -159,7 +159,7 @@ export async function getUserTierAndLimits(userId: string) {
       tierId: retryData.tier_id,
       stripeCustomerId: retryData.stripe_customer_id,
       stripeSubscriptionId: retryData.stripe_subscription_id,
-      limits: retryData.subscription_tiers as any,
+      limits: retryData.subscription_tiers as Record<string, unknown>,
     };
   }
 
@@ -172,7 +172,7 @@ export async function getUserTierAndLimits(userId: string) {
     tierId: data.tier_id,
     stripeCustomerId: data.stripe_customer_id,
     stripeSubscriptionId: data.stripe_subscription_id,
-    limits: data.subscription_tiers as any,
+    limits: data.subscription_tiers as Record<string, unknown>,
   };
 }
 

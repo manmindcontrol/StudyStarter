@@ -3,6 +3,11 @@ import { stripe, constructWebhookEvent, SUBSCRIPTION_TIERS } from '@/lib/stripe'
 import { createServiceRoleClient } from '@/lib/utils';
 import Stripe from 'stripe';
 
+type StripeSubscriptionWithPeriod = Stripe.Subscription & {
+  current_period_start?: number;
+  current_period_end?: number;
+};
+
 const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET;
 
 export async function POST(request: NextRequest) {
@@ -67,7 +72,7 @@ export async function POST(request: NextRequest) {
           }
 
           // Update user subscription in database
-          const subData = subscription as any;
+          const subData = subscription as StripeSubscriptionWithPeriod;
           const periodStart = subData.current_period_start
             ? new Date(subData.current_period_start * 1000).toISOString()
             : null;
@@ -91,8 +96,6 @@ export async function POST(request: NextRequest) {
 
           if (updateError) {
             console.error('Error updating subscription:', updateError);
-          } else {
-            console.log('Subscription updated for user ' + userId + ' to tier ' + tier);
           }
 
           // Reset usage tracking for new subscription period
@@ -135,7 +138,7 @@ export async function POST(request: NextRequest) {
                        subscription.status === 'past_due' ? 'past_due' :
                        subscription.status === 'canceled' ? 'canceled' : 'inactive';
 
-        const subData = subscription as any;
+        const subData = subscription as StripeSubscriptionWithPeriod;
         const periodStart = subData.current_period_start
           ? new Date(subData.current_period_start * 1000).toISOString()
           : null;
@@ -155,7 +158,6 @@ export async function POST(request: NextRequest) {
           })
           .eq('user_id', userId);
 
-        console.log('Subscription updated for user ' + userId + ': tier_id=' + tier + ', status=' + status);
         break;
       }
 
@@ -183,7 +185,6 @@ export async function POST(request: NextRequest) {
               })
               .eq('user_id', sub.user_id);
 
-            console.log('Subscription canceled for user ' + sub.user_id);
           }
         } else {
           await supabase
@@ -197,7 +198,6 @@ export async function POST(request: NextRequest) {
             })
             .eq('user_id', userId);
 
-          console.log('Subscription canceled for user ' + userId);
         }
         break;
       }
@@ -215,7 +215,7 @@ export async function POST(request: NextRequest) {
 
           if (userId) {
             // Reset usage for new billing period
-            const subData = subscription as any;
+            const subData = subscription as StripeSubscriptionWithPeriod;
             const pStart = subData.current_period_start
               ? new Date(subData.current_period_start * 1000).toISOString()
               : new Date().toISOString();
@@ -236,7 +236,6 @@ export async function POST(request: NextRequest) {
                 })
                 .eq('user_id', userId);
 
-              console.log('Usage reset for user ' + userId + ' after payment');
             }
           }
         }
@@ -263,14 +262,13 @@ export async function POST(request: NextRequest) {
               })
               .eq('user_id', userId);
 
-            console.log('Payment failed for user ' + userId);
           }
         }
         break;
       }
 
       default:
-        console.log('Unhandled event type: ' + event.type);
+        break;
     }
 
     return NextResponse.json({ received: true });

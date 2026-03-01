@@ -62,7 +62,7 @@ export async function POST(
 
     const { searchParams } = new URL(request.url);
 
-    const questionType = (searchParams.get("type") as QuestionType) || "exam";
+    const _questionType = (searchParams.get("type") as QuestionType) || "exam";
     const targetLanguage = searchParams.get("lang"); // user can request output lang
     const questionCount = parseInt(searchParams.get("count") || "10", 10); // default 10
     const questionFormat = searchParams.get("format") || "mixed"; // mcq, open, mixed

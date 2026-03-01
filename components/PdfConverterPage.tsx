@@ -52,7 +52,7 @@ export default function PdfConverterPage() {
     periodEnd: string;
   } | null>(null);
   const [showPaymentModal, setShowPaymentModal] = useState(false);
-  const [paymentSuccess, setPaymentSuccess] = useState(false);
+  const [_paymentSuccess, setPaymentSuccess] = useState(false);
 
   // Skontroluj používateľa a jeho usage
   useEffect(() => {
@@ -119,12 +119,6 @@ export default function PdfConverterPage() {
                 type: "application/pdf",
               });
 
-              console.log(
-                "Restored file:",
-                restoredFile.name,
-                restoredFile.type,
-                restoredFile.size,
-              );
               setFile(restoredFile);
 
               // Clear sessionStorage
@@ -160,6 +154,7 @@ export default function PdfConverterPage() {
       setError(t("pdfConverter.errors.paymentCanceled"));
       window.history.replaceState({}, "", "/pdf-converter");
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handleDrag = (e: React.DragEvent) => {
@@ -187,7 +182,6 @@ export default function PdfConverterPage() {
         droppedFile.name.toLowerCase().endsWith(".pdf");
 
       if (isPdf) {
-        console.log("File accepted:", droppedFile.name, droppedFile.type);
         setFile(droppedFile);
       } else {
         setError(t("pdfConverter.errors.pleaseUploadPdf"));
@@ -206,7 +200,6 @@ export default function PdfConverterPage() {
         selectedFile.name.toLowerCase().endsWith(".pdf");
 
       if (isPdf) {
-        console.log("File accepted:", selectedFile.name, selectedFile.type);
         setFile(selectedFile);
       } else {
         setError(t("pdfConverter.errors.pleaseUploadPdf"));
@@ -266,7 +259,6 @@ export default function PdfConverterPage() {
 
     // Prihlásený ale usage info sa nepodarilo načítať - skús konverziu aj tak
     if (user && !usageInfo) {
-      console.warn("Usage info not available for logged-in user, allowing conversion");
       await performConversion();
       return;
     }
@@ -284,21 +276,12 @@ export default function PdfConverterPage() {
       // Use passed file or fall back to state file
       const targetFile = fileToConvert || file;
 
-      console.log(
-        "Starting conversion for file:",
-        targetFile?.name,
-        targetFile?.type,
-        targetFile?.size,
-      );
-
       if (!targetFile) {
         throw new Error(t("pdfConverter.errors.noFileSelected"));
       }
 
       const formData = new FormData();
       formData.append("file", targetFile);
-
-      console.log("FormData created, sending request...");
 
       const { session: convSession } = await getSession();
       const response = await fetch("/api/pdf-to-docx", {

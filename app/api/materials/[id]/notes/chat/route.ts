@@ -42,7 +42,7 @@ export async function POST(
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    const { id: materialId } = await context.params; // Reserved for future functionality
+    const { id: _materialId } = await context.params; // Reserved for future functionality
     const { searchParams } = new URL(request.url);
     const targetLanguage = searchParams.get("lang"); // Get user's preferred language
 

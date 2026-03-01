@@ -235,6 +235,7 @@ export default function QuestionsViewPage({
     };
 
     loadData();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [materialId, questionRecordId, router, searchParams, conversationId]);
 
   useEffect(() => {
@@ -256,7 +257,7 @@ export default function QuestionsViewPage({
     };
   }, [showExportMenu]);
 
-  const toggleQuestion = (index: number) => {
+  const _toggleQuestion = (index: number) => {
     const newSelected = new Set(selectedQuestions);
     if (newSelected.has(index)) {
       newSelected.delete(index);

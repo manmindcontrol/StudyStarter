@@ -134,5 +134,6 @@ export function useAutoLogout() {
         }
       };
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [debouncedReset, handleVisibilityChange]);
 }

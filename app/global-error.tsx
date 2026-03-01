@@ -31,7 +31,7 @@ export default function GlobalError({
               {/* Monster SVG */}
               <div className="relative z-10 flex justify-center py-12">
                 <Image
-                  src="/confused.webp"
+                  src="/confused.svg"
                   alt="StudyStarter maskot - na stránke nastala chyba"
                   width={400}
                   height={400}

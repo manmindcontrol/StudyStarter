@@ -4,12 +4,9 @@ import { motion } from "framer-motion";
 import {
   FileText,
   Scale,
-  AlertTriangle,
-  UserCheck,
-  CreditCard,
-  Ban,
   Shield,
   Mail,
+  UserCheck,
 } from "lucide-react";
 
 export default function TermsOfUsePage() {
@@ -79,10 +76,10 @@ export default function TermsOfUsePage() {
             </div>
             <p className="text-gray-700 leading-relaxed mb-4">
               These Terms of Use constitute a legally binding agreement made
-              between you, whether personally or on behalf of an entity ("you")
-              and Study Starter ("Company", "we", "us", or "our"), concerning
+              between you, whether personally or on behalf of an entity (&ldquo;you&rdquo;)
+              and Study Starter (&ldquo;Company&rdquo;, &ldquo;we&rdquo;, &ldquo;us&rdquo;, or &ldquo;our&rdquo;), concerning
               your access to and use of the Study Starter website and
-              application (collectively, the "Application").
+              application (collectively, the &ldquo;Application&rdquo;).
             </p>
             <p className="text-gray-700 leading-relaxed mb-4">
               You agree that by accessing the Application, you have read,
@@ -97,7 +94,7 @@ export default function TermsOfUsePage() {
               incorporated herein by reference. We reserve the right, in our
               sole discretion, to make changes or modifications to these Terms
               of Use at any time and for any reason. We will alert you about any
-              changes by updating the "Last updated" date of these Terms of Use,
+              changes by updating the &ldquo;Last updated&rdquo; date of these Terms of Use,
               and you waive any right to receive specific notice of each such
               change. It is your responsibility to periodically review these
               Terms of Use to stay informed of updates.
@@ -122,15 +119,15 @@ export default function TermsOfUsePage() {
               Unless otherwise indicated, the Application is our proprietary
               property and all source code, databases, functionality, software,
               website designs, audio, video, text, photographs, and graphics on
-              the Application (collectively, the "Content") and the trademarks,
-              service marks, and logos contained therein (the "Marks") are owned
+              the Application (collectively, the &ldquo;Content&rdquo;) and the trademarks,
+              service marks, and logos contained therein (the &ldquo;Marks&rdquo;) are owned
               or controlled by us or licensed to us, and are protected by
               copyright and trademark laws and various other intellectual
               property rights and unfair competition laws of the United States,
               international copyright laws, and international conventions.
             </p>
             <p className="text-gray-700 leading-relaxed mb-4">
-              The Content and the Marks are provided on the Application "AS IS"
+              The Content and the Marks are provided on the Application &ldquo;AS IS&rdquo;
               for your information and personal use only. Except as expressly
               provided in these Terms of Use, no part of the Application and no
               Content or Marks may be copied, reproduced, aggregated,

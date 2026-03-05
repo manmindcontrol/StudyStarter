@@ -2,13 +2,23 @@ import RegisterPage from "@/components/authentification/RegisterPage";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Registrácia",
+  title: "Registrácia – Začni sa učiť s AI zadarmo",
   description:
-    "Vytvorte si bezplatný účet na StudyStarter. AI pomôcka pre študentov – prepis prednášok, generovanie testových otázok a študijných materiálov. | Create a free account | Kostenloses Konto erstellen.",
+    "Vytvor si bezplatný účet a začni sa učiť efektívnejšie. AI prepis prednášok, generátor testových otázok a poznámok. Bez kreditnej karty. | Sign up free | Kostenlos registrieren.",
+  keywords: [
+    "registrácia zadarmo",
+    "bezplatný účet",
+    "AI pre študentov zadarmo",
+    "sign up free study app",
+    "AI study tool free signup",
+    "create student account",
+    "kostenlos registrieren Lernapp",
+    "bezplatná pomôcka na učenie",
+  ],
   openGraph: {
-    title: "Registrácia | StudyStarter",
+    title: "Registrácia – Začni sa učiť s AI zadarmo | StudyStarter",
     description:
-      "Zaregistrujte sa zadarmo a začnite sa učiť efektívnejšie s AI.",
+      "Zaregistruj sa zadarmo a získaj AI prepis prednášok, generátor testov a poznámky. Bez kreditnej karty.",
     url: "https://studystarter.io/register",
   },
   alternates: {

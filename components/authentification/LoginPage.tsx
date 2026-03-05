@@ -55,7 +55,6 @@ export default function LoginPage() {
     const { user, error } = await signIn(
       formData.email,
       formData.password,
-      rememberMe,
     );
 
     if (error) {

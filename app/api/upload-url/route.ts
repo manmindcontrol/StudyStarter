@@ -226,7 +226,7 @@ async function extractContent(url: string): Promise<string> {
   // Build detailed error message
   const errorDetails = [];
   if (jsdomError) {
-    errorDetails.push(`JSDOM: ${jsdomError.message}`);
+    errorDetails.push(`JSDOM: ${(jsdomError as Error).message}`);
   } else if (jsdomContent !== null) {
     errorDetails.push(`JSDOM: Content too short (${jsdomContent.length} chars)`);
   }

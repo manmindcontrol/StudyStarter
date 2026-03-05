@@ -36,7 +36,7 @@ export async function getCurrentUsage(userId: string) {
   periodEnd.setMonth(periodEnd.getMonth() + 1); // Prvý deň budúceho mesiaca
 
   // Skús získať existujúci usage záznam
-  const { data: usage, error } = await supabaseAdmin
+  const { data: existingUsage, error } = await supabaseAdmin
     .from('usage_tracking')
     .select('*')
     .eq('user_id', userId)
@@ -49,39 +49,39 @@ export async function getCurrentUsage(userId: string) {
     throw error;
   }
 
-  // Ak neexistuje, vytvor nový záznam
-  // Použijeme upsert pre handling race conditions
-  if (!usage) {
-    const { data: newUsage, error: insertError } = await supabaseAdmin
-      .from('usage_tracking')
-      .upsert(
-        {
-          user_id: userId,
-          period_start: periodStart.toISOString(),
-          period_end: periodEnd.toISOString(),
-          pdf_conversions_used: 0,
-          materials_uploaded: 0,
-          notes_generations_used: 0,
-          questions_generations_used: 0,
-          updated_at: new Date().toISOString(),
-        },
-        {
-          onConflict: 'user_id,period_start',
-          ignoreDuplicates: false,
-        }
-      )
-      .select()
-      .single();
-
-    if (insertError) {
-      console.error('Error creating usage record:', insertError);
-      throw insertError;
-    }
-
-    usage = newUsage;
+  if (existingUsage) {
+    return existingUsage;
   }
 
-  return usage;
+  // Ak neexistuje, vytvor nový záznam
+  // Použijeme upsert pre handling race conditions
+  const { data: newUsage, error: insertError } = await supabaseAdmin
+    .from('usage_tracking')
+    .upsert(
+      {
+        user_id: userId,
+        period_start: periodStart.toISOString(),
+        period_end: periodEnd.toISOString(),
+        pdf_conversions_used: 0,
+        materials_uploaded: 0,
+        notes_generations_used: 0,
+        questions_generations_used: 0,
+        updated_at: new Date().toISOString(),
+      },
+      {
+        onConflict: 'user_id,period_start',
+        ignoreDuplicates: false,
+      }
+    )
+    .select()
+    .single();
+
+  if (insertError) {
+    console.error('Error creating usage record:', insertError);
+    throw insertError;
+  }
+
+  return newUsage;
 }
 
 /**
@@ -159,7 +159,7 @@ export async function getUserTierAndLimits(userId: string) {
       tierId: retryData.tier_id,
       stripeCustomerId: retryData.stripe_customer_id,
       stripeSubscriptionId: retryData.stripe_subscription_id,
-      limits: retryData.subscription_tiers as Record<string, unknown>,
+      limits: retryData.subscription_tiers as unknown as Record<string, unknown>,
     };
   }
 
@@ -172,7 +172,7 @@ export async function getUserTierAndLimits(userId: string) {
     tierId: data.tier_id,
     stripeCustomerId: data.stripe_customer_id,
     stripeSubscriptionId: data.stripe_subscription_id,
-    limits: data.subscription_tiers as Record<string, unknown>,
+    limits: data.subscription_tiers as unknown as Record<string, unknown>,
   };
 }
 
@@ -216,11 +216,11 @@ export async function checkUsageLimit(
 
     // Mapovanie usageType na limit field
     const limitMapping: Record<UsageType, number | null> = {
-      pdf_conversions: limits.pdf_conversions_limit,
-      materials: limits.materials_limit,
-      lectures: limits.materials_limit,
-      notes_generations: limits.notes_generations_limit,
-      questions_generations: limits.questions_generations_limit,
+      pdf_conversions: limits.pdf_conversions_limit as number | null,
+      materials: limits.materials_limit as number | null,
+      lectures: limits.materials_limit as number | null,
+      notes_generations: limits.notes_generations_limit as number | null,
+      questions_generations: limits.questions_generations_limit as number | null,
     };
     const limit = limitMapping[usageType];
 

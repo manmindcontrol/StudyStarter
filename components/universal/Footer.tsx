@@ -1,6 +1,6 @@
 import Link from "next/link";
 import Image from "next/image";
-import { Mail } from "lucide-react";
+import { Mail, ShieldCheck } from "lucide-react";
 import CookieSettingsButton from "./CookieSettingsButton";
 
 export default function Footer() {
@@ -74,12 +74,18 @@ export default function Footer() {
           </div>
         </div>
 
-        {/* Copyright + Email */}
+        {/* Copyright + Stripe + Email */}
         <div className="border-t border-gray-700/30 pt-6">
-          <div className="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
+          <div className="flex flex-col md:flex-row justify-between items-center gap-4">
             <p className="text-gray-500 text-sm">
               © {currentYear} StudyStarter. All rights reserved.
             </p>
+
+            <div className="flex items-center gap-1.5 text-gray-500 text-xs border border-gray-700/50 rounded-full px-3 py-1">
+              <ShieldCheck className="w-3.5 h-3.5 text-green-500" />
+              <span>Secure payments by</span>
+              <span className="font-semibold text-gray-300 tracking-wide">Stripe</span>
+            </div>
 
             <a
               href="mailto:info@studystarter.io"

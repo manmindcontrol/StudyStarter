@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createClient } from "@supabase/supabase-js";
 import OpenAI from "openai";
+import type { ChatCompletion } from "openai/resources/chat/completions";
 import { retryWithAdaptiveContent } from "@/lib/openai-retry";
 
 export const runtime = "nodejs";
@@ -268,7 +269,7 @@ DO:
     );
 
     // 4️⃣ Extract text safely
-    const jsonText = aiResponse.choices[0]?.message?.content;
+    const jsonText = (aiResponse as ChatCompletion).choices[0]?.message?.content;
 
     if (!jsonText) {
       console.error("OpenAI response:", aiResponse);

@@ -285,8 +285,8 @@ export default function QuestionsViewPage({
     }
 
     // Extract the option text from the correct answer format: "b) Option text - Explanation"
-    // The correct answer format is: "letter) full option text - explanation"
-    const answerMatch = correctAnswer.match(/^[a-d]\)\s*(.+?)\s*-/i);
+    // Use \s+-\s+ to avoid splitting on hyphens within the option text (e.g. "15-24")
+    const answerMatch = correctAnswer.match(/^[a-d]\)\s*(.+?)\s+-\s+/i);
     const correctOptionText = answerMatch ? answerMatch[1].trim() : null;
 
     // Check if the selected answer matches the correct option text
@@ -867,10 +867,11 @@ export default function QuestionsViewPage({
                                 quizAnswer?.userAnswer === option;
 
                               // Extract correct option text from answer format: "b) Option text - Explanation"
+                              // Use \s+-\s+ to avoid splitting on hyphens within the option text (e.g. "15-24")
                               let isCorrectOption = false;
                               if (q.answer) {
                                 const answerMatch =
-                                  q.answer.match(/^[a-d]\)\s*(.+?)\s*-/i);
+                                  q.answer.match(/^[a-d]\)\s*(.+?)\s+-\s+/i);
                                 const correctOptionText = answerMatch
                                   ? answerMatch[1].trim()
                                   : null;

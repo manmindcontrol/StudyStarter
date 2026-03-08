@@ -3,8 +3,12 @@ import pdf from 'pdf-parse';
 import { Document, Packer, Paragraph, TextRun, AlignmentType } from 'docx';
 import { createServiceRoleClient } from '@/lib/utils';
 import { getUserTierAndLimits } from '@/lib/usage';
+import { stripe } from '@/lib/stripe';
 
 const supabase = createServiceRoleClient();
+
+// Prevent a paid Stripe session from being used more than once
+const usedStripeSessions = new Set<string>();
 
 // Account-based rate limiting for Basic users
 const rateLimitMap = new Map<string, { count: number; resetTime: number }>();
@@ -33,23 +37,43 @@ export async function POST(request: NextRequest) {
   try {
     // Check auth and determine tier
     const authHeader = request.headers.get('authorization');
-    if (!authHeader) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-    }
-    const token = authHeader.replace('Bearer ', '');
-    const { data: { user }, error: authError } = await supabase.auth.getUser(token);
-    if (authError || !user) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-    }
+    const stripeSessionId = request.headers.get('x-stripe-session-id');
 
     let tierId = 'free';
-    const userId = user.id;
+    let userId: string | null = null;
 
-    try {
-      const tierInfo = await getUserTierAndLimits(user.id);
-      tierId = tierInfo.tierId;
-    } catch {
-      // Fallback to free tier if we can't fetch tier info
+    if (authHeader) {
+      // Logged-in user path
+      const token = authHeader.replace('Bearer ', '');
+      const { data: { user }, error: authError } = await supabase.auth.getUser(token);
+      if (authError || !user) {
+        return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+      }
+      userId = user.id;
+      try {
+        const tierInfo = await getUserTierAndLimits(user.id);
+        tierId = tierInfo.tierId;
+      } catch {
+        // Fallback to free tier
+      }
+    } else if (stripeSessionId) {
+      // Guest paid via Stripe — verify the session
+      if (usedStripeSessions.has(stripeSessionId)) {
+        return NextResponse.json({ error: 'This payment session has already been used.' }, { status: 403 });
+      }
+      let session;
+      try {
+        session = await stripe.checkout.sessions.retrieve(stripeSessionId);
+      } catch {
+        return NextResponse.json({ error: 'Invalid payment session.' }, { status: 401 });
+      }
+      if (session.payment_status !== 'paid' || session.metadata?.type !== 'pdf_conversion') {
+        return NextResponse.json({ error: 'Payment not completed.' }, { status: 402 });
+      }
+      usedStripeSessions.add(stripeSessionId);
+      tierId = 'paid_guest';
+    } else {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
     // Rate limiting based on tier

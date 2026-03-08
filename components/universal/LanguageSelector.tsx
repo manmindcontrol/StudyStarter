@@ -1,19 +1,19 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
-import { Globe, Check } from "lucide-react";
+import { Check } from "lucide-react";
 import { useLanguage, type Locale } from "@/contexts/LanguageContext";
 
 type Language = {
   code: Locale;
   name: string;
-  flag: string;
+  flagUrl: string;
 };
 
 const languages: Language[] = [
-  { code: "en", name: "English", flag: "🇬🇧" },
-  { code: "sk", name: "Slovenčina", flag: "🇸🇰" },
-  { code: "de", name: "Deutsch", flag: "🇩🇪" },
+  { code: "en", name: "English",    flagUrl: "https://flagcdn.com/gb.svg" },
+  { code: "sk", name: "Slovenčina", flagUrl: "https://flagcdn.com/sk.svg" },
+  { code: "de", name: "Deutsch",    flagUrl: "https://flagcdn.com/de.svg" },
 ];
 
 type LanguageSelectorProps = {
@@ -61,7 +61,14 @@ export default function LanguageSelector({ mobile = false }: LanguageSelectorPro
         className="flex items-center space-x-2 px-3 py-2 rounded-lg border border-gray-300 dark:border-slate-600 bg-white dark:bg-slate-800 hover:bg-gray-50 dark:hover:bg-slate-700 transition-all duration-200 shadow-sm hover:shadow-md"
         aria-label="Select language"
       >
-        <Globe className="w-4 h-4 text-gray-600 dark:text-gray-300" />
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          src={selectedLanguage.flagUrl}
+          alt={selectedLanguage.name}
+          width={20}
+          height={15}
+          className="rounded-sm object-cover"
+        />
         <span className="text-sm font-medium text-gray-700 dark:text-gray-200">
           {selectedLanguage.code.toUpperCase()}
         </span>
@@ -86,8 +93,15 @@ export default function LanguageSelector({ mobile = false }: LanguageSelectorPro
                   : ""
               }`}
             >
-              <div className="flex items-center space-x-3">
-                <span className="text-xl">{language.flag}</span>
+                      <div className="flex items-center space-x-3">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src={language.flagUrl}
+                  alt={language.name}
+                  width={22}
+                  height={16}
+                  className="rounded-sm object-cover"
+                />
                 <span className="text-sm font-medium text-gray-700 dark:text-gray-200">
                   {language.name}
                 </span>

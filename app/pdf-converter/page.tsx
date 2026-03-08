@@ -12,6 +12,12 @@ export const metadata: Metadata = {
     "PDF converter",
     "PDF zu DOCX",
     "PDF do Word",
+    "How to convert PDF to DOCX",
+    "best PDF to DOCX converter",
+    "free PDF converter online",
+    "PDF to DOCX online",
+    "PDF to DOCX ",
+    "PDF to DOCX converter",
   ],
   openGraph: {
     title: "PDF to DOCX Konvertor | StudyStarter",

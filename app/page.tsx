@@ -46,6 +46,9 @@ export const metadata: Metadata = {
     "student AI assistant",
     "best study app",
     "study helper",
+    "test question generator",
+    "AI for learning",
+    "How to learn faster",
     // Nemecké
     "effektiv lernen",
     "KI Lernhilfe",

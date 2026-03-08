@@ -128,9 +128,9 @@ export default function PdfConverterPage() {
               setSuccess(false); // Don't show success yet
               setError("");
 
-              // Auto-convert immediately with the restored file
+              // Auto-convert immediately with the restored file + paid session id
               setTimeout(() => {
-                performConversion(restoredFile);
+                performConversion(restoredFile, sessionId);
               }, 1000);
             })
             .catch((err) => {
@@ -267,7 +267,7 @@ export default function PdfConverterPage() {
     setShowPaymentModal(true);
   };
 
-  const performConversion = async (fileToConvert?: File) => {
+  const performConversion = async (fileToConvert?: File, stripeSessionId?: string) => {
     setConverting(true);
     setError("");
     setSuccess(false);
@@ -284,12 +284,17 @@ export default function PdfConverterPage() {
       formData.append("file", targetFile);
 
       const { session: convSession } = await getSession();
+      const headers: Record<string, string> = {};
+      if (convSession?.access_token) {
+        headers["Authorization"] = `Bearer ${convSession.access_token}`;
+      } else if (stripeSessionId) {
+        headers["x-stripe-session-id"] = stripeSessionId;
+      }
+
       const response = await fetch("/api/pdf-to-docx", {
         method: "POST",
         body: formData,
-        headers: convSession?.access_token
-          ? { Authorization: `Bearer ${convSession.access_token}` }
-          : {},
+        headers,
       });
 
       if (!response.ok) {

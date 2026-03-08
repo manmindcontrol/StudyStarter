@@ -50,7 +50,7 @@ export default function SlidingChatPanel({
     };
   }, [isOpen]);
 
-  const handleKeyPress = (e: React.KeyboardEvent) => {
+  const handleKeyDown = (e: React.KeyboardEvent) => {
     if (e.key === "Enter" && !e.shiftKey) {
       e.preventDefault();
       onSendMessage();
@@ -72,7 +72,7 @@ export default function SlidingChatPanel({
         className={`
           fixed md:sticky md:top-4 z-50 md:z-auto
           inset-0 md:inset-auto
-          w-screen h-screen md:w-full md:h-[calc(100vh-2rem)]
+          w-screen h-[100dvh] md:w-full md:h-[calc(100vh-2rem)]
           max-w-full max-h-full
           transform transition-transform duration-300 ease-in-out
           ${isOpen ? "translate-x-0" : "translate-x-full md:translate-x-0"}
@@ -183,9 +183,9 @@ export default function SlidingChatPanel({
                 type="text"
                 value={inputMessage}
                 onChange={(e) => onInputChange(e.target.value)}
-                onKeyPress={handleKeyPress}
+                onKeyDown={handleKeyDown}
                 placeholder="Write a message..."
-                className="flex-1 px-3 py-2 sm:px-4 sm:py-3 text-sm sm:text-base border text-gray-700 dark:text-gray-200 border-gray-300 dark:border-slate-600 bg-white dark:bg-slate-700 rounded-xl focus:ring-2 focus:ring-blue-600 dark:focus:ring-blue-500 focus:border-cyan-500 dark:focus:border-cyan-400 outline-none transition-all placeholder:text-gray-400 dark:placeholder:text-gray-500"
+                className="flex-1 px-3 py-2 sm:px-4 sm:py-3 text-base border text-gray-700 dark:text-gray-200 border-gray-300 dark:border-slate-600 bg-white dark:bg-slate-700 rounded-xl focus:ring-2 focus:ring-blue-600 dark:focus:ring-blue-500 focus:border-cyan-500 dark:focus:border-cyan-400 outline-none transition-all placeholder:text-gray-400 dark:placeholder:text-gray-500"
                 disabled={isSending}
               />
               <button

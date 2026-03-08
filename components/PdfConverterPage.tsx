@@ -154,7 +154,7 @@ export default function PdfConverterPage() {
       setError(t("pdfConverter.errors.paymentCanceled"));
       window.history.replaceState({}, "", "/pdf-converter");
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handleDrag = (e: React.DragEvent) => {
@@ -222,7 +222,11 @@ export default function PdfConverterPage() {
     // Ak je prihlásený používateľ
     if (user && loading) {
       // Ešte sa načítavajú údaje - počkaj
-      setError(t("pdfConverter.errors.pleaseSelectFile").includes("Please") ? "Loading your account info, please try again in a moment." : "Načítavam údaje o účte, skúste to znova o chvíľu.");
+      setError(
+        t("pdfConverter.errors.pleaseSelectFile").includes("Please")
+          ? "Loading your account info, please try again in a moment."
+          : "Načítavam údaje o účte, skúste to znova o chvíľu.",
+      );
       return;
     }
 
@@ -267,7 +271,10 @@ export default function PdfConverterPage() {
     setShowPaymentModal(true);
   };
 
-  const performConversion = async (fileToConvert?: File, stripeSessionId?: string) => {
+  const performConversion = async (
+    fileToConvert?: File,
+    stripeSessionId?: string,
+  ) => {
     setConverting(true);
     setError("");
     setSuccess(false);
@@ -531,7 +538,7 @@ export default function PdfConverterPage() {
             <button
               onClick={handleConvert}
               disabled={!file || converting}
-              className={`w-full mt-4 py-3 rounded-xl font-semibold transition-all flex items-center justify-center space-x-2 ${
+              className={`w-full mt-4 py-3 rounded-xl font-semibold transition-all cursor-pointer flex items-center justify-center space-x-2 ${
                 !file || converting
                   ? "bg-gray-300 dark:bg-gray-700 text-gray-500 dark:text-gray-400 cursor-not-allowed"
                   : "bg-blue-600 hover:bg-blue-700 text-white"
@@ -653,7 +660,7 @@ export default function PdfConverterPage() {
                     €0.50
                   </span>
                 </div>
-                <div className="text-sm text-gray-600 dark:text-gray-400">
+                <div className="text-sm text-gray-600 dark:text-gray-400 cursor-pointer">
                   {t("pdfConverter.oneTimePayment")}
                 </div>
               </div>
@@ -682,7 +689,7 @@ export default function PdfConverterPage() {
                 </button>
                 <button
                   onClick={handlePayment}
-                  className="flex-1 bg-linear-to-r from-blue-600 to-cyan-600 hover:from-blue-700 hover:to-cyan-700 text-white font-semibold py-3 px-6 rounded-xl transition-all duration-300 shadow-lg shadow-blue-500/30 hover:shadow-xl hover:shadow-blue-500/40"
+                  className="flex-1 bg-linear-to-r cursor-pointer from-blue-600 to-cyan-600 hover:from-blue-700 hover:to-cyan-700 text-white font-semibold py-3 px-6 rounded-xl transition-all duration-300 shadow-lg shadow-blue-500/30 hover:shadow-xl hover:shadow-blue-500/40"
                 >
                   {t("pdfConverter.pay")}
                 </button>

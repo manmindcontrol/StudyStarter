@@ -92,7 +92,7 @@ export const metadata: Metadata = {
     siteName: "StudyStarter",
     images: [
       {
-        url: "/og-image.webp",
+        url: "/logo.webp",
         width: 1200,
         height: 630,
         alt: "StudyStarter - AI pomôcka pre efektívne učenie",
@@ -104,7 +104,7 @@ export const metadata: Metadata = {
     title: "StudyStarter - Ako sa efektívne učiť",
     description:
       "Bezplatná AI aplikácia pre študentov. Prepis prednášok, generovanie testov a študijných materiálov.",
-    images: ["/og-image.webp"],
+    images: ["/logo.webp"],
     creator: "@studystarter",
   },
   manifest: "/manifest.json",

@@ -1,8 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createClient } from "@supabase/supabase-js";
 import OpenAI from "openai";
-import type { ChatCompletion } from "openai/resources/chat/completions";
-import { retryWithAdaptiveContent } from "@/lib/openai-retry";
 
 export const runtime = "nodejs";
 
@@ -241,65 +239,44 @@ DO:
 - Analyze how much attention the document gives to each subconcept and reflect that in your explanation length
 `;
 
-    // 3️⃣ Call OpenAI with retry logic and adaptive content sizing
-    const aiResponse = await retryWithAdaptiveContent(
-      async (contentToAnalyze) => {
-        return await openai.chat.completions.create({
-          model: "gpt-4o-mini", // Using powerful model for comprehensive notes
-          messages: [
-            {
-              role: "system",
-              content: systemPrompt,
-            },
-            {
-              role: "user",
-              content: `${userPrompt}\n\nDocument content:\n${contentToAnalyze}`,
-            },
-          ],
-          response_format: { type: "json_object" },
-          temperature: 0.7, // Slightly higher for more natural, flowing text
-          max_tokens: 16000, // Increased token limit for comprehensive notes
-        });
+    // 3️⃣ Stream OpenAI response directly to the client
+    const contentToAnalyze = material.content.substring(0, 100000);
+
+    const openaiStream = await openai.chat.completions.create({
+      model: "gpt-4o-mini",
+      messages: [
+        { role: "system", content: systemPrompt },
+        { role: "user", content: `${userPrompt}\n\nDocument content:\n${contentToAnalyze}` },
+      ],
+      response_format: { type: "json_object" },
+      temperature: 0.7,
+      max_tokens: 16000,
+      stream: true,
+    });
+
+    const encoder = new TextEncoder();
+    const readableStream = new ReadableStream({
+      async start(controller) {
+        try {
+          for await (const chunk of openaiStream) {
+            const delta = chunk.choices[0]?.delta?.content ?? '';
+            if (delta) {
+              controller.enqueue(encoder.encode(delta));
+            }
+          }
+          controller.close();
+        } catch (err) {
+          controller.error(err);
+        }
       },
-      material.content,
-      {
-        maxRetries: 3,
-        contentLimits: [150000, 100000, 50000],
-      }
-    );
+    });
 
-    // 4️⃣ Extract text safely
-    const jsonText = (aiResponse as ChatCompletion).choices[0]?.message?.content;
-
-    if (!jsonText) {
-      console.error("OpenAI response:", aiResponse);
-      return NextResponse.json(
-        { error: "Could not extract text from OpenAI response." },
-        { status: 500 }
-      );
-    }
-
-    // 5️⃣ Parse JSON
-    let notesData: StudyNotesResponse;
-
-    try {
-      notesData = JSON.parse(jsonText) as StudyNotesResponse;
-
-      if (!notesData.summary || !Array.isArray(notesData.key_points) || !Array.isArray(notesData.concepts)) {
-        throw new Error("Invalid notes structure");
-      }
-    } catch (_err) {
-      console.error("JSON parse error:", jsonText);
-      return NextResponse.json(
-        { error: "OpenAI did not return valid JSON." },
-        { status: 500 }
-      );
-    }
-
-    // 6️⃣ Done - return notes without saving (user will save manually)
-    return NextResponse.json({
-      success: true,
-      notes: notesData,
+    return new NextResponse(readableStream, {
+      headers: {
+        'Content-Type': 'text/plain; charset=utf-8',
+        'Cache-Control': 'no-cache',
+        'X-Content-Type-Options': 'nosniff',
+      },
     });
   } catch (error) {
     console.error("Generate Notes Error:", error);

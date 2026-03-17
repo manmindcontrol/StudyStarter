@@ -6,14 +6,20 @@ import { useTranslation } from "@/hooks/useTranslation";
 
 type GeneratingNotesModalProps = {
   isOpen: boolean;
+  streamProgress?: number; // real progress from stream (0-100), overrides fake animation
 };
 
 export default function GeneratingNotesModal({
   isOpen,
+  streamProgress,
 }: GeneratingNotesModalProps) {
   const { t } = useTranslation();
   const [currentTextIndex, setCurrentTextIndex] = useState(0);
-  const [progress, setProgress] = useState(0);
+  const [fakeProgress, setFakeProgress] = useState(0);
+
+  const progress = streamProgress !== undefined && streamProgress > 0
+    ? streamProgress
+    : fakeProgress;
 
   const loadingTexts = [
     {
@@ -65,8 +71,22 @@ export default function GeneratingNotesModal({
     };
   }, [isOpen]);
 
+  // Sync text index to real stream progress
+  useEffect(() => {
+    if (streamProgress !== undefined && streamProgress > 0) {
+      const index = Math.min(
+        Math.floor((streamProgress / 100) * loadingTexts.length),
+        loadingTexts.length - 1
+      );
+      setCurrentTextIndex(index);
+    }
+  }, [streamProgress, loadingTexts.length]);
+
   useEffect(() => {
     if (!isOpen) return;
+
+    // Only run fake animations when there's no real stream progress
+    if (streamProgress !== undefined && streamProgress > 0) return;
 
     // Change text every 3 seconds
     const textInterval = setInterval(() => {
@@ -78,9 +98,9 @@ export default function GeneratingNotesModal({
       });
     }, 3000);
 
-    // Smooth progress animation
+    // Smooth fake progress animation
     const progressInterval = setInterval(() => {
-      setProgress((prev) => {
+      setFakeProgress((prev) => {
         if (prev < 95) {
           return prev + 0.5;
         }
@@ -92,7 +112,7 @@ export default function GeneratingNotesModal({
       clearInterval(textInterval);
       clearInterval(progressInterval);
     };
-  }, [isOpen, loadingTexts.length]);
+  }, [isOpen, streamProgress, loadingTexts.length]);
 
   if (!isOpen) return null;
 

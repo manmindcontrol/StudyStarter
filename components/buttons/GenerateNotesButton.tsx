@@ -25,10 +25,12 @@ export default function GenerateNotesButton({
   const router = useRouter();
   const { t } = useTranslation();
   const [loading, setLoading] = useState(false);
+  const [streamProgress, setStreamProgress] = useState(0);
   const [error, setError] = useState<string | null>(null);
 
   const handleClick = async () => {
     setError(null);
+    setStreamProgress(0);
     setLoading(true);
 
     try {
@@ -56,14 +58,30 @@ export default function GenerateNotesButton({
         },
       });
 
-      const data = await res.json();
-
-      if (!res.ok) {
-        throw new Error(data.error || "Failed to generate study notes.");
+      if (!res.ok || !res.body) {
+        const data = await res.json().catch(() => ({}));
+        throw new Error((data as { error?: string }).error || "Failed to generate study notes.");
       }
 
+      // Read the streaming response
+      const reader = res.body.getReader();
+      const decoder = new TextDecoder();
+      let fullJson = '';
+      // Estimate: typical notes JSON is ~40k chars; cap progress at 95%
+      const ESTIMATED_SIZE = 40000;
+
+      while (true) {
+        const { done, value } = await reader.read();
+        if (done) break;
+        fullJson += decoder.decode(value, { stream: true });
+        setStreamProgress(Math.min(95, Math.round((fullJson.length / ESTIMATED_SIZE) * 95)));
+      }
+
+      const notes = JSON.parse(fullJson);
+      setStreamProgress(100);
+
       // Store notes data in sessionStorage to avoid URL length limits
-      sessionStorage.setItem('unsavedNotes', JSON.stringify(data.notes));
+      sessionStorage.setItem('unsavedNotes', JSON.stringify(notes));
 
       // Redirect to notes page
       if (contentType === "material") {
@@ -87,6 +105,7 @@ export default function GenerateNotesButton({
       <GeneratingNotesModal
         key={loading ? "open" : "closed"}
         isOpen={loading}
+        streamProgress={streamProgress}
       />
 
       <div className="flex flex-col space-y-2">

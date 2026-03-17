@@ -124,14 +124,11 @@ export default function PdfConverterPage() {
               // Clear sessionStorage
               sessionStorage.removeItem("pendingPdfFile");
 
-              // Show success message with info
-              setSuccess(false); // Don't show success yet
+              setSuccess(false);
               setError("");
 
-              // Auto-convert immediately with the restored file + paid session id
-              setTimeout(() => {
-                performConversion(restoredFile, sessionId);
-              }, 1000);
+              // Auto-convert with the restored file + paid session id
+              performConversion(restoredFile, sessionId);
             })
             .catch((err) => {
               console.error("Failed to restore file blob:", err);
@@ -325,8 +322,8 @@ export default function PdfConverterPage() {
       setSuccess(true);
       setFile(null);
 
-      // Refresh usage info ak je prihlásený
-      if (user) {
+      // Refresh usage info ak je prihlásený a nemá unlimited
+      if (user && !usageInfo?.usage.pdf_conversions.unlimited) {
         const { session } = await getSession();
         const usageResponse = await fetch("/api/usage", {
           headers: session?.access_token
@@ -352,6 +349,16 @@ export default function PdfConverterPage() {
   const handlePayment = async () => {
     if (!file) {
       setError(t("pdfConverter.errors.pleaseSelectFile"));
+      return;
+    }
+
+    // SessionStorage limit is ~5MB; base64 encoding adds ~33% overhead
+    const MAX_SESSION_STORAGE_SIZE = 3.5 * 1024 * 1024; // 3.5 MB
+    if (file.size > MAX_SESSION_STORAGE_SIZE) {
+      setError(
+        t("pdfConverter.errors.fileTooLargeForPayment") ||
+          "File is too large for payment redirect (max 3.5 MB). Please sign in and convert directly.",
+      );
       return;
     }
 

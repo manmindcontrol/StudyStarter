@@ -217,49 +217,49 @@ Additional rules:
       const firstHalfContent = contentToAnalyze.substring(0, halfPoint);
       const secondHalfContent = contentToAnalyze.substring(halfPoint, contentLimit);
 
-      // Generate first batch from first half
+      // Generate both batches in parallel for faster results
       const firstPrompt = userPrompt.replace(
         `Generate EXACTLY ${questionCount} questions`,
         `Generate EXACTLY ${firstBatch} questions from this section of the document`
       );
 
-      const firstResponse = await retryOpenAICall(() =>
-        openai.chat.completions.create({
-          model: "gpt-4o-mini",
-          messages: [
-            { role: "system", content: systemPrompt },
-            { role: "user", content: `${firstPrompt}\n\nDocument content:\n${firstHalfContent}` },
-          ],
-          response_format: { type: "json_object" },
-          temperature: 0.7,
-          max_tokens: 10000,
-        })
+      const secondPrompt = userPrompt.replace(
+        `Generate EXACTLY ${questionCount} questions`,
+        `Generate EXACTLY ${secondBatch} questions from this section of the document. Make sure these are DIFFERENT from any previous questions.`
       );
+
+      const [firstResponse, secondResponse] = await Promise.all([
+        retryOpenAICall(() =>
+          openai.chat.completions.create({
+            model: "gpt-4o-mini",
+            messages: [
+              { role: "system", content: systemPrompt },
+              { role: "user", content: `${firstPrompt}\n\nDocument content:\n${firstHalfContent}` },
+            ],
+            response_format: { type: "json_object" },
+            temperature: 0.7,
+            max_tokens: 10000,
+          })
+        ),
+        retryOpenAICall(() =>
+          openai.chat.completions.create({
+            model: "gpt-4o-mini",
+            messages: [
+              { role: "system", content: systemPrompt },
+              { role: "user", content: `${secondPrompt}\n\nDocument content:\n${secondHalfContent}` },
+            ],
+            response_format: { type: "json_object" },
+            temperature: 0.7,
+            max_tokens: 10000,
+          })
+        ),
+      ]);
 
       const firstJson = firstResponse.choices[0]?.message?.content;
       if (firstJson) {
         const firstParsed = JSON.parse(firstJson) as { questions: GeneratedQuestion[] };
         questions.push(...firstParsed.questions);
       }
-
-      // Generate second batch from second half
-      const secondPrompt = userPrompt.replace(
-        `Generate EXACTLY ${questionCount} questions`,
-        `Generate EXACTLY ${secondBatch} questions from this section of the document. Make sure these are DIFFERENT from any previous questions.`
-      );
-
-      const secondResponse = await retryOpenAICall(() =>
-        openai.chat.completions.create({
-          model: "gpt-4o-mini",
-          messages: [
-            { role: "system", content: systemPrompt },
-            { role: "user", content: `${secondPrompt}\n\nDocument content:\n${secondHalfContent}` },
-          ],
-          response_format: { type: "json_object" },
-          temperature: 0.7,
-          max_tokens: 10000,
-        })
-      );
 
       const secondJson = secondResponse.choices[0]?.message?.content;
       if (secondJson) {

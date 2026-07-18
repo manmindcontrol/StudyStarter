@@ -358,6 +358,7 @@ export default function FileUpload({
                   <button
                     onClick={clearFile}
                     className="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition-colors p-1"
+                    aria-label="Remove file"
                   >
                     <X className="w-4 h-4" />
                   </button>

@@ -7,6 +7,9 @@ export const runtime = "nodejs";
 const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY! });
 const supabase = createServiceRoleClient();
 
+// Model used for grading — override with OPENAI_GENERATION_MODEL if needed
+const GRADING_MODEL = process.env.OPENAI_GENERATION_MODEL || "gpt-4.1";
+
 export async function POST(request: NextRequest) {
   try {
     const authHeader = request.headers.get("authorization");
@@ -20,10 +23,11 @@ export async function POST(request: NextRequest) {
     }
 
     const body = await request.json();
-    const { question, userAnswer, correctAnswer } = body as {
+    const { question, userAnswer, correctAnswer, rubric } = body as {
       question: string;
       userAnswer: string;
       correctAnswer: string;
+      rubric?: string[] | null;
     };
 
     if (!question || !userAnswer || !correctAnswer) {
@@ -33,38 +37,47 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Use OpenAI to validate the answer
-    const systemPrompt = `You are an AI assistant that validates student answers to open-ended questions.
+    const rubricBlock =
+      rubric && rubric.length > 0
+        ? `\n\nGrading rubric (award credit per criterion):\n${rubric
+            .map((c, i) => `${i + 1}. ${c}`)
+            .join("\n")}`
+        : "";
 
-Your task:
-1. Compare the student's answer with the correct answer
-2. Determine if the student's answer is correct, partially correct, or incorrect
-3. Consider that answers can be phrased differently but still be correct
-4. Be lenient with minor wording differences if the core concept is correct
-5. Provide brief, constructive feedback
+    // Use OpenAI to grade the answer like a university examiner
+    const systemPrompt = `You are an experienced university examiner grading a student's open-ended (constructed-response) answer. Grade fairly, rigorously, and constructively, exactly as you would on a real university exam.
 
-Respond in JSON format:
+Grading principles:
+1. Judge the SUBSTANCE of the answer against the model answer (and rubric, if provided), not superficial wording. Different phrasing, synonyms, or ordering that convey the correct ideas earn full credit.
+2. Award PARTIAL CREDIT: an answer can be fully correct, partially correct, or incorrect. Reward what the student got right and identify what is missing or wrong.
+3. Do not reward vague, empty, or irrelevant answers, nor penalize an academically sound answer that differs from the model answer but is still correct.
+4. Be accurate about factual/conceptual errors — a prestigious university expects precision.
+5. Feedback must be specific and constructive: name the concepts the student captured, and the key points they missed or got wrong. 1-3 sentences. Address the student directly and in the SAME LANGUAGE as their answer.
+
+Respond in JSON:
 {
-  "isCorrect": true/false,
-  "feedback": "Brief explanation (1-2 sentences)"
+  "isCorrect": true | false,   // true only if the answer would earn a clear passing/near-full score
+  "score": 0-100,               // percentage of the marks you would award
+  "verdict": "correct" | "partial" | "incorrect",
+  "feedback": "Specific, constructive feedback in the student's language."
 }`;
 
     const completion = await openai.chat.completions.create({
-      model: "gpt-4o-mini",
+      model: GRADING_MODEL,
       messages: [
         { role: "system", content: systemPrompt },
         {
           role: "user",
           content: `Question: ${question}
 
-Correct Answer: ${correctAnswer}
+Model / correct answer: ${correctAnswer}${rubricBlock}
 
-Student's Answer: ${userAnswer}
+Student's answer: ${userAnswer}
 
-Please evaluate if the student's answer is correct.`,
+Grade the student's answer.`,
         },
       ],
-      temperature: 0.3,
+      temperature: 0.2,
       response_format: { type: "json_object" },
     });
 
@@ -75,8 +88,15 @@ Please evaluate if the student's answer is correct.`,
 
     const validation = JSON.parse(result);
 
+    // Normalise score to a 0-100 integer when present
+    let score: number | null =
+      typeof validation.score === "number" ? Math.round(validation.score) : null;
+    if (score !== null) score = Math.max(0, Math.min(100, score));
+
     return NextResponse.json({
       isCorrect: validation.isCorrect,
+      verdict: validation.verdict ?? null,
+      score,
       feedback: validation.feedback,
     });
   } catch (error) {

@@ -419,8 +419,6 @@
     "saving": "Speichern...",
     "questionsSaved": "Fragen gespeichert",
     "downloadQuestions": "Fragen herunterladen",
-    "wordDocx": "Word (.docx)",
-    "textTxt": "Text (.txt)",
     "generatedQuestions": "Generierte Fragen",
     "multipleChoice": "Multiple Choice",
     "open": "Offen",
@@ -437,7 +435,51 @@
     "chatGreetingDefault": "Hallo! Ich kann Ihnen mit den Fragen helfen. Was benötigen Sie?",
     "chatError": "Entschuldigung, ein Fehler ist aufgetreten. Bitte versuchen Sie es erneut.",
     "validationError": "Antwort konnte nicht überprüft werden. Bitte prüfen Sie die richtige Antwort unten.",
-    "generatedWithAI": "Mit AI-Assistent generiert"
+    "generatedWithAI": "Mit AI-Assistent generiert",
+    "scoreLabel": "Punktzahl",
+    "gradingCriteria": "Bewertungskriterien",
+    "difficulty": {
+      "easy": "Leicht",
+      "medium": "Mittel",
+      "hard": "Schwer"
+    },
+    "bloom": {
+      "remember": "Erinnern",
+      "understand": "Verstehen",
+      "apply": "Anwenden",
+      "analyze": "Analysieren",
+      "evaluate": "Bewerten",
+      "create": "Erschaffen"
+    },
+    "editQuestion": "Frage bearbeiten",
+    "deleteQuestion": "Frage löschen",
+    "confirmDeleteQuestion": "Diese Frage löschen?",
+    "saveChanges": "Fertig",
+    "cancelEdit": "Abbrechen",
+    "questionTextLabel": "Frage",
+    "optionsLabel": "Optionen (richtige auswählen)",
+    "explanationLabel": "Erläuterung der richtigen Antwort",
+    "modelAnswerLabel": "Musterantwort",
+    "topicLabel": "Thema",
+    "difficultyLabel": "Schwierigkeit",
+    "bloomLabel": "Kognitive Ebene",
+    "rubricLabel": "Bewertungskriterien",
+    "addCriterion": "Kriterium hinzufügen",
+    "removeCriterion": "Kriterium entfernen",
+    "unsavedChanges": "Sie haben ungespeicherte Änderungen",
+    "saveChangesButton": "Änderungen speichern",
+    "changesSaved": "Änderungen gespeichert",
+    "questionRequired": "Der Fragetext darf nicht leer sein.",
+    "optionsRequired": "Alle vier Optionen müssen ausgefüllt sein.",
+    "addQuestion": "Frage hinzufügen",
+    "addQuestionTitle": "Neue Frage hinzufügen",
+    "chooseQuestionType": "Welchen Fragetyp möchten Sie hinzufügen?",
+    "mcqTypeDescription": "Vier Optionen, die richtige markieren Sie",
+    "openTypeDescription": "Freitextantwort mit Musterantwort und Kriterien",
+    "wordWithAnswers": "Word — mit Antworten",
+    "wordForStudent": "Word — leerer Test",
+    "studentNameLine": "Name:",
+    "studentDateLine": "Datum:"
   },
   "buttons": {
     "openDocument": "Dokument öffnen",
@@ -504,7 +546,14 @@
       "noteText": "Die richtige Antwort wird immer unter jeder Frage zu Lernzwecken angezeigt.",
       "cancel": "Abbrechen",
       "generate": "Fragen generieren",
-      "generating": "Generieren..."
+      "generating": "Generieren...",
+      "academicLevel": "Akademisches Niveau",
+      "levelStandardTitle": "Standard",
+      "levelStandardDesc": "Einführungskurs — Verständnis und Anwendung",
+      "levelAdvancedTitle": "Fortgeschritten",
+      "levelAdvancedDesc": "Höheres Niveau / Abschlussprüfung — Analyse und Bewertung",
+      "levelExpertTitle": "Experte",
+      "levelExpertDesc": "Master / Staatsprüfung — Synthese und kritische Meisterschaft"
     },
     "slidingChat": {
       "defaultTitle": "AI-Assistent",
@@ -618,7 +667,8 @@
       "limitReached": "Sie haben Ihr monatliches Limit von {limit} PDF-Konvertierungen erreicht. Bitte upgraden Sie Ihren Plan oder warten Sie bis zum nächsten Monat.",
       "failedToRead": "Datei konnte nicht gelesen werden. Bitte versuchen Sie es erneut.",
       "failedToInitiatePayment": "Zahlung konnte nicht initiiert werden",
-      "failedToCreateCheckout": "Checkout-Sitzung konnte nicht erstellt werden"
+      "failedToCreateCheckout": "Checkout-Sitzung konnte nicht erstellt werden",
+      "loadingAccountInfo": "Kontodaten werden geladen, bitte versuchen Sie es gleich noch einmal."
     }
   },
   "contact": {

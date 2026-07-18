@@ -419,8 +419,6 @@
     "saving": "Saving...",
     "questionsSaved": "Questions Saved",
     "downloadQuestions": "Download questions",
-    "wordDocx": "Word (.docx)",
-    "textTxt": "Text (.txt)",
     "generatedQuestions": "Generated Questions",
     "multipleChoice": "Multiple Choice",
     "open": "Open",
@@ -437,7 +435,51 @@
     "chatGreetingDefault": "Hello! I can help you with the questions. What do you need?",
     "chatError": "Sorry, an error occurred. Please try again.",
     "validationError": "Could not validate answer. Please check the correct answer below.",
-    "generatedWithAI": "Generated with AI assistant"
+    "generatedWithAI": "Generated with AI assistant",
+    "scoreLabel": "Score",
+    "gradingCriteria": "Grading criteria",
+    "difficulty": {
+      "easy": "Easy",
+      "medium": "Medium",
+      "hard": "Hard"
+    },
+    "bloom": {
+      "remember": "Remember",
+      "understand": "Understand",
+      "apply": "Apply",
+      "analyze": "Analyze",
+      "evaluate": "Evaluate",
+      "create": "Create"
+    },
+    "editQuestion": "Edit question",
+    "deleteQuestion": "Delete question",
+    "confirmDeleteQuestion": "Delete this question?",
+    "saveChanges": "Done",
+    "cancelEdit": "Cancel",
+    "questionTextLabel": "Question",
+    "optionsLabel": "Options (select the correct one)",
+    "explanationLabel": "Explanation of the correct answer",
+    "modelAnswerLabel": "Model answer",
+    "topicLabel": "Topic",
+    "difficultyLabel": "Difficulty",
+    "bloomLabel": "Cognitive level",
+    "rubricLabel": "Grading criteria",
+    "addCriterion": "Add criterion",
+    "removeCriterion": "Remove criterion",
+    "unsavedChanges": "You have unsaved changes",
+    "saveChangesButton": "Save changes",
+    "changesSaved": "Changes saved",
+    "questionRequired": "The question text cannot be empty.",
+    "optionsRequired": "All four options must be filled in.",
+    "addQuestion": "Add question",
+    "addQuestionTitle": "Add a new question",
+    "chooseQuestionType": "What type of question do you want to add?",
+    "mcqTypeDescription": "Four options, you mark the correct one",
+    "openTypeDescription": "Free-text answer with a model answer and criteria",
+    "wordWithAnswers": "Word — with answers",
+    "wordForStudent": "Word — blank test",
+    "studentNameLine": "Name:",
+    "studentDateLine": "Date:"
   },
   "buttons": {
     "openDocument": "Open Document",
@@ -504,7 +546,14 @@
       "noteText": "The correct answer will always be displayed below each question for learning purposes.",
       "cancel": "Cancel",
       "generate": "Generate Questions",
-      "generating": "Generating..."
+      "generating": "Generating...",
+      "academicLevel": "Academic level",
+      "levelStandardTitle": "Standard",
+      "levelStandardDesc": "Introductory course - comprehension and application",
+      "levelAdvancedTitle": "Advanced",
+      "levelAdvancedDesc": "Upper-level / final exam - analysis and evaluation",
+      "levelExpertTitle": "Expert",
+      "levelExpertDesc": "Graduate / state exam - synthesis and critical mastery"
     },
     "slidingChat": {
       "defaultTitle": "AI Assistant",
@@ -618,7 +667,8 @@
       "limitReached": "You've reached your monthly limit of {limit} PDF conversions. Please upgrade your plan or wait until next month.",
       "failedToRead": "Failed to read file. Please try again.",
       "failedToInitiatePayment": "Failed to initiate payment",
-      "failedToCreateCheckout": "Failed to create checkout session"
+      "failedToCreateCheckout": "Failed to create checkout session",
+      "loadingAccountInfo": "Loading your account info, please try again in a moment."
     }
   },
   "contact": {

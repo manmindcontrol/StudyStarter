@@ -7,15 +7,21 @@ import {
   HelpCircle,
   CheckCircle,
   Shuffle,
+  GraduationCap,
 } from "lucide-react";
 import { useTranslation } from "@/hooks/useTranslation";
 
 type QuestionFormat = "mcq" | "open" | "mixed";
+type AcademicLevel = "standard" | "advanced" | "expert";
 
 type GenerateQuestionsModalProps = {
   isOpen: boolean;
   onClose: () => void;
-  onGenerate: (count: number, format: QuestionFormat) => void;
+  onGenerate: (
+    count: number,
+    format: QuestionFormat,
+    difficulty: AcademicLevel,
+  ) => void;
   loading?: boolean;
 };
 
@@ -28,6 +34,8 @@ export default function GenerateQuestionsModal({
   const { t } = useTranslation();
   const [questionCount, setQuestionCount] = useState<number>(10);
   const [questionFormat, setQuestionFormat] = useState<QuestionFormat>("mixed");
+  const [academicLevel, setAcademicLevel] =
+    useState<AcademicLevel>("advanced");
 
   // Disable body scroll when modal is open
   useEffect(() => {
@@ -44,8 +52,30 @@ export default function GenerateQuestionsModal({
   if (!isOpen) return null;
 
   const handleGenerate = () => {
-    onGenerate(questionCount, questionFormat);
+    onGenerate(questionCount, questionFormat, academicLevel);
   };
+
+  const levels: {
+    value: AcademicLevel;
+    titleKey: string;
+    descKey: string;
+  }[] = [
+    {
+      value: "standard",
+      titleKey: "modals.generateQuestions.levelStandardTitle",
+      descKey: "modals.generateQuestions.levelStandardDesc",
+    },
+    {
+      value: "advanced",
+      titleKey: "modals.generateQuestions.levelAdvancedTitle",
+      descKey: "modals.generateQuestions.levelAdvancedDesc",
+    },
+    {
+      value: "expert",
+      titleKey: "modals.generateQuestions.levelExpertTitle",
+      descKey: "modals.generateQuestions.levelExpertDesc",
+    },
+  ];
 
   return (
     <div className="fixed inset-0 min-h-screen z-50 flex items-center justify-center p-3 sm:p-4 bg-black/60 backdrop-blur-sm">
@@ -65,6 +95,7 @@ export default function GenerateQuestionsModal({
               onClick={onClose}
               disabled={loading}
               className="text-white/80 hover:text-white transition-colors disabled:opacity-50 p-1"
+              aria-label="Close"
             >
               <X className="w-5 h-5 sm:w-6 sm:h-6" />
             </button>
@@ -290,6 +321,58 @@ export default function GenerateQuestionsModal({
                   </div>
                 </div>
               </button>
+            </div>
+          </div>
+
+          {/* Academic Level */}
+          <div>
+            <label className="block text-sm font-semibold text-gray-900 dark:text-gray-300 mb-2">
+              {t("modals.generateQuestions.academicLevel")}
+            </label>
+            <div className="space-y-2">
+              {levels.map((level) => (
+                <button
+                  key={level.value}
+                  type="button"
+                  onClick={() => setAcademicLevel(level.value)}
+                  disabled={loading}
+                  className={`
+                    w-full p-3 rounded-xl border-2 transition-all text-left
+                    ${
+                      academicLevel === level.value
+                        ? "border-green-500 bg-green-50 dark:bg-green-900/50 dark:border-green-700/50"
+                        : "border-gray-200 bg-white dark:bg-slate-700/70 dark:border-slate-700/70 hover:border-gray-300"
+                    }
+                    disabled:opacity-50 disabled:cursor-not-allowed
+                  `}
+                >
+                  <div className="flex items-center space-x-2.5">
+                    <div
+                      className={`
+                      w-4 h-4 sm:w-5 sm:h-5 rounded-full border-2 flex items-center justify-center transition-all shrink-0
+                      ${
+                        academicLevel === level.value
+                          ? "border-green-500 bg-green-500"
+                          : "border-gray-300"
+                      }
+                    `}
+                    >
+                      {academicLevel === level.value && (
+                        <CheckCircle className="w-2.5 h-2.5 sm:w-3 sm:h-3 text-white" />
+                      )}
+                    </div>
+                    <GraduationCap className="w-4 h-4 text-emerald-600 dark:text-emerald-400 shrink-0" />
+                    <div className="flex-1 min-w-0">
+                      <h3 className="font-semibold text-gray-900 dark:text-gray-300 text-sm">
+                        {t(level.titleKey)}
+                      </h3>
+                      <p className="text-xs text-gray-500 dark:text-gray-400 truncate">
+                        {t(level.descKey)}
+                      </p>
+                    </div>
+                  </div>
+                </button>
+              ))}
             </div>
           </div>
 

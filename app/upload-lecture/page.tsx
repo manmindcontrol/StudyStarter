@@ -4,7 +4,8 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { getCurrentUser } from "@/lib/auth";
 import type { User } from "@supabase/supabase-js";
-import { Mic, Upload, ArrowLeft } from "lucide-react";
+// Mic: re-add to imports when real-time recording is re-enabled
+import { Upload, ArrowLeft } from "lucide-react";
 import { useTranslation } from "@/hooks/useTranslation";
 
 export default function UploadLecturePage() {
@@ -62,8 +63,10 @@ export default function UploadLecturePage() {
         </div>
 
         {/* Options Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-5xl mx-auto">
-          {/* Record in Real-Time */}
+        {/* NOTE: Real-time recording is temporarily disabled. To re-enable, uncomment the
+            "Record in Real-Time" card below and restore "md:grid-cols-2 max-w-5xl" on the grid. */}
+        <div className="grid grid-cols-1 gap-6 max-w-xl mx-auto">
+          {/* Record in Real-Time — TEMPORARILY DISABLED
           <button
             onClick={() => router.push("/record-lecture")}
             className="group bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm border-2 border-green-200 dark:border-green-700 hover:border-green-500 dark:hover:border-green-400 rounded-2xl shadow-xl p-8 hover:shadow-2xl transition-all relative overflow-hidden cursor-pointer"
@@ -97,6 +100,7 @@ export default function UploadLecturePage() {
               <Mic className="w-48 h-48 text-green-500" />
             </div>
           </button>
+          */}
 
           {/* Upload Recorded Lecture */}
           <button

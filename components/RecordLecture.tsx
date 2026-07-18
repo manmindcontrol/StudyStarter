@@ -80,7 +80,8 @@ export default function RecordLecture() {
     };
   }, []);
 
-  const cleanup = () => {
+  // Function declaration so it is hoisted for the unmount effect above
+  function cleanup() {
     if (timerIntervalRef.current) {
       clearInterval(timerIntervalRef.current);
       timerIntervalRef.current = null;
@@ -96,7 +97,7 @@ export default function RecordLecture() {
       streamRef.current.getTracks().forEach((track) => track.stop());
       streamRef.current = null;
     }
-  };
+  }
 
   const formatTime = (seconds: number) => {
     const hrs = Math.floor(seconds / 3600);

@@ -52,7 +52,6 @@ export default function PdfConverterPage() {
     periodEnd: string;
   } | null>(null);
   const [showPaymentModal, setShowPaymentModal] = useState(false);
-  const [_paymentSuccess, setPaymentSuccess] = useState(false);
 
   // Skontroluj používateľa a jeho usage
   useEffect(() => {
@@ -93,185 +92,11 @@ export default function PdfConverterPage() {
     loadData();
   }, []);
 
-  // Handle payment success from Stripe redirect
-  useEffect(() => {
-    const urlParams = new URLSearchParams(window.location.search);
-    const success = urlParams.get("success");
-    const sessionId = urlParams.get("session_id");
-
-    if (success === "true" && sessionId) {
-      // Payment was successful
-      setPaymentSuccess(true);
-
-      // Try to restore file from sessionStorage
-      const savedFileData = sessionStorage.getItem("pendingPdfFile");
-      if (savedFileData) {
-        try {
-          const { fileName, fileData } = JSON.parse(savedFileData);
-
-          // Convert base64 back to File object with proper MIME type
-          fetch(fileData)
-            .then((res) => res.blob())
-            .then((blob) => {
-              // Ensure proper MIME type for PDF
-              const pdfBlob = new Blob([blob], { type: "application/pdf" });
-              const restoredFile = new File([pdfBlob], fileName, {
-                type: "application/pdf",
-              });
-
-              setFile(restoredFile);
-
-              // Clear sessionStorage
-              sessionStorage.removeItem("pendingPdfFile");
-
-              setSuccess(false);
-              setError("");
-
-              // Auto-convert with the restored file + paid session id
-              performConversion(restoredFile, sessionId);
-            })
-            .catch((err) => {
-              console.error("Failed to restore file blob:", err);
-              setError(t("pdfConverter.errors.paymentSuccessUploadAgain"));
-            });
-        } catch (err) {
-          console.error("Failed to parse saved file:", err);
-          setError(t("pdfConverter.errors.paymentSuccessUploadAgain"));
-        }
-      } else {
-        setError(t("pdfConverter.errors.paymentSuccessUploadAgain"));
-      }
-
-      // Clean URL
-      window.history.replaceState({}, "", "/pdf-converter");
-    }
-
-    const canceled = urlParams.get("canceled");
-    if (canceled === "true") {
-      setError(t("pdfConverter.errors.paymentCanceled"));
-      window.history.replaceState({}, "", "/pdf-converter");
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  const handleDrag = (e: React.DragEvent) => {
-    e.preventDefault();
-    e.stopPropagation();
-    if (e.type === "dragenter" || e.type === "dragover") {
-      setDragActive(true);
-    } else if (e.type === "dragleave") {
-      setDragActive(false);
-    }
-  };
-
-  const handleDrop = (e: React.DragEvent) => {
-    e.preventDefault();
-    e.stopPropagation();
-    setDragActive(false);
-    setError("");
-    setSuccess(false);
-
-    if (e.dataTransfer.files && e.dataTransfer.files[0]) {
-      const droppedFile = e.dataTransfer.files[0];
-      // Accept if MIME type is correct OR if file extension is .pdf
-      const isPdf =
-        droppedFile.type === "application/pdf" ||
-        droppedFile.name.toLowerCase().endsWith(".pdf");
-
-      if (isPdf) {
-        setFile(droppedFile);
-      } else {
-        setError(t("pdfConverter.errors.pleaseUploadPdf"));
-      }
-    }
-  };
-
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setError("");
-    setSuccess(false);
-    if (e.target.files && e.target.files[0]) {
-      const selectedFile = e.target.files[0];
-      // Accept if MIME type is correct OR if file extension is .pdf
-      const isPdf =
-        selectedFile.type === "application/pdf" ||
-        selectedFile.name.toLowerCase().endsWith(".pdf");
-
-      if (isPdf) {
-        setFile(selectedFile);
-      } else {
-        setError(t("pdfConverter.errors.pleaseUploadPdf"));
-      }
-    }
-  };
-
-  const handleConvert = async () => {
-    if (!file) {
-      setError(t("pdfConverter.errors.pleaseSelectFile"));
-      return;
-    }
-
-    // Ak má bypass, konvertuj priamo
-    if (hasBypass) {
-      await performConversion();
-      return;
-    }
-
-    // Ak je prihlásený používateľ
-    if (user && loading) {
-      // Ešte sa načítavajú údaje - počkaj
-      setError(
-        t("pdfConverter.errors.pleaseSelectFile").includes("Please")
-          ? "Loading your account info, please try again in a moment."
-          : "Načítavam údaje o účte, skúste to znova o chvíľu.",
-      );
-      return;
-    }
-
-    if (user && usageInfo) {
-      const pdfUsage = usageInfo.usage.pdf_conversions;
-
-      if (pdfUsage.unlimited) {
-        // Premium používateľ - konvertuj priamo
-        await performConversion();
-        return;
-      }
-
-      // Platený plán (basic/premium) - skontroluj limit
-      if (usageInfo.tierId !== "free") {
-        if (pdfUsage.limit !== null && pdfUsage.used >= pdfUsage.limit) {
-          // Dosiahol mesačný limit
-          setError(
-            t("pdfConverter.errors.limitReached").replace(
-              "{limit}",
-              pdfUsage.limit.toString(),
-            ),
-          );
-          return;
-        }
-        // Má ešte kredity - konvertuj
-        await performConversion();
-        return;
-      }
-
-      // Free tier - musí zaplatiť
-      setShowPaymentModal(true);
-      return;
-    }
-
-    // Prihlásený ale usage info sa nepodarilo načítať - skús konverziu aj tak
-    if (user && !usageInfo) {
-      await performConversion();
-      return;
-    }
-
-    // Neprihlásený používateľ - musí zaplatiť
-    setShowPaymentModal(true);
-  };
-
-  const performConversion = async (
+  // Declared before the Stripe-redirect effect below, which calls it
+  async function performConversion(
     fileToConvert?: File,
     stripeSessionId?: string,
-  ) => {
+  ) {
     setConverting(true);
     setError("");
     setSuccess(false);
@@ -344,6 +169,170 @@ export default function PdfConverterPage() {
     } finally {
       setConverting(false);
     }
+  }
+
+  // Handle payment success from Stripe redirect
+  useEffect(() => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const success = urlParams.get("success");
+    const sessionId = urlParams.get("session_id");
+
+    if (success === "true" && sessionId) {
+      // Restore the file from sessionStorage and auto-convert (async so state
+      // updates never happen synchronously inside the effect body)
+      const restoreAndConvert = async () => {
+        try {
+          const savedFileData = sessionStorage.getItem("pendingPdfFile");
+          if (!savedFileData) {
+            throw new Error("No pending file in sessionStorage");
+          }
+          const { fileName, fileData } = JSON.parse(savedFileData);
+
+          // Convert base64 back to File object with proper MIME type
+          const res = await fetch(fileData);
+          const blob = await res.blob();
+          const pdfBlob = new Blob([blob], { type: "application/pdf" });
+          const restoredFile = new File([pdfBlob], fileName, {
+            type: "application/pdf",
+          });
+
+          setFile(restoredFile);
+          sessionStorage.removeItem("pendingPdfFile");
+          setSuccess(false);
+          setError("");
+
+          // Auto-convert with the restored file + paid session id
+          await performConversion(restoredFile, sessionId);
+        } catch (err) {
+          console.error("Failed to restore file:", err);
+          setError(t("pdfConverter.errors.paymentSuccessUploadAgain"));
+        }
+      };
+      restoreAndConvert();
+
+      // Clean URL
+      window.history.replaceState({}, "", "/pdf-converter");
+    }
+
+    const canceled = urlParams.get("canceled");
+    if (canceled === "true") {
+      // Deferred so state is not set synchronously inside the effect body
+      queueMicrotask(() =>
+        setError(t("pdfConverter.errors.paymentCanceled")),
+      );
+      window.history.replaceState({}, "", "/pdf-converter");
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  const handleDrag = (e: React.DragEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    if (e.type === "dragenter" || e.type === "dragover") {
+      setDragActive(true);
+    } else if (e.type === "dragleave") {
+      setDragActive(false);
+    }
+  };
+
+  const handleDrop = (e: React.DragEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setDragActive(false);
+    setError("");
+    setSuccess(false);
+
+    if (e.dataTransfer.files && e.dataTransfer.files[0]) {
+      const droppedFile = e.dataTransfer.files[0];
+      // Accept if MIME type is correct OR if file extension is .pdf
+      const isPdf =
+        droppedFile.type === "application/pdf" ||
+        droppedFile.name.toLowerCase().endsWith(".pdf");
+
+      if (isPdf) {
+        setFile(droppedFile);
+      } else {
+        setError(t("pdfConverter.errors.pleaseUploadPdf"));
+      }
+    }
+  };
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setError("");
+    setSuccess(false);
+    if (e.target.files && e.target.files[0]) {
+      const selectedFile = e.target.files[0];
+      // Accept if MIME type is correct OR if file extension is .pdf
+      const isPdf =
+        selectedFile.type === "application/pdf" ||
+        selectedFile.name.toLowerCase().endsWith(".pdf");
+
+      if (isPdf) {
+        setFile(selectedFile);
+      } else {
+        setError(t("pdfConverter.errors.pleaseUploadPdf"));
+      }
+    }
+  };
+
+  const handleConvert = async () => {
+    if (!file) {
+      setError(t("pdfConverter.errors.pleaseSelectFile"));
+      return;
+    }
+
+    // Ak má bypass, konvertuj priamo
+    if (hasBypass) {
+      await performConversion();
+      return;
+    }
+
+    // Ak je prihlásený používateľ
+    if (user && loading) {
+      // Ešte sa načítavajú údaje - počkaj
+      setError(t("pdfConverter.errors.loadingAccountInfo"));
+      return;
+    }
+
+    if (user && usageInfo) {
+      const pdfUsage = usageInfo.usage.pdf_conversions;
+
+      if (pdfUsage.unlimited) {
+        // Premium používateľ - konvertuj priamo
+        await performConversion();
+        return;
+      }
+
+      // Platený plán (basic/premium) - skontroluj limit
+      if (usageInfo.tierId !== "free") {
+        if (pdfUsage.limit !== null && pdfUsage.used >= pdfUsage.limit) {
+          // Dosiahol mesačný limit
+          setError(
+            t("pdfConverter.errors.limitReached").replace(
+              "{limit}",
+              pdfUsage.limit.toString(),
+            ),
+          );
+          return;
+        }
+        // Má ešte kredity - konvertuj
+        await performConversion();
+        return;
+      }
+
+      // Free tier - musí zaplatiť
+      setShowPaymentModal(true);
+      return;
+    }
+
+    // Prihlásený ale usage info sa nepodarilo načítať - skús konverziu aj tak
+    if (user && !usageInfo) {
+      await performConversion();
+      return;
+    }
+
+    // Neprihlásený používateľ - musí zaplatiť
+    setShowPaymentModal(true);
   };
 
   const handlePayment = async () => {

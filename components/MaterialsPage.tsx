@@ -68,6 +68,8 @@ export default function MaterialsPage() {
   }, []);
 
   useEffect(() => {
+    // False positive: both are async and only set state after awaiting
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     checkUser();
     loadMaterials();
   }, [checkUser, loadMaterials]);

@@ -45,6 +45,7 @@ export default function ConfirmDeleteModal({
           onClick={onClose}
           disabled={isDeleting}
           className="absolute top-4 right-4 p-2 hover:bg-gray-100 dark:hover:bg-slate-700 rounded-lg transition-colors disabled:opacity-50 cursor-pointer"
+          aria-label="Close"
         >
           <X className="w-5 h-5 text-gray-500 dark:text-gray-400" />
         </button>

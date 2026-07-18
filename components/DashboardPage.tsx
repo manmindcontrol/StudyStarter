@@ -270,24 +270,26 @@ export default function DashboardPage() {
               </div>
             </Link>
 
-            {/* Record Lecture */}
+            {/* Upload Recorded Lecture — real-time recording is TEMPORARILY DISABLED.
+                When re-enabling, point this card back to /upload-lecture with the
+                Mic icon and dashboard.recordLecture texts (see git history). */}
             <Link
-              href="/upload-lecture"
+              href="/upload-recorded-lecture"
               className="bg-linear-to-br from-green-400 to-green-500 hover:from-green-500 hover:to-green-600 dark:bg-linear-to-br dark:from-green-500 dark:to-green-600 dark:hover:from-green-400 dark:hover:to-green-500 rounded-lg sm:rounded-xl md:rounded-2xl shadow-lg sm:shadow-xl p-4 sm:p-6 md:p-8 hover:shadow-xl sm:hover:shadow-2xl transition-all group relative overflow-hidden"
             >
               <div className="relative z-10">
                 <div className="bg-white/20 backdrop-blur-sm p-2 sm:p-3 md:p-4 rounded-full w-fit mb-3 sm:mb-4 md:mb-6">
-                  <Mic className="w-5 h-5 sm:w-6 sm:h-6 md:w-8 md:h-8 text-white" />
+                  <Upload className="w-5 h-5 sm:w-6 sm:h-6 md:w-8 md:h-8 text-white" />
                 </div>
                 <h3 className="text-base sm:text-xl md:text-2xl font-bold text-white mb-1.5 sm:mb-2 md:mb-3 leading-tight">
-                  {t("dashboard.recordLecture")}
+                  {t("uploadLecture.uploadRecorded")}
                 </h3>
                 <p className="text-green-100 text-xs sm:text-sm leading-relaxed">
-                  {t("dashboard.recordLectureDesc")}
+                  {t("uploadLecture.uploadRecordedDesc")}
                 </p>
               </div>
               <div className="absolute bottom-0 right-0 opacity-10">
-                <Mic className="w-24 h-24 sm:w-32 sm:h-32 md:w-48 md:h-48 text-white" />
+                <Upload className="w-24 h-24 sm:w-32 sm:h-32 md:w-48 md:h-48 text-white" />
               </div>
             </Link>
           </div>
@@ -411,6 +413,7 @@ export default function DashboardPage() {
                               }
                               className="p-1.5 sm:p-2 rounded-lg transition-all shrink-0 cursor-pointer"
                               title="Delete material"
+                              aria-label="Delete material"
                             >
                               <Trash2 className="w-4 h-4 sm:w-5 sm:h-5 text-gray-400 dark:text-gray-500 hover:text-red-500 dark:hover:text-red-400" />
                             </button>
@@ -481,6 +484,7 @@ export default function DashboardPage() {
                               }
                               className="p-1.5 sm:p-2 rounded-lg transition-all shrink-0 cursor-pointer"
                               title="Delete recording"
+                              aria-label="Delete recording"
                             >
                               <Trash2 className="w-4 h-4 sm:w-5 sm:h-5 text-gray-400 dark:text-gray-500 hover:text-red-500 dark:hover:text-red-400" />
                             </button>

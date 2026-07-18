@@ -21,9 +21,9 @@
   "shortcuts": [
     {
       "name": "Nahrať prednášku",
-      "short_name": "Nahrávať",
-      "description": "Začať nahrávať novú prednášku",
-      "url": "/record-lecture"
+      "short_name": "Prednáška",
+      "description": "Nahrať zvukový záznam prednášky",
+      "url": "/upload-recorded-lecture"
     },
     {
       "name": "Nahrať materiály",

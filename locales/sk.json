@@ -419,8 +419,6 @@
     "saving": "Ukladám...",
     "questionsSaved": "Otázky uložené",
     "downloadQuestions": "Stiahnuť otázky",
-    "wordDocx": "Word (.docx)",
-    "textTxt": "Text (.txt)",
     "generatedQuestions": "Vygenerované otázky",
     "multipleChoice": "Výberová otázka",
     "open": "Otvorená",
@@ -437,7 +435,51 @@
     "chatGreetingDefault": "Ahoj! Pomôžem vám s otázkami. Čo potrebujete?",
     "chatError": "Ospravedlňujem sa, nastala chyba. Skúste to prosím znova.",
     "validationError": "Nepodarilo sa overiť odpoveď. Skontrolujte správnu odpoveď nižšie.",
-    "generatedWithAI": "Vygenerované s AI asistentom"
+    "generatedWithAI": "Vygenerované s AI asistentom",
+    "scoreLabel": "Skóre",
+    "gradingCriteria": "Hodnotiace kritériá",
+    "difficulty": {
+      "easy": "Ľahká",
+      "medium": "Stredná",
+      "hard": "Ťažká"
+    },
+    "bloom": {
+      "remember": "Zapamätanie",
+      "understand": "Porozumenie",
+      "apply": "Aplikácia",
+      "analyze": "Analýza",
+      "evaluate": "Hodnotenie",
+      "create": "Tvorba"
+    },
+    "editQuestion": "Upraviť otázku",
+    "deleteQuestion": "Vymazať otázku",
+    "confirmDeleteQuestion": "Vymazať túto otázku?",
+    "saveChanges": "Hotovo",
+    "cancelEdit": "Zrušiť",
+    "questionTextLabel": "Otázka",
+    "optionsLabel": "Možnosti (označte správnu)",
+    "explanationLabel": "Vysvetlenie správnej odpovede",
+    "modelAnswerLabel": "Vzorová odpoveď",
+    "topicLabel": "Téma",
+    "difficultyLabel": "Náročnosť",
+    "bloomLabel": "Kognitívna úroveň",
+    "rubricLabel": "Hodnotiace kritériá",
+    "addCriterion": "Pridať kritérium",
+    "removeCriterion": "Odstrániť kritérium",
+    "unsavedChanges": "Máte neuložené zmeny",
+    "saveChangesButton": "Uložiť zmeny",
+    "changesSaved": "Zmeny uložené",
+    "questionRequired": "Text otázky nemôže byť prázdny.",
+    "optionsRequired": "Všetky štyri možnosti musia byť vyplnené.",
+    "addQuestion": "Pridať otázku",
+    "addQuestionTitle": "Pridať novú otázku",
+    "chooseQuestionType": "Aký typ otázky chcete pridať?",
+    "mcqTypeDescription": "Štyri možnosti, správnu označíte vy",
+    "openTypeDescription": "Voľná odpoveď so vzorovou odpoveďou a kritériami",
+    "wordWithAnswers": "Word — s odpoveďami",
+    "wordForStudent": "Word — prázdny test",
+    "studentNameLine": "Meno:",
+    "studentDateLine": "Dátum:"
   },
   "buttons": {
     "openDocument": "Otvoriť dokument",
@@ -504,7 +546,14 @@
       "noteText": "Správna odpoveď bude vždy zobrazená pod každou otázkou na účely učenia.",
       "cancel": "Zrušiť",
       "generate": "Generovať otázky",
-      "generating": "Generujem..."
+      "generating": "Generujem...",
+      "academicLevel": "Akademická úroveň",
+      "levelStandardTitle": "Štandardná",
+      "levelStandardDesc": "úvodný kurz — porozumenie a aplikácia",
+      "levelAdvancedTitle": "Pokročilá",
+      "levelAdvancedDesc": "Vyšší ročník / záverečná skúška — analýza a hodnotenie",
+      "levelExpertTitle": "Expertná",
+      "levelExpertDesc": "Magisterská / štátnica — syntéza a kritické zvládnutie"
     },
     "slidingChat": {
       "defaultTitle": "AI Asistent",
@@ -618,7 +667,8 @@
       "limitReached": "Dosiahli ste mesačný limit {limit} PDF konverzií. Prosím vylepšite plán alebo počkajte do budúceho mesiaca.",
       "failedToRead": "Nepodarilo sa prečítať súbor. Prosím skúste znova.",
       "failedToInitiatePayment": "Nepodarilo sa inicializovať platbu",
-      "failedToCreateCheckout": "Nepodarilo sa vytvoriť platobné sedenie"
+      "failedToCreateCheckout": "Nepodarilo sa vytvoriť platobné sedenie",
+      "loadingAccountInfo": "Načítavam údaje o účte, skúste to znova o chvíľu."
     }
   },
   "contact": {

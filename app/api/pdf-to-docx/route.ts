@@ -14,6 +14,7 @@ const usedStripeSessions = new Set<string>();
 const rateLimitMap = new Map<string, { count: number; resetTime: number }>();
 const BASIC_RATE_LIMIT = 20; // 20 conversions per hour for Basic
 const RATE_WINDOW = 60 * 60 * 1000; // 1 hour in milliseconds
+const MAX_FILE_SIZE = 25 * 1024 * 1024; // 25 MB — protects the server from OOM/timeouts
 
 function checkRateLimit(key: string, limit: number): { allowed: boolean; remainingTime?: number } {
   const now = Date.now();
@@ -118,6 +119,13 @@ export async function POST(request: NextRequest) {
       return NextResponse.json(
         { error: `File must be a PDF. Received type: ${file.type}, name: ${file.name}` },
         { status: 400 }
+      );
+    }
+
+    if (file.size > MAX_FILE_SIZE) {
+      return NextResponse.json(
+        { error: `File is too large. Maximum size is ${MAX_FILE_SIZE / 1024 / 1024} MB.` },
+        { status: 413 }
       );
     }
 

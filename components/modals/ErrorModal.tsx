@@ -48,6 +48,7 @@ export default function ErrorModal({
             <button
               onClick={onClose}
               className="text-white/80 hover:text-white transition-colors"
+              aria-label="Close"
             >
               <X className="w-6 h-6" />
             </button>

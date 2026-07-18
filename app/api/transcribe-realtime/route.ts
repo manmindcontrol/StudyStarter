@@ -23,7 +23,18 @@ function getExtensionFromMime(mimeType: string): string {
   return "webm";
 }
 
+// Real-time lecture recording is TEMPORARILY DISABLED.
+// Set to true (or remove the guard below) to re-enable this endpoint.
+const REALTIME_TRANSCRIPTION_ENABLED = false;
+
 export async function POST(request: NextRequest) {
+  if (!REALTIME_TRANSCRIPTION_ENABLED) {
+    return NextResponse.json(
+      { error: "Real-time transcription is temporarily unavailable" },
+      { status: 503 }
+    );
+  }
+
   let tempFilePath: string | null = null;
 
   try {

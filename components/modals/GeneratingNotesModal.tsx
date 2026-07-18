@@ -71,16 +71,15 @@ export default function GeneratingNotesModal({
     };
   }, [isOpen]);
 
-  // Sync text index to real stream progress
-  useEffect(() => {
-    if (streamProgress !== undefined && streamProgress > 0) {
-      const index = Math.min(
-        Math.floor((streamProgress / 100) * loadingTexts.length),
-        loadingTexts.length - 1
-      );
-      setCurrentTextIndex(index);
-    }
-  }, [streamProgress, loadingTexts.length]);
+  // Text index follows real stream progress when available; otherwise the
+  // fake interval below drives it (derived during render, no extra state)
+  const displayTextIndex =
+    streamProgress !== undefined && streamProgress > 0
+      ? Math.min(
+          Math.floor((streamProgress / 100) * loadingTexts.length),
+          loadingTexts.length - 1
+        )
+      : currentTextIndex;
 
   useEffect(() => {
     if (!isOpen) return;
@@ -116,7 +115,7 @@ export default function GeneratingNotesModal({
 
   if (!isOpen) return null;
 
-  const currentColor = loadingTexts[currentTextIndex].color;
+  const currentColor = loadingTexts[displayTextIndex].color;
 
   return (
     <div className="fixed min-h-screen inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-md">
@@ -156,7 +155,7 @@ export default function GeneratingNotesModal({
             <p
               className={`text-center font-medium transition-all duration-500 ${currentColor} dark:text-blue-400`}
             >
-              {loadingTexts[currentTextIndex].text}
+              {loadingTexts[displayTextIndex].text}
             </p>
           </div>
 
@@ -180,9 +179,9 @@ export default function GeneratingNotesModal({
               <div
                 key={index}
                 className={`h-2 rounded-full transition-all duration-300 ${
-                  index === currentTextIndex
+                  index === displayTextIndex
                     ? "w-8 bg-linear-to-r from-blue-600 to-cyan-400 dark:from-blue-500 dark:to-cyan-300"
-                    : index < currentTextIndex
+                    : index < displayTextIndex
                       ? "w-2 bg-blue-500 dark:bg-blue-400"
                       : "w-2 bg-gray-300 dark:bg-slate-600"
                 }`}

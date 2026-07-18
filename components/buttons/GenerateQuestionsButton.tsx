@@ -11,12 +11,23 @@ import { supabase } from "@/lib/supabase";
 
 type QuestionType = "exam" | "test" | "summary";
 type QuestionFormat = "mcq" | "open" | "mixed";
+type AcademicLevel = "standard" | "advanced" | "expert";
 
 export type GeneratedQuestion = {
   question: string;
   type: "open" | "mcq";
   options: string[] | null;
   answer: string | null;
+  difficulty?: "easy" | "medium" | "hard";
+  bloom_level?:
+    | "remember"
+    | "understand"
+    | "apply"
+    | "analyze"
+    | "evaluate"
+    | "create";
+  topic?: string;
+  rubric?: string[] | null;
 };
 
 type GenerateQuestionsButtonProps = {
@@ -43,7 +54,11 @@ export default function GenerateQuestionsButton({
   const [isGenerating, setIsGenerating] = useState(false);
   const [isErrorModalOpen, setIsErrorModalOpen] = useState(false);
 
-  const handleGenerate = async (count: number, format: QuestionFormat) => {
+  const handleGenerate = async (
+    count: number,
+    format: QuestionFormat,
+    difficulty: AcademicLevel,
+  ) => {
     setError(null);
 
     // Close settings modal and open generating modal
@@ -61,6 +76,7 @@ export default function GenerateQuestionsButton({
       params.set("type", questionType);
       params.set("count", count.toString());
       params.set("format", format);
+      params.set("difficulty", difficulty);
       if (lang) {
         params.set("lang", lang);
       }

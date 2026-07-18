@@ -17,6 +17,9 @@ const supabase = createClient(supabaseUrl, serviceRoleKey, {
 // OpenAI
 const openai = new OpenAI({ apiKey: openaiApiKey });
 
+// Model used for generation — override with OPENAI_GENERATION_MODEL if needed
+const GENERATION_MODEL = process.env.OPENAI_GENERATION_MODEL || "gpt-4.1";
+
 // --- Types -------------------------------------------------------
 
 type KeyPoint = {
@@ -31,7 +34,9 @@ type Concept = {
   examples: string[];
 };
 
-type StudyNotesResponse = {
+// Shape of the AI-generated notes payload (kept for documentation; the
+// response is streamed as raw text so it is not referenced directly)
+type _StudyNotesResponse = {
   summary: string;
   key_points: KeyPoint[];
   concepts: Concept[];
@@ -131,15 +136,17 @@ export async function POST(
       : `Use the dominant language of the document for all notes and explanations.`;
 
     const systemPrompt = `
-You are an expert academic tutor who creates COMPREHENSIVE, STRUCTURED study notes from educational materials.
+You are a distinguished university professor and subject-matter expert at a prestigious research university, preparing authoritative lecture-grade study notes for your students. Your notes are known for their academic rigour, conceptual clarity, and completeness — a student who studies them should be able to master the material and perform well in a demanding university examination WITHOUT the original source.
 
-CRITICAL: DO NOT create an abstract or short general summary. Create FULL-FLEDGED STUDY NOTES that a student can learn from even without the original text.
+CRITICAL: DO NOT create an abstract or short general summary. Create FULL-FLEDGED, UNIVERSITY-LEVEL STUDY NOTES that teach the material from the ground up.
 
 Your task:
-1. First, thoroughly read and understand the main ideas, concepts, definitions, examples, and connections in the text
+1. First, thoroughly read and understand the main ideas, theories, definitions, derivations, examples, and connections in the text
 2. Identify the document's structure (chapters, sections, subsections) and use it to organize notes logically
 3. Progress from GENERAL concepts to SPECIFIC details, following the document's natural flow
-4. Create STUDY NOTES with this structure:
+4. Preserve academic precision: use correct terminology, state definitions formally, and explain the reasoning/mechanisms behind claims (the "why", not only the "what")
+5. Where the material contains formulas, models, classifications, proofs, or processes, reproduce and explain them fully and accurately
+6. Create STUDY NOTES with this structure:
 
 Your output must ALWAYS be valid JSON in this exact format:
 
@@ -169,25 +176,28 @@ Your output must ALWAYS be valid JSON in this exact format:
 ${languageInstruction}
 
 MANDATORY REQUIREMENTS:
-✓ Summary: 2-5 sentences explaining the topic's purpose
+✓ Summary: 2-5 sentences framing the topic's purpose and scholarly significance
 ✓ Key Points: 7-12 important terms/definitions, each with 6-10 sentences of explanation
 ✓ Concepts: 4-8 main ideas/theories/processes, each with 8-15 sentences PLUS 3-5 detailed examples
 ✓ Study Tips: 7 structured paragraphs (approach, priorities, practice, mistakes, exam prep, summary, review questions)
 
-WRITING STYLE:
-- Write clearly and understandably, as if for a student learning this for the first time
-- Explain terms; don't assume the reader knows everything
+WRITING STYLE (university lecture-note standard):
+- Write with the clarity of an excellent lecturer: precise but accessible, building understanding step by step
+- Use correct academic terminology and define each term formally the first time it appears
+- Explain terms; don't assume the reader already knows them
 - Use headings, subheadings, and structure for clarity
 - Don't skip substantial parts of the text
-- If there's a definition, explain and expand on it
-- If there's a relationship, formula, or diagram, describe what it means and how to use it
+- If there's a definition, state it precisely, then expand on its meaning and implications
+- If there's a relationship, formula, model, or diagram, reproduce it, define every symbol/component, and explain how and when it is applied
+- Where relevant, note assumptions, limitations, conditions of validity, and counter-examples — the marks of graduate-level understanding
 - Don't reduce to "a few paragraphs about what it's about"
-- Stick EXCLUSIVELY to information from the provided text - DO NOT invent new facts
-- Explain WHY things matter, not just WHAT they are
+- Stick EXCLUSIVELY to information from the provided text - DO NOT invent new facts, citations, or figures
+- Explain WHY things matter and HOW they work, not just WHAT they are
 - Build understanding progressively from GENERAL to SPECIFIC (big picture → structure/divisions → detailed mechanisms)
-- When a concept has divisions/categories/types, list them with bullet points and 1-2 sentence descriptions
+- When a concept has divisions/categories/types, list them with bullet points and descriptions whose length matches the document's emphasis
 - Make bullet points flow organically within the narrative - they should enhance, not interrupt the explanation
 - Follow the document's natural progression and structure (chapters, sections, subsections)
+- Maintain a scholarly, objective register suitable for university students and faculty
 `;
 
     const userPrompt = `
@@ -240,16 +250,16 @@ DO:
 `;
 
     // 3️⃣ Stream OpenAI response directly to the client
-    const contentToAnalyze = material.content.substring(0, 100000);
+    const contentToAnalyze = material.content.substring(0, 150000);
 
     const openaiStream = await openai.chat.completions.create({
-      model: "gpt-4o-mini",
+      model: GENERATION_MODEL,
       messages: [
         { role: "system", content: systemPrompt },
         { role: "user", content: `${userPrompt}\n\nDocument content:\n${contentToAnalyze}` },
       ],
       response_format: { type: "json_object" },
-      temperature: 0.7,
+      temperature: 0.6,
       max_tokens: 16000,
       stream: true,
     });

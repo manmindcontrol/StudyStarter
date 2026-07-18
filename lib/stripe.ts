@@ -1,14 +1,33 @@
 // Stripe konfigurácia a helper funkcie
 import Stripe from 'stripe';
 
-if (!process.env.STRIPE_SECRET_KEY) {
-  throw new Error('STRIPE_SECRET_KEY is not set in environment variables');
-}
+// The Stripe SDK throws at construction when no key is present, and `next build`
+// imports every route module to collect page data — so constructing eagerly made
+// the whole build fail on deployments that do not use payments. The client is
+// therefore created on first use: routes that never run never need a key.
+let stripeClient: Stripe | null = null;
 
-// Inicializácia Stripe s API verziou
-export const stripe = new Stripe(process.env.STRIPE_SECRET_KEY, {
-  apiVersion: '2026-02-25.clover',
-  typescript: true,
+const getStripe = (): Stripe => {
+  if (!stripeClient) {
+    const secretKey = process.env.STRIPE_SECRET_KEY;
+    if (!secretKey) {
+      throw new Error('STRIPE_SECRET_KEY is not set in environment variables');
+    }
+    stripeClient = new Stripe(secretKey, {
+      apiVersion: '2026-02-25.clover',
+      typescript: true,
+    });
+  }
+  return stripeClient;
+};
+
+// Kept as a `stripe.foo.bar()` style export so call sites stay unchanged.
+export const stripe = new Proxy({} as Stripe, {
+  get: (_target, property) => {
+    const client = getStripe();
+    const value = Reflect.get(client, property);
+    return typeof value === 'function' ? value.bind(client) : value;
+  },
 });
 
 // Stripe Price IDs z environment variables
